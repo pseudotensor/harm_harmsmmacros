@@ -1,0 +1,63 @@
+          #
+default   0
+          smstart
+          #
+rdr     0 #
+	macro read "/home/maguilar/sm/rdreads.m"
+          #
+grd     1 #
+        define GAMMIE (1)
+	macro read "/home/maguilar/sm/gtwod.m"
+        rdp $1
+	setgrd
+        macro read "/home/maguilar/sm/gammie.m"
+        gammienew
+	smstart
+        define GAMMIE (1)
+        #
+jre     1
+        macro read "/home/maguilar/sm/$!1"
+        #
+smstart 0 # the startup macro for my SM sessions.
+        # file types from global.h
+	# if doing GRMHD
+	if(0){\
+	macro read "/home/maguilar/sm/gtwod.m"
+	macro read "/home/maguilar/sm/mode2.m"
+	macro read "/home/maguilar/sm/gtwodavgs.m"
+	macro read "/home/maguilar/sm/gammie.m"
+	#
+	}
+	#
+ 	macro read "/home/maguilar/sm/rdreads.m"
+	macro read "/home/maguilar/sm/twod.m"
+	macro read "/home/maguilar/sm/more.m"
+	macro read "/home/maguilar/sm/utils.m"
+	defaults
+	define PTYPE     1 #// global par file
+        define GRIDTYPE  2
+        define DTYPE     3 #// dump
+        define FLTYPE    4 #// floor
+        define NPTYPE    5 #// np
+        define AVG2DTYPE 6
+        define AVG1DTYPE 7
+        define ENERTYPE  8
+        define LOSSTYPE  9
+        define SPTYPE    10
+        define TSTYPE    11
+        define LOGDTTYPE 12 
+        define STEPTYPE  13
+        define PERFTYPE  14
+        define ADTYPE    15 #// same as dump except filename
+        define PDTYPE    16 #// same as dump except filename
+        define CALCTYPE  17 #// arbitrary calcs during pp
+        define FIELDLINETYPE  18 #// fieldline calcs during pp
+	define MODETYPE 19 #// mode dump
+        define EXPANDTYPE 50 #// used to signify doing pp expansion
+        define NPCOMPUTETYPE 33 #// used to signify want to compute np before output
+	define ZEUSHSTTYPE 100
+         #
+gopnmhd 0 #
+	macro read "/home/maguilar/sm/myplots.m"	
+	macro read "/home/maguilar/sm/myplots2.m"	
+	macro read "/home/maguilar/sm/avgwrite.m"	

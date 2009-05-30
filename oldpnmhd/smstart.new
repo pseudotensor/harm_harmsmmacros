@@ -1,0 +1,845 @@
+                  # MACRO READ "/home/jon/sm/smstart"
+                  ###########
+                  # actual smstart macros
+                  #
+                  #
+der        4      # derivative (e.g. der t min1 td min1d)
+                  set _length=dimen($1)
+                  echo der
+                  define length (_length)
+                  set $3=0,$length-1,1
+                  set $4=0,$length-1,1
+                  do ii=1,$length-1,1 {
+                     set $3[$ii]=0.5*($1[$ii-1]+$1[$ii]) 
+		     set $4[$ii]=($2[$ii]-$2[$ii-1])/($1[$ii]-$1[$ii-1])
+  		  }
+                  # hack to allow derivative same size as function, should really linearly interpolate function to get this
+		  set $3[0]=$1[0]
+                  set $4[0]=$4[1]
+                  # hack to avoid problem at end with same time data
+                  set $4[$length-1]=$4[$length-2]
+                  #
+grad       4      # (e.g. grad  pot gpot 3 2) div <fun> <newfun> <coord> <grid>
+	          # <coord> 3->spc 2->cyl 1->cart
+                  # <grid> 2 -> b-grid, 1 -> a-grid for source data
+                  # currently assume a-grid source data
+                  if($3==1){\
+                    set newf1=$1
+                    set newf2=$1
+                    #set newf3=$1
+                    set f1=x12/x12
+                    set f2=x22/x22
+                    #set f3=x32/x32
+                  }\
+                  else{\
+                    if($3==3){\
+			if($4==1){\
+                         set newf1=$1
+                         set newf2=$1
+                         #set newf3=$1
+                         set f1=x1/x1
+                         set f2=1/(g32)
+                         #set f3=1/(g32*g42)
+	                 define dxx1 dx1
+	                 define dxx2 dx2
+                        }
+	                if($4==2){\
+                         set newf1=$1
+                         set newf2=$1
+                         #set newf3=$1
+                         set f1=x1/x1
+                         set f2=1/(g3)
+                         #set f3=1/(g3*g4)
+	                 define dxx1 dx12
+	                 define dxx2 dx22
+                        }
+                    }
+                  }
+                  set $2x=0,$nx*$ny-1,1
+                  set $2y=0,$nx*$ny-1,1
+                  set $2z=0,$nx*$ny-1,1
+	          set $2x=$2x*0
+	          set $2y=$2y*0
+	          set $2z=$2z*0
+                  do kk=0,$nx*$ny-1,1 {
+	                if( (INT($kk%$nx)!=$nx-1)&&($kk<($ny-2)*$nx+$nx) ){\
+	        	   set $2x[$kk]=f1[$kk]*(newf1[$kk+1]-newf1[$kk])/$dxx1[$kk]
+			   set $2y[$kk]=f2[$kk]*(newf2[$kk+$nx]-newf2[$kk])/$dxx2[$kk]
+                        }\
+                        else{\
+                           if(INT($kk%$nx)==$nx-1){ set $2x[$kk]=$2x[$kk-1] set $2y[$kk]=$2y[$kk-1] }
+                           if($kk>($ny-2)*$nx+($nx-1)){ set $2x[$kk]=$2x[$kk-$nx] set $2y[$kk]=$2y[$kk-$nx] }
+                        }
+	                #+f3[$kk]*(newf3[$kk+$nx*$ny]-newf3[$kk])/$dxx3[$kk]
+  		  }
+                  #
+vdotgradv   5     # (e.g. vdotgradv  vtodot v result 3 2) fdotgradv <vec\cdot> <v> <newv> <coord> <grid>
+	          # gradient of vector
+	          # <coord> 3->spc 2->cyl 1->cart
+                  # <grid> 2 -> b-grid, 1 -> a-grid for source data
+                  # currently assume a-grid source data
+		  # just normal gradient with additional curvature terms in spc only
+	          grad $2x tempx $4 $5
+	          grad $2y tempy $4 $5
+	          grad $2z tempz $4 $5
+		  # v\cdot(\nablda v)
+                  # now, e.g. tempxy means x component, y-dir derivative
+                  # no derivatives in z dir
+		  set $3x=$1x*tempxx+$1y*tempxy
+		  set $3y=$1x*tempyx+$1y*tempyy
+		  set $3z=$1x*tempzx+$1y*tempzy
+                  # additional curvature terms if spc
+		  if($4==3){\
+		   set $3x=$3x-$1y*($2y/g22)-$1z*$2z/g32
+		   set $3y=$3y+$1y*($2x/g22)-$1z*($2z*dg42/(g22*g42))
+		   set $3z=$3z+$1z*($2x/g32+$2y*dg4/(g22*g42))
+                  }
+                  #
+div       5       # (e.g. div  v dv 3 2 0) div <fun> <newfun> <coord> <grid> <diffvol>
+	          # <coord> 3->spc 2->cyl 1->cart
+                  # <grid> 2 -> b-grid, 1 -> a-grid for source data
+                  # currently assume a-grid source data
+                  # <diffvol> whether to use diff=0 or volume=1 method
+                  if($3==1){\
+                    set newf1=$1x
+                    set newf2=$1y
+                    set newf3=$1z
+                    set f1=x12/x12
+                    set f2=x22/x22
+                    set f3=x32/x32
+                    set dx1temp=dx1
+                    set dx2temp=dx2
+                    set dx3temp=dx3
+                  }\
+                  else{\
+                    if($3==3){\
+                     if($5==0){\
+                      set newf1=$1x*g2*g3
+                      set newf2=$1y*g4
+                      set newf3=$1z
+                      set f1=1/(g22*g32)
+                      set f2=1/(g32*g42)
+                      set f3=1/(g32*g42)
+                      set dx1temp=dx1
+                      set dx2temp=dx2
+                      set dx3temp=dx3
+                     }\
+                     else{\
+                      set newf1=$1x*g2*g3
+                      set newf2=$1y*g4
+                      set newf3=$1z
+                      set f1=dx1/dx1
+                      set f2=1/(g32)
+                      set f3=1/(g32*g42)
+                      set dx1temp=dvl1
+                      set dx2temp=dvl2
+                      set dx3temp=dx3
+                     }
+                    }
+                  }
+                  set $2=0,$nx*$ny*$nz-1,1
+                  do kk=0,$nx*$ny*$nz-1,1 {
+		   set indexi=INT($kk%$nx)
+		   set indexj=INT(($kk%($nx*$ny))/$nx)
+		   set indexk=INT($kk/($nx*$ny))
+	                if( ((indexi!=$nx-1)||($nx==1))&&((indexj!=$ny-1)||($ny==1))&&((indexk!=$nz-1)||($nz==1)) ){\
+	                   set $2[$kk]=0
+	                   if($nx>1){\
+	        	    set $2[$kk]=$2[$kk]+f1[$kk]*(newf1[$kk+1]-newf1[$kk])/dx1temp[$kk]
+                           }
+                           if($ny>1){\
+                            set $2[$kk]=$2[$kk]+f2[$kk]*(newf2[$kk+$nx]-newf2[$kk])/dx2temp[$kk]
+                           }
+                           if($nz>1){\
+                             if($DODIV3==1){\
+	                      set $2[$kk]=$2[$kk]+f3[$kk]*(newf3[$kk+$nx*$ny]-newf3[$kk])/dx3temp[$kk]
+                             }
+                           }
+                        }\
+                        else{\
+			   # just copy over outer layer
+                           if(($nx>1)&&(indexi==$nx-1)){ set $2[$kk]=$2[$kk-1] }
+                           if(($ny>1)&&(indexj==$ny-1)){ set $2[$kk]=$2[$kk-$nx] }
+                           if(($nz>1)&&(indexk==$nz-1)){ set $2[$kk]=$2[$kk-$nx*$ny] }
+                        }
+  		  }
+                  #
+curl       4       # (e.g. curl vecin vecout 2) div <fun> <newfun> <source grid>
+                  # not setup since grid source location is funny
+                  #
+                  #
+                  #
+                  # assumes coord stuff in grid data
+                  #
+                  set newa1=$1x*g12
+                  set newa2=$1y*g22
+	          set newa3=$1z*g32*g42
+                  set f2=1/(g42)
+                  set f3=1/(g32*g42)
+                  #
+                  set $2=0,$nx*$ny-1,1
+                  do kk=0,$nx*$ny-1,1 {
+	                if( (INT($kk%$nx)!=$nx-1)&&($kk<($ny-2)*$nx+($nx-1)) ){\
+	        	   set $2[$kk]=f1[$kk]*(newf1[$kk+1]-newf1[$kk])/dx1[$kk]+f2[$kk]*(newf2[$kk+$nx]-newf2[$kk])/dx2[$kk]
+                        }\
+                        else{\
+                           if(INT($kk%$nx)==$nx-1){ set $2[$kk]=$2[$kk-1] }
+                           if($kk>=($ny-2)*$nx+($nx-1)){ set $2[$kk]=$2[$kk-$nx] }
+                        }
+	                #+f3[$kk]*(newf3[$kk+$nx*$ny]-newf3[$kk])/dx3[$kk]
+  		  }
+                  # above is hack to allow derivative same size as function, should really linearly interpolate function to get this
+                  #
+                  #
+fieldint  2       # (e.g. fieldit b aphi)
+	          # <coord> 3->spc 2->cyl 1->cart
+                  # <grid> 2 -> b-grid, 1 -> a-grid for source data
+                  # currently assume b-grid source data
+                  set $2=0,$nx*$ny-1,1
+	          set A=-$1y*g32*g42
+	          set B=$1x*g22*g32*g42
+	          set differA=A*dx1
+	          set differB=B*dx2
+                  do kk=0,$nx*$ny-1,1 {
+			   set temp=differB if((i==$kk%$nx)&&(j<=$kk/$nx))
+			   set temp2=differA if((i<=$kk%$nx)&&(j==0))
+	        	   set $2[$kk]=SUM(temp)+SUM(temp2)
+  		  }
+                  # final norm factor(messes things up?)
+	          #set $2=$2/(x12*g42)
+                  #
+                  #
+fftreallim 7       # (eg. fftreallim 1 td min1d freq min1dfpow 10000 20000)
+                   # assume all have same dimension
+                   #set itreal=dimen($3)
+                   set itin=$6
+                   set itout=$7
+                   set it=$7-$6+1
+                   set crap=0,it-1,1
+                   set complex=crap*0
+                   set deltat=(t[itout]-t[itin])
+                   set delt=(t[itout]-t[itin])/it
+                   #set $4=1/4000*(-0.5*it/deltat+crap/deltat)
+                   #set $4=-0.5*it*deltat+crap*deltat
+                   set $4=1,it,1
+                   set realin=1,it,1
+                   set jj=0
+                   do ii=0,it/2-1,1 {
+		     define itj (jj)
+                      set $4[$ii]=-$itj/deltat
+                      set realin[$ii]=$3[$ii+itin]
+                      set jj=jj+1
+		   }
+                   set jj=0
+                   if(it/2-INT(it/2)>.001){ set doit=it} else{set doit=it-1} 
+                   do ii=it/2,doit,1 {
+		     define itj (jj)
+                      set $4[$ii]=0.5*it/deltat-$itj/deltat
+                      set realin[$ii]=$3[$ii+itin]
+                      set jj=jj+1
+            	   }
+                   fft $1 realin complex outreal outcomplex
+                   set $5= outreal**2+outcomplex**2
+fftreal 5          # (eg. fftreal 1 td min1d freq min1dfpow)
+                   # assume all have same dimension
+                  set inneri=0
+	          set outeri=dimen($3)-1
+                  fftreallim $1 $2 $3 $4 $5 inneri outeri
+                  #
+integrate  4      # (e.g. integrate td min1d t min1)
+                  set _length=dimen($1)
+                  define length (_length)
+                  set $3=0,$length-1,1
+                  set $4=0,$length-1,1
+                  do ii=1,$length-1,1 {
+                     set $3[$ii]=0.5*($1[$ii-1]+$1[$ii]) 
+		     set $4[$ii]=($2[$ii]-$2[$ii-1])*($1[$ii]-$1[$ii-1])
+  		  }
+                  # hack to allow derivative same size as function, should really linearly interpolate function to get this
+		  set $3[0]=$1[0]
+                  set $4[0]=$4[1]
+                  #
+runabs     4      # running integrated absolute value (.e.g runabs t min1 ta min1a)
+                  set _length=dimen($1)
+                  define length (_length)
+                  set $3=0,$length-1,1
+                  set $4=0,$length-1,1
+	          # hack to allow recursive add
+		  set $3[0]=$1[0]
+                  set $4[0]=0
+                  do ii=1,$length-1,1 {
+                     set $3[$ii]=0.5*($1[$ii-1]+$1[$ii]) 
+		     set $4[$ii]=ABS($2[$ii]-$2[$ii-1])+$4[$ii-1]
+  		  }
+                  #
+avg 3		  # average: (e.g. avg td min1d min1davg)
+                  set _length=dimen($1)
+                  define length (_length)
+	          avglim $1 $2 $3 0 $length
+                  #
+avglim 5	  # average: (e.g. avglim td min1d min1davg 20000 30000)
+                  set _length=$5
+                  define length (_length)
+                  set temptime=0
+                  set $3=1,1,1
+		  set $3[0]=0
+                  do ii=$4+1,$length-1,1 {
+                     set tempdt=($1[$ii]-$1[$ii-1]) 
+                     set temptime=temptime+tempdt
+		     set $3=$3+$2[$ii]*tempdt
+  		  }
+                  set $3=$3/temptime
+                  set tempaverage=$3
+                  print '%g\n' {tempaverage}
+                  #
+pdimen 1          # print dimension (e.g. pdimen td)
+                  set tempdimen=dimen($1)
+                  print '%g\n' {tempdimen}
+                  #
+rdraft            #
+                  define finaldraft (0)
+                  define PLOTLWEIGHT (1)
+                  define NORMLWEIGHT (1)
+                  lweight $NORMLWEIGHT
+                  ltype 0
+ 	          expand 1.00001
+                  location 3500 31000 3500 31000
+fdraft            #
+                  define finaldraft (1)
+                  define PLOTLWEIGHT (5)
+                  define NORMLWEIGHT (3)
+                  expand 1.5
+	          ltype 0
+                  lweight $NORMLWEIGHT
+	          #location 5000 31000 3500 31000
+                  #LOCATION $($gx1 + 1000) $gx2 $gy1 $gy2
+                  #                  
+mypoints 2        #
+		  lweight $PLOTLWEIGHT
+                  if(!($finaldraft)){\
+                   #points $1 $2
+                  }
+                  connect $1 $2
+		  lweight $NORMLWEIGHT
+defaults          # go back to defaults
+	          if($?npdone == 0){\
+		   define npdone (0)
+	          }
+	        define filetype (1)
+       		 rdraft
+                define COORD (1)
+                define COMPDIM (3)
+                define DODIV3 (1)
+	        expand 1.00001
+	        define PLANE (3)
+		define PLOTERASE (1)
+		define CONSTLEVELS (0)
+		define ANIMSKIP (1)
+		define SOLIDCONTOURS (0)
+		define SKIPFACTOR (1)
+     		define PRINTTO (0)
+    	    	define AVG1DWHICH (2)
+      		  define DOCALCS (1)
+	          notation -2 2 -2 2
+		  define loginterprho 0
+                  ticksize 0 0 0 0
+                  if(!($finaldraft)){\
+                   rdraft
+                  }\
+                  else{ fdraft }
+	          define cres (15) # see plc
+	          ctype default
+	          window 1 1 1 1
+	          location 3500 31000 3500 31000
+shrink3  8         # assumes x12,x22 are original coords, $nx $ny are original sizes
+                   # shrink3 <oldfun> <newx1> <newx2> <newfun> <xl> <xh> <yl> <yh>
+                   # default(0) to not use limits on sm line
+                   define txl ($5)
+                   define txh ($6)
+                   define tyl ($7)
+                   define tyh ($8)
+                   # determine index range from requested numerical range
+                   set flipi=0
+                   set flipo=0
+                   do kk=0,$nx-1,1{
+                     if( (x12[$kk]>=$txl)&(flipi==0)){ set tempxl=$kk set flipi=1}
+                     if( (x12[$kk]>=$txh)&(flipo==0)){ set tempxh=$kk set flipo=1}
+                   }
+                   if(flipi==0){ set tempxl=0 }
+                   if(flipo==0){ set tempxh=$nx-1 }
+                   set flipi=0
+                   set flipo=0
+                   do kk=0,$ny-1,1{
+                     if( (x22[$kk*$nx]>=$tyl)&(flipi==0)){ set tempyl=$kk set flipi=1}
+                     if( (x22[$kk*$nx]>=$tyh)&(flipo==0)){ set tempyh=$kk set flipo=1}
+                   }
+                   if(flipi==0){ set tempyl=0 }
+                   if(flipo==0){ set tempyh=$ny-1 }
+                   set temprnx=(tempxh-tempxl+1)
+                   set temprny=(tempyh-tempyl+1)
+                   define rxl (tempxl)
+                   define rxh (tempxh)
+                   define ryl (tempyl)
+                   define ryh (tempyh)
+                   define rnx (temprnx)
+                   define rny (temprny)
+	           set iiold=1,$nx*$ny,1
+                   set ixold=(iiold - $nx*int((iiold-0.5)/$nx) - 1)
+                   set iyold=((int((iiold-0.5)/$nx) ))
+                   set ii=1,$rnx*$rny,1
+                   set ix=(ii - $rnx*int((ii-0.5)/$rnx) - 1)
+                   set iy=((int((ii-0.5)/$rnx) ))
+                   set $2=x12 if( (ixold>=$rxl)&(ixold<=$rxh)&(iyold>=$ryl)&(iyold<=$ryh))
+                   set $3=x22 if( (ixold>=$rxl)&(ixold<=$rxh)&(iyold>=$ryl)&(iyold<=$ryh))
+                   set $4=$1 if( (ixold>=$rxl)&(ixold<=$rxh)&(iyold>=$ryl)&(iyold<=$ryh))
+                   #
+reduce   5         # (e.g. reduce td min1d tdr min1dr 10)
+                   set reduction=($5)
+                   define reductiondef (reduction)
+                   echo reduced by $reductiondef
+                   set _length=dimen($1)
+                   define length (_length)
+                   set $3=0,$length/$5-1,1
+                   set $4=0,$length/$5-1,1
+                   do i=0,$length/$5-1,1 {
+                      set $3[$i]=$1[$i*$5]
+		      set $4[$i]=$2[$i*$5]
+  		   }
+                   #
+shrink2  6         # (e.g. shrink   td min1d tds min1ds 0 1E5)
+                   set _length=dimen($1)
+                   define length (_length)
+		   # determine index range from requested numerical range
+                   set flipi=0
+                   set flipo=0
+                   do kk=0,$length-1,1{
+                     if( ($1[$kk]>=$5)&(flipi==0)){ set tempxl=$kk set flipi=1}
+                     if( ($1[$kk]>=$6)&(flipo==0)){ set tempxh=$kk set flipo=1}
+                   }
+                   if(flipi==0){ set tempxl=0 }
+                   if(flipo==0){ set tempxh=$length-1 }
+                   set temprnx=(tempxh-tempxl+1)
+                   define rxl (tempxl)
+                   define rxh (tempxh)
+                   define rnx (temprnx)
+                   set ix=0,$length-1,1
+                   set $3=$1 if( (ix>=$rxl)&(ix<=$rxh))
+                   set $4=$2 if( (ix>=$rxl)&(ix<=$rxh))
+                   #
+startup #
+        smstart
+        #
+smstart # the startup macro for my SM sessions.
+        load twod.m
+        # file types from global.h
+	define PTYPE     1 #// global par file
+        define GRIDTYPE  2
+        define DTYPE     3 #// dump
+        define FLTYPE    4 #// floor
+        define NPTYPE    5 #// np
+        define AVG2DTYPE 6
+        define AVG1DTYPE 7
+        define ENERTYPE  8
+        define LOSSTYPE  9
+        define SPTYPE    10
+        define TSTYPE    11
+        define LOGDTTYPE 12 
+        define STEPTYPE  13
+        define PERFTYPE  14
+        define ADTYPE    15 #// same as dump except filename
+        define PDTYPE    16 #// same as dump except filename
+        define CALCTYPE  17 #// arbitrary calcs during pp
+        define FIELDLINETYPE  18 #// fieldline calcs during pp
+	define MODETYPE 19 #// mode dump
+        define EXPANDTYPE 50 #// used to signify doing pp expansion
+        define NPCOMPUTETYPE 33 #// used to signify want to compute np before output
+	define ZEUSHSTTYPE 100
+	defaults
+# Macro 'smstart' defined...
+# Written by Curtis Krawchuk
+tlabel 101# put a title on the plot, centering it in the plot region
+        # Usage:  tlabel title, E.g. tlabel Hi there
+        # No quotes are necessary, since it takes the rest of the line
+        #   as arguments.
+        #
+        # The known coordinates of the plot are:
+        # ($fx1,$fy1) : the BL corner of the plot, in user coords
+        # ($fx2,$fy2) : the UR corner of the plot, in user coords
+        # ($gx1,$gy1) : the BL corner of the plot, in screen coords
+        # ($gx2,$gy2) : the UR corner of the plot, in screen coords
+        # see the macro 'show' for more information.
+        #
+        # if there are no arguments, then use a default
+        if ($?1 == 0) { define 1 "Untitled Plot" }
+        define _x (($gx2-$gx1)/2 + $gx1) # the middle of the user plot region
+        define _y ($gy2+900)            # just above the top axis
+        # relocate to the device coordinates, since they are independent
+        # of the current user scale
+        relocate ( $_x $_y )            # relocate to those coordinates
+        # put the label there
+        putlabel 5 $1
+        define _x delete                # delete the temporary variables
+        define _y delete
+# Macro 'tlabel' defined...
+
+        # Written by Curtis Krawchuk
+delvar 1        # deletes a thing given by the first argument
+        # decides how to delete something based on the value of 'whatis'
+        # See 'help whatis' for a description.
+        # useful for cleaning up temporary vectors/variables
+        if (is_set(whatis($1),1)==1) {
+                # the argument is a macro
+                macro $1 delete
+        } else {
+        if (is_set(whatis($1),2)==1) {
+                # the argument is a variable
+                define $1 delete
+        } else {
+        if (is_set(whatis($1),3)==1) {
+                # the argument is a vector
+                delete $1
+        }# else {
+        #       # the argument must be a constant
+        #       echo DELVAR: Can't delete the constant argument: $1
+        #}
+        }}
+        # Comment must be here to end off all of the closing braces
+# Macro 'delvar' defined...
+
+       # Written by Curtis Krawchuk
+drawspline 2    # draws a spline curve through a set of data points
+        # the vector has to be monotonic, but not necessarily increasing
+        # if it isn't, expect unexpected results :)
+        # inputs: 2 vectors, x and y points
+        define dens 100         # density of output = 100x input density
+        define _max ($1[0])
+        define _n (DIMEN($1))
+        define _min ($1[$_n-1])
+        define _d (($_max-$_min)/($_n*$dens))
+        set _v = $1             
+        set _w = $2             
+        sort{_v _w}     # sort the x values and y values together
+        # define the output
+        set _x = $_min,$_max,$_d
+        set _y = _x
+        spline _v _w _x _y
+        connect _x _y
+        # clean up
+        foreach v (dens _max _n _min _d _x _y) {delvar $v}
+        define v delete
+# Macro 'drawspline' defined...
+
+        # Written by Curtis Krawchuk
+gsave 1 # save the current state of the graphics (to a vector $1)
+        # this includes: angle, aspect, ctype, expand, ltype, lweight,
+        # ptype, and location.
+        #
+        # declare a vector
+        set dimen($1) = 12
+        set $1[0] = ($!!angle)
+        set $1[1] = ($!!aspect)
+        set $1[2] = ($!!ctype)
+        set $1[3] = ($!!expand)
+        set $1[4] = ($!!ltype)
+        set $1[5] = ($!!lweight)
+        # to save the ptype, create a temporary vector
+        # the <> force expansion now -- so it doesn't track $ptype
+        set _temp = < $ptype >
+        set $1[6] = _temp[0]
+        set $1[7] = _temp[1]
+        delvar _temp
+        # save the plotting area
+        set $1[8] = ($!!gx1)
+        set $1[9] = ($!!gx2)
+        set $1[10] = ($!!gy1)
+        set $1[11] = ($!!gy2)
+# Macro 'gsave' defined...
+
+grestore 1 # restores the graphics state given by the first arg., or
+        # the named argument -- must be defined with 'gsave'
+        if (dimen($1) != 12) {
+                echo Can't restore the graphics state:  $1 isn't in the
+                echo   right form.
+                return
+        }
+        angle $($1[0])
+        aspect $($1[1])
+        ctype $($1[2])
+        expand $($1[3])
+        ltype $($1[4])
+        lweight $($1[5])
+        ptype $($1[6]) $($1[7])
+        location $($1[8]) $($1[9]) $($1[10]) $($1[11])
+# Macro 'grestore' defined...
+
+        # Written by Curtis Krawchuk
+push 2  # appends value $1 to the vector $2
+        #
+        # if the name doesn't exist, then create a vector with $1 as the
+        # first argument.
+        if (is_set($2,3) != 1) {
+                set $2 = $1
+                return
+        }
+        set $2 = $2 CONCAT $1
+# Macro 'push' defined...
+
+        # Written by Curtis Krawchuk
+pushstr 2 # appends a string $1 to the string vector $2
+        # If the vector doesn't exist, then create it with 1 element: $1
+        if (is_set($2,3) != 1) {
+                set dimen($2) = 1.s
+                set $2[0] = $1
+                return
+        }
+        set $2 = $2 CONCAT $1
+# Macro 'pushstr' defined
+
+        # written by Curtis Krawchuk
+rptype 1        # defines a (random) ptype.  Type rptype 0 to reset the cycle.
+        # Side effects: sets strings _ninc and _pinc
+        # modify the vectors below (_npts and _psty) to give different cycles
+        # the number of points for the point style
+        set _npts = {4 3 10 5}
+        # define the point style
+        set _psty = {0 3 1 2}
+        # if the argument $1 is 0, or one or both global
+        # counters are not set, then reset the counters to 0.
+        if ((is_set(_ninc,2)!=1 || is_set(_pinc,2)!=1) || $1==0) {
+                define _ninc 0
+                define _pinc 0
+        }
+        define _n $(DIMEN(_npts))
+        define _m $(DIMEN(_psty))
+        # now set the ptype
+        ptype $(_npts[$_ninc]) $(_psty[$_pinc])
+        # increment the point type for the next pass.  Don't loop in
+        # as you would for a double 'do' loop -- instead, just increment
+        # them together, and then adjust the increment at the end to get all
+        # the possibilities.
+        define _pinc $($_pinc + 1)
+        # make sure it is not beyond the limits
+        if ($_pinc >= DIMEN(_psty)) { define _pinc 0}
+        # increment the number of points for the point type
+        define _ninc $($_ninc + 1)
+        # make sure it is not beyond the limits of the vector _npts
+        if ($_ninc >= DIMEN(_npts)) { 
+                define _ninc 0
+                # make sure that the cycle doesn't repeat prematurely:
+                # if DIMEN(_npts) mod DIMEN(_psty) is 0 (they are a multiple
+                # of each other), then increment the psty again.
+                if ((DIMEN(_npts) - DIMEN(_psty)*INT(DIMEN(_npts)/DIMEN(_psty)))==0) {
+                        define _pinc $($_pinc + 1)
+                        if ($_pinc >= DIMEN(_psty)) { define _pinc 0}
+                }
+        }
+        # delete temporary variables
+        foreach v {_n _npts _m _psty} {delvar $v}
+        #
+# Macro 'rptype' defined...
+
+        # written by Curtis Krawchuk
+rltype 1        # defines a (random) ltype.  Type rltype 0 to reset the cycle.
+        # Side effects: sets strings _sinc and _winc
+        # define the line types and weights
+        set _lsty = 0,6
+        set _lwt = 1,5
+        # if the argument $1 is 0, or one or both global
+        # counters are not set, then reset the counters to 0.
+        if ((is_set(_sinc,2)!=1 || is_set(_winc,2)!=1) || $1==0) {
+                define _sinc 0
+                define _winc 0
+        }
+        define _n $(DIMEN(_lsty))
+        define _m $(DIMEN(_lwt))
+        # set the ltype and lweight
+        ltype $(_lsty[$_sinc])
+        lweight $(_lwt[$_winc])
+        # now increment the counters as you would through a double 'do' loop
+        define _sinc $($_sinc + 1)
+        # make sure it is not beyond the limits of the vector
+        if ($_sinc >= DIMEN(_lsty)) { 
+                define _sinc 0
+                # increment the lweight counter too
+                define _winc $($_winc + 1)
+                # make sure it is not beyond the limits of the vector
+                if ($_winc >= DIMEN(_lwt)) { define _winc 0 }
+        }
+        # delete temporary variables
+        foreach v {_n _lsty _m _lwt} {delvar $v}                
+        #
+# Macro 'rltype' defined...
+
+        # Written by Curtis Krawchuk
+pts 3   # executes the 'points' function, with a % enlargment of the
+        # symbols given by a third argument:  pts x y 75 gives 75%
+        define _es ($expand)    # save the current expansion
+        define _lt ($ltype)     # save the current line type
+        define _f (1.0+($3/100))  # compute the enlargement factor
+        define _e ($_es*$_f)    # the new expansion
+        ltype 0                 # always use solid lines for the symbols
+        expand $_e
+        points $1 $2            # draw the points
+        expand $_es             # put back the expansion, ltype
+        ltype $_lt
+        foreach v {_f _e _es _lt} {delvar $v}
+# Macro 'pts' defined...
+
+        # Written by Curtis Krawchuk
+addlegend 2     # adds data series to the vectors needed for the legend
+        # $1:  if $1 = 0  plot only the lines
+        #            = 1  plot both lines and points
+        #            = 2  plot only points
+        # $2:  The text annotation for this series -- must be enclosed
+        #      in single quotes, e.g. 'Series Text'
+        # This routine reads from the state variables, so call this routine
+        # right after you plot a data series.
+        #if ($?1 != 1) { define 1 (1) }
+        #if ($?2 != 1) { define 2  }
+        push $!lweight lgd_lweight
+        pushstr $2 lgd_text
+        set _temp = < $ptype >
+        # decide if we should plot the lines
+        if ($1==1) {
+                # record the proper ptype
+                push _temp[0] lgd_p1
+                push _temp[1] lgd_p2
+                # record the proper ltype
+                push $!ltype lgd_ltype
+        } else {
+        if ($1==0) {
+                # record dummy ptypes (negative ones) so legend doesn't
+                # plot symbols
+                push -1 lgd_p1
+                push -1 lgd_p2
+                # record the proper ltype
+                push $!ltype lgd_ltype
+        } else {
+        if ($1 == 2) {
+                # record the proper ptype
+                # record the proper ptype
+                push _temp[0] lgd_p1
+                push _temp[1] lgd_p2
+                # record negative (dummy) ltypes
+                push -1 lgd_ltype
+        } else {
+                # make a syntax error on purpose
+                Stop
+        }}}
+        delvar _temp
+        #
+# Macro 'addlegend' defined...
+
+        # Written by Curtis Krawchuk
+drawlegend 3    # syntax: drawlegend xcoord ycoord expansion
+        # this routine calls legend with the vectors set
+        # with 'addlegend' above.  It also deletes the vectors, so
+        # you can't call it twice.
+        legend $1 $2 $3 lgd_p1 lgd_p2 lgd_ltype lgd_lweight lgd_text
+        dellegend
+# Macro 'drawlegend' defined...
+
+        # Written by Curtis Krawchuk
+dellegend # deletes a legend definition by deleting all the vectors
+        # clean up the vectors
+        foreach i ( lgd_p1 lgd_p2 lgd_ltype lgd_lweight lgd_text ) {
+                if (whatis($i)>1) {     # if it is a real vector
+                        delvar $i
+                }
+        }
+# Macro 'dellegend' defined...
+        
+        # Written by Curtis Krawchuk
+legend 8        # makes a legend for a plot, given:
+        # $1    The starting x position (user coords)
+        # $2    The starting y position (user coords)
+        # $3    Expansion for the legend
+        # $4    Vector of ptypes, argument 1
+        # $5    Vector of ptypes, argument 2
+        # $6    Vector of ltypes
+        # $7    Vector of lweights
+        # $8    Vector of Text Annotations
+       # if either of the ptype variables is negative, no point is plotted
+        # if the ltype is negative, then don't plot the line
+        # the text is drawn with ltype 0 and the current lweight
+
+        # NOTE:  Needs to use the 'pts' macro
+        # each input vector must have the same size
+        if (!((dimen($4)==dimen($5)) && (dimen($5)==dimen($6)) && \
+                (dimen($6)==dimen($7)) && (dimen($7)==dimen($8)))) {
+                echo LEGEND Error:
+                echo   Each input vector must have the same length
+        } else {
+                define _es ($expand)    # save the current plot settings
+                define _lt ($ltype)
+                define _lw ($lweight)
+                define len (3000*$3)    # the length of the line
+                # the space between the line and the text
+                define spc (750*$3)     
+                define nl  1000         # the space btwn lines, for expansion=1
+                relocate $1 $2
+                # The x,y screen coords of the current pos'n
+                define _x ($xp)         
+                define _y ($yp)
+                expand $3               # set the expansion of the legend
+                # loop over all the legend lines
+                do i = 0, (dimen($4)-1) {
+                        # don't draw the line if the ltype is 0
+                        if ($6[$i]>=0) {
+                                # move to this position for the line
+                                relocate ($_x $_y)      
+                                # why doesn't 'lweight $6[$i]' work?
+                                define _t ($6[$i])      # define _t with a value first
+                                ltype $_t               # set the line attributes
+                                define _t ($7[$i])      
+                                lweight $_t
+                                define _t ($_x + $len) #find the end of the legend line
+                                draw ($_t $_y)          # draw the legend line
+                        }
+        
+                        # don't draw a point if ptype1 or ptype2 is negative
+                        define _t ($4[$i])
+                        define _u ($5[$i])
+                        if (($_t>=0) && ($_u>=0)) {
+                                define _t ($_x + $len/2)
+                                # find the user coordinates of this point
+                                relocate ($_t $_y)
+                                # make up temp. vectors of 1 pt. (user coords)
+                                set _tx = ($uxp)
+                                set _ty = ($uyp)
+                                # set the ltype, lweight, and ptype
+                                define _t ($6[$i])
+                                ltype $_t
+                                define _t ($7[$i])
+                                lweight $_t
+                                define _t ($4[$i])
+                                define _u ($5[$i])
+                                ptype $_t $_u
+                                # draw the points with oversize expansion
+                                pts _tx _ty 75
+                                delete _tx delete _ty
+                        }
+                        delete _u
+                        # move over to plot the text
+                        define _t ($_x + $len + $spc)
+                        relocate ($_t $_y)
+                        # draw the text with weight 1 and solid font
+                        # lweight 1
+                        ltype 0
+                        # draw the text
+                        define _t ($8[$i])
+                        putlabel 6 $_t
+                        # reset the ltype and lweight
+                        ltype $_lt
+                        lweight $_lw
+                        # move down one line by incrementing _y
+                        define _y ($_y - $nl*$3)
+                }
+                # reset the current expansion, and clean up.
+                expand $_es
+                foreach v (_es _lt _lw _x _y len spc nl _t _u) {
+                        delvar $v
+                }
+                define v delete
+        } # end of the 'if' statement
+# Macro 'legend' defined...
