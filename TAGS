@@ -1,0 +1,628 @@
+
+2dtilt.m,25
+             set y=4,75
+
+anim.m,29
+                set h1=2,29
+
+areamap.m,62
+                     define nx 4,154
+     set urat1=75,2340
+
+asdfas.m,0
+
+avery.m,21
+		set usehor=16,229
+
+averyraytrace.m,23
+		define myinx 14,204
+
+averystar.m,50
+		    set cs2=11,286
+		#define NUMDUMPS 78,1872
+
+averywind.m,28
+		set pos_accretorx=13,260
+
+avgwrite.m,22
+		set lrtime=26,1187
+
+bani.m,14
+		set C=5,61
+
+blandford.m,244
+		set rshift=22,410
+		# define arg1 540,14797
+		# define arg2 541,14826
+		#define interptype 629,16716
+                #define interptype 631,16797
+		#define interptype 635,16938
+		#define filein 1120,32266
+		#define fileout 1121,32294
+
+bondi_conv.m,15
+		set lN 4,58
+
+bphivst.m,25
+		define doprint 42,898
+
+bzplots.m,228
+		#define cres 15,365
+		define coord 19,435
+		#define cres 75,1685
+		#define cres 101,2247
+		#define x2label 118,2621
+		#define cres 147,3248
+		set it1=300,7597
+		#define x1label 1196,33544
+		#define x2label 1197,33575
+
+cartonly.m,18
+		set wavee=2,26
+
+cartonlyold.m,18
+		set wavee=2,26
+
+checksasdfasdf.m,17
+		set use=8,124
+
+checksinwave.m,21
+		set prcent=10,165
+
+codechecks.m,18
+		set mybsq=4,66
+
+coldgrmhd.m,18
+		set vdotB=2,15
+
+courant.m,19
+		set godv1c=2,18
+
+crap.m,0
+
+crapsm.m,0
+
+diss.m,0
+
+extra.m,0
+
+fail.m,40
+		define myi 2,18
+		set pksbu1=12,195
+
+fail1.m,16
+		set it=8,125
+
+ffde.m,12
+		plc 2,47
+
+fieldline.m,0
+
+fieldtests.m,14
+		set v=3,23
+
+flowlines.m,18
+		set normx=2,18
+
+forcebalance.m,96
+		set lgtot1=9,148
+		# define type 67,1453
+		#define coord 89,1835
+		#define interp 90,1853
+
+forgammie.m,31
+readall 0       # Charles,1,0
+
+gammie.m,1063
+		set notdone=14,402
+		#define GAMMIE 274,9389
+		#define GAMMIE 435,17018
+		#define GAMMIE 485,18870
+		#define GAMMIE 531,20370
+		#define GAMMIE 554,20904
+		#define program 1521,71894
+		#define program 1522,71922
+		#define program 1524,71991
+		#define interptype 1559,73354
+		#define program 1619,75454
+		#define program 1620,75482
+		#define program 1622,75551
+		#define interptype 1654,76765
+                #define refinement 1690,78015
+                #define refinement 1726,79368
+		#define x1label 1743,80134
+		#define x2label 1744,80163
+		#define x1label 1750,80313
+		#define x2label 1751,80342
+	 #define coord 1880,83013
+	 #define coord 1947,84437
+         #define coord 1948,84511
+	 #define coord 2012,85885
+	 #define Sz 2103,87940
+		# define COUNTUTOPRIMFAILCONV 2151,89213
+		# define COUNTFLOORACT 2152,89272
+		# define COUNTLIMITGAMMAACT 2153,89321
+		# define COUNTINFLOWACT 2154,89383
+		# define COUNTUTOPRIMFAILRHONEG 2155,89440
+		# define COUNTUTOPRIMFAILUNEG 2156,89476
+		# define COUNTUTOPRIMFAILRHOUNEG 2157,89510
+
+gener.m,47
+		define which 24,286
+		set dm$which=74,1695
+
+gmri.m,18
+		set mydx1=5,50
+
+grb1.m,15
+		set n1=2,18
+
+grbmodel.m,0
+
+grif.m,21
+		    set dr 10,277
+
+gtwod.m,325
+		do i=3,33
+		#define Lx 1373,43258
+                #define Ly 1374,43295
+		#define Lx 1426,44790
+                #define Ly 1427,44827
+		       #define gam 1693,52148
+		#define myg 2418,72155
+		  #define coord 2931,86944
+		  #define CONSTLEVELS 2938,87127
+		#define PLANE 2975,88216
+		#define WHICHLEV 2976,88236
+
+gtwodavgs.m,66
+gcalc2          17       # gcalc2 1 0 pi/2   or gcalc2 2 rho 1,0
+
+gtwodmaps.m,16
+		set _a=5,144
+
+gtwodmaps2.m,62
+                     define nx 4,154
+     set urat1=75,2340
+
+gtwodplots.m,17
+		set it=33,864
+
+hawley.m,25
+mdotvsr 0       # a=1,0
+
+idealmhdcheck.m,17
+		set disk=4,56
+
+inftest.m,17
+		set rho0 3,15
+
+jet1.m,19
+		set myv1=27,562
+
+jetinst.m,40
+		set iii=4,52
+		#define cres 43,1076
+
+kaz.m,75
+		set kb=3,37
+		  # define your 566,14960
+		#define WHICHLEV 1049,29565
+
+kaz_backup.m,20
+		 set xnuc=13,296
+
+kom.m,614
+		set olditem=6,76
+		#define x1label 272,5342
+		#define x1label 321,6403
+		#define maxc 462,9319
+		#define maxc 463,9340
+		#define maxc 464,9361
+		#define minc 864,17241
+		#define maxc 866,17294
+		#define maxc 867,17315
+		#define minc 900,17945
+		#define minc 902,17999
+		#define maxc 1097,22307
+		#define maxc 1201,24346
+		       #define maxc 1204,24411
+		       #define maxc 1205,24439
+		#define minc 1494,30557
+		#define maxc 1496,30597
+		#define POSCONTCOLOR 1538,31464
+		#define NEGCONTCOLOR 1539,31491
+		#define UNITVECTOR 1550,31671
+		#define maxc 2306,47691
+		#define maxc 2357,48553
+
+levinson.m,132
+		ksp2bl # creates einf,4,79
+		ksp2bl # creates einf, einfEM,4,79
+		ksp2bl # creates einf, einfEM, einfbl,4,79
+		set eta1=7,187
+
+lumvsr.m,43
+		set oldti=23,620
+		 #define nz 45,1191
+
+lw2003.m,236
+		set lev=11,156
+		#define POSCONTCOLOR 68,1162
+		#define NEGCONTCOLOR 69,1191
+		#define BOXCOLOR 70,1220
+		#define POSCONTLTYPE 71,1247
+		#define NEGCONTLTYPE 72,1272
+		  #define coord 211,4064
+		  #define CONSTLEVELS 218,4257
+
+lwtests.m,72
+		set trho=8,137
+		#define iii 15,250
+		#          define iii 21,440
+
+magnetic_diss.m,21
+		set alphamag=5,42
+
+manyeners.m,14
+		do ii=2,60
+
+meissner.m,100
+		#define sizenx 35,826
+		#define sizeny 36,847
+		#define newgy1 91,2323
+		#define cres 98,2467
+
+metrics.m,22
+		define triple 3,25
+
+mignone.m,19
+		set rideal=2,35
+
+mode.m,38
+		define myi 2,18
+		set god1=17,340
+
+mode2.m,39
+		define myi 4,103
+		set god1=19,425
+
+more.m,134
+tlabel 101# put a title on the plot,3,58
+        # define the 65,2799
+        # define the 147,5521
+        # define the 187,7348
+
+mri.m,93
+		set mydr=16,218
+		#define max 231,6298
+		#define min 232,6316
+		#define delta 233,6339
+
+myplots.m,1673
+ # define grandpa 23,826
+ # define fileversion 25,855
+ # define filetype 26,879
+ #define PVER 29,959
+ #define GRIDVER 30,975
+ #define DVER 31,994
+ #define FLVER 32,1049
+ #define NPVER 33,1066
+ #define AVG1DVER 34,1083
+ #define AVG2DVER 35,1103
+ #define ENERVER 36,1123
+ #define LOSSVER 37,1142
+ #define SPVER 38,1161
+ #define TSVER 39,1180
+ #define LOGDTVER 40,1199
+ #define STEPVER 41,1219
+ #define PERFVER 42,1238
+ #define ADVER 43,1257
+ #define PDVER 44,1277
+ #define CALCVER 45,1297
+ #define PTYPE 47,1400
+ #define GRIDTYPE 48,1440
+ #define DTYPE 49,1461
+ #define FLTYPE 50,1490
+ #define NPTYPE 51,1520
+ #define AVG2DTYPE 52,1547
+ #define AVG1DTYPE 53,1568
+ #define ENERTYPE 54,1589
+ #define LOSSTYPE 55,1610
+ #define SPTYPE 56,1631
+ #define TSTYPE 57,1653
+ #define LOGDTTYPE 58,1675
+ #define STEPTYPE 59,1698
+ #define PERFTYPE 60,1720
+ #define ADTYPE 61,1742
+ #define PDTYPE 62,1796
+ #define CALCTYPE 63,1850
+ #define EXPANDTYPE 64,1901
+ #define NPCOMPUTETYPE 65,1962
+                   # define interp 84,3090
+                  relocate 140,5495
+                   #define CONVT1 320,12126
+                   #define CONVT2 322,12204
+                   #define CONV1 325,12322
+                   #define CONV2 327,12400
+                   #define CONVT1 401,15109
+                   #define CONVT2 403,15187
+                   #define CONV1 406,15301
+                   #define CONV2 408,15382
+                   #define CONVT1 480,18020
+                   #define CONVT2 482,18098
+                   #define CONV1 485,18212
+                   #define CONV2 487,18291
+                   # define interp 553,20858
+
+myplots2.m,71
+		     set start=13,287
+                      #define lisco 111,3345
+
+newinterpmacro.m,66
+                set quickmyuse=10,148
+		#define program 51,1150
+
+niayesh.m,20
+		set ratdlm=8,171
+
+ns1.m,20
+		set freeze1=6,79
+
+paratest.m,15
+		set it=6,86
+
+phivsr.m,112
+		define mynx 13,167
+		#define x2label 1118,26773
+		#define x2label 1120,26831
+		#define x2label 1156,27918
+
+pls.m,171
+pls    17	# pls <file> <function> <type of plot=1,0
+		   #define WHICHLEV 53,1913
+		   #define WHICHLEV 82,2783
+		   #define WHICHLEV 105,3502
+		#define rny 162,5239
+
+plsold.m,171
+pls    17	# pls <file> <function> <type of plot=1,0
+		   #define WHICHLEV 53,1913
+		   #define WHICHLEV 82,2783
+		   #define WHICHLEV 105,3502
+		#define rny 162,5239
+
+powercheck.m,21
+		set myuse0=11,144
+
+pulsar.m,0
+
+punsly.m,93
+		set _defcoord=8,108
+		#define POSCONTCOLOR 1381,35359
+		#define NEGCONTCOLOR 1382,35387
+
+qpo1.m,18
+		set mydlm=2,11
+
+ramesh_disk.m,1124
+		set zin=43,760
+		#define max 104,1847
+		#define max 128,2392
+		#define x2label 269,5870
+		#define x2label 270,5962
+		#define x2label 292,6969
+		#define x2label 293,7061
+		#define x2label 327,8248
+		#define x2label 328,8347
+		#define POSCONTCOLOR 454,11225
+		#define NEGCONTCOLOR 455,11254
+		#define POSCONTCOLOR 486,11993
+		#define NEGCONTCOLOR 487,12022
+		#define x2label 501,12375
+		#define POSCONTCOLOR 1304,30701
+		#define NEGCONTCOLOR 1305,30730
+		#define x_gutter 1428,33549
+                #define x_gutter 1447,34036
+		#define cres 1453,34185
+		#define ii 1666,39005
+		#define ii 1667,39023
+		#define cres 2210,52002
+		#define POSCONTCOLOR 2211,52020
+		#define NEGCONTCOLOR 2212,52051
+		#define x2label 2282,53530
+		#define lgRout 2788,65854
+		#define x1label 2797,66075
+		#define x2label 2909,68660
+		#define x2label 2911,68786
+		#define x2label 2912,68836
+		#define x1label 2956,69802
+                #define x2label 2957,69824
+		#define x1label 3000,70959
+		#define x2label 3001,70981
+		#define startdump 3091,72998
+		#define enddump 3092,73021
+		#define myangle 3425,81760
+
+ramesh_instability.m,223
+		set lgptot=4,39
+		#define myRin 53,799
+		#define myRout 54,819
+		#define myRin 55,843
+		#define myRout 56,864
+		#define myRin 108,1894
+		#define myRout 109,1914
+		#define myRin 110,1938
+		#define myRout 111,1959
+
+ramesh_selfsim.m,428
+		set aphiuse=44,1019
+		#define coord 81,1725
+		#define POSCONTCOLOR 248,5639
+		#define NEGCONTCOLOR 249,5670
+		#define lgRout 1031,23408
+		#define x1label 1041,23669
+		#define x1label 1074,24600
+		#define x2label 1101,25325
+		#define x2label 1129,26026
+		#define x2label 1131,26157
+		#define x2label 1132,26207
+		       #define x1out 1503,35234
+		#define POSCONTCOLOR 1545,36362
+		#define NEGCONTCOLOR 1546,36391
+
+rdreads.m,1252
+ # define grandpa 23,826
+ # define fileversion 25,855
+ # define filetype 26,879
+ #define PVER 29,959
+ #define GRIDVER 30,975
+ #define DVER 31,994
+ #define FLVER 32,1049
+ #define NPVER 33,1066
+ #define AVG1DVER 34,1083
+ #define AVG2DVER 35,1103
+ #define ENERVER 36,1123
+ #define LOSSVER 37,1142
+ #define SPVER 38,1161
+ #define TSVER 39,1180
+ #define LOGDTVER 40,1199
+ #define STEPVER 41,1219
+ #define PERFVER 42,1238
+ #define ADVER 43,1257
+ #define PDVER 44,1277
+ #define CALCVER 45,1297
+ #define PTYPE 47,1400
+ #define GRIDTYPE 48,1440
+ #define DTYPE 49,1461
+ #define FLTYPE 50,1490
+ #define NPTYPE 51,1520
+ #define AVG2DTYPE 52,1547
+ #define AVG1DTYPE 53,1568
+ #define ENERTYPE 54,1589
+ #define LOSSTYPE 55,1610
+ #define SPTYPE 56,1631
+ #define TSTYPE 57,1653
+ #define LOGDTTYPE 58,1675
+ #define STEPTYPE 59,1698
+ #define PERFTYPE 60,1720
+ #define ADTYPE 61,1742
+ #define PDTYPE 62,1796
+ #define CALCTYPE 63,1850
+ #define EXPANDTYPE 64,1901
+ #define NPCOMPUTETYPE 65,1962
+                   # define interp 84,3090
+		        #define x2label 245,8099
+                # define only 913,34802
+                # define derivative 1009,37467
+		 #define Sz 1022,37948
+                # #define MAGPHI 1251,46337
+
+rebecaphi.m,18
+		set _n3=12,184
+
+restartderes.m,16
+		set _n1=6,65
+
+sashadiff.m,21
+		set rhoanal=5,126
+
+sashagod.m,19
+   set vanal=3,31
+
+sashagod2.m,18
+		set vanal=8,75
+
+scalingdata.m,120
+		set cores=5,57
+		#define startx 67,1705
+		#define endy 68,1730
+		#define startx 114,2686
+		#define endy 115,2712
+
+scn.m,16
+set alpha 9,82
+
+scnsymmetry.m,15
+set files 2,1
+
+sigmaproblem.m,18
+		set Bd1=31,908
+
+spin.m,14
+		set a=4,67
+
+stress.m,279
+		set $1$2$3=2,18
+		#define picki 118,2495
+		#define pickj 119,2517
+		#define picki 121,2561
+		#define pickj 122,2583
+		#define picki 124,2649
+		#define pickj 125,2671
+		#define picki 128,2734
+		#define pickj 129,2756
+		#define picki 130,2777
+		#define pickj 131,2814
+
+symmetry.m,33
+                set $1diff=2,50
+
+tests1dhd.m,0
+
+testworks.jon.m,205
+		    set blgv311 5,103
+                    # define T^8,195
+		    #define it 52,1587
+		#define x2label 427,12715
+		#define x1label 489,13996
+		#define x2label 526,14707
+		#define x2label 527,14774
+
+thindisk.m,18
+		set thin=6,125
+
+thindisk2.m,26
+		1311  set dm2048=6,137
+
+trans1.m,20
+		set "$!2"u0=2,12
+
+twod.m,1047
+plc    17	# plc <file> <function> <type of plot=1,0
+                # define cres 70,1934
+                   #define truelimtxl 194,5612
+                   #define truelimtxh 195,5661
+                   #define truelimtyl 196,5710
+                   #define truelimtyh 197,5759
+		   #define WHICHLEV 262,7555
+		   #define WHICHLEV 277,7964
+		   #define WHICHLEV 307,8824
+		   #define WHICHLEV 453,13306
+		   #define WHICHLEV 463,13593
+		   #define WHICHLEV 488,14346
+                # define cres 585,17021
+		   #define WHICHLEV 818,23641
+		   # define realdx 822,23810
+		   # define realdy 823,23837
+		   #define WHICHLEV 849,24589
+		   #define WHICHLEV 872,25308
+		#define rny 930,27064
+		   #define WHICHLEV 1053,30825
+		   #define WHICHLEV 1070,31331
+		   #define WHICHLEV 1102,32288
+		  # define your 1332,38751
+		#define PLANE 2118,63975
+		#define WHICHLEV 2119,63995
+		#define max 2281,69014
+		#define min 2282,69030
+		#define min 2283,69047
+		     # define whether 2786,85775
+                set x=2997,92356
+
+utils.m,15
+		set $0=2,43
+
+uzdensky.m,0
+
+wavespeed_check.m,0

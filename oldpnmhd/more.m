@@ -1,0 +1,388 @@
+# Macro 'smstart' defined...
+# Written by Curtis Krawchuk
+tlabel 101# put a title on the plot, centering it in the plot region
+        # Usage:  tlabel title, E.g. tlabel Hi there
+        # No quotes are necessary, since it takes the rest of the line
+        #   as arguments.
+        #
+        # The known coordinates of the plot are:
+        # ($fx1,$fy1) : the BL corner of the plot, in user coords
+        # ($fx2,$fy2) : the UR corner of the plot, in user coords
+        # ($gx1,$gy1) : the BL corner of the plot, in screen coords
+        # ($gx2,$gy2) : the UR corner of the plot, in screen coords
+        # see the macro 'show' for more information.
+        #
+        # if there are no arguments, then use a default
+        if ($?1 == 0) { define 1 "Untitled Plot" }
+        define _x (($gx2-$gx1)/2 + $gx1) # the middle of the user plot region
+        define _y ($gy2+900)            # just above the top axis
+        # relocate to the device coordinates, since they are independent
+        # of the current user scale
+        relocate ( $_x $_y )            # relocate to those coordinates
+        # put the label there
+        putlabel 5 $1
+        define _x delete                # delete the temporary variables
+        define _y delete
+# Macro 'tlabel' defined...
+
+        # Written by Curtis Krawchuk
+delvar 1        # deletes a thing given by the first argument
+        # decides how to delete something based on the value of 'whatis'
+        # See 'help whatis' for a description.
+        # useful for cleaning up temporary vectors/variables
+        if (is_set(whatis($1),1)==1) {
+                # the argument is a macro
+                macro $1 delete
+        } else {
+        if (is_set(whatis($1),2)==1) {
+                # the argument is a variable
+                define $1 delete
+        } else {
+        if (is_set(whatis($1),3)==1) {
+                # the argument is a vector
+                delete $1
+        }# else {
+        #       # the argument must be a constant
+        #       echo DELVAR: Can't delete the constant argument: $1
+        #}
+        }}
+        # Comment must be here to end off all of the closing braces
+# Macro 'delvar' defined...
+
+       # Written by Curtis Krawchuk
+drawspline 2    # draws a spline curve through a set of data points
+        # the vector has to be monotonic, but not necessarily increasing
+        # if it isn't, expect unexpected results :)
+        # inputs: 2 vectors, x and y points
+        define dens 100         # density of output = 100x input density
+        define _max ($1[0])
+        define _n (DIMEN($1))
+        define _min ($1[$_n-1])
+        define _d (($_max-$_min)/($_n*$dens))
+        set _v = $1             
+        set _w = $2             
+        sort{_v _w}     # sort the x values and y values together
+        # define the output
+        set _x = $_min,$_max,$_d
+        set _y = _x
+        spline _v _w _x _y
+        connect _x _y
+        # clean up
+        foreach v (dens _max _n _min _d _x _y) {delvar $v}
+        define v delete
+# Macro 'drawspline' defined...
+
+        # Written by Curtis Krawchuk
+gsave 1 # save the current state of the graphics (to a vector $1)
+        # this includes: angle, aspect, ctype, expand, ltype, lweight,
+        # ptype, and location.
+        #
+        # declare a vector
+        set dimen($1) = 12
+        set $1[0] = ($!!angle)
+        set $1[1] = ($!!aspect)
+        set $1[2] = ($!!ctype)
+        set $1[3] = ($!!expand)
+        set $1[4] = ($!!ltype)
+        set $1[5] = ($!!lweight)
+        # to save the ptype, create a temporary vector
+        # the <> force expansion now -- so it doesn't track $ptype
+        set _temp = < $ptype >
+        set $1[6] = _temp[0]
+        set $1[7] = _temp[1]
+        delvar _temp
+        # save the plotting area
+        set $1[8] = ($!!gx1)
+        set $1[9] = ($!!gx2)
+        set $1[10] = ($!!gy1)
+        set $1[11] = ($!!gy2)
+# Macro 'gsave' defined...
+
+grestore 1 # restores the graphics state given by the first arg., or
+        # the named argument -- must be defined with 'gsave'
+        if (dimen($1) != 12) {
+                echo Can't restore the graphics state:  $1 isn't in the
+                echo   right form.
+                return
+        }
+        angle $($1[0])
+        aspect $($1[1])
+        ctype $($1[2])
+        expand $($1[3])
+        ltype $($1[4])
+        lweight $($1[5])
+        ptype $($1[6]) $($1[7])
+        location $($1[8]) $($1[9]) $($1[10]) $($1[11])
+# Macro 'grestore' defined...
+
+        # Written by Curtis Krawchuk
+push 2  # appends value $1 to the vector $2
+        #
+        # if the name doesn't exist, then create a vector with $1 as the
+        # first argument.
+        if (is_set($2,3) != 1) {
+                set $2 = $1
+                return
+        }
+        set $2 = $2 CONCAT $1
+# Macro 'push' defined...
+
+        # Written by Curtis Krawchuk
+pushstr 2 # appends a string $1 to the string vector $2
+        # If the vector doesn't exist, then create it with 1 element: $1
+        if (is_set($2,3) != 1) {
+                set dimen($2) = 1.s
+                set $2[0] = $1
+                return
+        }
+        set $2 = $2 CONCAT $1
+# Macro 'pushstr' defined
+
+        # written by Curtis Krawchuk
+rptype 1        # defines a (random) ptype.  Type rptype 0 to reset the cycle.
+        # Side effects: sets strings _ninc and _pinc
+        # modify the vectors below (_npts and _psty) to give different cycles
+        # the number of points for the point style
+        set _npts = {4 3 10 5}
+        # define the point style
+        set _psty = {0 3 1 2}
+        # if the argument $1 is 0, or one or both global
+        # counters are not set, then reset the counters to 0.
+        if ((is_set(_ninc,2)!=1 || is_set(_pinc,2)!=1) || $1==0) {
+                define _ninc 0
+                define _pinc 0
+        }
+        define _n $(DIMEN(_npts))
+        define _m $(DIMEN(_psty))
+        # now set the ptype
+        ptype $(_npts[$_ninc]) $(_psty[$_pinc])
+        # increment the point type for the next pass.  Don't loop in
+        # as you would for a double 'do' loop -- instead, just increment
+        # them together, and then adjust the increment at the end to get all
+        # the possibilities.
+        define _pinc $($_pinc + 1)
+        # make sure it is not beyond the limits
+        if ($_pinc >= DIMEN(_psty)) { define _pinc 0}
+        # increment the number of points for the point type
+        define _ninc $($_ninc + 1)
+        # make sure it is not beyond the limits of the vector _npts
+        if ($_ninc >= DIMEN(_npts)) { 
+                define _ninc 0
+                # make sure that the cycle doesn't repeat prematurely:
+                # if DIMEN(_npts) mod DIMEN(_psty) is 0 (they are a multiple
+                # of each other), then increment the psty again.
+                if ((DIMEN(_npts) - DIMEN(_psty)*INT(DIMEN(_npts)/DIMEN(_psty)))==0) {
+                        define _pinc $($_pinc + 1)
+                        if ($_pinc >= DIMEN(_psty)) { define _pinc 0}
+                }
+        }
+        # delete temporary variables
+        foreach v {_n _npts _m _psty} {delvar $v}
+        #
+# Macro 'rptype' defined...
+
+        # written by Curtis Krawchuk
+rltype 1        # defines a (random) ltype.  Type rltype 0 to reset the cycle.
+        # Side effects: sets strings _sinc and _winc
+        # define the line types and weights
+        set _lsty = 0,6
+        set _lwt = 1,5
+        # if the argument $1 is 0, or one or both global
+        # counters are not set, then reset the counters to 0.
+        if ((is_set(_sinc,2)!=1 || is_set(_winc,2)!=1) || $1==0) {
+                define _sinc 0
+                define _winc 0
+        }
+        define _n $(DIMEN(_lsty))
+        define _m $(DIMEN(_lwt))
+        # set the ltype and lweight
+        ltype $(_lsty[$_sinc])
+        lweight $(_lwt[$_winc])
+        # now increment the counters as you would through a double 'do' loop
+        define _sinc $($_sinc + 1)
+        # make sure it is not beyond the limits of the vector
+        if ($_sinc >= DIMEN(_lsty)) { 
+                define _sinc 0
+                # increment the lweight counter too
+                define _winc $($_winc + 1)
+                # make sure it is not beyond the limits of the vector
+                if ($_winc >= DIMEN(_lwt)) { define _winc 0 }
+        }
+        # delete temporary variables
+        foreach v {_n _lsty _m _lwt} {delvar $v}                
+        #
+# Macro 'rltype' defined...
+
+        # Written by Curtis Krawchuk
+pts 3   # executes the 'points' function, with a % enlargment of the
+        # symbols given by a third argument:  pts x y 75 gives 75%
+        define _es ($expand)    # save the current expansion
+        define _lt ($ltype)     # save the current line type
+        define _f (1.0+($3/100))  # compute the enlargement factor
+        define _e ($_es*$_f)    # the new expansion
+        ltype 0                 # always use solid lines for the symbols
+        expand $_e
+        points $1 $2            # draw the points
+        expand $_es             # put back the expansion, ltype
+        ltype $_lt
+        foreach v {_f _e _es _lt} {delvar $v}
+# Macro 'pts' defined...
+
+        # Written by Curtis Krawchuk
+addlegend 2     # adds data series to the vectors needed for the legend
+        # $1:  if $1 = 0  plot only the lines
+        #            = 1  plot both lines and points
+        #            = 2  plot only points
+        # $2:  The text annotation for this series -- must be enclosed
+        #      in single quotes, e.g. 'Series Text'
+        # This routine reads from the state variables, so call this routine
+        # right after you plot a data series.
+        #if ($?1 != 1) { define 1 (1) }
+        #if ($?2 != 1) { define 2  }
+        push $!lweight lgd_lweight
+        pushstr $2 lgd_text
+        set _temp = < $ptype >
+        # decide if we should plot the lines
+        if ($1==1) {
+                # record the proper ptype
+                push _temp[0] lgd_p1
+                push _temp[1] lgd_p2
+                # record the proper ltype
+                push $!ltype lgd_ltype
+        } else {
+        if ($1==0) {
+                # record dummy ptypes (negative ones) so legend doesn't
+                # plot symbols
+                push -1 lgd_p1
+                push -1 lgd_p2
+                # record the proper ltype
+                push $!ltype lgd_ltype
+        } else {
+        if ($1 == 2) {
+                # record the proper ptype
+                # record the proper ptype
+                push _temp[0] lgd_p1
+                push _temp[1] lgd_p2
+                # record negative (dummy) ltypes
+                push -1 lgd_ltype
+        } else {
+                # make a syntax error on purpose
+                Stop
+        }}}
+        delvar _temp
+        #
+# Macro 'addlegend' defined...
+
+        # Written by Curtis Krawchuk
+drawlegend 3    # syntax: drawlegend xcoord ycoord expansion
+        # this routine calls legend with the vectors set
+        # with 'addlegend' above.  It also deletes the vectors, so
+        # you can't call it twice.
+        legend $1 $2 $3 lgd_p1 lgd_p2 lgd_ltype lgd_lweight lgd_text
+        dellegend
+# Macro 'drawlegend' defined...
+
+        # Written by Curtis Krawchuk
+dellegend # deletes a legend definition by deleting all the vectors
+        # clean up the vectors
+        foreach i ( lgd_p1 lgd_p2 lgd_ltype lgd_lweight lgd_text ) {
+                if (whatis($i)>1) {     # if it is a real vector
+                        delvar $i
+                }
+        }
+# Macro 'dellegend' defined...
+        
+        # Written by Curtis Krawchuk
+legend 8        # makes a legend for a plot, given:
+        # $1    The starting x position (user coords)
+        # $2    The starting y position (user coords)
+        # $3    Expansion for the legend
+        # $4    Vector of ptypes, argument 1
+        # $5    Vector of ptypes, argument 2
+        # $6    Vector of ltypes
+        # $7    Vector of lweights
+        # $8    Vector of Text Annotations
+       # if either of the ptype variables is negative, no point is plotted
+        # if the ltype is negative, then don't plot the line
+        # the text is drawn with ltype 0 and the current lweight
+
+        # NOTE:  Needs to use the 'pts' macro
+        # each input vector must have the same size
+        if (!((dimen($4)==dimen($5)) && (dimen($5)==dimen($6)) && \
+                (dimen($6)==dimen($7)) && (dimen($7)==dimen($8)))) {
+                echo LEGEND Error:
+                echo   Each input vector must have the same length
+        } else {
+                define _es ($expand)    # save the current plot settings
+                define _lt ($ltype)
+                define _lw ($lweight)
+                define len (3000*$3)    # the length of the line
+                # the space between the line and the text
+                define spc (750*$3)     
+                define nl  1000         # the space btwn lines, for expansion=1
+                relocate $1 $2
+                # The x,y screen coords of the current pos'n
+                define _x ($xp)         
+                define _y ($yp)
+                expand $3               # set the expansion of the legend
+                # loop over all the legend lines
+                do i = 0, (dimen($4)-1) {
+                        # don't draw the line if the ltype is 0
+                        if ($6[$i]>=0) {
+                                # move to this position for the line
+                                relocate ($_x $_y)      
+                                # why doesn't 'lweight $6[$i]' work?
+                                define _t ($6[$i])      # define _t with a value first
+                                ltype $_t               # set the line attributes
+                                define _t ($7[$i])      
+                                lweight $_t
+                                define _t ($_x + $len) #find the end of the legend line
+                                draw ($_t $_y)          # draw the legend line
+                        }
+        
+                        # don't draw a point if ptype1 or ptype2 is negative
+                        define _t ($4[$i])
+                        define _u ($5[$i])
+                        if (($_t>=0) && ($_u>=0)) {
+                                define _t ($_x + $len/2)
+                                # find the user coordinates of this point
+                                relocate ($_t $_y)
+                                # make up temp. vectors of 1 pt. (user coords)
+                                set _tx = ($uxp)
+                                set _ty = ($uyp)
+                                # set the ltype, lweight, and ptype
+                                define _t ($6[$i])
+                                ltype $_t
+                                define _t ($7[$i])
+                                lweight $_t
+                                define _t ($4[$i])
+                                define _u ($5[$i])
+                                ptype $_t $_u
+                                # draw the points with oversize expansion
+                                pts _tx _ty 75
+                                delete _tx delete _ty
+                        }
+                        delete _u
+                        # move over to plot the text
+                        define _t ($_x + $len + $spc)
+                        relocate ($_t $_y)
+                        # draw the text with weight 1 and solid font
+                        # lweight 1
+                        ltype 0
+                        # draw the text
+                        define _t ($8[$i])
+                        putlabel 6 $_t
+                        # reset the ltype and lweight
+                        ltype $_lt
+                        lweight $_lw
+                        # move down one line by incrementing _y
+                        define _y ($_y - $nl*$3)
+                }
+                # reset the current expansion, and clean up.
+                expand $_es
+                foreach v (_es _lt _lw _x _y len spc nl _t _u) {
+                        delvar $v
+                }
+                define v delete
+	} # end of the 'if' statement
+# Macro 'legend' defined...

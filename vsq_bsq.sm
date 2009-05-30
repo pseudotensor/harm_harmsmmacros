@@ -1,0 +1,24 @@
+#
+#jrdp dump0000
+#gammienew
+#gammiegrid gdump
+#
+# Remember v_HARM = gamma v 
+#  
+
+set Bd1 = bd1 * uu0 - bu0 * ud1
+set Bd2 = bd2 * uu0 - bu0 * ud2
+set Bd3 = bd3 * uu0 - bu0 * ud3
+set Bsq = Bd1*B1 + Bd2*B2 + Bd3*B3
+set vd1 = v1*gv311 + v2*gv312 + v3*gv313
+set vd2 = v1*gv321 + v2*gv322 + v3*gv323
+set vd3 = v1*gv331 + v2*gv332 + v3*gv333
+set vsq = vd1*v1 + vd2*v2 + vd3*v3
+set gammav = sqrt( 1+vsq)
+set lgammav = lg(gammav)
+set lB1 = lg(abs(B1)+1.e-30)
+set lB2 = lg(abs(B2)+1.e-30)
+set lB3 = lg(abs(B3)+1.e-30)
+set lv1 = lg(abs(v1)+1.e-30)
+set lv2 = lg(abs(v2)+1.e-30)
+set lv3 = lg(abs(v3)+1.e-30)

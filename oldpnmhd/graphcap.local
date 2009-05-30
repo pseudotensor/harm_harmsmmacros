@@ -1,0 +1,44 @@
+BIN = /usr/local/bin
+
+#18 144 305 718
+postencap2|encap2|postfile2|encapsulated postscript2, written to file $1:\
+	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
+	'%'%BoundingBox\: 18 160 330 718\n'%'%DocumentFonts\: Helvetica\n\
+	'%'%EndComments\n:\
+	:SY=mv $F $1:tc=postscript2:
+postscript2|POSTSCRIPT|Postscript for non-square plots :\
+	:xr#1195:yr#2390:ch#.0229:cw#.013:\
+	:CW=stroke\ngrestore\nshowpage\nend\n:\
+	:DE=L\n(7#1+!778<#11;#0!7)CS M\n:\
+	:dE=l\n(7#1+!778<#11;#0!7)CS M\n:vE=m :\
+	:OW='%!\ninitgraphics\n:\
+	:OX=(#22!9#300!8#0!7) 20 dict begin\n72 300 div dup scale\n\
+	1 setlinejoin 0 setlinecap\n\
+	/Helvetica findfont 55 scalefont setfont \n\
+	/B {CS newpath moveto} def\n\
+	/F {moveto 0 setlinecap} def\n\
+	/C {CS M 1 1 3 {pop 3 1 roll 255 div} for SET_COLOUR} def\n\
+	/CS {currentpoint stroke} def\n\
+	/CF {currentpoint eofill} def\n\
+	/L {lineto} def /l {rlineto} def /M {moveto} def /m {rmoveto} def\n\
+	/P {moveto 0 1 rlineto stroke} def\n\
+	/T {currentlinecap exch 1 setlinecap show setlinecap} def\n\
+        errordict /nocurrentpoint {pop 0 0 M currentpoint} put\n:\
+	:OY=/SET_COLOUR statusdict begin /processcolors where\n\
+	'  {pop processcolors 1 gt} {false} ifelse\n\
+	'  {'(setrgbcolor')} {'(pop pop pop')} ifelse cvx end def\n:\
+	:OZ= 80 600 translate\ngsave\n:\
+	:ME=P\n:\
+	:PG=stroke showpage grestore gsave\n(#0!7:\
+	:VE=M :XY=(1%d) (2%d) :FS=(#0!7)B\n:FE=CF M\n:FD=(1%d) (2%d) L\n:\
+	:CT= (1%d) (2%d) (3%d) C\n:DC=black\
+	:TB=(1%d) (2%d) F '(:TE=') T\n:\
+	:lt=01234\:;:\
+	:ML=CS (1$0)[]($1)[6 12]($2)[32 24]($3)[80 24]($4)[6 12 32 12]\
+		($\:)currentrgbcolor 5 3 roll 1 1 1 setrgbcolor []\
+		($;)M setrgbcolor CS []($$) 0 setdash M\n:\
+	:LW=CS M (1|$0#1%d$D1%g) 100 mul 72 div($$) dup setlinewidth\n\
+	/P [ /moveto cvx 0 5 -1 roll .05 add dup -2 div 0 exch /rmoveto cvx \
+	/rlineto cvx /stroke cvx ] cvx def\n:\
+	:OF=ps_XXXXXX:\
+	:SY=lpr -r $F:

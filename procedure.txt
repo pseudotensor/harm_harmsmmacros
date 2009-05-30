@@ -1,0 +1,27 @@
+
+#
+
+jre forcebalance.m
+doallforces
+
+# Then look at the various "forces."
+
+# error in rest-mass conservation
+plc 0 errorrm
+
+# error in energy-conservation
+plc 0 errorstress0
+
+# error in momentums (1=R,2=z,3=\phi)
+plc 0 errorstress1
+plc 0 errorstress2
+plc 0 errorstress3
+
+# error in divB
+plc 0 errorb0
+
+# error in induction equations (1=R,2=z,3=\phi)
+plc 0 errorb1
+plc 0 errorb2
+plc 0 errorb3
+
