@@ -89,10 +89,10 @@ errorsym 1      #
 		print {avgratasym peakratasym peak2ratasym}
 		#
 		if(avgrat<avgratasym){
-		   plc 0 ($1diff/$1asum)
+		   plc0 0 ($1diff/$1asum)
 		}
 		if(avgrat>avgratasym){
-		   plc 0 ($1sum/$1asum)
+		   plc0 0 ($1sum/$1asum)
 		}
 		#
 		#
