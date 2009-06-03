@@ -989,6 +989,10 @@ jrdp3du	1	#
 		#
 		gammienew
  		#
+                #
+                print {_is _ie _js _je _ks _ke}
+                #
+                #
 jrdp3duentropy	1	# with NPRDUMP=8 even if doing entropy since entropy primitive not really used
 		jrdpheader3d $1
 		da dumps/$1
@@ -1281,8 +1285,8 @@ jrdpunits 0  #
 jrdpheader3d 1  #
 		da dumps/$1
 		lines 1 1
-		read '%g %d %d %d %g %g %g %g %g %g %d %g %g %g %g %g %g %g %d %g %g' \
-		    {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord _MBH _QBH}
+		read '%g %d %d %d %g %g %g %g %g %g %d %g %g %g %g %g %g %g %d %g %g %d %d %d %d %d %d' \
+		    {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord _MBH _QBH _is _ie _js _je _ks _ke}
 		    #
 		    #
 		    #

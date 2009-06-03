@@ -39,7 +39,9 @@ mirrordel 1     # CENTER or FACE1 across equator
 		set $1partner=$1diff
 		#
 		set $1diffpeak=0
+		set $1sumpeak=0
 		set $1peak=0
+		set $1peak2=0
 		#
 		#
 		do ii=0,$nx*$ny-1,1 {
@@ -56,10 +58,12 @@ mirrordel 1     # CENTER or FACE1 across equator
 		  #
 		  #if(ABS($1[$ii])>$1peak) { set  $1peak = ABS($1[$ii]) } 
 		  if(ABS($1diff[$ii])>$1diffpeak) { set  $1diffpeak = $1diff[$ii] set  $1peak = $1asum[$ii] } 
+                  if(ABS($1sum[$ii])>$1sumpeak) { set  $1sumpeak = $1sum[$ii] set  $1peak2 = $1asum[$ii] } 
 		  #
 		}
-		ctype default pl 0 r $1diff
-		ctype red points r $1diff
+		#
+		#ctype default pl 0 r $1diff
+		#ctype red points r $1diff
 		#
 		errorsym $1
 		#
@@ -76,7 +80,22 @@ errorsym 1      #
 		set avgrat=SUM(ABS($1diff))/SUM($1asum)
 		set peakrat=$1diffpeak/$1peak
 		set peak2rat=$1diffpeak/SUM($1asum)/dimen($1asum)
+                #
+		set avgratasym=SUM(ABS($1sum))/SUM($1asum)
+		set peakratasym=$1sumpeak/$1peak2
+		set peak2ratasym=$1sumpeak/SUM($1asum)/dimen($1asum)
+                #
 		print {avgrat peakrat peak2rat}
+		print {avgratasym peakratasym peak2ratasym}
+		#
+		if(avgrat<avgratasym){
+		   plc 0 ($1diff/$1asum)
+		}
+		if(avgrat>avgratasym){
+		   plc 0 ($1sum/$1asum)
+		}
+		#
+		#
 		#
 mirrordel2 1    # FACE2 or CORN across equator
 		set $1diff=$1*0

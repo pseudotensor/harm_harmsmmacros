@@ -81,7 +81,7 @@ plc    17	# plc <file> <function> <type of plot=100,000,overlay=010,000,limits=0
 		           define max $delta
 		        }
 		        #
-		        if(0 & $min==-$max){\
+		        if(1 & $min==-$max){\
 		         echo min is minus max
 		         if($cres % 2 == 1){ set lev=0,$max,$delta }
 		         if($cres % 2 == 0){ set lev=$delta/2,$max,$delta }
