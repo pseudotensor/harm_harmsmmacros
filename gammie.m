@@ -1513,6 +1513,19 @@ forfline    0   # (out of date)
 		#
 		# 
 		#
+setupbasicdirs 0 #
+		# # imagesdir, dumpsdir, idumpsdir, iimagesdir used by interps3ddump and interps3dimage
+		# non-interpolated images and dumps
+		define imagesdir "./images/"
+		define dumpsdir "./dumps/"
+		#
+		# thing to preappend to file name for interpolated things
+		define dumpspreappend "i"
+		define imagespreappend "i"
+		#
+		# interpolated dumps (same location for idumps for now)
+		define idumpsdir "./idumps/" 
+		#
 		#
 interpsingle 18   #
 		# interpsingle aphi 384 768 xin xout yin yout
@@ -1665,7 +1678,7 @@ interps3ddump 2 #
                 #
 		define print_noheader (1)
 		# must keep header in line with code's expectation
-		print "dumps/$!!1" {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord _MBH _QBH}
+		print "dumps/$!!1" {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord _MBH _QBH _is _ie _js _je _ks _ke}
 		print + "dumps/$!!1" '%21.15g\n' {todump}
                 #
                 set h0='$dumpsdir/'

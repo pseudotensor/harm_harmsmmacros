@@ -161,7 +161,7 @@ jrdpcf 1        #
 		jrdpcf3du $1
  		#
 jrdpcf3du 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
-		jrdpheader3d $1
+		jrdpheader3d dumps/$1
 		da dumps/$1
 		lines 2 10000000
 		#
@@ -192,7 +192,7 @@ jrdpcf3du 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
 		gammienew
  		#
 jrdpcf3dugrb 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
-		jrdpheader3d $1
+		jrdpheader3d dumps/$1
 		da dumps/$1
 		lines 2 10000000
 		#
@@ -223,7 +223,7 @@ jrdpcf3dugrb 1	# for reading file with current (jcon/jcov) and faraday (fcon,fco
 		gammienew
  		#
 jrdpcf3duold 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
-		jrdpheader3dold $1
+		jrdpheader3dold dumps/$1
 		da dumps/$1
 		lines 2 10000000
 		#
@@ -253,7 +253,7 @@ jrdpcf3duold 1	# for reading file with current (jcon/jcov) and faraday (fcon,fco
 		gammienew
  		#
 jrdpcf3dold 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
-		jrdpheader3dold $1
+		jrdpheader3dold dumps/$1
 		da dumps/$1
 		lines 2 10000000
 		#
@@ -899,7 +899,7 @@ jrdp 1 #
 		jrdp3d $1
 		#
 jrdp3d	1	#
-		jrdpheader3d $1
+		jrdpheader3d dumps/$1
 		da dumps/$1
 		lines 2 10000000
 		#
@@ -925,7 +925,7 @@ jrdpeos	1	#
 		# gets whichdatatype and numextras
 		rdjonheadernew # kaz.m
 		#
-		jrdpheader3d $1
+		jrdpheader3d dumps/$1
 		da dumps/$1
 		lines 2 10000000
 		#
@@ -947,7 +947,7 @@ jrdpeos	1	#
 	        #
 jrdpvpot 1	#
 		#
-		jrdpheader3d $1
+		jrdpheader3d dumps/$1
 		da dumps/$1
 		lines 2 10000000
 		#
@@ -960,7 +960,7 @@ jrdpvpot 1	#
  		#
  		#
 jrdp3du	1	#
-		jrdpheader3d $1
+		jrdpheader3d dumps/$1
 		da dumps/$1
 		lines 2 10000000
 		#
@@ -994,7 +994,7 @@ jrdp3du	1	#
                 #
                 #
 jrdp3duentropy	1	# with NPRDUMP=8 even if doing entropy since entropy primitive not really used
-		jrdpheader3d $1
+		jrdpheader3d dumps/$1
 		da dumps/$1
 		lines 2 10000000
 		#
@@ -1024,7 +1024,7 @@ jrdp3duentropy	1	# with NPRDUMP=8 even if doing entropy since entropy primitive 
 		gammienew
  		#
 jrdp3duentropyold	1	#
-		jrdpheader3d $1
+		jrdpheader3d dumps/$1
 		da dumps/$1
 		lines 2 10000000
 		#
@@ -1054,7 +1054,7 @@ jrdp3duentropyold	1	#
 		gammienew
  		#
 jrdp3dugrb	1	#
-		jrdpheader3d $1
+		jrdpheader3d dumps/$1
 		da dumps/$1
 		lines 2 10000000
 		#
@@ -1085,7 +1085,7 @@ jrdp3dugrb	1	#
 		gammienew
  		#
 jrdp3duold	1	#
-		jrdpheader3dold $1
+		jrdpheader3dold dumps/$1
 		da dumps/$1
 		lines 2 10000000
 		#
@@ -1111,7 +1111,7 @@ jrdp3duold	1	#
 		gammienew
  		#
 jrdpother	1	#
-		jrdpheader3d $1
+		jrdpheader3d dumps/$1
 		da dumps/$1
 		lines 2 10000000
 		#
@@ -1143,7 +1143,7 @@ debugjon0     0 #
 		#
  		#
 jrdp3dudebug	1	#
-		jrdpheader3d $1
+		jrdpheader3d dumps/$1
 		da dumps/$1
 		lines 2 10000000
 		#
@@ -1214,7 +1214,7 @@ jrdp3dudebug	1	#
 		gammienew
  		#
 jrdpflux	1	# for fluxdump in harm
-		jrdpheader3d $1
+		jrdpheader3d dumps/$1
 		da dumps/$1
 		lines 2 10000000
 		#
@@ -1266,7 +1266,7 @@ jrdp2d	1	#
 		gammienew2d
  		#
 jrdpheader 1    #
-		jrdpheader3d $1
+		jrdpheader3d dumps/$1
 		#
 		#
 jrdpunits 0  #
@@ -1282,8 +1282,9 @@ jrdpunits 0  #
 		    #
 		    #
 		    #
-jrdpheader3d 1  #
-		da dumps/$1
+jrdpheader3d 1  # assume directory put in name
+		#da dumps/$1
+		da $1
 		lines 1 1
 		read '%g %d %d %d %g %g %g %g %g %g %d %g %g %g %g %g %g %g %d %g %g %d %d %d %d %d %d' \
 		    {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord _MBH _QBH _is _ie _js _je _ks _ke}
@@ -1291,7 +1292,8 @@ jrdpheader3d 1  #
 		    #
 		    #
 jrdpheader3dold 1  #
-		da dumps/$1
+		#da dumps/$1
+		da $1
 		lines 1 1
 		read '%g %d %d %d %g %g %g %g %g %g %d %g %g %g %g %g %g %g %d' \
 		    {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
@@ -1338,7 +1340,7 @@ jrdp1ci    2  #
 		#
 		#
 		jrdpheader2d $1
-		da dumps/$1
+		da $idumpsdir/$1
 		lines 2 10000000
                 #
                 read '%g' {temptemp}
@@ -1384,8 +1386,8 @@ jrdp3d1ci    2  #
 		echo "jrdp3d1ci"
 		#
 		#
-		jrdpheader3d $1
-		da dumps/$1
+		jrdpheader3d $idumpsdir/$1
+		da $idumpsdir/$1
 		lines 2 10000000
                 #
                 read '%g' {temptemp}
@@ -1493,7 +1495,7 @@ jrdpdebug2d   1   #
 		jrdpdebuggen $1
 		#
 jrdpdebug3d   1   #
-		jrdpheader3d $1
+		jrdpheader3d dumps/$1
 		jrdpdebuggen $1
 		#
 jrdpdebuggen 1  #
@@ -2933,7 +2935,8 @@ agplc 17	# animplc 'dump' r 000 <0 0 0 0>
                   define filename (_fname)
 		  #jrdp2d $filename
 		  #define coord 1
-                  jrdpcf3duold $filename
+                  #jrdpcf3duold $filename
+                  jrdp3du $filename
 		  fieldcalc 0 aphi
 		  #jre mode2.m
 		  #alfvenvp
