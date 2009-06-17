@@ -1387,7 +1387,7 @@ grid3d  1	# read in grid data with extra connection2 and all dxdxp's
 		#da dumps/$1
 		#lines 1 1
 		#read '%g %g %g %g %g %g %g %g %g %g' {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3}
-		jrdpheader3d $1
+		jrdpheader3d dumps/$1
 		da dumps/$1
 		lines 2 10000000
 		#
