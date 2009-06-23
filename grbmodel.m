@@ -33,7 +33,7 @@ dostandard   1  #
 		# remember to set lambdatot=1 if doing first time
 		#
 		#
-		cd ~/research/grbmodel/
+		#cd ~/research/grbmodel/
 		#
 		#jre grbmodel.m
 		echo "rdstar"
