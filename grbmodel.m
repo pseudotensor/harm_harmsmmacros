@@ -1293,6 +1293,9 @@ processeos 0    #
 		processeos1
 		#
 		# process data
+                #
+                !rm -rf eosdetails.dat eosother.dat eos.dat eoscoulomb.dat eosazbar.dat
+                #
 		echo "HELM begin"
 		!./helmstareos.exe > processeos.output
 		echo "HELM end"
