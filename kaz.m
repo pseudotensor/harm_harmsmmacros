@@ -1148,7 +1148,7 @@ rdshenheader 0 #
                 lines 2 2
                 read '%d' {ncout}
                 lines 3 3
-                read '%d %d %d' {nrhob nyp ntk}
+                read '%d %d %d' {nrhobin nypin ntkin}
                 lines 4 4
                 read '%d %d %d' {nrhobout nypout ntkout}
                 lines 5 5
@@ -1156,15 +1156,20 @@ rdshenheader 0 #
                 lines 6 6
                 read '%g %g %g %g %g %g' {lrhobminout lrhobmaxout lypminout lypmaxout ltkminout ltkmaxout}
                 #
-                define nx (nrhobout)
-                define ny (nypout)
-                define nz (ntkout)
+		set nrhob=nrhobout
+		set nyp=nypout
+		set ntk=ntkout
+		#
+                define nx (nrhob)
+                define ny (nyp)
+                define nz (ntk)
 		#
                 #
 rdshenmatlab 0  #
 		# read-in header
 		rdshenheader
 		#
+		###########################################################################
 		# reads-in and checks data for table consistency
 		#
 		#
@@ -1173,6 +1178,7 @@ rdshenmatlab 0  #
 		# sed 's\NaN\0.0\g' sheneos.dat > sheneosnonan.dat
 		da sheneosnonan.dat
 		#
+		# CAN plc 0 <var> below vars:
 		lines 1 100000000
                 read '%d %d %d %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
                 { rhoi ypi tki goodrow lrhob nb lyp yp f ebulk sbulk aheav zheav mstar xneut \
@@ -1186,14 +1192,15 @@ rdshenmatlab 0  #
                 set indexk=INT(iii/($nx*$ny))
 		#
                 # assume normally want to plot rhob vs. T at fixed Yp (high)
-                define WHICHLEV (nyp-1)
+                define WHICHLEV (nypout-1)
                 define PLANE (2)
                 #
 		setupshencontour
 		#
-                #
+                #####################################################################
 		set badvalue=-1E20*.9
 		#
+		# BELOW SHOULD REPORT NO ELEMENTS!
 		set mylrhob=lrhob if(goodrow && lrhob<badvalue)
 		set mynb=nb if(goodrow && nb<badvalue)
 		set mylyp=lyp if(goodrow && lyp<badvalue)
@@ -1214,8 +1221,11 @@ rdshenmatlab 0  #
 		set myltempk=ltempk if(goodrow && ltempk<badvalue)
 		set mytempk=tempk if(goodrow && tempk<badvalue)
 		#
+		########################################################################
 		# Setup same size as 200^2 normal HELM version for study with comparison contour plots
 		#
+		#
+		###########################################################################
 		#set myuse=(abs(yp-0.4285)<0.06) ? 1 : 0
 		set myuse=(tki==$nz-10) ? 1 : 0
 		set myxneut = xneut if(myuse)
@@ -1224,7 +1234,8 @@ rdshenmatlab 0  #
 		print {rat1}
 		echo "Above should be 1 for contour plots"
 		#
-		# CAN plc 0 <var> the below <var>'s:
+		###########################################################################
+		# CAN pl 0 <var> below vars
 		set myxneut = xneut if(myuse)
 		set mylrhob=lrhob if(myuse)
 		set mynb=nb if(myuse)
@@ -1249,6 +1260,7 @@ rdshenmatlab 0  #
 		set myxnuc = (xprot+xneut) if(myuse)
 		#
 		#
+		###########################################################################
 		#
                 set crap=lg(kb*10**9.913/ergPmev)
                 print {crap}
