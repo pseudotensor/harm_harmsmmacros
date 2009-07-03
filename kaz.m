@@ -1162,9 +1162,6 @@ rdshenheader 0 #
 		#
                 #
 rdshenmatlab 0  #
-		# read-in header
-		rdshenheader
-		setupshencontour
 		#
 		# reads-in and checks data for table consistency
 		#
@@ -1179,6 +1176,12 @@ rdshenmatlab 0  #
                 { rhoi ypi tki goodrow lrhob nb lyp yp f ebulk sbulk aheav zheav mstar xneut \
                   xprot xalfa xh pbulk mun mup ltempk tempk}
                 #
+		set rhob=10.0**lrhob
+		#
+		# read-in header
+		rdshenheader
+		setupshencontour
+		#
                 #
 		set badvalue=-1E20*.9
 		#
