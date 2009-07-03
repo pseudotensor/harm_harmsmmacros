@@ -1205,7 +1205,7 @@ rdshenmatlab 0  #
 		# Setup same size as 200^2 normal HELM version for study with comparison contour plots
 		#
 		#set myuse=(abs(yp-0.4285)<0.06) ? 1 : 0
-		set myuse=(ypi==$nz-10) ? 1 : 0
+		set myuse=(tki==$nz-10) ? 1 : 0
 		set myxneut = xneut if(myuse)
 		#
 		set rat1=dimen(myxneut)/($nx*$ny)
