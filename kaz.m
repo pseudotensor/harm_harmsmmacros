@@ -1164,6 +1164,7 @@ rdshenheader 0 #
 rdshenmatlab 0  #
 		# read-in header
 		rdshenheader
+		setupshencontour
 		#
 		# reads-in and checks data for table consistency
 		#
@@ -1201,7 +1202,7 @@ rdshenmatlab 0  #
 		set myltempk=ltempk if(goodrow && ltempk<badvalue)
 		set mytempk=tempk if(goodrow && tempk<badvalue)
 		#
-		# Setup same size as 200^2 normal HELM version for study
+		# Setup same size as 200^2 normal HELM version for study with comparison contour plots
 		#
 		#set myuse=(abs(yp-0.4285)<0.06) ? 1 : 0
 		set myuse=(ypi==$nz-10) ? 1 : 0
