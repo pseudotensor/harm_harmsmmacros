@@ -1157,8 +1157,8 @@ rdshenheader 0 #
                 read '%g %g %g %g %g %g' {lrhobminout lrhobmaxout lypminout lypmaxout ltkminout ltkmaxout}
                 #
                 define nx (nrhobout)
-                define ny (ntkout)
-                define nz (nypout)
+                define ny (nypout)
+                define nz (ntkout)
 		#
                 #
 rdshenmatlab 0  #
