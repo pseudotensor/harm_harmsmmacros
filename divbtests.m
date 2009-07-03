@@ -13,7 +13,7 @@ randomtest 0    #
                 #jrdp3du dump0008
                 #jrdp3du dump0046
                 #jrdp3du dump0028
-                jrdp3du dump0090
+                jrdp3du dump0064 jrdpdebug debug0064
 		#jrdp3du dump0020
                 set myuse=(ti>=_is && ti<=_ie && tj>=_js && tj<=_je && tk>=_ks && tk<=_ke)
 		stresscalc 1
@@ -163,3 +163,17 @@ faildiff 0      #
                 print {sumfail0diff sumfloor0diff}
 		#
 		#
+failwhere 0     #
+		#
+		plc 0 fail0 001 1.5E6 3E6 -.2 .6
+		set myfail0=newfun
+		plc 0 ti 001 1.5E6 3E6 -.2 .6
+		set myti=newfun
+		plc 0 tj 001 1.5E6 3E6 -.2 .6
+		set mytj=newfun
+		#
+		#
+		print {myti mytj myfail0}
+		#
+
+

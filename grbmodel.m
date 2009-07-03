@@ -1879,6 +1879,7 @@ plottauafter 0  #
 		ctype red pl 0 r (hcm/lambdatot) 1110
 		#ctype blue pl 0 r (qtautelohcm*hcm) 1110
 		#
+                #ctype cyan pl 0 r (hcm/Hofr) 1110
                 #
 		#
 plotqdtau 0      #

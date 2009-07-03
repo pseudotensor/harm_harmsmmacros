@@ -693,6 +693,26 @@ rdmykazeos 1      ## LATEST : 1944890
                       Enutot Enue Enuebar \
 		      Ynuthermal }
                   }
+                  if(whichdatatype==4){
+                    if(numcol1!=32){
+                        echo WHICHDATATYPE==4 NOT SETUP in SM
+                        }
+		     read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		     {rhob tempk tdynorye tdynorynu hcm \
+                      dptot dutot dstot \
+                        qtautnueohcm  qtauanueohcm \
+                    qtautnuebarohcm  qtauanuebarohcm \
+                    qtautmuohcm  qtauamuohcm \
+                    ntautnueohcm  ntauanueohcm \
+                    ntautnuebarohcm  ntauanuebarohcm \
+                    ntautmuohcm  ntauamuohcm \
+                    unue0 unuebar0 unumu0 \
+                    nnue0 nnuebar0 nnumu0 \
+                    lambdatot lambdaintot \
+                    tauphotonohcm tauphotonabsohcm \
+                    nnueth0 nnuebarth0 \
+                      }
+                  }
                   if(whichdatatype>3){
                       echo whichdatatype>3 not setup in SM
                       }
