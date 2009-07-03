@@ -1162,6 +1162,8 @@ rdshenheader 0 #
 		#
                 #
 rdshenmatlab 0  #
+		# read-in header
+		rdshenheader
 		#
 		# reads-in and checks data for table consistency
 		#
@@ -1178,8 +1180,15 @@ rdshenmatlab 0  #
                 #
 		set rhob=10.0**lrhob
 		#
-		# read-in header
-		rdshenheader
+                set iii=0,$nx*$ny*$nz-1,1
+                set indexi=INT(iii%$nx)
+                set indexj=INT((iii%($nx*$ny))/$nx)
+                set indexk=INT(iii/($nx*$ny))
+		#
+                # assume normally want to plot rhob vs. T at fixed Yp (high)
+                define WHICHLEV (nyp-1)
+                define PLANE (2)
+                #
 		setupshencontour
 		#
                 #
@@ -1215,6 +1224,8 @@ rdshenmatlab 0  #
 		print {rat1}
 		echo "Above should be 1 for contour plots"
 		#
+		# CAN plc 0 <var> the below <var>'s:
+		set myxneut = xneut if(myuse)
 		set mylrhob=lrhob if(myuse)
 		set mynb=nb if(myuse)
 		set mylyp=lyp if(myuse)
