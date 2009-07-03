@@ -713,8 +713,8 @@ rdmykazeos 1      ## LATEST : 1944890
                     nnueth0 nnuebarth0 \
                       }
                   }
-                  if(whichdatatype>3){
-                      echo whichdatatype>3 not setup in SM
+                  if(whichdatatype>4){
+                      echo whichdatatype>4 not setup in SM
                       }
 		#
 		# eos.dat line 1948
