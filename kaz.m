@@ -1192,7 +1192,7 @@ rdshenmatlab 0  #
                 set indexk=INT(iii/($nx*$ny))
 		#
                 # assume normally want to plot rhob vs. T at fixed Yp (high)
-                define WHICHLEV (nypout-1)
+                define WHICHLEV (nyp-1)
                 define PLANE (2)
                 #
 		setupshencontour
