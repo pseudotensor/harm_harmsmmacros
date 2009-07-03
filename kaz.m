@@ -1156,19 +1156,6 @@ rdshenheader 0 #
                 lines 6 6
                 read '%g %g %g %g %g %g' {lrhobminout lrhobmaxout lypminout lypmaxout ltkminout ltkmaxout}
                 #
-                
-		lines 1 1
-		read '%d' {ncin}
-                lines 2 2
-		read '%d' {ncout}
-		lines 3 3
-		read '%d %g %g' {nrhob nyp ntk}
-		lines 4 4
-		read '%d %g %g' {nrhobout n
-		lines 5 5
-		read '%d %g %g' {ntk tkmin tkmax}
-                lines 6 6
-                read '
 		#
                 #
 rdshenmatlab 0  #
