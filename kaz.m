@@ -923,7 +923,7 @@ rdhelmextra 1     #
 rdshentable0 0  #
                 #
                 #
-                cd ~/research/eos/sheneos/shen_table/
+                #cd ~/research/eos/sheneos/shen_table/
                 da sheneos.tab
 		lines 1 100000000
                 read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
