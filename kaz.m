@@ -1152,9 +1152,9 @@ rdshenheader 0 #
                 lines 4 4
                 read '%d %d %d' {nrhobout nypout ntkout}
                 lines 5 5
-                read '%d %d %d %d %d %d' {lrhobminin lrhobmaxin lypminin lypmaxin ltkminin ltkmaxin}
+                read '%g %g %g %g %g %g' {lrhobminin lrhobmaxin lypminin lypmaxin ltkminin ltkmaxin}
                 lines 6 6
-                read '%d %d %d %d %d %d' {lrhobminout lrhobmaxout lypminout lypmaxout ltkminout ltkmaxout}
+                read '%g %g %g %g %g %g' {lrhobminout lrhobmaxout lypminout lypmaxout ltkminout ltkmaxout}
                 #
                 
 		lines 1 1
