@@ -1157,8 +1157,8 @@ rdshenheader 0 #
                 read '%g %g %g %g %g %g' {lrhobminout lrhobmaxout lypminout lypmaxout ltkminout ltkmaxout}
                 #
                 define nx (nrhobout)
-                define ny (nypout)
-                define nz (ntkout)
+                define ny (ntkout)
+                define nz (nypout)
 		#
                 #
 rdshenmatlab 0  #
@@ -1203,7 +1203,8 @@ rdshenmatlab 0  #
 		#
 		# Setup same size as 200^2 normal HELM version for study
 		#
-		set myuse=(abs(yp-0.4285)<0.06) ? 1 : 0
+		#set myuse=(abs(yp-0.4285)<0.06) ? 1 : 0
+		set myuse=(ypi==$nz-10) ? 1 : 0
 		set myxneut = xneut if(myuse)
 		#
 		set rat1=dimen(myxneut)/($nx*$ny)
