@@ -1145,7 +1145,7 @@ rdshenmatlab 0  #
 		# reads-in and checks data for table consistency
 		#
 		#
-                cd /afs/slac.stanford.edu/u/ki/jmckinne/research/helm
+                #cd /afs/slac.stanford.edu/u/ki/jmckinne/research/helm
                 #
 		# sed 's\NaN\0.0\g' sheneos.dat > sheneosnonan.dat
 		da sheneosnonan.dat
