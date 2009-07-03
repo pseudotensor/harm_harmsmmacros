@@ -1140,6 +1140,36 @@ setupshencontour 0 #
 		# NaN
                 #
                 #
+rdshenheader 0 #
+		da sheneos.head
+                #
+                lines 1 1
+                read '%d' {nc}
+                lines 2 2
+                read '%d' {ncout}
+                lines 3 3
+                read '%d %d %d' {nrhob nyp ntk}
+                lines 4 4
+                read '%d %d %d' {nrhobout nypout ntkout}
+                lines 5 5
+                read '%d %d %d %d %d %d' {lrhobminin lrhobmaxin lypminin lypmaxin ltkminin ltkmaxin}
+                lines 6 6
+                read '%d %d %d %d %d %d' {lrhobminout lrhobmaxout lypminout lypmaxout ltkminout ltkmaxout}
+                #
+                
+		lines 1 1
+		read '%d' {ncin}
+                lines 2 2
+		read '%d' {ncout}
+		lines 3 3
+		read '%d %g %g' {nrhob nyp ntk}
+		lines 4 4
+		read '%d %g %g' {nrhobout n
+		lines 5 5
+		read '%d %g %g' {ntk tkmin tkmax}
+                lines 6 6
+                read '
+		#
                 #
 rdshenmatlab 0  #
 		# reads-in and checks data for table consistency
@@ -1150,7 +1180,7 @@ rdshenmatlab 0  #
 		# sed 's\NaN\0.0\g' sheneos.dat > sheneosnonan.dat
 		da sheneosnonan.dat
 		#
-		lines 1 100000000
+		lines 1 100000000myxneut
                 read '%d %d %d %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
                 { rhoi ypi tki goodrow lrhob nb lyp yp f ebulk sbulk aheav zheav mstar xneut \
                   xprot xalfa xh pbulk mun mup ltempk tempk}
