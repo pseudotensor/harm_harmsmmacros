@@ -1156,6 +1156,9 @@ rdshenheader 0 #
                 lines 6 6
                 read '%g %g %g %g %g %g' {lrhobminout lrhobmaxout lypminout lypmaxout ltkminout ltkmaxout}
                 #
+                define nx (nrhob)
+                define ny (nyp)
+                define nz (ntk)
 		#
                 #
 rdshenmatlab 0  #
@@ -1167,7 +1170,7 @@ rdshenmatlab 0  #
 		# sed 's\NaN\0.0\g' sheneos.dat > sheneosnonan.dat
 		da sheneosnonan.dat
 		#
-		lines 1 100000000myxneut
+		lines 1 100000000
                 read '%d %d %d %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
                 { rhoi ypi tki goodrow lrhob nb lyp yp f ebulk sbulk aheav zheav mstar xneut \
                   xprot xalfa xh pbulk mun mup ltempk tempk}
