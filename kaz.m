@@ -735,7 +735,18 @@ rdmykazeos 1      ## LATEST : 1944890
 		set dchi=dutot+dptot
 		#
 		#
+                # Different order than for Shen tables:
+                define nx (nrhob)
+                define ny (ntk)
+                define nz (ntdynorye)
+                #
+                setupshencontour rhob tempk tdynorye
+                #
+                # assume normally want to plot rhob vs. T at fixed Yp (high)
+                define WHICHLEV (ntdynorye-1)
+                define PLANE (3)
 		#
+                #
 rdmykazmonoeos 1      # eos_extract.m outputs this after processing input data and header data
 		#     # still function of T (i.e. not yet interpolated to U/P/CHI nor new functions created)
 		#
@@ -941,15 +952,10 @@ rdshentable0 0  #
                 define ny (nyp)
                 define nz (ntk)
                 #
-                set iii=0,$nx*$ny*$nz-1,1
-                set indexi=INT(iii%$nx)
-                set indexj=INT((iii%($nx*$ny))/$nx)
-                set indexk=INT(iii/($nx*$ny))
+                setupshencontour rhob yp tempk
                 #
                 set ltempk = -1 + (indexk)*(2+1)/(ntk-1)
                 set tempk=10**ltempk
-                #
-                setupshencontour
                 #
                 # assume normally want to plot rhob vs. T at fixed Yp (high)
                 define WHICHLEV (nyp-1)
@@ -1074,7 +1080,13 @@ shenplots 0     #
 		#
 		# 
                 #
-setupshencontour 0 #
+setupshencontour 3 # setupshencontour rhob yp tempk
+                #
+                #
+                set iii=0,$nx*$ny*$nz-1,1
+                set indexi=INT(iii%$nx)
+                set indexj=INT((iii%($nx*$ny))/$nx)
+                set indexk=INT(iii/($nx*$ny))
                 #
 		set i=iii
 		#
@@ -1082,9 +1094,9 @@ setupshencontour 0 #
 		set tj = indexj
 		set tk = indexk
 		#
-		set tx1=rhob
-		set tx2=yp
-		set tx3=tempk
+		set tx1=$1
+		set tx2=$2
+		set tx3=$3
 		#
 		#
 		set i=ti
@@ -1195,7 +1207,7 @@ rdshenmatlab 0  #
                 define WHICHLEV (nyp-1)
                 define PLANE (2)
                 #
-		setupshencontour
+                setupshencontour rhob yp tempk
 		#
                 #####################################################################
 		set badvalue=-1E20*.9
