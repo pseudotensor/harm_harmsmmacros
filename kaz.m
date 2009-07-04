@@ -756,6 +756,11 @@ rdmykazeos 1      ## LATEST : 1944890
                 set myrhob = rhob if(pp==0)
                 set mytempk = tempk if(pp==0)
                 set mytdynorye = tdynorye if(pp==0)
+		set mytdynorynu = tdynorynu if(pp==0)
+		set myhcm = hcm if(pp==0)
+		set mydptot = dptot if(pp==0)
+		set mydutot = dutot if(pp==0)
+		set mydstot = dstot if(pp==0)
                 #
                 # Different order than for Shen tables:
                 define nx (nrhob)
