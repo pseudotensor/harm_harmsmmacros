@@ -15,8 +15,8 @@ scalingdata 0   #
 		set franklinspeedupstrong=coresstrongfrank*franklineffstrong
 		#
 		set coreslone={1 2 4 8 16 32 64 128 256 512 1024}
-		set loneeff={1.0 0.99 0.99 0.99 0.99 0.95 0.93 0.92 0.90 0.89 0.80}
-		set lonespeedup=coreslone*loneeff
+		set loneeff={1.0 0.99 0.99 0.99 0.99 0.95 0.93 0.92 0.90 0.89 0.95 0.80}
+		set lonespeedup=cores*loneeff
 		#
 		#
 		erase
@@ -51,9 +51,7 @@ scalingdata 0   #
 		#addlegend 2 'BlueGene/L Weak'
 		#
 		ptype 6 3
-		points lgcoreslone lglonespeedup
-                ltype 2
-                connect lgcoreslone lglonespeedup
+		points lgcores lglonespeedup
 		#addlegend 2 'Lonestar Weak'
 		#
 		ptype 4 3
@@ -71,10 +69,9 @@ scalingdata 0   #
 		#
 		set vptype1={3 4 5 6}
 		set vptype2={3 3 3 3}
-		set vltype={-1 -1 -1 2}
+		set vltype={-1 -1 -1 -1}
 		set vlweight={3 3 3 3}
 		set vtext={'BlueGene/L Weak' 'BlueGene/L Strong' 'NERSC Franklin Strong' 'TACC Lonestar Weak'}
-                #set vtext={'1' '2' '3' '4'}
 		#
 		define startx (LG(1))
 		define endy (LG(1E3))
