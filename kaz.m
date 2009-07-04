@@ -723,24 +723,47 @@ rdmykazeos 1      ## LATEST : 1944890
 		# tk=0.86851137375135288239E+00010
 		# utot=0.88601890289717108602E+00029
 		# 
-		#
-		#
-		set iii=0,dimen(rhob)-1
-		#
-		set mm=iii%nrhob
-		set nn=INT(iii%(nrhob*ntk)/nrhob)
-		set oo=INT(iii%(nrhob*ntk*ntdynorye)/(nrhob*ntk))
-		set pp=mm*0
-		#
 		set dchi=dutot+dptot
 		#
 		#
+		#
+		if(0){\
+		       set iii=0,dimen(rhob)-1
+		       set mm=iii%nrhob
+		       set nn=INT(iii%(nrhob*ntk)/nrhob)
+		       set oo=INT(iii%(nrhob*ntk*ntdynorye)/(nrhob*ntk))
+		       set pp=mm*0
+		    }
+		#
+		if(0){\
+		       set iii=0,dimen(rhob)-1
+		       set mm=iii%nrhob
+		       set nn=INT(iii%(nrhob*ntk)/nrhob)
+		       set oo=INT(iii%(nrhob*ntk*nhcm)/(nrhob*ntk))
+		       set pp=INT(iii%(nrhob*ntk*nhcm*ntdyn)/(nrhob*ntk*nhcm))
+		}
+		#
+		#
+		if(1){\
+		       set iii=0,dimen(rhob)-1
+		       set mm=iii%nrhob
+		       set nn=INT(iii%(nrhob*ntk)/nrhob)
+		       set oo=INT(iii%(nrhob*ntk*ntdynorye)/(nrhob*ntk))
+		       set pp=INT(iii%(nrhob*ntk*ntdynorye*ntdynorynu)/(nrhob*ntk*ntdynorye))
+		}
+		#
+                # have to remove ynu or hcm if part of read-in table:
+                set myrhob = rhob if(pp==0)
+                set mytempk = tempk if(pp==0)
+                set mytdynorye = tdynorye if(pp==0)
+                #
                 # Different order than for Shen tables:
                 define nx (nrhob)
                 define ny (ntk)
                 define nz (ntdynorye)
                 #
-                setupshencontour rhob tempk tdynorye
+                setupshencontour myrhob mytempk mytdynorye
+                #
                 #
                 # assume normally want to plot rhob vs. T at fixed Yp (high)
                 define WHICHLEV (ntdynorye-1)
