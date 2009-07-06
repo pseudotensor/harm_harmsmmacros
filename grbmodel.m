@@ -10,19 +10,26 @@ loadmacrosgrb 0 #
 doallmodels 0   # at least 3 iterations so H calculation is good
 		#
 		#
+                set lambdatot=1
 		#
 		dostandard 0
 		dostandard 0
 		dostandard 0
 		#
+                set lambdatot=1
+                #
 		dostandard 1
 		dostandard 1
 		dostandard 1
 		#
+                set lambdatot=1
+                #
 		dostandard 2
 		dostandard 2
 		dostandard 2
 		#
+                set lambdatot=1
+                #
 		dostandard 3
 		dostandard 3
 		dostandard 3
@@ -30,7 +37,7 @@ doallmodels 0   # at least 3 iterations so H calculation is good
 		#
 dostandard   1  #
 		#
-		# remember to set lambdatot=1 if doing first time
+		echo "remember to set lambdatot=1 if doing first time"
 		#
 		#
 		#cd ~/research/grbmodel/
@@ -1006,8 +1013,8 @@ setH 0          #
 		set Hcm = Htest
 		set Ynu = Htest*0.0
 		#
-		if(1){
-		if(dimen(lambdatot)==dimen(rho)){
+		if(1){\
+                 if(dimen(lambdatot)==dimen(rho)){\
 		   #recomputeH
 		   #set Hcm = Hofrtau
 		   recomputeH2 lambdatot Hofrtau2
@@ -1026,7 +1033,7 @@ setH 0          #
 		   set Ynu=Hcm*0.0
 		   #
 		   #
-		}
+                 }
 		}
 		#
 		if(0){
@@ -1239,6 +1246,11 @@ processeos2 0   #
 		# assume whichdatatype==3 used with full 5D EOS used
 		#jre kaz.m
 		rdmykazeos eos.dat
+                #
+                if(whichdatatype!=3){\
+                                     echo "BAD EOS.DAT FORMAT for stellar model processing"
+                                     }
+                #
 		rdmykazeosother eosother.dat
 		rdhelmcou eoscoulomb.dat
 		rdhelmextra eosazbar.dat
