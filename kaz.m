@@ -744,7 +744,7 @@ rdmykazeos 1      ## LATEST : 1944890
 		}
 		#
 		#
-		if(1){\
+		if(whichdatatype==4){\
 		       set iii=0,dimen(rhob)-1
 		       set mm=iii%nrhob
 		       set nn=INT(iii%(nrhob*ntk)/nrhob)
@@ -752,27 +752,30 @@ rdmykazeos 1      ## LATEST : 1944890
 		       set pp=INT(iii%(nrhob*ntk*ntdynorye*ntdynorynu)/(nrhob*ntk*ntdynorye))
 		}
 		#
-                # have to remove ynu or hcm if part of read-in table:
-                set myrhob = rhob if(pp==0)
-                set mytempk = tempk if(pp==0)
-                set mytdynorye = tdynorye if(pp==0)
-		set mytdynorynu = tdynorynu if(pp==0)
-		set myhcm = hcm if(pp==0)
-		set mydptot = dptot if(pp==0)
-		set mydutot = dutot if(pp==0)
-		set mydstot = dstot if(pp==0)
-                #
-                # Different order than for Shen tables:
-                define nx (nrhob)
-                define ny (ntk)
-                define nz (ntdynorye)
-                #
-                setupshencontour myrhob mytempk mytdynorye
-                #
+                # for now, only do if ==4 type:
+		if(whichdatatype==4){\
+                 # have to remove ynu or hcm if part of read-in table:
+                 set myrhob = rhob if(pp==0)
+                 set mytempk = tempk if(pp==0)
+                 set mytdynorye = tdynorye if(pp==0)
+ 		 set mytdynorynu = tdynorynu if(pp==0)
+ 		 set myhcm = hcm if(pp==0)
+		 set mydptot = dptot if(pp==0)
+		 set mydutot = dutot if(pp==0)
+		 set mydstot = dstot if(pp==0)
+                 #
+                 # Different order than for Shen tables:
+                 define nx (nrhob)
+                 define ny (ntk)
+                 define nz (ntdynorye)
+                 #
+                 setupshencontour myrhob mytempk mytdynorye
                 #
                 # assume normally want to plot rhob vs. T at fixed Yp (high)
                 define WHICHLEV (ntdynorye-1)
                 define PLANE (3)
+                #
+                }
 		#
                 #
 rdmykazmonoeos 1      # eos_extract.m outputs this after processing input data and header data
