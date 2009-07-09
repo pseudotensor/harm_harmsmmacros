@@ -73,22 +73,22 @@ fieldideal 0   #
 		#
 		# for images:
 		# 0 3 1 1 256 256 1 2.0 0 0 0 512 512 1 0 40 -40 40 0 0 1.170236893 40 0 0.3 9
-		# ~/sm/iinterpnoextrap <above> < input > output
+		# ~/bin/iinterpnoextrap <above> < input > output
 		#
 		# < im0p0s0l0625.r8 > ideal43lrho.r8
 		# before doing this, copy coordparms.dat to local dir.
 		#
 		# full thing for 4/3
 		#
-		# ~/sm/iinterpnoextrap 0 3 1 1 256 256 1 2.0 0 0 0 512 512 1 0 20 -10 10 0 0 1.170236893 40 0 0.3 9 < im0p0s0l0625.r8 > ideal43lrho.r8
+		# ~/bin/iinterpnoextrap 0 3 1 1 256 256 1 2.0 0 0 0 512 512 1 0 20 -10 10 0 0 1.170236893 40 0 0.3 9 < im0p0s0l0625.r8 > ideal43lrho.r8
 		#
 		# full thing for 5/3
 		#
-		# ~/sm/iinterpnoextrap 0 3 1 1 256 256 1 2.0 0 0 0 512 512 1 0 20 -10 10 0 0 1.170236893 40 0 0.3 9 < im0p0s0l0625.r8 > ideal53lrho.r8
+		# ~/bin/iinterpnoextrap 0 3 1 1 256 256 1 2.0 0 0 0 512 512 1 0 20 -10 10 0 0 1.170236893 40 0 0.3 9 < im0p0s0l0625.r8 > ideal53lrho.r8
 		#
 		# full thing for tm
 		#
-		# ~/sm/iinterpnoextrap 0 3 1 1 256 256 1 2.0 0 0 0 512 512 1 0 20 -10 10 0 0 1.170236893 40 0 0.3 9 < im0p0s0l0625.r8 > tmlrho.r8
+		# ~/bin/iinterpnoextrap 0 3 1 1 256 256 1 2.0 0 0 0 512 512 1 0 20 -10 10 0 0 1.170236893 40 0 0.3 9 < im0p0s0l0625.r8 > tmlrho.r8
 		#
 		#
 

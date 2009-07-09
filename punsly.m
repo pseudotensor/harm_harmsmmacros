@@ -2558,7 +2558,7 @@ myaphiit 0      #
 		window 1 1 1 1
 		greaddump dumptavgi
 		interpsingle2 aphi 512 512 100 100
-		!~/sm/iinterpnoextrap 1 2 1 1 $nx $ny $nz  1.0 0.0 0.5 $igrid \
+		!~/bin/iinterpnoextrap 1 2 1 1 $nx $ny $nz  1.0 0.0 0.5 $igrid \
 		    $inx $iny $inz  -$ixmax $ixmax -$iymax $iymax 0 0  $iRin \
 		    $iRout $iR0 $ihslope $idefcoord < ./dumps/aphi > ./dumps/iaphi
 		    #

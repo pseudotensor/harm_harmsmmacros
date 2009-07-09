@@ -798,7 +798,7 @@ angplotsplit1  0 #
 		#       
 walda0 0      #
 		#
-		# ~/sm/iinterp 1 2 1 1 64 64 1  2.0 0 0  0  64 128 1  0 100 -100 100 0 0  1.3097 100 0 1 0 < ./dumps/aphii  > ./dumps/iaphii
+		# ~/bin/iinterp 1 2 1 1 64 64 1  2.0 0 0  0  64 128 1  0 100 -100 100 0 0  1.3097 100 0 1 0 < ./dumps/aphii  > ./dumps/iaphii
 		#
 		fdraft
 		angle 0
@@ -974,7 +974,7 @@ debug2 0 ##
 		
 walda91 0 ##
 		#
-		# ~/sm/iinterp 1 2 1 1 64 64 1  2.0 0 0  0  64 128 1  0 100 -100 100 0 0  1.3097 100 0 1 0 < ./dumps/aphii  > ./dumps/iaphii
+		# ~/bin/iinterp 1 2 1 1 64 64 1  2.0 0 0  0  64 128 1  0 100 -100 100 0 0  1.3097 100 0 1 0 < ./dumps/aphii  > ./dumps/iaphii
 		#
 		fdraft
 		angle 0
