@@ -9,8 +9,6 @@ areamap.m,62
                      define nx 4,154
      set urat1=75,2340
 
-asdfas.m,0
-
 avery.m,21
 		set usehor=16,229
 
@@ -78,25 +76,18 @@ coldgrmhd.m,18
 courant.m,19
 		set godv1c=2,18
 
-crap.m,0
+divbtests.m,32
+                set myuse=5,45
 
-crapsm.m,0
-
-diss.m,0
-
-extra.m,0
+fail1.m,16
+		set it=8,125
 
 fail.m,40
 		define myi 2,18
 		set pksbu1=12,195
 
-fail1.m,16
-		set it=8,125
-
 ffde.m,12
 		plc 2,47
-
-fieldline.m,0
 
 fieldtests.m,14
 		set v=3,23
@@ -120,32 +111,32 @@ gammie.m,1063
 		#define GAMMIE 485,18870
 		#define GAMMIE 531,20370
 		#define GAMMIE 554,20904
-		#define program 1521,71894
-		#define program 1522,71922
-		#define program 1524,71991
-		#define interptype 1559,73354
-		#define program 1619,75454
-		#define program 1620,75482
-		#define program 1622,75551
-		#define interptype 1654,76765
-                #define refinement 1690,78015
-                #define refinement 1726,79368
-		#define x1label 1743,80134
-		#define x2label 1744,80163
-		#define x1label 1750,80313
-		#define x2label 1751,80342
-	 #define coord 1880,83013
-	 #define coord 1947,84437
-         #define coord 1948,84511
-	 #define coord 2012,85885
-	 #define Sz 2103,87940
-		# define COUNTUTOPRIMFAILCONV 2151,89213
-		# define COUNTFLOORACT 2152,89272
-		# define COUNTLIMITGAMMAACT 2153,89321
-		# define COUNTINFLOWACT 2154,89383
-		# define COUNTUTOPRIMFAILRHONEG 2155,89440
-		# define COUNTUTOPRIMFAILUNEG 2156,89476
-		# define COUNTUTOPRIMFAILRHOUNEG 2157,89510
+		#define program 1534,72327
+		#define program 1535,72355
+		#define program 1537,72424
+		#define interptype 1572,73787
+		#define program 1632,75887
+		#define program 1633,75915
+		#define program 1635,75984
+		#define interptype 1667,77198
+                #define refinement 1703,78472
+                #define refinement 1739,79825
+		#define x1label 1756,80591
+		#define x2label 1757,80620
+		#define x1label 1763,80770
+		#define x2label 1764,80799
+	 #define coord 1893,83470
+	 #define coord 1960,84894
+         #define coord 1961,84968
+	 #define coord 2025,86342
+	 #define Sz 2116,88397
+		# define COUNTUTOPRIMFAILCONV 2164,89670
+		# define COUNTFLOORACT 2165,89729
+		# define COUNTLIMITGAMMAACT 2166,89778
+		# define COUNTINFLOWACT 2167,89840
+		# define COUNTUTOPRIMFAILRHONEG 2168,89897
+		# define COUNTUTOPRIMFAILUNEG 2169,89933
+		# define COUNTUTOPRIMFAILRHOUNEG 2170,89967
 
 gener.m,47
 		define which 24,286
@@ -157,33 +148,34 @@ gmri.m,18
 grb1.m,15
 		set n1=2,18
 
-grbmodel.m,0
+grbmodel.m,38
+                set lambdatot=13,150
 
 grif.m,21
 		    set dr 10,277
 
-gtwod.m,325
-		do i=3,33
-		#define Lx 1373,43258
-                #define Ly 1374,43295
-		#define Lx 1426,44790
-                #define Ly 1427,44827
-		       #define gam 1693,52148
-		#define myg 2418,72155
-		  #define coord 2931,86944
-		  #define CONSTLEVELS 2938,87127
-		#define PLANE 2975,88216
-		#define WHICHLEV 2976,88236
-
 gtwodavgs.m,66
 gcalc2          17       # gcalc2 1 0 pi/2   or gcalc2 2 rho 1,0
 
-gtwodmaps.m,16
-		set _a=5,144
+gtwod.m,325
+		do i=3,33
+		#define Lx 1379,43550
+                #define Ly 1380,43587
+		#define Lx 1432,45098
+                #define Ly 1433,45135
+		       #define gam 1699,52462
+		#define myg 2424,72469
+		  #define coord 2937,87258
+		  #define CONSTLEVELS 2945,87478
+		#define PLANE 2982,88567
+		#define WHICHLEV 2983,88587
 
 gtwodmaps2.m,62
                      define nx 4,154
      set urat1=75,2340
+
+gtwodmaps.m,16
+		set _a=5,144
 
 gtwodplots.m,17
 		set it=33,864
@@ -204,13 +196,13 @@ jetinst.m,40
 		set iii=4,52
 		#define cres 43,1076
 
-kaz.m,75
-		set kb=3,37
-		  # define your 566,14960
-		#define WHICHLEV 1049,29565
-
 kaz_backup.m,20
 		 set xnuc=13,296
+
+kaz.m,75
+		set kb=3,37
+		  # define your 566,14961
+		#define WHICHLEV 1106,31834
 
 kom.m,614
 		set olditem=6,76
@@ -279,13 +271,13 @@ metrics.m,22
 mignone.m,19
 		set rideal=2,35
 
-mode.m,38
-		define myi 2,18
-		set god1=17,340
-
 mode2.m,39
 		define myi 4,103
 		set god1=19,425
+
+mode.m,38
+		define myi 2,18
+		set god1=17,340
 
 more.m,134
 tlabel 101# put a title on the plot,3,58
@@ -298,6 +290,10 @@ mri.m,93
 		#define max 231,6298
 		#define min 232,6316
 		#define delta 233,6339
+
+myplots2.m,71
+		     set start=13,287
+                      #define lisco 111,3345
 
 myplots.m,1673
  # define grandpa 23,826
@@ -355,10 +351,6 @@ myplots.m,1673
                    #define CONV2 487,18291
                    # define interp 553,20858
 
-myplots2.m,71
-		     set start=13,287
-                      #define lisco 111,3345
-
 newinterpmacro.m,66
                 set quickmyuse=10,148
 		#define program 51,1150
@@ -394,8 +386,6 @@ pls    17	# pls <file> <function> <type of plot=1,0
 
 powercheck.m,21
 		set myuse0=11,144
-
-pulsar.m,0
 
 punsly.m,93
 		set _defcoord=8,108
@@ -516,7 +506,7 @@ rdreads.m,1252
                 # define only 913,34802
                 # define derivative 1009,37467
 		 #define Sz 1022,37948
-                # #define MAGPHI 1251,46337
+                # #define MAGPHI 1251,46338
 
 rebecaphi.m,18
 		set _n3=12,184
@@ -527,18 +517,18 @@ restartderes.m,16
 sashadiff.m,21
 		set rhoanal=5,126
 
-sashagod.m,19
-   set vanal=3,31
-
 sashagod2.m,18
 		set vanal=8,75
 
+sashagod.m,19
+   set vanal=3,31
+
 scalingdata.m,120
 		set cores=5,57
-		#define startx 67,1705
-		#define endy 68,1730
-		#define startx 114,2686
-		#define endy 115,2712
+		#define startx 65,1628
+		#define endy 66,1653
+		#define startx 111,2565
+		#define endy 112,2591
 
 scn.m,16
 set alpha 9,82
@@ -565,28 +555,43 @@ stress.m,279
 		#define picki 130,2777
 		#define pickj 131,2814
 
+supercrap.m,23
+		set oldU0ogdet=6,48
+
 symmetry.m,33
                 set $1diff=2,50
 
-tests1dhd.m,0
+testgcovmacro.m,76
+set i=3,2
+#define GCOVI(18,431
+#define GCOVJ(19,465
+#define GIND(20,499
 
-testworks.jon.m,205
+testpara.m,20
+		set jonuse=9,141
+
+testworks.jon.m,207
 		    set blgv311 5,103
-                    # define T^8,195
+                    # define T^T8,195
 		    #define it 52,1587
 		#define x2label 427,12715
 		#define x1label 489,13996
 		#define x2label 526,14707
 		#define x2label 527,14774
 
-thindisk.m,18
-		set thin=6,125
+testworks.m,91
+		    set blgv311 5,103
+                    # define T^T8,195
+		    #define it 52,1587
 
 thindisk2.m,26
 		1311  set dm2048=6,137
 
-trans1.m,20
-		set "$!2"u0=2,12
+thindisk.m,18
+		set thin=6,125
+
+trans1.m,23
+		set "$!2"u0=u02,12
 
 twod.m,1047
 plc    17	# plc <file> <function> <type of plot=1,0
@@ -623,6 +628,22 @@ plc    17	# plc <file> <function> <type of plot=1,0
 utils.m,15
 		set $0=2,43
 
+wavespeed_check.m,0
+
 uzdensky.m,0
 
-wavespeed_check.m,0
+tests1dhd.m,0
+
+pulsar.m,0
+
+fieldline.m,0
+
+extra.m,0
+
+diss.m,0
+
+crapsm.m,0
+
+crap.m,0
+
+asdfas.m,0

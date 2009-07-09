@@ -29,7 +29,7 @@ rdareamap 1 #
      set urat3=uu3*ud3/(uu0*ud0)
      set rhorat=rho*(r**2)*10**3
      set urat=u*(r**3)*(10**5)
-     re "/home/jon/sm/gtwod.m"
+     re "$!HOME/sm/gtwod.m"
      gsetup
      gcalc
      #

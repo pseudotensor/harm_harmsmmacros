@@ -2643,7 +2643,7 @@ fieldcalcavg 3     #start end aphitavg          # time average
                 print "dumps/forfldump" {_t _n1 _n2 _startx1 _startx2 _dx1 _dx2 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
 		print + "dumps/forfldump" {ti tj btimex btimey btimez gdet}
                 # then run:
-                !/home/jon/sm/smcalc 1 1 0 $nx $ny ./dumps/forfldump ./dumps/tavgfl
+                !$!HOME/bin/smcalc 1 1 0 $nx $ny ./dumps/forfldump ./dumps/tavgfl
 		#
 		da ./dumps/tavgfl
 		lines 2 100000000
@@ -2659,7 +2659,7 @@ fieldcalc 2	#dumpnum aphi
                 print "dumps/forfldump" '%21.15g %d %d %21.15g %21.15g %21.15g %21.15g %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %d\n' \
 		    {_t _n1 _n2 _startx1 _startx2 _dx1 _dx2 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
                 print + "dumps/forfldump" '%d %d %21.15g %21.15g %21.15g %21.15g\n' {ti tj B1 B2 B3 gdet}
-		#!/home/jon/sm/smcalc 1 1 0 $nx $ny ./dumps/forfldump ./dumps/fl$1
+		#!$!HOME/bin/smcalc 1 1 0 $nx $ny ./dumps/forfldump ./dumps/fl$1
                 !~/sm/smcalc 1 1 0 $nx $ny ./dumps/forfldump ./dumps/fl$1
 		da ./dumps/fl$1
 		lines 2 100000000		
@@ -2678,7 +2678,7 @@ ficalc 0	#
                 print + "dumps/forficalcdump" '%d %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
                     {ti tj rho u v1 v2 v3 B1 B2 B3 ptot gdet}
                 #
-		!/home/jon/sm/smcalc 10 4 0 $nx $ny ./dumps/forficalcdump ./dumps/ficalc
+		!$!HOME/bin/smcalc 10 4 0 $nx $ny ./dumps/forficalcdump ./dumps/ficalc
 		da ./dumps/ficalc
 		lines 2 100000000		
 		read '%g %g' {ficalc1 ficalc2}
@@ -2696,7 +2696,7 @@ fieldtcalc 2	#dumpnum aphi
 		    set B2omegaf2=B2*omegaf2
 		    set B3omegaf2=B3*omegaf2
                 print + "dumps/forfldump" '%d %d %21.15g %21.15g %21.15g %21.15g\n' {ti tj B1omegaf2 B2omegaf2 B3omegaf2 gdet}
-		!/home/jon/sm/smcalc 1 1 0 $nx $ny ./dumps/forfldump ./dumps/fl$1
+		!$!HOME/bin/smcalc 1 1 0 $nx $ny ./dumps/forfldump ./dumps/fl$1
 		da ./dumps/fl$1
 		lines 2 100000000		
 		read {aphitemp 1}
@@ -2718,7 +2718,7 @@ fieldcalci 4	#dumpnum aphi $nx $ny
                 print "dumps/forfldump" '%21.15g %d %d %21.15g %21.15g %21.15g %21.15g %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %d\n' \
 		    {_t _n1 _n2 _startx1 _startx2 _dx1 _dx2 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
                 print + "dumps/forfldump" '%d %d %21.15g %21.15g %21.15g %21.15g\n' {ti tj iB1 iB2 iB3 igdet}
-		!/home/jon/sm/smcalc 1 1 0 $nx $ny ./dumps/forfldump ./dumps/fl$1
+		!$!HOME/bin/smcalc 1 1 0 $nx $ny ./dumps/forfldump ./dumps/fl$1
 		da ./dumps/fl$1
 		lines 2 100000000		
 		read {aphitemp 1}
@@ -2734,7 +2734,7 @@ dercalc 3	# dercalc 0 it itd
 		    {_t _n1 _n2 _startx1 _startx2 _dx1 _dx2 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
 		set sendtemp=$2
                 print + "dumps/forder" '%d %d %21.15g\n' {ti tj sendtemp}
-		!/home/jon/sm/smcalc 1 2 $1 $nx $ny ./dumps/forder ./dumps/$3
+		!$!HOME/bin/smcalc 1 2 $1 $nx $ny ./dumps/forder ./dumps/$3
 		da ./dumps/$3
 		lines 2 100000000		
 		read {dertempx 1 dertempy 2}

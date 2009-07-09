@@ -175,5 +175,32 @@ failwhere 0     #
 		#
 		print {myti mytj myfail0}
 		#
-
+checkdU 0       #
+		#
+		jrdp3du dump0000 jrdpdebug debug0000 jrdpflux fluxdump0000
+		plc 0 B2 001 1E8 1E9 -3 9
+		#
+		jrdp3du dump0010 jrdpdebug debug0010 jrdpflux fluxdump0010
+		plc 0 B2 001 1E8 1E9 -3 9
+		#
+		plc 0 U6 001 1E8 1E9 -3 9
+		#
+		#
+		plc 0 (dUr16/U6) 001 1E8 1E9 -3 9
+		#
+		plc 0 dUr16 001 1E8 1E9 -3 9
+		#
+		set testdUr16=gdet*(uu1/uu0*B2-uu2/uu0*B1)
+		dercalc 2 testdUr16 dtestdUr16
+		set mydU = dtestdUr16x*_dt
+		plc 0 mydU 001 1E8 1E9 -3 9
+		#
+		set mydUr16 =  gdet*(uu1/uu0*B2-uu2/uu0*B1)*_dt/$dx1
+		plc 0 mydUr16 001 1E8 1E9 -3 9
+		#
+		set ampB2 = exp((uu1/uu0*B2-uu2/uu0*B1)/$dx1*_t)
+		plc 0 ampB2 001 1E8 1E9 -3 9
+		#
+		#
+		#
 

@@ -2761,7 +2761,7 @@ printg42     1   #
 		     Tud33part0tavg Tud33part1tavg  Tud33part2tavg  Tud33part3tavg  Tud33part4tavg  Tud33part5tavg  Tud33part6tavg }
 		     #
 		     #
-doavgavg 2       # !/home/jon/sm/smcalc 329 3 256 256 ./dumps/avg ./dumps/avg 10 39
-		!/home/jon/sm/smcalc 329 3 $nx $ny ./dumps/avg ./dumps/avg $1 $2
+doavgavg 2       # !$!HOME/bin/smcalc 329 3 256 256 ./dumps/avg ./dumps/avg 10 39
+		!$!HOME/bin/smcalc 329 3 $nx $ny ./dumps/avg ./dumps/avg $1 $2
 		#
 		#
