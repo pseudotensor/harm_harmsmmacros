@@ -919,6 +919,32 @@ rdmykazeosother 1      # LATEST : qminusel, qtausohcm,qtautelohcm<0
 		set stot=s_tot
 		set chi=utot+ptot
 		#
+		set myetae = etae if(pp==0)
+		set myetap = etap if(pp==0)
+		set myetan = etan if(pp==0)
+		set myetanu = etanu if(pp==0)
+		set myxnuc = xnuc if(pp==0)
+		set mynpratio = npratio if(pp==0)
+		#
+		set myp_tot = p_tot if(pp==0)
+		set myp_photon = p_photon if(pp==0)
+		set myp_eleposi = p_eleposi if(pp==0)
+		set myp_N = p_N if(pp==0)
+		set myp_nu = p_nu if(pp==0)
+		#
+		set myu_tot = u_tot if(pp==0)
+		set myrho_photon = rho_photon if(pp==0)
+		set myrho_eleposi = rho_eleposi if(pp==0)
+		set myrho_N = rho_N if(pp==0)
+		set myrho_nu = rho_nu if(pp==0)
+		#
+		set mys_tot = s_tot if(pp==0)
+		set mys_photon = s_photon if(pp==0)
+		set mys_eleposi = s_eleposi if(pp==0)
+		set mys_N = s_N if(pp==0)
+		set mys_nu = s_nu if(pp==0)
+		#
+		#
 		#
 		#
 rdhelmcou 1     #
@@ -942,6 +968,10 @@ rdhelmextra 1     #
 		#
 		# to compare with cs2rhoT that is dimensionless
 		set cs2helm=cshelm**2/c**2
+                #
+                #
+                #
+		set mycshelm = cshelm if(pp==0)
 		#
                 #
                 #agzplc 'dump' pbulk
@@ -1344,153 +1374,527 @@ checkmup 0      #
 		#
 		#
 		#
-		#
-		############################################
-		#
-		# MATLAB OUTPUT OF DIFF VERSIONS
-		#
-		#############################################
+prepleos2dp 0   #   Pre-Matlab version of similar macro in phivsr.m
 		#
 		#
+		define BOXCOLOR default
+		define POSCONTLTYPE 0
+		define NEGCONTLTYPE 0
 		#
-		#
-		#
-		#
-		#
-rdjoneosold 1      # old no-degen files
-		#
-		# eos_extract.m has interpolated to U/P/CHI space for this data
-		#
-		#
-		da $1
-		lines 1 100000000
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-		    {sm sn so sp rhob utotdiff ptotdiff chidiff hcm tdyn \
-		       pofu uofp \
-		       dpofudrho0 dpofudu \
-		       cs2cgs \
-		       sofu dsofudrho dsofudu \
-		    pofchi dpofchidrho0 dpofchidchi \
-		    qmofU tkofU tkofP tkofCHI}
-		#
-		#
-		#
-		#
-rdjonheadernew 0 #
-		#
-		# see eos_extract.m
-		#
+		set fracbase=0.4
+		set basefun=abs(mydptot)
+		set mybad=sqrt(-1)+basefun*0
                 #
-		da eosnew.head
-		lines 1 1
-		read '%d %d %d' {whichrnpmethod whichynumethod whichhcmmethod}
-                lines 2 2
-                read '%d %d %d' {whichdatatype numoutcolumns numextras}
-		lines 3 3
-		read '%g %g %g %g %g %g' {nrhob lrhobmin lrhobmax steplrhob baselrhob linearoffsetlrhob}
-		lines 4 4
-		read '%g %g %g %g %g %g' {nutotout lutotoutmin lutotoutmax steplutotout baselutotout linearoffsetlutotout}
-		lines 5 5
-		read '%g %g %g %g %g %g' {nptotout lptotoutmin lptotoutmax steplptotout baselptotout linearoffsetlptotout}
-		lines 6 6
-		read '%g %g %g %g %g %g' {nchiout lchioutmin lchioutmax steplchiout baselchiout linearoffsetlchiout}
-		lines 7 7
-		read '%g %g %g %g %g %g' {nhcm lhcmmin lhcmmax steplhcm baselhcm linearoffsetlhcm}
-		lines 8 8
-		read '%g %g %g %g %g %g' {ntdynorye ltdynoryemin ltdynoryemax stepltdynorye baseltdynorye linearoffsetltdynorye}
-		lines 9 9
-		read '%g %g %g %g %g %g' {ntdynorynu ltdynorynumin ltdynorynumax stepltdynorynu baseltdynorynu linearoffsetltdynorynu}
-		lines 10 10
-		read '%g %g %g %g %g %g' {ntk ltkmin ltkmax stepltk baseltk linearoffsetltk}
+		set whichfun=myp_photon
+		set mylgfun=(whichfun>fracbase*basefun) ? LG(whichfun) : mybad
+		define POSCONTCOLOR red
+		define NEGCONTCOLOR default
+		plc 0 mylgfun
+		#
+		set whichfun=abs(myp_eleposi)
+		set mylgfun=(whichfun>fracbase*basefun) ? LG(whichfun) : mybad
+		define POSCONTCOLOR magenta
+		define NEGCONTCOLOR default
+		plc 0 mylgfun 010
+		#
+                # (full ion+coul part)
+		set whichfun=abs(myp_N)
+		set mylgfun=(whichfun>fracbase*basefun) ? LG(whichfun) : mybad
+		define POSCONTCOLOR cyan
+		define NEGCONTCOLOR default
+		plc 0 mylgfun 010
+		#
+		set whichfun=abs(myp_nu)
+		set mylgfun=(whichfun>fracbase*basefun) ? LG(whichfun) : mybad
+		define POSCONTCOLOR yellow
+		define NEGCONTCOLOR default
+		plc 0 mylgfun 010
+		#
+		#if(0 && $whicheos==1){\
+		#set whichfun=abs(mypcou)
+		#set mylgfun=(whichfun>fracbase*basefun) ? LG(whichfun) : mybad
+		#define POSCONTCOLOR green
+		#define NEGCONTCOLOR default
+		#plc 0 mylgfun 010
+		#}
 		#
 		#
-rdjoneos 1      #
-		#
-		# see eos_extract.m
+prepleos2du 0   #   Pre-Matlab version of similar macro in phivsr.m
 		#
 		#
-		# here the utot, ptot, chi are really offsets from the degenerate (sn==0) case
-		# eos_extract.m has interpolated to U/P/CHI space for this data
+		define BOXCOLOR default
+		define POSCONTLTYPE 0
+		define NEGCONTLTYPE 0
 		#
-		# get header info that has whichrnpmethod
-		rdjonheadernew
+		set fracbase=0.4
+		set basefun=abs(mydutot)
+		set mybad=sqrt(-1)+basefun*0
+		set whichfun=abs(myrho_photon)
+		set mylgfun=(whichfun>fracbase*basefun) ? LG(whichfun) : mybad
+		define POSCONTCOLOR red
+		define NEGCONTCOLOR default
+		plc 0 mylgfun
 		#
-		da $1
-		lines 1 100000000
+		set whichfun=abs(myrho_eleposi)
+		set mylgfun=(whichfun>fracbase*basefun) ? LG(whichfun) : mybad
+		define POSCONTCOLOR magenta
+		define NEGCONTCOLOR default
+		plc 0 mylgfun 010
 		#
-                # 27 base things, 1 extra for 28 total things
-		if(whichdatatype==1){
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-		    {sm sn so sp \
-		       rhob utotdiff ptotdiff chidiff hcm tdynorye \
-		       uofutotdiff pofptotdiff chiofchidiff \
-		       pofu uofp \
-		       dpofudrho0 dpofudu \
-		       cs2cgs \
-		       sofu dsofudrho dsofudu \
-		    pofchi dpofchidrho0 dpofchidchi \
-		    tkofU tkofP tkofCHI qmofU}
+                # full ion+coul part
+                set whichfun=abs(myrho_N-myrhob*c*c)
+		set mylgfun=(whichfun>fracbase*basefun) ? LG(whichfun) : mybad
+		define POSCONTCOLOR cyan
+		define NEGCONTCOLOR default
+		plc 0 mylgfun 010
 		#
-		}
+		set whichfun=abs(myrho_nu)
+		set mylgfun=(whichfun>fracbase*basefun) ? LG(whichfun) : mybad
+		define POSCONTCOLOR yellow
+		define NEGCONTCOLOR default
+		plc 0 mylgfun 010
 		#
-		# 27 base things, 16 extra for 43 total things
-		if(whichdatatype==2){
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-		    {sm sn so sp \
-		       rhob utotdiff ptotdiff chidiff hcm tdynorye \
-		       uofutotdiff pofptotdiff chiofchidiff \
-		       pofu uofp \
-		       dpofudrho0 dpofudu \
-		       cs2cgs \
-		       sofu dsofudrho0 dsofudu \
-		    pofchi dpofchidrho0 dpofchidchi \
-		    tkofU tkofP tkofCHI \
-		    qtautelohcm qtauaelohcm \
-		    qtautmuohcm qtauamuohcm \
-		    qtautqtauohcm qtauaqtauohcm \
-		    ntautelohcm ntauaelohcm \
-		    ntautmuohcm ntauamuohcm \
-		    ntautntauohcm ntauantauohcm \
-		    gammapeglobal gammapnuglobalplusgammapenuglobal \
-		    gammanglobalplusgammaneglobal gammannuglobal }
-		 #
-		 }
-		# 27 base things, 9 extra, for 36 total things
-		if(whichdatatype==3){
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-		    {sm sn so sp \
-		       rhob utotdiff ptotdiff chidiff hcm tdynorye \
-		       uofutotdiff pofptotdiff chiofchidiff \
-		       pofu uofp \
-		       dpofudrho0 dpofudu \
-		       cs2cgs \
-		       sofu dsofudrho0 dsofudu \
-		    pofchi dpofchidrho0 dpofchidchi \
-		    tkofU tkofP tkofCHI \
-		    Qm graddotrhouyenonthermal graddotrhouye Tthermaltot lambdatot \
-                    Enuglobal Enueglobal Enuebarglobal \
-                    Ynu }
-		 #
-		 }
-                  #
-                  #
-                  #
-		#		#
-rdjondegeneos 1      #
+		#if(0 && $whicheos==1){\
+		#set whichfun=abs(myucou)
+		#set mylgfun=(whichfun>fracbase*basefun) ? LG(whichfun) : mybad
+		#define POSCONTCOLOR green
+		#define NEGCONTCOLOR default
+		#plc 0 mylgfun 010
+		#}
 		#
 		#
-		# here the utotoffset, ptotoffset, chioffset are really offsets from the degenerate (sdn==0) case
-		# eos_extract.m has interpolated to U/P/CHI space for this data
-		#
-		da $1
-		lines 1 100000000
-		read '%d %d %d %g %g %g %g %g %g' \
-		    {sdm sdo sdp \
-		       rhobdegen hcmdegen tdynoryedegen \
-		       utotoffset ptotoffset chioffset}
+prepleos2ds 0   #   Pre-Matlab version of similar macro in phivsr.m
 		#
 		#
+		define BOXCOLOR default
+		define POSCONTLTYPE 0
+		define NEGCONTLTYPE 0
+		#
+		#
+		set fracbase=0.4
+                set basefun=mydstot
+                #
+		set mybad=sqrt(-1)+basefun*0
+		set whichfun=mys_photon
+		set mylgfun=(whichfun>fracbase*basefun) ? LG(whichfun) : mybad
+		define POSCONTCOLOR red
+		define NEGCONTCOLOR red
+		plc 0 mylgfun
+		#
+		set whichfun=mys_eleposi
+		set mylgfun=(whichfun>fracbase*basefun) ? LG(whichfun) : mybad
+		define POSCONTCOLOR magenta
+		define NEGCONTCOLOR magenta
+		plc 0 mylgfun 010
+		#
+		# full nucleon part (ion+coulomb)
+		set whichfun=mys_N
+		set mylgfun=(whichfun>fracbase*basefun) ? LG(whichfun) : mybad
+		define POSCONTCOLOR cyan
+		define NEGCONTCOLOR cyan
+		plc 0 mylgfun 010
+		#
+		set whichfun=mys_nu
+		set mylgfun=(whichfun>fracbase*basefun) ? LG(whichfun) : mybad
+		define POSCONTCOLOR yellow
+		define NEGCONTCOLOR yellow
+		plc 0 mylgfun 010
+		#
+		#if(0 && $whicheos==1){\
+		#set whichfun=myscou
+		#set mylgfun=(whichfun>fracbase*basefun) ? LG(whichfun) : mybad
+		#define POSCONTCOLOR green
+		#define NEGCONTCOLOR green
+		#plc 0 mylgfun 010
+		#}
+		#
+		#
+showpressure  2 # showpressure 1 1
+		# show pressures for kaz or helm EOS
+		# before processing by eos_extract.m
+		#
+		# 0=KAZ 1=HELM
+		define whicheos $1
+		# 0=no mono  1=mono
+		define whichmono $2
+		#
+		#
+		# HELM:
+		if($whicheos==1){\
+		       if($whichmono){ checkrdhelmmono}
+		       if($whichmono==0){ checkrdhelm }
+		       set temp=tempk
+		    }
+		#
+		# KAZ:
+		if($whicheos==0){\
+		       if($whichmono){ checkrdkazmono}
+		       if($whichmono==0){ checkrdkaz }
+		       set temp=tempk
+		    }
+		#
+		#ctype default pl 0 temp ptot 1100
+                #
+                setupplc nrhob ntk ntdynorye rhob tempk tdynorye
+                #
+simpleread 1    #simpleread 'test1'
+		#
+		#
+		#cd ~/research/helm/200x200x1x50/
+		rdmykazeos $1
+		#
+		setupplc nrhob ntk ntdynorye rhob tempk tdynorye
+                #
+                setgrbconsts
+		#
+		#
+setupplc 6      #  setup contour plotting of post-Matlab EOSs
+		#  note that if Ynu varied, then plotting will ignore all but first/lowest Ynu in table.  Can extract like done for pre-Matlab tables.
+		#
+		#
+		define nx ($1)
+		define ny ($2)
+		define nz ($3)
+		#
+		set _n1=$nx
+		set _n2=$ny
+		set _n3=$nz
+		#
+		#
+		set i=0,$nx*$ny*$nz-1,1
+		#
+		set ti = i%$nx
+		set tj = int(i/$nx)
+                set tk=INT(i/($nx*$ny))
+                set tl=INT(i/($nx*$ny*$nz))
+		#set tk=(i+1)/(i+1)-1
+		#
+		set tx1=$4
+		set tx2=$5
+		set tx3=$6
+		#
+		#
+		set i=ti
+		set j=tj
+		set k=tk
+		#
+		#
+		set x12=tx1
+		set x1=x12
+		set dx1=1.0+0.0*x1
+		set dx12=dx1
+		#
+		#
+		set x22=tx2
+		set x2=x22
+		set dx2=dx1
+		set dx22=dx2
+		#
+		set x3=tx3
+		set x32=x3
+		set dx3=dx1*0
+		set dx32=dx3
+		#
+		define Sx (x1[0])
+		define Sy (x2[0])
+		define Sz (x3[0])
+		define dx (1)
+		define dy (1)
+		define dz (1)
+		define Lx (x1[$nx*$ny*$nz-1]-x1[0])
+		define Ly (x2[$nx*$ny*$nz-1]-x2[0])
+		define Lz (x3[$nx*$ny*$nz-1]-x3[0])
+		define ncpux1 1
+		define ncpux2 1
+		define ncpux3 1
+		define interp (0)
+		define coord (3)
+                define PLANE 3
+                define WHICHLEV 0
+		define x1label "\rho_b"
+		define x2label "T[K]"
+		#
+		set _startx1=$Sx
+		set _startx2=$Sy
+		set _startx3=$Sz
+		set _dx1=$dx
+		set _dx2=$dy
+		set _dx3=$dz
+		set _realnstep=0
+		set _gam=0
+		set _a=0
+		set _R0=0
+		set _Rin=0
+		set _Rout=1
+		set _hslope=1
+		set _dt=1
+		set _defcoord=0
+		#
+		#!mkdir dumps
+		#
+		#
+		define LOGTYPE 2
+		#
+		#
+		# $missing_data
+		# NaN
+		#
+		#    p_photon p_eleposi p_N p_nu
+		#    rho_photon rho_eleposi rho_N rho_nu
+                #    s_photon s_eleposi s_N s_nu
+		#
+		# FOR HELM:
+		#    pcou ucou sdencou
+		#
+plcs2helm 0      #
+		# how the hell is this so smooth if stot is so erratic?
+		# dimensionless
+		#
+		plc 0 cs2helm
+		#
+		#
+
+pleos2dconv 0    #
+		#
+		fdraft
+		#
+		set funplot=LG(rhob)
+		set mybad=sqrt(-1)+funplot*0
+		set funplot2=LG(temp)
+		#
+		define BOXCOLOR default
+		define POSCONTLTYPE 0
+		define NEGCONTLTYPE 0
+		define cres 50
+		#
+		#
+		set convvalue=1
+		set mylgfun=(abs(didconverge-convvalue)<1E-10) ? funplot : mybad
+		define POSCONTCOLOR red
+		define NEGCONTCOLOR default
+		plc 0 mylgfun
+		#
+		set convvalue=0
+		set mylgfun=(abs(didconverge-convvalue)<1E-10) ? funplot : mybad
+		define POSCONTCOLOR magenta
+		define NEGCONTCOLOR default
+		plc 0 mylgfun 010
+		#
+		set convvalue=-1
+		set mylgfun=(abs(didconverge-convvalue)<1E-10) ? funplot : mybad
+		define POSCONTCOLOR cyan
+		define NEGCONTCOLOR default
+		plc 0 mylgfun 010
+		#
+		set convvalue=-2
+		set mylgfun=(abs(didconverge-convvalue)<1E-10) ? funplot : mybad
+		define POSCONTCOLOR yellow
+		define NEGCONTCOLOR default
+		plc 0 mylgfun 010
+		#
+		set convvalue=-3
+		set mylgfun=(abs(didconverge-convvalue)<1E-10) ? funplot : mybad
+		define POSCONTCOLOR green
+		define NEGCONTCOLOR default
+		plc 0 mylgfun 010
+		#
+		set convvalue=-4
+		set mylgfun=(abs(didconverge-convvalue)<1E-10) ? funplot : mybad
+		define POSCONTCOLOR green
+		define NEGCONTCOLOR default
+		plc 0 mylgfun 010
+		#
+		set convvalue=-10
+		set mylgfun=(abs(didconverge-convvalue)<1E-10) ? funplot2 : mybad
+		define POSCONTCOLOR red
+		define NEGCONTCOLOR default
+		define cres 250
+		plc 0 mylgfun 010
+		define cres 50
+		#
+		set convvalue=-11
+		set mylgfun=(abs(didconverge-convvalue)<1E-10) ? funplot2 : mybad
+		define POSCONTCOLOR blue
+		define NEGCONTCOLOR default
+		plc 0 mylgfun 010
+		#
+		set convvalue=-12
+		set mylgfun=(abs(didconverge-convvalue)<1E-10) ? funplot2 : mybad
+		define POSCONTCOLOR cyan
+		define NEGCONTCOLOR default
+		plc 0 mylgfun 010
+		#
+		set convvalue=-13
+		set mylgfun=(abs(didconverge-convvalue)<1E-10) ? funplot2 : mybad
+		define POSCONTCOLOR green
+		define NEGCONTCOLOR default
+		plc 0 mylgfun 010
+		#
+		set convvalue=-100
+		set mylgfun=(abs(didconverge-convvalue)<1E-10) ? funplot2 : mybad
+		define POSCONTCOLOR yellow
+		define NEGCONTCOLOR default
+		plc 0 mylgfun 010
+		#
+		set convvalue=-200
+		set mylgfun=(abs(didconverge-convvalue)<1E-10) ? funplot2 : mybad
+		define POSCONTCOLOR magenta
+		define NEGCONTCOLOR default
+		plc 0 mylgfun 010
+		#
+		set convvalue=-500
+		set mylgfun=(abs(didconverge-convvalue)<1E-10) ? funplot2 : mybad
+		define POSCONTCOLOR yellow
+		define NEGCONTCOLOR default
+		plc 0 mylgfun 010
+		#
+		#
+		# To compare my LS accurat.eps plot with Lat wrapper
+		#
+		# eos.dat
+		# rhob, tempk
+		# 26770      1.096985797892386E+13      1.035321843295664E+10
+		#
+		# eosazbar.dat:
+		#abar, zbar
+		#4.002337469845328E+00      1.145490890024282E+00
+		# implies ye=zbar/abar =
+		# 0.2862
+		#
+		# feed to lat wrap:
+		# 0.2862 1.035321843295664E+10 1.096985797892386E+13
+		#
+		## from wrap:
+		#abar =  9.0242E+01  zbar =  2.5827E+01
+		#
+		#
+shownpratio 0   #  using pre-Matlab
+		showpressure 0 0
+		#
+		define BOXCOLOR default
+		define POSCONTLTYPE 0
+		define NEGCONTLTYPE 0
+		define cres 50
+		#
+		cd ~/research/kazeos/kaz_allfixed_tdynsmall_200sq/
+		rdmykazeos eos.dat
+		rdmykazeosother eosother.dat
+		define POSCONTCOLOR red
+		define NEGCONTCOLOR default
+		plc 0 npratio
+		#
+		cd ~/research/kazeos/allfixed_200sq_new/
+		rdmykazeos eos.dat
+		rdmykazeosother eosother.dat
+		define POSCONTCOLOR blue
+		define NEGCONTCOLOR default
+		plc 0 npratio 010
+		#
+shownpratio1 0  # using pre-Matlab
+		showpressure 0 0
+		showpressure 1 0
+		pleos2dconv
+		#
+		# now overlay npratio
+		define BOXCOLOR default
+		define POSCONTLTYPE 0
+		define NEGCONTLTYPE 0
+		define cres 50
+		#
+		#cd ~/research/kazeos/kaz_allfixed_tdynsmall_200sq/
+		rdmykazeos eos.dat
+		rdmykazeosother eosother.dat
+		#
+		set rho10=rhob/1E10
+		set T10=temp/1E10
+		set xnuc = 11.3226d0*rho10**(-0.75d0)*T10**1.125d0*exp(-8.20899d0/T10)
+		set xnuc=(xnuc>1.0) ? 1.0 : xnuc
+		set xnuc=(xnuc<0.0) ? 0.0 : xnuc
+		#
+		define POSCONTCOLOR cyan
+		define NEGCONTCOLOR default
+		plc 0 xnuc 010
+		#
+		define POSCONTCOLOR blue
+		define NEGCONTCOLOR default
+		plc 0 npratio 010
+		#
+		# See where Tod Thompson used LSEOS
+		set lowT = 10**(-0.8)*ergPmev/kb
+		set highT = 10**(1)*ergPmev/kb
+		#
+		define PLOTWEIGHT 7
+		define lweight 7
+		set myusex=((temp>lowT)&&(temp<highT)) ? 1 : 0
+		set myusey=((rhob>10**6.4)&&(rhob<10**15.1)) ? 1 : 0
+		set myrhob=rhob if(myusex&&myusey)
+		set mylowT=(lowT+rhob*0) if(myusex&&myusey)
+		set myhighT=(highT+rhob*0) if(myusex&&myusey)
+		ctype cyan pl 0 myrhob mylowT 1110
+		ctype cyan pl 0 myrhob myhighT 1110
+		#
+		set myx=0,1,1
+		set myx=6.4 + myx*1E-5
+		set myy=0,1,1
+		set myy[0]=LG(lowT)
+		set myy[1]=LG(highT)
+		connect myx myy
+		#
+		#
+		set myx=0,1,1
+		set myx=15.1 + myx*1E-5
+		set myy=0,1,1
+		set myy[0]=LG(lowT)
+		set myy[1]=LG(highT)
+		connect myx myy
+		#
+		defaults
+		#
+		#
+showpcontrib0 0 #
+		redohelm
+		#redokaz
+		#
+		set myrho_photon=rho_photon if(nn==0)
+		set myrho_eleposi=rho_eleposi if(nn==0)
+		set myrho_N=rho_N-rhob*c*c if(nn==0)
+		set myrho_nu=rho_nu if(nn==0)
+		set myrhob=rhob if(nn==0)
+		#
+		erase
+		ctype default box
+		#
+		fdraft
+		define PLOTWEIGHT 5
+		ctype default pl 0 myrhob myrho_photon 1110
+		ctype red pl 0 myrhob myrho_eleposi 1110
+		ctype blue pl 0 myrhob myrho_N 1110
+		ctype magenta pl 0 myrhob myrho_nu 1110
+		define PLOTWEIGHT 3
+		#
+checkloTrho 0   #
+		#
+		redokaz
+		set myrhob= rhob if(tempk<=1E4)
+		set myutot= utot if(tempk<=1E4)
+		pl 0 myrhob myutot 1100 
 		#
 		#
 		#
+checkne 0       #
+		set myxne=xne if(nn==0)
+		set myrhob=rhob if(nn==0)
+		set myetae=etae if(nn==0)
+		set mynp=myrhob/mb/2
+		set myzbar=zbar if(nn==0)
+		print {myrhob myxne mynp myetae myzbar}
+checkrhoele 0   #
+		#redokaz
+		redohelm
 		#
+		set god=me*c**2*rhob/mp if(nn==0)
+		set myrhob=rhob if(nn==0)
+		ctype blue pl 0 myrhob god 1110
+		#
+                # End pre-Matlab EOS
+                #####################
