@@ -1,3 +1,13 @@
+startold 0      #
+		set _is=0
+                set _ie=23
+		set _js=0
+                set _je=31
+		set _ks=0
+                set _ke=0
+		jrdp3duold dump0000
+		jrdp3du dump0000
+                #
 randomtest 0    #
 		#
 		#
@@ -13,7 +23,10 @@ randomtest 0    #
                 #jrdp3du dump0008
                 #jrdp3du dump0046
                 #jrdp3du dump0028
-                jrdp3du dump0064 jrdpdebug debug0064
+		#jrdp3du dump0049 jrdpdebug debug0049
+		#jrdp3du dump0180 jrdpdebug debug0180
+                #jrdp3du dump0009 jrdpdebug debug0009
+                jrdp3du dump0004 jrdpdebug debug0004
 		#jrdp3du dump0020
                 set myuse=(ti>=_is && ti<=_ie && tj>=_js && tj<=_je && tk>=_ks && tk<=_ke)
 		stresscalc 1
@@ -180,27 +193,58 @@ checkdU 0       #
 		jrdp3du dump0000 jrdpdebug debug0000 jrdpflux fluxdump0000
 		plc 0 B2 001 1E8 1E9 -3 9
 		#
+		jrdp3du dump0001 jrdpdebug debug0001 jrdpflux fluxdump0001
+		plc 0 B2 001 1E8 1E9 -3 9
+		#
+		jrdp3du dump0002 jrdpdebug debug0002 jrdpflux fluxdump0002
+		plc 0 B2 001 1E8 1E9 -3 9
+		#
+		jrdp3du dump0003 jrdpdebug debug0003 jrdpflux fluxdump0003
+		plc 0 B2 001 1E8 1E9 -3 9
+		#
+		jrdp3du dump0004 jrdpdebug debug0004 jrdpflux fluxdump0004
+		plc 0 B2 001 1E8 1E9 -3 9
+		#
+		jrdp3du dump0005 jrdpdebug debug0005 jrdpflux fluxdump0005
+		plc 0 B2 001 1E8 1E9 -3 9
+		#
 		jrdp3du dump0010 jrdpdebug debug0010 jrdpflux fluxdump0010
 		plc 0 B2 001 1E8 1E9 -3 9
 		#
 		plc 0 U6 001 1E8 1E9 -3 9
 		#
 		#
-		plc 0 (dUr16/U6) 001 1E8 1E9 -3 9
+		plc 0 (dUr16*_dt/U6) 001 1E8 1E9 -3 9
+		#
+		plc 0 (dUr16*_dt) 001 1E8 1E9 -3 9
+		#
+		set god=dUr16
+		set god2=dUr16*_dt
+		set crap=god if(ti==470 && tj==1)
+		set crap2=god2 if(ti==470 && tj==1)
+		print '%21.15g %21.15g %21.15g\n' {crap crap2 _dt}
 		#
 		plc 0 dUr16 001 1E8 1E9 -3 9
+		#min:-784682752
 		#
 		set testdUr16=gdet*(uu1/uu0*B2-uu2/uu0*B1)
 		dercalc 2 testdUr16 dtestdUr16
-		set mydU = dtestdUr16x*_dt
+		set mydU = dtestdUr16x
 		plc 0 mydU 001 1E8 1E9 -3 9
+		#min:-383203968
 		#
 		set mydUr16 =  gdet*(uu1/uu0*B2-uu2/uu0*B1)*_dt/$dx1
 		plc 0 mydUr16 001 1E8 1E9 -3 9
 		#
-		set ampB2 = exp((uu1/uu0*B2-uu2/uu0*B1)/$dx1*_t)
+		set ampB2 = exp((uu1/uu0*B2-uu2/uu0*B1)/$dx1*_t/B2)
 		plc 0 ampB2 001 1E8 1E9 -3 9
 		#
 		#
 		#
-
+		set startanim=0
+		set endanim=63
+		#agplc 'dump' (dUr16*_dt) 001 1E8 1E9 -3 9
+		agplc 'dump' (B2) 001 1E8 1E9 -3 9
+		#agplc 'dump' (uu2) 001 1E8 1E9 -3 9
+		#
+		#

@@ -2927,17 +2927,29 @@ agplc 17	# animplc 'dump' r 000 <0 0 0 0>
                 #defaults
 		define PLANE (3)
 		define WHICHLEV (0)
-                set h1=$1
 		#set constlevelshit=0
 		#
                 do ii=startanim,endanim,$ANIMSKIP {
+                  set h1=$1
 		  set h2=sprintf('%04d',$ii) set _fname=h1+h2
                   define filename (_fname)
+                    #
+		  set h1='fluxdump' set _fname=h1+h2
+                  define filenameflux (_fname)
+                    #
+		  set h1='debug' set _fname=h1+h2
+                  define filenamedebug (_fname)
+                    #
+                    #
 		  #jrdp2d $filename
 		  #define coord 1
                   #jrdpcf3duold $filename
+                    echo $filename $filenameflux $filenamedebug
                   jrdp3du $filename
-		  fieldcalc 0 aphi
+                  jrdpflux $filenameflux
+                  jrdpdebug $filenamedebug
+                  #
+		  #fieldcalc 0 aphi
 		  #jre mode2.m
 		  #alfvenvp
 		  #interpsingle aphi 128 128 -2.5 2.5 -2.5 2.5
