@@ -922,8 +922,12 @@ jrdp3d	1	#
 		#
 		gammienew
 jrdpeos	1	#
+		#
+                # Must do:
+		# gogrmhd
+		# jre kazpostmatlab.m
 		# gets whichdatatype and numextras
-		rdjonheadernew # kaz.m
+		rdjonheadernew eosnew.head
 		#
 		jrdpheader3d dumps/$1
 		da dumps/$1
