@@ -127,7 +127,11 @@ jrdpallgrb 1       # for latest code (3d, with metric and EOS stuff)
                 jrdpcf3dugrb $filename
 		jrdpeos $filenameeosdump
 		jrdpunits
-		grid3d $filenamegdump
+                if($nx>1 && $ny==1 && $nz==1){\
+                 #
+		  grid3d $filenamegdump
+		 #
+                }
 		#
 		#
 jrdpcf2d 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).

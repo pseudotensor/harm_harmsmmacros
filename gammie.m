@@ -1384,14 +1384,24 @@ gammiegridnew3 1	# read in grid data with extra connection2 and all dxdxp's
 		setgrd
 		#
 grid3d  1	# read in grid data with extra connection2 and all dxdxp's
-		#da dumps/$1
-		#lines 1 1
-		#read '%g %g %g %g %g %g %g %g %g %g' {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3}
-		jrdpheader3d dumps/$1
-		da dumps/$1
-		lines 2 10000000
 		#
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+                !if [ -f dumps/$1 ]; then echo "1" > testifexists.$1.temp ; else echo "0" > testifexists.$1.temp; fi
+		da testifexists.$1.temp
+		read '%d' {fileexists}
+		!rm -rf testifexists.$1.temp
+		define filexistsdef (fileexists)
+		#
+		if($filexistsdef ==0){\
+		 echo "File dumps/$!!1 does not exist"
+		}
+                #
+		if($filexistsdef ==1){\
+		 #
+		 jrdpheader3d dumps/$1
+		 da dumps/$1
+		 lines 2 10000000
+		 #
+		 read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {  ti   tj   tk  x1   x2   x3   V1   V2  V3 \
 		       c000 c001 c002 c003 \
 		       c010 c011 c012 c013 \
@@ -1428,9 +1438,10 @@ grid3d  1	# read in grid data with extra connection2 and all dxdxp's
 		       set h=V2
 		       set ph=V3
 		       #
-		jre gtwod.m
-		gsetup
-		setgrd
+		 jre gtwod.m
+		 gsetup
+		 setgrd
+		}
 		#
 gammiestress 5 # gammiestress tot2em tot2ma totmdot 6 PI/2
 		gammieflux $4 $5 lflem $1
