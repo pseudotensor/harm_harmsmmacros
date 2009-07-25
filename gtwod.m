@@ -1747,6 +1747,10 @@ gcalcmore       0     #
 		set ksbu2=bu2*dxdxp2
 		# only for KS/KSP (given KS, computes in KS and returns in KSP)
 		#
+                #
+                #(((u+p)*uu0*ud0+p)/(Tud10+rho*uu0))
+                #
+                #
 		# generally true ...
 		set cs=sqrt(cs2)
 		set va=sqrt(val2)
