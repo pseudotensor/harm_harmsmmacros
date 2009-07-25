@@ -24,6 +24,11 @@ gogrmhd 0 #
 	macro read "$!HOME/sm/gtwodavgs.m"
 	macro read "$!HOME/sm/gammie.m"
 	#
+gogrb 0 #
+	macro read "$!HOME/sm/grbmodel.m"
+	macro read "$!HOME/sm/kaz.m"
+	macro read "$!HOME/sm/kazpostmatlab.m"
+	#
 	#
 smstart 0 # the startup macro for my SM sessions.
         # file types from global.h

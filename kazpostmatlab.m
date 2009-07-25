@@ -55,6 +55,8 @@ rdjonheadernew 1 #
 		lines 9 9
 		read '%g %g %g %g %g %g' {ntdynorynu ltdynorynumin ltdynorynumax stepltdynorynu baseltdynorynu linearoffsetltdynorynu}
 		lines 10 10
+		read '%g %g' {lsoffset fakelsoffset}
+		lines 11 11
 		read '%g %g %g %g %g %g' {ntk ltkmin ltkmax stepltk baseltk linearoffsetltk}
 		#
 		#
