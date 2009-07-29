@@ -428,6 +428,212 @@ checkforcebal 0  #
 		#
 		ctype default pl 0 r gravaccx 1101 1 1E4 1E-10 10
 		ctype red pl 0 r (-pressureaccx) 1111 1 1E4 1E-10 10
+                #
+                #
+setupharmcompare 0 #
+		#
+		#
+		# First get HARM dump versions
+		# From: jrdpeos eosdump0000
+		####################################
+		# below are independent variables
+		set rharm = (r*Lunit)
+		set rhoharm = (rho*1)
+		set uharm = (u*Pressureunit)
+		set yeharm = YE
+		set ynuharm = YNU
+		#
+		# below is from tau integral
+		set hharm = (Height1*Lunit)
+		#
+		# below are from lookup table directly
+		set pharm = (p*Pressureunit)
+		set tempharm = (temp*Tempunit)
+		set qtautnueohcmharm = (qtautnueohcm/Lunit)
+		set qtauanueohcmharm = (qtauanueohcm/Lunit)
+		set qtautnuebarohcmharm = (qtautnuebarohcm/Lunit)
+		set qtauanuebarohcmharm = (qtauanuebarohcm/Lunit)
+		set qtautmuohcmharm = (qtautmuohcm/Lunit)
+		set qtauamuohcmharm = (qtauamuohcm/Lunit)
+		set ntautnueohcmharm = (ntautnueohcm/Lunit)
+		set ntauanueohcmharm = (ntauanueohcm/Lunit)
+		set ntautnuebarohcmharm = (ntautnuebarohcm/Lunit)
+		set ntauanuebarohcmharm = (ntauanuebarohcm/Lunit)
+		set ntautmuohcmharm = (ntautmuohcm/Lunit)
+		set ntauamuohcmharm = (ntauamuohcm/Lunit)
+		set unue0harm = (unue0*Pressureunit)
+		set unuebar0harm = (unuebar0*Pressureunit)
+		set unumu0harm = (unumu0*Pressureunit)
+		set nnue0harm = (nnue0/Lunit**3)
+		set nnuebar0harm = (nnuebar0/Lunit**3)
+		set nnumu0harm = (nnumu0/Lunit**3)
+		set lambdatotharm = (lambdatot*Lunit)
+		set lambdaintotharm = (lambdaintot*Lunit)
+		set tauphotonohcmharm = (tauphotonohcm/Lunit)
+		set tauphotonabsohcmharm = (tauphotonabsohcm/Lunit)
+		set nnueth0harm = (nnueth0/Lunit**3)
+		set nnuebarth0harm = (nnuebarth0/Lunit**3)
+		#
+		# for HARM, derived inside HARM as functions of above while for stellar model computed directly
+		set qphotonharm = (qphoton*Pressureunit/Tunit)
+		set qmharm = (qm*Pressureunit/Tunit)
+		set graddotrhouylharm = (graddotrhouyl*rhounit/Tunit)
+		set tthermaltotharm = (tthermaltot*Tunit)
+		set tdifftotharm = (tdifftot*Tunit)
+		set rho_nuharm = (rho_nu*Pressureunit)
+		set p_nuharm = (p_nu*Pressureunit)
+		set s_nuharm = (s_nu*Pressureunit/energyunit)
+		set ynulocalharm = ynulocal
+		set Ynuthermalharm = Ynuthermal
+		set enuharm = (enu*energyunit/ergPmev)
+		set enueharm = (enue*energyunit/ergPmev)
+		set enuebarharm = (enuebar*energyunit/ergPmev)
+		#
+setupstarcompare 0 #
+		#
+		####################################
+		# NOW GET stellar model versions
+		# From: rdmykazeos eos.dat ; rdmykazeosother eosother.dat ; rdhelmcou eoscoulomb.dat ; rdhelmextra eosazbar.dat
+		#
+		#
+		dostandard 0
+		dostandard 0
+		dostandard 0
+		#
+		# below are independent variables
+		set rstar = r
+		set rhostar = rhob
+		set ustar = u
+		set yestar = tdynorye
+		set ynustar = tdynorynu
+		#
+		# below is from tau integral
+		set hstar = hcm
+		#
+		# below are from lookup table directly
+		# dptot is really p_tot
+		set pstar = dptot
+		set tempstar = tempk
+		#
+		# from eosother.dat:
+		set qtautnueohcmstar = qtautelohcm
+		set qtauanueohcmstar = qtauaelohcm
+		set qtautnuebarohcmstar = 0
+		set qtauanuebarohcmstar = 0
+		set qtautmuohcmstar = qtautmuohcm
+		set qtauamuohcmstar = qtauamuohcm
+		set ntautnueohcmstar = ntautelohcm
+		set ntauanueohcmstar = ntauaelohcm
+		set ntautnuebarohcmstar = 0
+		set ntauanuebarohcmstar = 0
+		set ntautmuohcmstar = ntautmuohcm
+		set ntauamuohcmstar = ntauamuohcm
+		set unue0star = 0
+		set unuebar0star = 0
+		set unumu0star = 0
+		set nnue0star = 0
+		set nnuebar0star = 0
+		set nnumu0star = 0
+		set lambdatotstar = lambdatot
+		set lambdaintotstar = 0
+		set tauphotonohcmstar = tauphotonohcm
+		set tauphotonabsohcmstar = tauphotonabsohcm
+		set nnueth0star = 0
+		set nnuebarth0star = 0
+		#
+		# for HARM, derived inside HARM as functions of above while for stellar model computed directly
+		set qphotonstar = Qphoton
+		set qmstar = Qm
+		set graddotrhouylstar = graddotrhouye
+		set tthermaltotstar = Tthermaltot
+		set tdifftotstar = Tdifftot
+		# eosother.dat:
+		set rho_nustar = rho_nu
+		set p_nustar = p_nu
+		set s_nustar = s_nu
+		set ynulocalstar = Ynutemp
+		set Ynuthermalstar = 0
+		# back to primary eos.dat:
+		set enustar = (Enutot/ergPmev)
+		set enuestar = (Enue/ergPmev)
+		set enuebarstar = (Enuebar/ergPmev)
+		#
+		#
+		#
+		#
+plotstarharm 0  #
+		#
+		setgrbconsts
+		#
+		cd /data/jon/testfulleostable2/harm/run/
+		jrdpallgrb 0000
+		setupharmcompare
+		#
+		cd /data/jon/svngrbmodel/
+		setupstarcompare
+		#
+		cd /data/jon/testfulleostable2/harm/run/
+		#
+		#############
+		# Plot star and HARM versions
+		#
+		ctype default pl 0 rharm hharm 1100
+		ctype red pl 0 rstar hstar 1110
+		#
+		ctype default pl 0 rharm pharm 1100
+		ctype red pl 0 rstar pstar 1110
+		#
+		ctype default pl 0 rharm tempharm 1100
+		ctype red pl 0 rstar tempstar 1110
+		#
+		ctype default pl 0 rharm rhoharm 1100
+		ctype red pl 0 rstar rhostar 1110
+		#
+		ctype default pl 0 rharm yeharm 1100
+		ctype red pl 0 rstar yestar 1110
+		#
+		ctype default pl 0 rharm ynuharm 1100
+		ctype red pl 0 rstar ynustar 1110
+		#
+		ctype default pl 0 rharm lambdatotharm 1100
+		ctype red pl 0 rstar lambdatotstar 1110
+		#
+		ctype default pl 0 rharm qmharm 1100
+		ctype red pl 0 rstar qmstar 1110
+		#
+		ctype default pl 0 rharm graddotrhouylharm 1100
+		ctype red pl 0 rstar graddotrhouylstar 1110
+		#
+		ctype default pl 0 rharm tthermaltotharm 1100
+		ctype red pl 0 rstar tthermaltotstar 1110
+		ctype blue pl 0 rharm tdifftotharm 1110
+		ctype cyan pl 0 rstar tdifftotstar 1110
+		ctype green pl 0 rharm (hharm/c) 1110
+		ctype magenta pl 0 rstar (hstar/c) 1110
+		#
+		ctype default pl 0 rharm rho_nuharm 1100
+		ctype red pl 0 rstar rho_nustar 1110
+		#
+		ctype default pl 0 rharm p_nuharm 1100
+		ctype red pl 0 rstar p_nustar 1110
+		#
+		ctype default pl 0 rharm s_nuharm 1100
+		ctype red pl 0 rstar s_nustar 1110
+		#
+		ctype default pl 0 rharm enuharm 1100
+		ctype red pl 0 rstar enustar 1110
+		#
+		ctype default pl 0 rharm enueharm 1100
+		ctype red pl 0 rstar enuestar 1110
+		#
+		ctype default pl 0 rharm enuebarharm 1100
+		ctype red pl 0 rstar enuebarstar 1110
+		#
+		#
+		# check interpolation (related to DEBUG code in kazfulleos.c)
+		#
+		#ctype default pl 0 rharm tauphotonabsohcm 1100
+		#
 		#
 checkdt 0       #
 		#
