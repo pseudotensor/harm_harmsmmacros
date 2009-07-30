@@ -1525,16 +1525,31 @@ jrdpdebuggen 1  #
 		da dumps/$1
 		lines 2 10000000
 		#
+                # rows shown below in formatted way are TSCALE:
 		# ALLTS 0
 		# ENERTS 1
 		# IMAGETS 2
 		# DEBUGTS 3
+                #
+                # columns are as in global.nondepnmemonics.h:
+                #define COUNTUTOPRIMFAILCONV 0 // if failed to converge
+                #define COUNTFLOORACT 1 // if floor activated
+                #define COUNTLIMITGAMMAACT 2 // if Gamma limiter activated
+                #define COUNTINFLOWACT 3 // if inflow check activated
+                #define COUNTUTOPRIMFAILRHONEG 4
+                #define COUNTUTOPRIMFAILUNEG 5
+                #define COUNTUTOPRIMFAILRHOUNEG 6
+                #define COUNTGAMMAPERC 7 // see fixup_checksolution()
+                #define COUNTUPERC 8 // see fixup_checksolution()
+                #define COUNTENTROPY 9
+                #define COUNTCOLD 10
+                # 
 		#
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-		    {fail0 floor0 limitgamma0 inflow0 failrho0 failu0 failrhou0 precgam0 precu0 \
-		       fail1 floor1 limitgamma1 inflow1 failrho1 failu1 failrhou1 precgam1 precu1 \
-		    fail2 floor2 limitgamma2 inflow2 failrho2 failu2 failrhou2 precgam2 precu2 \
-		    fail3 floor3 limitgamma3 inflow3 failrho3 failu3 failrhou3 precgam3 precu3 }
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		    {fail0 floor0 limitgamma0 inflow0 failrho0 failu0 failrhou0 precgam0 precu0 toentropy0 tocold0 \
+		       fail1 floor1 limitgamma1 inflow1 failrho1 failu1 failrhou1 precgam1 precu1 toentropy1 tocold1 \
+		    fail2 floor2 limitgamma2 inflow2 failrho2 failu2 failrhou2 precgam2 precu2 toentropy2 tocold2 \
+		    fail3 floor3 limitgamma3 inflow3 failrho3 failu3 failrhou3 precgam3 precu3 toentropy3 tocold3 }
 		#
 		# shows where *ever* failed or not
 		set lg1fail=lg(fail0+1)
