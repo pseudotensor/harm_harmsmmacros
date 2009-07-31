@@ -441,7 +441,9 @@ setupharmcompare 0 #
 		set rhoharm = (rho*1)
 		set uharm = (u*Pressureunit)
 		set yeharm = YE
-		set ynuharm = YNU
+		set ynuharm = ynu
+		set ynu0harm = YNU
+		set ynulocalharm = ynulocal
 		#
 		# below is from tau integral
 		set hharm = (Height1*Lunit)
@@ -506,6 +508,8 @@ setupstarcompare 0 #
 		set ustar = u
 		set yestar = tdynorye
 		set ynustar = tdynorynu
+		# below Ynu0 for whichdatatype==4 if stellar model has that, but it has whichdatatype==3 instead
+		#set ynu0star = Ynu0
 		#
 		# below is from tau integral
 		set hstar = hcm
@@ -562,10 +566,12 @@ setupstarcompare 0 #
 		#
 		#
 plotstarharm 0  #
+		# run gogrb if haven't
 		#
 		setgrbconsts
 		#
-		cd /data/jon/testfulleostable2/harm/run/
+		#cd /data/jon/testfulleostable2/harm/run/
+		cd /data/jon/testfulleostable2/harm.test/run/
 		jrdpallgrb 0000
 		setupharmcompare
 		#
@@ -589,11 +595,18 @@ plotstarharm 0  #
 		ctype default pl 0 rharm rhoharm 1100
 		ctype red pl 0 rstar rhostar 1110
 		#
+                # YE
 		ctype default pl 0 rharm yeharm 1100
 		ctype red pl 0 rstar yestar 1110
 		#
+                # YNU
 		ctype default pl 0 rharm ynuharm 1100
+		ctype green pl 0 rharm ynulocalharm 1110
 		ctype red pl 0 rstar ynustar 1110
+		ctype blue pl 0 rharm ynu0harm 1110
+		#
+                # YNU0 (not available with normal stellar model)
+		#ctype red pl 0 rstar ynu0star 1110
 		#
 		ctype default pl 0 rharm lambdatotharm 1100
 		ctype red pl 0 rstar lambdatotstar 1110

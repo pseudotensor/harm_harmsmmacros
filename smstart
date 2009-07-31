@@ -28,6 +28,7 @@ gogrb 0 #
 	macro read "$!HOME/sm/grbmodel.m"
 	macro read "$!HOME/sm/kaz.m"
 	macro read "$!HOME/sm/kazpostmatlab.m"
+	macro read "$!HOME/sm/phivsr.m"
 	#
 	#
 smstart 0 # the startup macro for my SM sessions.
