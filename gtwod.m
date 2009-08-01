@@ -113,15 +113,19 @@ jrdpallgrb 1       # for latest code (3d, with metric and EOS stuff)
                 set h1='dump'
 		set h1gdump='gdump'
 		set h1eosdump='eosdump'
+		set h1debugdump='debug'
 		#
 		define ii ($1)
 		set h2=sprintf('%04d',$ii)
 		set _fname=h1+h2
 		set _fnamegdump=h1gdump+h2
 		set _fnameeosdump=h1eosdump+h2
+		set _fnamedebugdump=h1debugdump+h2
+                #
 		define filename (_fname)
-		define filenameeosdump (_fnameeosdump)
 		define filenamegdump (_fnamegdump)
+		define filenameeosdump (_fnameeosdump)
+		define filenamedebugdump (_fnamedebugdump)
 		#
 		#jrdp3dugrb $filename
                 jrdpcf3dugrb $filename
@@ -132,6 +136,8 @@ jrdpallgrb 1       # for latest code (3d, with metric and EOS stuff)
 		  grid3d $filenamegdump
 		 #
                 }
+                #
+                jrdpdebug $filenamedebugdump
 		#
 		#
 jrdpcf2d 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
@@ -1543,13 +1549,13 @@ jrdpdebuggen 1  #
                 #define COUNTUPERC 8 // see fixup_checksolution()
                 #define COUNTENTROPY 9
                 #define COUNTCOLD 10
-                # 
+                #define COUNTEOSLOOKUPFAIL 11
 		#
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-		    {fail0 floor0 limitgamma0 inflow0 failrho0 failu0 failrhou0 precgam0 precu0 toentropy0 tocold0 \
-		       fail1 floor1 limitgamma1 inflow1 failrho1 failu1 failrhou1 precgam1 precu1 toentropy1 tocold1 \
-		    fail2 floor2 limitgamma2 inflow2 failrho2 failu2 failrhou2 precgam2 precu2 toentropy2 tocold2 \
-		    fail3 floor3 limitgamma3 inflow3 failrho3 failu3 failrhou3 precgam3 precu3 toentropy3 tocold3 }
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		    {fail0 floor0 limitgamma0 inflow0 failrho0 failu0 failrhou0 precgam0 precu0 toentropy0 tocold0 eosfail0 \
+		       fail1 floor1 limitgamma1 inflow1 failrho1 failu1 failrhou1 precgam1 precu1 toentropy1 tocold1 eosfail1 \
+		    fail2 floor2 limitgamma2 inflow2 failrho2 failu2 failrhou2 precgam2 precu2 toentropy2 tocold2 eosfail2 \
+		    fail3 floor3 limitgamma3 inflow3 failrho3 failu3 failrhou3 precgam3 precu3 toentropy3 tocold3 eosfail3 }
 		#
 		# shows where *ever* failed or not
 		set lg1fail=lg(fail0+1)
