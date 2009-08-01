@@ -491,6 +491,10 @@ setupharmcompare 0 #
 		set enueharm = (enue*energyunit/ergPmev)
 		set enuebarharm = (enuebar*energyunit/ergPmev)
 		#
+                #
+                set cs2harm=(cs2*c*c)
+		#
+		#
 setupstarcompare 0 #
 		#
 		####################################
@@ -562,11 +566,12 @@ setupstarcompare 0 #
 		set enuestar = (Enue/ergPmev)
 		set enuebarstar = (Enuebar/ergPmev)
 		#
+		set cs2star=(cs2helm*c*c)
 		#
 		#
 		#
 plotstarharm 0  #
-		# run gogrb if haven't
+		# run macros: gogrmhd and gogrb if haven't already
 		#
 		setgrbconsts
 		#
@@ -578,7 +583,7 @@ plotstarharm 0  #
 		cd /data/jon/svngrbmodel/
 		setupstarcompare
 		#
-		cd /data/jon/testfulleostable2/harm/run/
+		cd /data/jon/testfulleostable2/harm.test/run/
 		#
 		#############
 		# Plot star and HARM versions
@@ -643,9 +648,21 @@ plotstarharm 0  #
 		ctype red pl 0 rstar enuebarstar 1110
 		#
 		#
+                # c_s : sound speed
+                ctype default pl 0 rharm (sqrt(cs2harm)) 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
+                ctype green pl 0 rharm (c+rharm*0) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
+                ctype blue pl 0 rharm (c/3+rharm*0) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
+                set cs2starapprox=(4.0/3.0)*p/(rho0+u+p)
+                ctype cyan pl 0 rharm (sqrt(cs2starapprox)*c) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
+                ctype red pl 0 rstar (sqrt(cs2star)) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
+                #
+		#
+		#
 		# check interpolation (related to DEBUG code in kazfulleos.c)
 		#
 		#ctype default pl 0 rharm tauphotonabsohcm 1100
+                #
+                #
 		#
 		#
 checkdt 0       #

@@ -1,5 +1,7 @@
 jrdp3dener      0 #
-		jrdp3denergen ener.out 0 1E30 # already assumes ener.out
+		jrdp3denergen ener.out -1E30 1E30 # already assumes ener.out
+jrdpgrbener   0 #
+		energrbgen ener.out -1E30 1E30 # already assumes ener.out
 jrdpener0      0 #
 		jrdpener 0 1E30 # already assumes ener.out
 jrdpener1      0 #
@@ -23,6 +25,24 @@ jrdpener 2              #
 		#
 jrdpmetricparms 0 #
 		metricparmsener metricparms.out
+		#
+energrbgen 3	#
+		# jrdpener ener.out 0 2000
+		# jrdpener jetener0.out 0 2000
+		# jrdpener jetener1.out 0 2000
+		# generalized ener.out reader
+		set notdone=1
+		set divbavg=-1
+		set bx3dot=-1000
+		set dl=-1000
+		#
+		energrb3d $1
+		# no checks yet, first macro
+		#
+		# now find average of useful quantities
+		#enersettime $2 $3
+		#eneraverages
+		enererrors
 		#
 jrdp3denergen 3	#
 		# jrdpener ener.out 0 2000
@@ -273,7 +293,41 @@ enerdefs1 0          #
 		set td=t
 		#define GAMMIE (1)
                 #
-gammieener3d 1	# more directions to consider in general
+energrb3d 1	# more directions to consider in general
+		# below 11 is normal 8 with YL, YNU, and ENTROPY (on regardles of dissipation on/off)
+                set NPR=11
+                # below always 18 so consistent format
+                set NUMDISSVERSIONS=18
+		set totalcol= 2 + NPR + 2*NPR*6 + NPR*2 + 2 + NUMDISSVERSIONS
+                print {totalcol}
+		#
+		da $1
+		lines 1 10000000
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		    {  t nstep \
+		       u0 u1 u2 u3 u4 u5 u6 u7 u8 u9 u10 \
+		    u0dot0 u1dot0 u2dot0 u3dot0 u4dot0 u5dot0 u6dot0 u7dot0 u8dot0 u9dot0 u10dot0 \
+		    u0dot1 u1dot1 u2dot1 u3dot1 u4dot1 u5dot1 u6dot1 u7dot1 u8dot1 u9dot1 u10dot1 \
+		    u0dot2 u1dot2 u2dot2 u3dot2 u4dot2 u5dot2 u6dot2 u7dot2 u8dot2 u9dot2 u10dot2 \
+		    u0dot3 u1dot3 u2dot3 u3dot3 u4dot3 u5dot3 u6dot3 u7dot3 u8dot3 u9dot3 u10dot3 \
+		    u0dot4 u1dot4 u2dot4 u3dot4 u4dot4 u5dot4 u6dot4 u7dot4 u8dot4 u9dot4 u10dot4 \
+		    u0dot5 u1dot5 u2dot5 u3dot5 u4dot5 u5dot5 u6dot5 u7dot5 u8dot5 u9dot5 u10dot5 \
+		    u0cum0 u1cum0 u2cum0 u3cum0 u4cum0 u5cum0 u6cum0 u7cum0 u8cum0 u9cum0 u10cum0 \
+		    u0cum1 u1cum1 u2cum1 u3cum1 u4cum1 u5cum1 u6cum1 u7cum1 u8cum1 u9cum1 u10cum1 \
+		    u0cum2 u1cum2 u2cum2 u3cum2 u4cum2 u5cum2 u6cum2 u7cum2 u8cum2 u9cum2 u10cum2 \
+		    u0cum3 u1cum3 u2cum3 u3cum3 u4cum3 u5cum3 u6cum3 u7cum3 u8cum3 u9cum3 u10cum3 \
+		    u0cum4 u1cum4 u2cum4 u3cum4 u4cum4 u5cum4 u6cum4 u7cum4 u8cum4 u9cum4 u10cum4 \
+		    u0cum5 u1cum5 u2cum5 u3cum5 u4cum5 u5cum5 u6cum5 u7cum5 u8cum5 u9cum5 u10cum5 \
+		    u0fl u1fl u2fl u3fl u4fl u5fl u6fl u7fl u8fl u9fl u10fl \
+		    u0src u1src u2src u3src u4src u5src u6src u7src u8src u9src u10src \
+		    divbmax divbavg \
+		    diss0 diss1 diss2 diss3 diss4 diss5 diss6 diss7 \
+		    diss8 diss9 diss10 diss11 diss12 diss13 diss14 diss15 \
+                    diss16 diss17 }
+		    #
+		    enerdefs1
+		    #
+gammieener3do1 1	# more directions to consider in general
 		# need 132
 		# 2 + NPR + 2*NPR*6 + NPR*2 + 2 + NUMDISSVERSIONS(18 currently)
 		#
@@ -2554,15 +2608,12 @@ debugener 0	#
 		#
 		da debug.out
 		#
-		# 2+2+3+3*3+2+4*9 = 54
+		# 2+2+3+3*3+2+4*12 = 66
 		#
-		# ALLTS 0
-		# ENERTS 1
-		# IMAGETS 2
-		# DEBUGTS 3
+                # See jrdpdebuggen for more descriptions/details
 		#
 		lines 1 10000000
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {  t nstep \
                        dt strokes \
                        wavedt sourcedt gravitydt \
@@ -2570,10 +2621,10 @@ debugener 0	#
                        wavedti2 wavedtj2 wavedtk2 \
                        wavedti3 wavedtj3 wavedtk3 \
                        horizoni horizoncpupos1 \
-		    failt0 floort0 limitt0 inflowt0 failrhot0 failut0 failrhout0 precgamt0 precut0 \
-		    failt1 floort1 limitt1 inflowt1 failrhot1 failut1 failrhout1 precgamt1 precut1  \
-		    failt2 floort2 limitt2 inflowt2 failrhot2 failut2 failrhout2 precgamt2 precut2  \
-		    failt3 floort3 limitt3 inflowt3 failrhot3 failut3 failrhout3 precgamt3 precut3  }
+		    failt0 floort0 limitt0 inflowt0 failrhot0 failut0 failrhout0 precgamt0 precut0 toentropyt0 tocoldt0 eosfailt0 \
+		    failt1 floort1 limitt1 inflowt1 failrhot1 failut1 failrhout1 precgamt1 precut1 toentropyt1 tocoldt1 eosfailt1  \
+		    failt2 floort2 limitt2 inflowt2 failrhot2 failut2 failrhout2 precgamt2 precut2 toentropyt2 tocoldt2 eosfailt2  \
+		    failt3 floort3 limitt3 inflowt3 failrhot3 failut3 failrhout3 precgamt3 precut3 toentropyt3 tocoldt3 eosfailt3  }
 		    #
 		    #
 		    	# shows where *ever* failed or not
