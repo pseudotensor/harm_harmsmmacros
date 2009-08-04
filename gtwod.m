@@ -206,13 +206,13 @@ jrdpcf3dugrb 1	# for reading file with current (jcon/jcov) and faraday (fcon,fco
 		da dumps/$1
 		lines 2 10000000
 		#
-		# 3*3+10+3+10+1+4*4+6+1+4*2+6*2=74
+		# 3*3+10+3+11+1+4*4+6+1+4*2+6*2=74
 		#
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {ti tj tk x1 x2 x3 r h ph \
                      rho u v1 v2 v3 B1 B2 B3 yl ynu \
 		      p cs2 Sden \
-		      U0 U1 U2 U3 U4 U5 U6 U7 U8 U9 \
+		      U0 U1 U2 U3 U4 U5 U6 U7 U8 U9 U10 \
 		      divb \
 		      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
 		      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
@@ -1086,14 +1086,14 @@ jrdp3dugrb	1	#
 		da dumps/$1
 		lines 2 10000000
 		#
-		# 3*3 + 10*2 + 3 + 1+4*4+6+1=56
+		# 3*3 + 10 + 3 + 11 + 1+4*4+6+1=57
                 # currents give 20 more
 		#
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {ti tj tk x1 x2 x3 r h ph \
 		       rho u v1 v2 v3 B1 B2 B3 yl ynu \
 		       p cs2 Sden \
-		       U0 U1 U2 U3 U4 U5 U6 U7 U8 U9 \
+		       U0 U1 U2 U3 U4 U5 U6 U7 U8 U9 U10 \
 		      divb \
 		      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
 		      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \

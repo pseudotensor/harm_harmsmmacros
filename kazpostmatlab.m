@@ -49,14 +49,16 @@ rdjonheadernew 1 #
 		lines 6 6
 		read '%g %g %g %g %g %g' {nchiout lchioutmin lchioutmax steplchiout baselchiout linearoffsetlchiout}
 		lines 7 7
-		read '%g %g %g %g %g %g' {nhcm lhcmmin lhcmmax steplhcm baselhcm linearoffsetlhcm}
+		read '%g %g %g %g %g %g' {nstotout lstotoutmin lstotoutmax steplstotout baselstotout linearoffsetlstotout}
 		lines 8 8
-		read '%g %g %g %g %g %g' {ntdynorye ltdynoryemin ltdynoryemax stepltdynorye baseltdynorye linearoffsetltdynorye}
+		read '%g %g %g %g %g %g' {nhcm lhcmmin lhcmmax steplhcm baselhcm linearoffsetlhcm}
 		lines 9 9
-		read '%g %g %g %g %g %g' {ntdynorynu ltdynorynumin ltdynorynumax stepltdynorynu baseltdynorynu linearoffsetltdynorynu}
+		read '%g %g %g %g %g %g' {ntdynorye ltdynoryemin ltdynoryemax stepltdynorye baseltdynorye linearoffsetltdynorye}
 		lines 10 10
-		read '%g %g' {lsoffset fakelsoffset}
+		read '%g %g %g %g %g %g' {ntdynorynu ltdynorynumin ltdynorynumax stepltdynorynu baseltdynorynu linearoffsetltdynorynu}
 		lines 11 11
+		read '%g %g' {lsoffset fakelsoffset}
+		lines 12 12
 		read '%g %g %g %g %g %g' {ntk ltkmin ltkmax stepltk baseltk linearoffsetltk}
 		#
 		#
