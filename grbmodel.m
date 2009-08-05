@@ -824,7 +824,6 @@ plot4 0         #
 		define x1label "r [cm]"
 		#
 		#
-		#
 		ctype default pl 0 r pgastest 1101 rl 1E14 1E3 1E32
 		#ctype default pl 0 r pgastest 1101 rl (1E4*rl) 1E20 1E28
 		ctype red pl 0 r pradtest 1110

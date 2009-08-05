@@ -201,6 +201,39 @@ jrdpcf3du 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
  		#
 		gammienew
  		#
+jrdpcf3duentropy 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
+		jrdpheader3d dumps/$1
+		da dumps/$1
+		lines 2 10000000
+		#
+                # 73
+		set totalcolumns=3*3+8+3+9 + 1 + 4*4+6+1 + 4*2+6*2
+                print {totalcolumns}
+		#
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		    {ti tj tk x1 x2 x3 r h ph rho u v1 v2 v3 \
+		      B1 B2 B3 \
+		      p cs2 Sden \
+		      U0 U1 U2 U3 U4 U5 U6 U7 U8 \
+		      divb \
+		      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
+		      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
+		     v1m v1p v2m v2p v3m v3p gdet \
+		    ju0 ju1 ju2 ju3  \
+		    jd0 jd1 jd2 jd3  \
+		    fu0 fu1 fu2 fu3 fu4 fu5 \
+		    fd0 fd1 fd2 fd3 fd4 fd5 }
+		    #
+		set tx1=x1
+		set tx2=x2
+		set tx3=x3
+                gsetup
+		if($DOGCALC) { gcalc }
+		# gcalc
+		abscompute
+ 		#
+		gammienew
+ 		#
 jrdpcf3dugrb 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
 		jrdpheader3d dumps/$1
 		da dumps/$1
@@ -992,7 +1025,9 @@ jrdp3du	1	#
 		da dumps/$1
 		lines 2 10000000
 		#
-		# 3*3 + 8*2 + 3 + 1+4*4+6+1=42
+                # 52
+		set totalcolumns=3*3 + 8 + 3 + 8 + 1 + 4*4+6+1
+                print {totalcolumns}
 		#
 		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {ti tj tk x1 x2 x3 r h ph \
@@ -1026,13 +1061,15 @@ jrdp3duentropy	1	# with NPRDUMP=8 even if doing entropy since entropy primitive 
 		da dumps/$1
 		lines 2 10000000
 		#
-		# 3*3 + 8*2 + 3 + 1+4*4+6+1=44
+                # 53
+		set totalcolumns=3*3 + 8+3+9 + 1 + 4*4+6+1
+                print {totalcolumns}
 		#
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {ti tj tk x1 x2 x3 r h ph \
 		       rho u v1 v2 v3 B1 B2 B3 \
 		       p cs2 Sden \
-		       U0 U1 U2 U3 U4 U5 U6 U7 \
+		       U0 U1 U2 U3 U4 U5 U6 U7 U8 \
 		      divb \
 		      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
 		      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \

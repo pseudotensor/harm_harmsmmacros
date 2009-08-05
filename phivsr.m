@@ -440,6 +440,7 @@ setupharmcompare 0 #
 		set rharm = (r*Lunit)
 		set rhoharm = (rho*1)
 		set uharm = (u*Pressureunit)
+		set ylharm = yl
 		set yeharm = YE
 		set ynuharm = ynu
 		set ynu0harm = YNU
@@ -479,7 +480,9 @@ setupharmcompare 0 #
 		# for HARM, derived inside HARM as functions of above while for stellar model computed directly
 		set qphotonharm = (qphoton*Pressureunit/Tunit)
 		set qmharm = (qm*Pressureunit/Tunit)
-		set graddotrhouylharm = (graddotrhouyl*rhounit/Tunit)
+		# \nabla_\mu (\rho_0 u^\mu Y_L) = 0
+		# d/dt (\rho_0 V^2 u^t Y_L)
+		set graddotrhouylharm = (graddotrhouyl*rhounit/Tunit/Vunit**2)
 		set tthermaltotharm = (tthermaltot*Tunit)
 		set tdifftotharm = (tdifftot*Tunit)
 		set rho_nuharm = (rho_nu*Pressureunit)
@@ -490,7 +493,10 @@ setupharmcompare 0 #
 		set enuharm = (enu*energyunit/ergPmev)
 		set enueharm = (enue*energyunit/ergPmev)
 		set enuebarharm = (enuebar*energyunit/ergPmev)
+                #
+                set Nmharm = (qm/enu)/Tunit/Lunit**3
 		#
+                set expectedgraddotrhouylharm = mb*Nmharm
                 #
                 set cs2harm=(cs2*c*c)
 		#
@@ -619,9 +625,17 @@ plotstarharm 0  #
 		ctype default pl 0 rharm qmharm 1100
 		ctype red pl 0 rstar qmstar 1110
 		#
+		# 1  (rharm[0]) (rharm[dimen(rharm)-1]) 1E-15 1E30
 		ctype default pl 0 rharm graddotrhouylharm 1100
 		ctype red pl 0 rstar graddotrhouylstar 1110
+                ctype blue pl 0 rharm expectedgraddotrhouylharm 1110
 		#
+                set Nmharm = (qm/enu)/Tunit/Lunit**3
+		set tscaleharm = (ylharm*rhoharm)/(mb*Nmharm)
+                set tscalestar= ((rhostar*ye)/(graddotrhouylstar+1E-30))
+		ctype default pl 0 rharm tscaleharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-15 1E5
+                ctype red pl 0 rstar tscalestar 1110
+                #
 		ctype default pl 0 rharm tthermaltotharm 1100
 		ctype red pl 0 rstar tthermaltotstar 1110
 		ctype blue pl 0 rharm tdifftotharm 1110
