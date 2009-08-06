@@ -500,6 +500,7 @@ setupharmcompare 0 #
                 #
                 set cs2harm=(cs2*c*c)
 		#
+                set tauharm = Height1/lambdatot
 		#
 setupstarcompare 0 #
 		#
@@ -515,11 +516,11 @@ setupstarcompare 0 #
 		# below are independent variables
 		set rstar = r
 		set rhostar = rhob
-		set ustar = u
+		set ustar = dutot
 		set yestar = tdynorye
 		set ynustar = tdynorynu
-		# below Ynu0 for whichdatatype==4 if stellar model has that, but it has whichdatatype==3 instead
-		#set ynu0star = Ynu0
+		set ynu0star = Ynu0
+                set ynustar2 = Ynu
 		#
 		# below is from tau integral
 		set hstar = hcm
@@ -565,7 +566,7 @@ setupstarcompare 0 #
 		set rho_nustar = rho_nu
 		set p_nustar = p_nu
 		set s_nustar = s_nu
-		set ynulocalstar = Ynutemp
+		set ynulocalstar = Ynu
 		set Ynuthermalstar = 0
 		# back to primary eos.dat:
 		set enustar = (Enutot/ergPmev)
@@ -575,6 +576,7 @@ setupstarcompare 0 #
 		set cs2star=(cs2helm*c*c)
 		#
 		#
+                set taustar = hcm/lambdatot
 		#
 plotstarharm 0  #
 		# run macros: gogrmhd and gogrb if haven't already
@@ -600,6 +602,9 @@ plotstarharm 0  #
 		ctype default pl 0 rharm pharm 1100
 		ctype red pl 0 rstar pstar 1110
 		#
+		ctype default pl 0 rharm uharm 1100
+		ctype red pl 0 rstar ustar 1110
+		#
 		ctype default pl 0 rharm tempharm 1100
 		ctype red pl 0 rstar tempstar 1110
 		#
@@ -611,14 +616,22 @@ plotstarharm 0  #
 		ctype red pl 0 rstar yestar 1110
 		#
                 # YNU
+                # ynuharm : initial primitive YNU read-in from stellar model
 		ctype default pl 0 rharm ynuharm 1100
-		ctype green pl 0 rharm ynulocalharm 1110
+                # ynustar : initial stellar model value of YNU
 		ctype red pl 0 rstar ynustar 1110
+                # ynulocalharm: Using latest Ynu0 to get Ynu[Ynu0] (currently 3 iterations)
+		ctype green pl 0 rharm ynulocalharm 1110
+                # ynu0harm : Latest Ynu0 (after 3 iterations so far) for the lookup table
 		ctype blue pl 0 rharm ynu0harm 1110
 		#
                 # YNU0 (not available with normal stellar model)
 		#ctype red pl 0 rstar ynu0star 1110
 		#
+                #
+		ctype default pl 0 rharm tauharm 1100
+		ctype red pl 0 rstar taustar 1110
+                #
 		ctype default pl 0 rharm lambdatotharm 1100
 		ctype red pl 0 rstar lambdatotstar 1110
 		#
