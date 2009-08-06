@@ -682,16 +682,16 @@ rdmykazeos 1      ## LATEST : 1944890
 		  }
                   #
                   if(whichdatatype==3){
-                    if(numcol1!=19){
+                    if(numcol1!=21){
                         echo WHICHDATATYPE==3 NOT SETUP in SM
                         }
-		     read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		     read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		     {rhob tempk tdynorye tdynorynu hcm \
                       dptot dutot dstot \
                       Qphoton Qm graddotrhouye Tthermaltot Tdifftot \
                       lambdatot lambdaintot \
                       Enutot Enue Enuebar \
-		      Ynuthermal }
+		      Ynuthermal Ynu Ynu0}
                   }
                   if(whichdatatype==4){
                     if(numcol1!=32){
@@ -830,7 +830,7 @@ rdmykazmonoeos 1      # eos_extract.m outputs this after processing input data a
 		    Qphoton Qm graddotrhouye Tthermaltot Tdifftot \
                     lambdatot lambdaintot \
 		    Enuglobal Enueglobal Enuebarglobal \
-		    Ynuthermal }
+		    Ynuthermal Ynu Ynu0}
 		}
 		#
 		#
@@ -878,7 +878,7 @@ rdmykazeosother 1      # LATEST : qminusel, qtausohcm,qtautelohcm<0
 		#
 		da $1
 		lines 1 100000000
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {etae etap etan etanu xnuc  npratio \
 		       p_tot p_photon  p_eleposi  p_N  p_nu \
 		       u_tot rho_photon  rho_eleposi  rho_N  rho_nu \
@@ -899,18 +899,9 @@ rdmykazeosother 1      # LATEST : qminusel, qtausohcm,qtautelohcm<0
                      Qm Nm Tdifftot Tthermaltot lambdatot \
 		    Enutot Enue Enuebar \
 		    RufNm RufQm Rufgraddotrhouye \
-		    Ynutemp \
+		    Ynu Ynu0 \
 		    }
 		#
-                # if whichdatatype==4, then Ynu is actually Ynu0
-                #
-		if(whichdatatype==2 || whichdatatype==4){
-                    set Ynu0=Ynutemp
-                    }\
-                else{\
-                     set Ynu=Ynutemp
-                     }
-                #
                 #
 		# translate from Kaz form to HELM form
 		#
