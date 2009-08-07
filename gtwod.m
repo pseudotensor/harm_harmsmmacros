@@ -239,7 +239,9 @@ jrdpcf3dugrb 1	# for reading file with current (jcon/jcov) and faraday (fcon,fco
 		da dumps/$1
 		lines 2 10000000
 		#
-		# 3*3+10+3+11+1+4*4+6+1+4*2+6*2=74
+                # 77
+                set totalcolumns=3*3+10+3+11+1+4*4+6+1+4*2+6*2
+                print {totalcolumns}
 		#
 		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {ti tj tk x1 x2 x3 r h ph \

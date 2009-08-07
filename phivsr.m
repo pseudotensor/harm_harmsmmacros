@@ -430,8 +430,12 @@ checkforcebal 0  #
 		ctype red pl 0 r (-pressureaccx) 1111 1 1E4 1E-10 10
                 #
                 #
-setupharmcompare 0 #
+setupharmcompare 1 # setupharmcompare 0000
 		#
+		setgrbconsts
+		#
+                gotoharmdir
+		jrdpallgrb $1
 		#
 		# First get HARM dump versions
 		# From: jrdpeos eosdump0000
@@ -443,11 +447,18 @@ setupharmcompare 0 #
 		set ylharm = yl
 		set yeharm = YE
 		set ynuharm = ynu
-		set ynu0harm = YNU
+		set ynu0harm = YNU0
+		set ynu0oldharm = YNU0OLD
+                set ynuold = YNUOLD
 		set ynulocalharm = ynulocal
 		#
 		# below is from tau integral
-		set hharm = (Height1*Lunit)
+		set h1harm = (Height1*Lunit)
+		set h2harm = (Height2*Lunit)
+		set h3harm = (Height3*Lunit)
+		set h4harm = (Height4*Lunit)
+                set PNUharm = PNU*Pressureunit
+                set UNUharm = UNU*Pressureunit
 		#
 		# below are from lookup table directly
 		set pharm = (p*Pressureunit)
@@ -504,10 +515,13 @@ setupharmcompare 0 #
 		#
 setupstarcompare 0 #
 		#
+		gotogrbmodeldir
 		####################################
 		# NOW GET stellar model versions
 		# From: rdmykazeos eos.dat ; rdmykazeosother eosother.dat ; rdhelmcou eoscoulomb.dat ; rdhelmextra eosazbar.dat
 		#
+                set lambdatot=1
+		set utot=1
 		#
 		dostandard 0
 		dostandard 0
@@ -516,7 +530,8 @@ setupstarcompare 0 #
 		# below are independent variables
 		set rstar = r
 		set rhostar = rhob
-		set ustar = dutot
+                # utot itself has table offset, while utottrue is  true utot
+		set ustar = utottrue
 		set yestar = tdynorye
 		set ynustar = tdynorynu
 		set ynu0star = Ynu0
@@ -526,8 +541,8 @@ setupstarcompare 0 #
 		set hstar = hcm
 		#
 		# below are from lookup table directly
-		# dptot is really p_tot
-		set pstar = dptot
+		# dptot is really p_tot-p_nu
+		set pstar = ptot
 		set tempstar = tempk
 		#
 		# from eosother.dat:
@@ -578,31 +593,41 @@ setupstarcompare 0 #
 		#
                 set taustar = hcm/lambdatot
 		#
-plotstarharm 0  #
-		# run macros: gogrmhd and gogrb if haven't already
-		#
-		setgrbconsts
-		#
+gotoharmdir  0  #              
 		#cd /data/jon/testfulleostable2/harm/run/
 		cd /data/jon/testfulleostable2/harm.test/run/
-		jrdpallgrb 0000
-		setupharmcompare
+                #cd /data/jon/testfulleostable2/harm.test.oldgoodpressure/run
+                #
+                #
+gotogrbmodeldir  0  #
 		#
 		cd /data/jon/svngrbmodel/
+                #
+setupstarharm 0  #
+		# run macros: gogrmhd and gogrb if haven't already
+		#
+		setupharmcompare 0000
+		#
 		setupstarcompare
+                #
+		gotoharmdir
 		#
-		cd /data/jon/testfulleostable2/harm.test/run/
-		#
+plotstarharm 0  #
 		#############
 		# Plot star and HARM versions
 		#
-		ctype default pl 0 rharm hharm 1100
+		ctype default pl 0 rharm h1harm 1100
+		ctype blue pl 0 rharm h2harm 1110
+		ctype blue pl 0 rharm h3harm 1110
+		ctype blue pl 0 rharm h4harm 1110
 		ctype red pl 0 rstar hstar 1110
 		#
 		ctype default pl 0 rharm pharm 1100
+                ctype blue pl 0 rharm PNUharm 1110
 		ctype red pl 0 rstar pstar 1110
 		#
 		ctype default pl 0 rharm uharm 1100
+                ctype blue pl 0 rharm UNUharm 1110
 		ctype red pl 0 rstar ustar 1110
 		#
 		ctype default pl 0 rharm tempharm 1100
@@ -623,11 +648,14 @@ plotstarharm 0  #
                 # ynulocalharm: Using latest Ynu0 to get Ynu[Ynu0] (currently 3 iterations)
 		ctype green pl 0 rharm ynulocalharm 1110
                 # ynu0harm : Latest Ynu0 (after 3 iterations so far) for the lookup table
-		ctype blue pl 0 rharm ynu0harm 1110
 		#
-                # YNU0 (not available with normal stellar model)
-		#ctype red pl 0 rstar ynu0star 1110
+                # YNU0
+		ctype default pl 0 rharm ynu0harm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-21 1
+		ctype red pl 0 rstar ynu0star 1110
 		#
+		# stellar YNU0 and YNU
+		ctype default pl 0 rstar ynu0star 1101 (rstar[0]) (rstar[dimen(rstar)-1]) 1E-21 1
+		ctype green pl 0 rstar ynustar 1110
                 #
 		ctype default pl 0 rharm tauharm 1100
 		ctype red pl 0 rstar taustar 1110
