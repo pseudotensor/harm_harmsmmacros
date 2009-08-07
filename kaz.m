@@ -685,7 +685,7 @@ rdmykazeos 1      ## LATEST : 1944890
                     if(numcol1!=21){
                         echo WHICHDATATYPE==3 NOT SETUP in SM
                         }
-		     read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		     read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		     {rhob tempk tdynorye tdynorynu hcm \
                       dptot dutot dstot \
                       Qphoton Qm graddotrhouye Tthermaltot Tdifftot \
@@ -744,13 +744,11 @@ rdmykazeos 1      ## LATEST : 1944890
 		}
 		#
 		#
-		if(whichdatatype==4){\
-		       set iii=0,dimen(rhob)-1
-		       set mm=iii%nrhob
-		       set nn=INT(iii%(nrhob*ntk)/nrhob)
-		       set oo=INT(iii%(nrhob*ntk*ntdynorye)/(nrhob*ntk))
-		       set pp=INT(iii%(nrhob*ntk*ntdynorye*ntdynorynu)/(nrhob*ntk*ntdynorye))
-		}
+                set iii=0,dimen(rhob)-1
+                set mm=iii%nrhob
+                set nn=INT(iii%(nrhob*ntk)/nrhob)
+                set oo=INT(iii%(nrhob*ntk*ntdynorye)/(nrhob*ntk))
+                set pp=INT(iii%(nrhob*ntk*ntdynorye*ntdynorynu)/(nrhob*ntk*ntdynorye))
 		#
                 # for now, only do if ==4 type:
 		if(whichdatatype==4){\
