@@ -1272,7 +1272,7 @@ processeos2 0   #
 		#set stot=stotold
 		#
                 # Correct for arbitrary fake lsoffset so that HARM has true utot
-                set utottrue=utot - fakelsoffset*ergPmev*(rho/mb)
+                set utottrue=u_tot - fakelsoffset*ergPmev*(rhob/mb)
 		#
 		#
 processeos 0    #

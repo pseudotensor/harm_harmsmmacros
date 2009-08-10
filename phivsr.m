@@ -571,6 +571,7 @@ setupstarcompare 0 #
 		set nnueth0star = 0
 		set nnuebarth0star = 0
 		#
+		#
 		# for HARM, derived inside HARM as functions of above while for stellar model computed directly
 		set qphotonstar = Qphoton
 		set qmstar = Qm
@@ -625,6 +626,7 @@ plotstarharm 0  #
 		ctype default pl 0 rharm pharm 1100
                 ctype blue pl 0 rharm PNUharm 1110
 		ctype red pl 0 rstar pstar 1110
+                ctype green pl 0 rstar p_nustar 1110
 		#
 		ctype default pl 0 rharm uharm 1100
                 ctype blue pl 0 rharm UNUharm 1110
@@ -635,6 +637,10 @@ plotstarharm 0  #
 		#
 		ctype default pl 0 rharm rhoharm 1100
 		ctype red pl 0 rstar rhostar 1110
+		ctype blue pl 0 rstar rho_nustar 1110
+                #
+                ctype default pl 0 rhoharm tempharm 1100
+                ctype red pl 0 rhostar tempstar 1110
 		#
                 # YE
 		ctype default pl 0 rharm yeharm 1100
@@ -647,9 +653,9 @@ plotstarharm 0  #
 		ctype red pl 0 rstar ynustar 1110
                 # ynulocalharm: Using latest Ynu0 to get Ynu[Ynu0] (currently 3 iterations)
 		ctype green pl 0 rharm ynulocalharm 1110
-                # ynu0harm : Latest Ynu0 (after 3 iterations so far) for the lookup table
 		#
                 # YNU0
+                # ynu0harm : Latest Ynu0 (after 3 iterations so far) for the lookup table
 		ctype default pl 0 rharm ynu0harm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-21 1
 		ctype red pl 0 rstar ynu0star 1110
 		#
@@ -718,6 +724,73 @@ plotstarharm 0  #
 		#ctype default pl 0 rharm tauphotonabsohcm 1100
                 #
                 #
+testynueos 0    #
+		#
+		gotogrbmodeldir
+		#
+		# harm
+		#set rho1 = 3698177672.97952
+		# star
+		set rho1 = 3698268044.70451
+		set u1 = 2.74411482190307e+28
+		set ye1 = 0.428493
+		set  ynu0star1 = 0.00109834311532855
+		#set h1 = 36510204.3851301
+		#set h1 = 36497750.345734
+		set h1=40845928.1475294
+		#
+		# harm:
+		#set tk1 = 7650875554.28765
+		set tk1 = 8183138022.48367
+		#
+		set ynu0harm1 = 0.476587890201402
+		set ynustar1 = 1.6929529503307e-06
+		#
+		#set myindex = 0,1000-1,1
+		set myindex = 0,0,1
+		#
+		set rhotest=rho1 + myindex*0
+		set tktest=tk1 + myindex*0
+		set yetest=ye1+myindex*0
+		set htest=h1+myindex*0
+		#
+		set abarintest=abarin[0]+myindex*0
+		set abarboundintest=abarboundin[0]+myindex*0
+		set nucleonstest=nucleons[0]+myindex*0
+		set heliumtest=helium[0]+myindex*0
+		set carbontest=carbon[0]+myindex*0
+		set oxygentest=oxygen[0]+myindex*0
+		set neontest=neon[0]+myindex*0
+		set magnesiumtest=magnesium[0]+myindex*0
+		set sitest=si[0]+myindex*0
+		set irontest=iron[0]+myindex*0
+		set Hcmtest=Hcm[0]+myindex*0
+		set Ynutest=Ynu[0]+myindex*0
+		#
+		#
+		define print_noheader (1)
+		#
+		set numlines=dimen(myindex)
+		#
+		print stellarmodel.head '%d\n' {numlines}
+		#
+		#
+		# now print out data
+		#
+		print stellarmodel.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
+                {rhotest tktest yetest abarintest abarboundintest nucleonstest heliumtest carbontest oxygentest neontest magnesiumtest sitest irontest Hcmtest Ynutest}
+		#
+                !rm -rf eosdetails.dat eosother.dat eos.dat eoscoulomb.dat eosazbar.dat
+		#
+		echo "HELM begin"
+		!./helmstareos.exe > processeos.output
+		echo "HELM end"
+		#
+		# input
+		processeos2
+		#
+		#
+		print {Ynu0 Ynu}
 		#
 		#
 checkdt 0       #
