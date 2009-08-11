@@ -109,7 +109,7 @@ grdp	1	#
 		set tj=i2
 		gcalc
  		#
-jrdpallgrb 1       # for latest code (3d, with metric and EOS stuff)
+jrdpallgrb 1    # for latest code (3d, with metric and EOS stuff)
                 set h1='dump'
 		set h1gdump='gdump'
 		set h1eosdump='eosdump'
@@ -132,9 +132,7 @@ jrdpallgrb 1       # for latest code (3d, with metric and EOS stuff)
 		jrdpeos $filenameeosdump
 		jrdpunits
                 if($nx>1 && $ny==1 && $nz==1){\
-                 #
 		  grid3d $filenamegdump
-		 #
                 }
                 #
                 jrdpdebug $filenamedebugdump
@@ -175,32 +173,40 @@ jrdpcf3du 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
 		da dumps/$1
 		lines 2 10000000
 		#
-		# 3*3+8+3+8+1+4*4+6+1+4*2+6*2=72
-		#
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-		    {ti tj tk x1 x2 x3 r h ph rho u v1 v2 v3 \
+		# 72
+                set totalcolumns=3*3+8+3+8+1+4*4+6+1+4*2+6*2
+                #
+                if(totalcolumns!=_numcolumns || dimen(nprdumplist)!=8 || dimen(nprlist)!=8){\
+                 echo "Wrong format"
+                 print {totalcolumns _numcolumns}
+                }\
+                else{\
+                     read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+                     {ti tj tk x1 x2 x3 r h ph rho u v1 v2 v3 \
 		      B1 B2 B3 \
 		      p cs2 Sden \
 		      U0 U1 U2 U3 U4 U5 U6 U7 \
 		      divb \
 		      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
 		      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
-		     v1m v1p v2m v2p v3m v3p gdet \
-		    ju0 ju1 ju2 ju3  \
-		    jd0 jd1 jd2 jd3  \
-		    fu0 fu1 fu2 fu3 fu4 fu5 \
-		    fd0 fd1 fd2 fd3 fd4 fd5 }
-		    #
-		set tx1=x1
-		set tx2=x2
-		set tx3=x3
-                gsetup
-		if($DOGCALC) { gcalc }
-		# gcalc
-		abscompute
+                      v1m v1p v2m v2p v3m v3p gdet \
+                      ju0 ju1 ju2 ju3  \
+                      jd0 jd1 jd2 jd3  \
+                      fu0 fu1 fu2 fu3 fu4 fu5 \
+                      fd0 fd1 fd2 fd3 fd4 fd5 }
+                     #
+                     set tx1=x1
+                     set tx2=x2
+                     set tx3=x3
+                     gsetup
+                     if($DOGCALC) { gcalc }
+                  # gcalc
+                  abscompute
+                  #
+                  gammienew
+                }
  		#
-		gammienew
- 		#
+                #
 jrdpcf3duentropy 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
 		jrdpheader3d dumps/$1
 		da dumps/$1
@@ -208,32 +214,38 @@ jrdpcf3duentropy 1	# for reading file with current (jcon/jcov) and faraday (fcon
 		#
                 # 73
 		set totalcolumns=3*3+8+3+9 + 1 + 4*4+6+1 + 4*2+6*2
-                print {totalcolumns}
-		#
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-		    {ti tj tk x1 x2 x3 r h ph rho u v1 v2 v3 \
+                #
+                if(totalcolumns!=_numcolumns || dimen(nprdumplist)!=8 || dimen(nprlist)!=9){\
+                 echo "Wrong format"
+                 print {totalcolumns _numcolumns}
+                }\
+                else{\
+                     read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+                     {ti tj tk x1 x2 x3 r h ph rho u v1 v2 v3 \
 		      B1 B2 B3 \
 		      p cs2 Sden \
 		      U0 U1 U2 U3 U4 U5 U6 U7 U8 \
 		      divb \
 		      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
 		      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
-		     v1m v1p v2m v2p v3m v3p gdet \
-		    ju0 ju1 ju2 ju3  \
-		    jd0 jd1 jd2 jd3  \
-		    fu0 fu1 fu2 fu3 fu4 fu5 \
-		    fd0 fd1 fd2 fd3 fd4 fd5 }
-		    #
-		set tx1=x1
-		set tx2=x2
-		set tx3=x3
-                gsetup
-		if($DOGCALC) { gcalc }
-		# gcalc
-		abscompute
+                      v1m v1p v2m v2p v3m v3p gdet \
+                      ju0 ju1 ju2 ju3  \
+                      jd0 jd1 jd2 jd3  \
+                      fu0 fu1 fu2 fu3 fu4 fu5 \
+                      fd0 fd1 fd2 fd3 fd4 fd5 }
+                     #
+                     set tx1=x1
+                     set tx2=x2
+                     set tx3=x3
+                     gsetup
+                     if($DOGCALC) { gcalc }
+                  # gcalc
+                  abscompute
+                  #
+                  gammienew
+                }
  		#
-		gammienew
- 		#
+                #
 jrdpcf3dugrb 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
 		jrdpheader3d dumps/$1
 		da dumps/$1
@@ -241,31 +253,37 @@ jrdpcf3dugrb 1	# for reading file with current (jcon/jcov) and faraday (fcon,fco
 		#
                 # 77
                 set totalcolumns=3*3+10+3+11+1+4*4+6+1+4*2+6*2
-                print {totalcolumns}
-		#
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-		    {ti tj tk x1 x2 x3 r h ph \
-                     rho u v1 v2 v3 B1 B2 B3 yl ynu \
+                #
+                if(totalcolumns!=_numcolumns || dimen(nprdumplist)!=8 || dimen(nprlist)!=9){\
+                 echo "Wrong format"
+                 print {totalcolumns _numcolumns}
+                }\
+                else{\
+                     read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+                     {ti tj tk x1 x2 x3 r h ph \
+                      rho u v1 v2 v3 B1 B2 B3 yl ynu \
 		      p cs2 Sden \
 		      U0 U1 U2 U3 U4 U5 U6 U7 U8 U9 U10 \
 		      divb \
 		      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
 		      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
-		     v1m v1p v2m v2p v3m v3p gdet \
-		    ju0 ju1 ju2 ju3  \
-		    jd0 jd1 jd2 jd3  \
-		    fu0 fu1 fu2 fu3 fu4 fu5 \
-		    fd0 fd1 fd2 fd3 fd4 fd5 }
-		    #
-		set tx1=x1
-		set tx2=x2
-		set tx3=x3
-                gsetup
-		if($DOGCALC) { gcalc }
-		# gcalc
-		abscompute
- 		#
-		gammienew
+                      v1m v1p v2m v2p v3m v3p gdet \
+                      ju0 ju1 ju2 ju3  \
+                      jd0 jd1 jd2 jd3  \
+                      fu0 fu1 fu2 fu3 fu4 fu5 \
+                      fd0 fd1 fd2 fd3 fd4 fd5 }
+                     #
+                     set tx1=x1
+                     set tx2=x2
+                     set tx3=x3
+                     gsetup
+                     if($DOGCALC) { gcalc }
+                  # gcalc
+                  abscompute
+                  #
+                  gammienew
+                }
+                #
  		#
 jrdpcf3duold 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
 		jrdpheader3dold dumps/$1
@@ -1029,33 +1047,37 @@ jrdp3du	1	#
 		#
                 # 52
 		set totalcolumns=3*3 + 8 + 3 + 8 + 1 + 4*4+6+1
-                print {totalcolumns}
-		#
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-		    {ti tj tk x1 x2 x3 r h ph \
-		       rho u v1 v2 v3 B1 B2 B3 \
-		       p cs2 Sden \
-		       U0 U1 U2 U3 U4 U5 U6 U7 \
-		      divb \
-		      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
-		      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
-		      v1m v1p v2m v2p v3m v3p gdet}
-	        #
-		set tx1=x1
-		set tx2=x2
-		set tx3=x3
-                gsetup
-		if(_gam<0){\
-		       jrdpeos eos$1
-		       }
-		if($DOGCALC) { gcalc }
-		# gcalc
-		abscompute
-		#
-		gammienew
- 		#
-                #
-                print {_is _ie _js _je _ks _ke}
+                if(totalcolumns!=_numcolumns || dimen(nprdumplist)!=8 || dimen(nprlist)!=8){\
+                 echo "Wrong format"
+                 print {totalcolumns _numcolumns}
+                }\
+                else{\
+                       read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+                       {ti tj tk x1 x2 x3 r h ph \
+                        rho u v1 v2 v3 B1 B2 B3 \
+                        p cs2 Sden \
+                        U0 U1 U2 U3 U4 U5 U6 U7 \
+                        divb \
+                        uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
+                        bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
+                        v1m v1p v2m v2p v3m v3p gdet}
+                       #
+                       set tx1=x1
+                       set tx2=x2
+                       set tx3=x3
+                       gsetup
+                       if(_gam<0){\
+                                  jrdpeos eos$1
+                                 }
+                         if($DOGCALC) { gcalc }
+                           # gcalc
+                           abscompute
+                           #
+                           gammienew
+                           #
+                           #
+                           print {_is _ie _js _je _ks _ke}
+                }
                 #
                 #
 jrdp3duentropy	1	# with NPRDUMP=8 even if doing entropy since entropy primitive not really used
@@ -1065,30 +1087,34 @@ jrdp3duentropy	1	# with NPRDUMP=8 even if doing entropy since entropy primitive 
 		#
                 # 53
 		set totalcolumns=3*3 + 8+3+9 + 1 + 4*4+6+1
-                print {totalcolumns}
-		#
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-		    {ti tj tk x1 x2 x3 r h ph \
-		       rho u v1 v2 v3 B1 B2 B3 \
-		       p cs2 Sden \
-		       U0 U1 U2 U3 U4 U5 U6 U7 U8 \
+                if(totalcolumns!=_numcolumns || dimen(nprdumplist)!=8 || dimen(nprlist)!=9){\
+                 echo "Wrong format"
+                 print {totalcolumns _numcolumns}
+                }\
+                else{\
+                     read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+                     {ti tj tk x1 x2 x3 r h ph \
+                      rho u v1 v2 v3 B1 B2 B3 \
+                      p cs2 Sden \
+                      U0 U1 U2 U3 U4 U5 U6 U7 U8 \
 		      divb \
 		      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
 		      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
 		      v1m v1p v2m v2p v3m v3p gdet}
-	        #
-		set tx1=x1
-		set tx2=x2
-		set tx3=x3
-                gsetup
-		if(_gam<0){\
-		       jrdpeos eos$1
-		       }
-		if($DOGCALC) { gcalc }
-		# gcalc
-		abscompute
-		#
-		gammienew
+                     #
+                     set tx1=x1
+                     set tx2=x2
+                     set tx3=x3
+                     gsetup
+                     if(_gam<0){\
+                                jrdpeos eos$1
+                               }
+                       if($DOGCALC) { gcalc }
+                         # gcalc
+                         abscompute
+                         #
+                         gammienew
+                }
  		#
 jrdp3duentropyold	1	#
 		jrdpheader3d dumps/$1
@@ -1125,31 +1151,37 @@ jrdp3dugrb	1	#
 		da dumps/$1
 		lines 2 10000000
 		#
-		# 3*3 + 10 + 3 + 11 + 1+4*4+6+1=57
+		# 57
+                totalcolumns=3*3 + 10 + 3 + 11 + 1+4*4+6+1
                 # currents give 20 more
-		#
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-		    {ti tj tk x1 x2 x3 r h ph \
-		       rho u v1 v2 v3 B1 B2 B3 yl ynu \
-		       p cs2 Sden \
-		       U0 U1 U2 U3 U4 U5 U6 U7 U8 U9 U10 \
+                if(totalcolumns!=_numcolumns || dimen(nprdumplist)!=10 || dimen(nprlist)!=11){\
+                 echo "Wrong format"
+                 print {totalcolumns _numcolumns}
+                }\
+                else{\
+                     read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+                     {ti tj tk x1 x2 x3 r h ph \
+                      rho u v1 v2 v3 B1 B2 B3 yl ynu \
+                      p cs2 Sden \
+                      U0 U1 U2 U3 U4 U5 U6 U7 U8 U9 U10 \
 		      divb \
 		      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
 		      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
 		      v1m v1p v2m v2p v3m v3p gdet}
-	        #
-		set tx1=x1
-		set tx2=x2
-		set tx3=x3
-                gsetup
-		if(_gam<0){\
-		       jrdpeos eos$1
-		       }
-		if($DOGCALC) { gcalc }
-		# gcalc
-		abscompute
-		#
-		gammienew
+                     #
+                     set tx1=x1
+                     set tx2=x2
+                     set tx3=x3
+                     gsetup
+                     if(_gam<0){\
+                                jrdpeos eos$1
+                               }
+                       if($DOGCALC) { gcalc }
+                         # gcalc
+                         abscompute
+                         #
+                         gammienew
+                }
  		#
 jrdp3duold	1	#
 		jrdpheader3dold dumps/$1
@@ -1353,11 +1385,26 @@ jrdpheader3d 1  # assume directory put in name
 		#da dumps/$1
 		da $1
 		lines 1 1
-		read '%g %d %d %d %g %g %g %g %g %g %d %g %g %g %g %g %g %g %d %g %g %d %d %d %d %d %d' \
-		    {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord _MBH _QBH _is _ie _js _je _ks _ke}
+		read '%g %d %d %d %g %g %g %g %g %g %d %g %g %g %g %g %g %g %d %g %g %d %d %d %d %d %d %d %d %d' \
+		    {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord _MBH _QBH _is _ie _js _je _ks _ke _whichdump _whichdumpversion _numcolumns}
+		    #
+                    # also read-in nprlist data
+                    jrdpnprlist
 		    #
 		    #
-		    #
+jrdpnprlist  0      #
+                    da nprlistinfo.dat
+                    lines 1 1
+                    read '%d %d' {_nprlistlines _nprlistversion}
+                    read row nprlist 2
+                    read row npr2interplist 3
+                    read row npr2notinterplist 4
+                    read row nprboundlist 5
+                    read row nprfluxboundlist 6
+                    read row nprdumplist 7
+                    read row nprinvertlist 8
+                    #
+                    #
 jrdpheader3dold 1  #
 		#da dumps/$1
 		da $1
