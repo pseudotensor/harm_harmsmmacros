@@ -51,18 +51,20 @@ rdjonheadernew 1 #
 		lines 7 7
 		read '%g %g %g %g %g %g' {nstotout lstotoutmin lstotoutmax steplstotout baselstotout linearoffsetlstotout}
 		lines 8 8
-		read '%g %g %g %g %g %g' {nhcm lhcmmin lhcmmax steplhcm baselhcm linearoffsetlhcm}
-		lines 9 9
 		read '%g %g %g %g %g %g' {ntdynorye ltdynoryemin ltdynoryemax stepltdynorye baseltdynorye linearoffsetltdynorye}
-		lines 10 10
+		lines 9 9
 		read '%g %g %g %g %g %g' {ntdynorynu ltdynorynumin ltdynorynumax stepltdynorynu baseltdynorynu linearoffsetltdynorynu}
+		lines 10 10
+		read '%g %g %g %g %g %g' {nhcm lhcmmin lhcmmax steplhcm baselhcm linearoffsetlhcm}
 		lines 11 11
 		read '%g %g' {lsoffset fakelsoffset}
 		lines 12 12
 		read '%g %g %g %g %g %g' {ntk ltkmin ltkmax stepltk baseltk linearoffsetltk}
 		#
 		#
-rdjoneos 1      # rdjoneos 'test1'
+rdjoneos 1      # E.g.:
+		# rdjoneos 'test1'
+		# rdjoneos ''
 		#
 		# see eos_extract.m
 		#
@@ -101,7 +103,6 @@ rdjoneos 1      # rdjoneos 'test1'
 		       sofu dsofudrho dsofudu \
 		    pofchi dpofchidrho0 dpofchidchi \
 		    tkofU tkofP tkofCHI qmofU}
-		#
 		}
 		#
 		# 29 base things, 16 extra for 45 total things
@@ -124,7 +125,6 @@ rdjoneos 1      # rdjoneos 'test1'
 		    ntautntauohcm ntauantauohcm \
 		    gammapeglobal gammapnuglobalplusgammapenuglobal \
 		    gammanglobalplusgammaneglobal gammannuglobal }
-		 #
 		 }
 		# 29 base things, 9 extra, for 38 total things
 		if(whichdatatype==3){
@@ -140,23 +140,31 @@ rdjoneos 1      # rdjoneos 'test1'
 		    tkofU tkofP tkofCHI \
 		    Qm graddotrhouyenonthermal graddotrhouye Tthermaltot lambdatot \
                     Enuglobal Enueglobal Enuebarglobal \
-                    Ynu }
-		 #
+                    Ynu Ynu0 }
 		 }
-		 # end whichdatatype==3
-                  #
-		# 29 base things, 24 extra, for 53 total things
+		#
+		# end whichdatatype==3
+		#
 		if(whichdatatype==4){
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+                  #
+		  set totalcolumnsA=5+8+4+1+2+2+1+3+3+3+4
+		  set totalcolumnsB=24
+		  set totalcolumns=totalcolumnsA+totalcolumnsB
+		  print {totalcolumns}
+		  #
+		  # 33 base things, 24 extra, for 57 total things
+		  read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {sm sn so sp sq \
-		       rhob utotdiff ptotdiff chidiff tdynorye tdynorynu hcm \
-		       uofutotdiff pofptotdiff chiofchidiff \
-		       pofu uofp \
+		       rhob utotdiff ptotdiff chidiff stotdiff tdynorye tdynorynu hcm \
+		       uofutotdiff pofptotdiff chiofchidiff sofstotdiff \
+		       pofu \
+		       uofp uofs \
 		       dpofudrho0 dpofudu \
 		       cs2cgs \
 		       sofu dsofudrho0 dsofudu \
+		       ssofchi dssofchidrho0 dssofchidchi \
 		    pofchi dpofchidrho0 dpofchidchi \
-		    tkofU tkofP tkofCHI \
+		    tkofU tkofP tkofCHI tkofS \
 		    \
                         qtautnueohcm  qtauanueohcm \
                     qtautnuebarohcm  qtauanuebarohcm \
@@ -169,7 +177,6 @@ rdjoneos 1      # rdjoneos 'test1'
                     lambdatot lambdaintot \
                     tauphotonohcm tauphotonabsohcm \
 		    nnueth0 nnuebarth0 }
-                  #
 		  }
 		 # end whichdatatype==4
                   #
@@ -192,16 +199,132 @@ rdjondegeneos 1	# rdjondegeneos 'test1'
 		#
 		da $filename
 		lines 1 100000000
-		read '%d %d %d %d %g %g %g %g %g %g %g' \
+		read '%d %d %d %d %g %g %g %g %g %g %g %g' \
 		    {sdm sdo sdp sdq \
 		       rhobdegen hcmdegen tdynoryedegen tdynorynudegen \
-		       utotoffset ptotoffset chioffset}
+		       utotoffset ptotoffset chioffset stotoffset}
 		#
 		#
 		#
 		#
 		#
 		# REMAINING MACROS ARE FOR FINAL POST-MATLAB TABLES for F(U/P/CHI)
+		#
+		#
+checkpretables  0 #
+		#
+		#
+		####################################
+		# read-in pre-Matlab tables
+		rdmykazeos eos.dat
+		rdmykazeosother eosother.dat
+		rdhelmcou eoscoulomb.dat
+		rdhelmextra eosazbar.dat
+		#
+		# check on behavior of quantities before Matlab deals with things
+		#
+		define WHICHLEV (ntdynorye-4)
+		#
+		plc 0 (LG(dptot))
+		#
+		# See Y_e dependence
+		agzplc 0 (LG(dptot))
+		#
+		agzplc 0 (LG(dutot))
+		#
+		agzplc 0 (LG(dstot))
+		#
+		# So far noticed things:
+		# 1) Unlike post-Matlab, pre-Matlab dptot,dutot,dstot looks good ... no feature at rhob=2E9 near low-temperatures
+		# 2) None of results are noisy, so Matlab must be producing the noise
+		#
+                # check entropy monotonicity
+		define WHICHLEV (ntdynorye-4)
+                #
+                plc 0 (LG(s_eleposi/rhob))
+                #
+                plc 0 (LG(s_photon/rhob))
+                #
+                plc 0 (LG(s_N/rhob))
+                #
+                plc 0 (LG((s_eleposi+s_photon+s_N)/rhob))
+                #
+                plc 0 (LG(abar))    
+                #
+                #
+checkpremonotables  0 #
+		#
+		# Shouldn't read-in pre-Matlab and monotonized at same time since some similar names for variables
+		# Monotonized but still in T-space
+		rdmykazmonoeos eosmonodegen.dat
+		#
+		define WHICHLEV (ntdynorye-4)
+		#
+		plc 0 (LG(dptot))
+		#
+		plc 0 (LG(dutot))
+		#
+		plc 0 (LG(dstot))
+		#
+		# See Y_e dependence
+		agzplc 0 (LG(dptot))
+		#
+		agzplc 0 (LG(dutot))
+		#
+		agzplc 0 (LG(dstot))
+		#
+		# So far noticed things:
+		# 1) dptot and dutot develop feature at 2E9
+		# 2) dstot becomes very noisy
+		# 3) noisy and truncations appear in ?degenfit, ?offset, ?diff
+		#
+                set mymmin=INT(mmin[dimen(mmin)-1]/2)
+		set myooin=INT(ooin[dimen(ooin)-1]-4)
+		set myppin=INT(ppin[dimen(ppin)-1]*0)
+		print {mymmin myooin myppin}
+		#
+                set myuse=((mmin==mymmin && ooin==myooin && ppin==myppin) ? 1 : 0)
+                #
+                # extract only if myuse is true
+                set mydptot = dptot if(myuse)
+                set mydutot = dutot if(myuse)
+                set mydstot = dstot if(myuse)
+                #
+		pl 0 mydutot mydstot 1100
+                #
+                #
+		#
+		#
+checkposttables 0 #
+		####################################
+		# read-in post-Matlab tables
+		checkeossimplenew
+		#
+		# So far noticed things:
+		# 1) Ss stuff is very noisy
+		# 2) dpofchidchi noisy at ye~0.43
+		# 3) pofchi has sharp jump around 2E9 for ye~0.43 for all temperatures up to 1E8K
+		#
+		# By plotting tkofU,CHI,P,S, one sees how well-resolved temperature is.
+		#
+		# Ynu=0 and Ye~.43
+		define WHICHLEV (ntdynorye-4)
+		#
+		plc 0 (LG(pofu))
+		#
+		#
+		plc 0 (LG(tkofU)) 
+		#
+		plc 0 (LG(tkofP)) 
+		#
+		plc 0 (LG(tkofCHI)) 
+		#
+		# tkofS seems fine
+		plc 0 (LG(tkofS))
+		#
+		# See Y_e dependence
+		agzplc 0 (LG(tkofCHI))
+		#
 		#
 		#
 checkeossimplenew 0

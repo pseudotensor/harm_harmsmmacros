@@ -713,10 +713,11 @@ rdmykazeos 1      ## LATEST : 1944890
                     nnueth0 nnuebarth0 \
                       }
                   }
-                  if(whichdatatype>4){
-                      echo whichdatatype>4 not setup in SM
-                      }
 		#
+                if(whichdatatype>4){
+                 echo whichdatatype>4 not setup in SM
+                }
+                #
 		# eos.dat line 1948
 		#
 		# rho=0.55908101825122222900E+00010
@@ -725,7 +726,10 @@ rdmykazeos 1      ## LATEST : 1944890
 		# 
 		set dchi=dutot+dptot
 		#
+                setupplcgrid
+                #
 		#
+setupplcgrid 0  #
 		#
 		if(0){\
 		       set iii=0,dimen(rhob)-1
@@ -831,15 +835,40 @@ rdmykazmonoeos 1      # eos_extract.m outputs this after processing input data a
 		    Ynuthermal Ynu Ynu0}
 		}
 		#
+		# 5+22=27 basic and 24 extra = 51
+		if(whichdatatype==4){
+		read '%d %d %d %d %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		    {mmin nnin ooin ppin qqin \
+		       rhob tempk tdynorye tdynorynu hcm \
+                     dptot dutot dchi dstot \
+		    pdegenfit udegenfit chidegenfit sdegenfit \
+		    ptotoffset utotoffset chioffset stotoffset \
+		    ptotdiff utotdiff chidiff stotdiff \
+		    cs2rhoT \
+                        qtautnueohcm  qtauanueohcm \
+                    qtautnuebarohcm  qtauanuebarohcm \
+                    qtautmuohcm  qtauamuohcm \
+                    ntautnueohcm  ntauanueohcm \
+                    ntautnuebarohcm  ntauanuebarohcm \
+                    ntautmuohcm  ntauamuohcm \
+                    unue0 unuebar0 unumu0 \
+                    nnue0 nnuebar0 nnumu0 \
+                    lambdatot lambdaintot \
+                    tauphotonohcm tauphotonabsohcm \
+                    nnueth0 nnuebarth0 \
+                      }
+		}
 		#
 		#
-		set iii=0,dimen(rhob)-1
 		#
-		set mm=iii%nrhob
-		set nn=INT(iii%(nrhob*ntk)/nrhob)
-		set oo=INT(iii%(nrhob*ntk*nhcm)/(nrhob*ntk))
-		set pp=INT(iii%(nrhob*ntk*nhcm*ntdynorye)/(nrhob*ntk*nhcm))
+		#set iii=0,dimen(rhob)-1
 		#
+		#set mm=iii%nrhob
+		#set nn=INT(iii%(nrhob*ntk)/nrhob)
+		#set oo=INT(iii%(nrhob*ntk*nhcm)/(nrhob*ntk))
+		#set pp=INT(iii%(nrhob*ntk*nhcm*ntdynorye)/(nrhob*ntk*nhcm))
+		#
+                setupplcgrid
 		#
 		#
 rdmykazeosotherold 1      #

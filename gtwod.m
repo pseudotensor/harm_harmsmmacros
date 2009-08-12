@@ -254,7 +254,7 @@ jrdpcf3dugrb 1	# for reading file with current (jcon/jcov) and faraday (fcon,fco
                 # 77
                 set totalcolumns=3*3+10+3+11+1+4*4+6+1+4*2+6*2
                 #
-                if(totalcolumns!=_numcolumns || dimen(nprdumplist)!=8 || dimen(nprlist)!=9){\
+                if(totalcolumns!=_numcolumns || dimen(nprdumplist)!=10 || dimen(nprlist)!=11){\
                  echo "Wrong format"
                  print {totalcolumns _numcolumns}
                 }\
@@ -1017,8 +1017,7 @@ jrdpeos	1	#
                                      }
                 #
                 if(readdata){\
-		# 
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		 read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {YE YNU0 YNU0OLD YNUOLD Height1 Height2 Height3 Height4 UNU PNU SNU IG JG KG \
 		      temp \
 		      qtautnueohcm      qtauanueohcm      qtautnuebarohcm      qtauanuebarohcm      qtautmuohcm      qtauamuohcm      ntautnueohcm      ntauanueohcm      ntautnuebarohcm      ntauanuebarohcm      ntautmuohcm      ntauamuohcm      unue0      unuebar0      unumu0      nnue0      nnuebar0      nnumu0      lambdatot      lambdaintot      tauphotonohcm      tauphotonabsohcm      nnueth0      nnuebarth0 \
