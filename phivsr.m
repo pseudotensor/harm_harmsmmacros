@@ -1,9 +1,15 @@
 gogrb 0        #
 		#
                 #gogrmhd
+                echo "Load phivsr.m"
 		jre phivsr.m
+                echo "Load grbmodel.m"
 		jre grbmodel.m
+                echo "Load kaz.m"
 		jre kaz.m
+                echo "Load kazpostmatlab.m"
+		jre kazpostmatlab.m
+                echo "Load Done"
                 #
 		#
 		#
