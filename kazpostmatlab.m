@@ -5,7 +5,8 @@
 		#############################################
 		#
 		#
-		#
+		# REMAINING MACROS ARE FOR FINAL POST-MATLAB TABLES for F(U/P/CHI)
+		# There are some macros for checking pre-matlab too
 		#
 		#
 		#
@@ -152,6 +153,7 @@ rdjoneos 1      # E.g.:
 		  set totalcolumns=totalcolumnsA+totalcolumnsB
 		  print {totalcolumns}
 		  #
+                  # RECALL:  utotdiff, etc. are really lutotdiff in eos_extract.m
 		  # 33 base things, 24 extra, for 57 total things
 		  read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {sm sn so sp sq \
@@ -199,16 +201,18 @@ rdjondegeneos 1	# rdjondegeneos 'test1'
 		#
 		da $filename
 		lines 1 100000000
-		read '%d %d %d %d %g %g %g %g %g %g %g %g' \
+		read '%d %d %d %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {sdm sdo sdp sdq \
 		       rhobdegen hcmdegen tdynoryedegen tdynorynudegen \
-		       utotoffset ptotoffset chioffset stotoffset}
+		       utotoffset ptotoffset chioffset stotoffset \
+		       utotin ptotin chiin stotin \
+		       utotout ptotout chiout stotout \
+		    }
 		#
 		#
 		#
 		#
 		#
-		# REMAINING MACROS ARE FOR FINAL POST-MATLAB TABLES for F(U/P/CHI)
 		#
 		#
 checkpretables  0 #
@@ -227,6 +231,104 @@ checkpretables  0 #
 		#
 		plc 0 (LG(dptot))
 		#
+		plc 0 (LG(dutot))
+		#
+		plc 0 (LG(dstot))
+		#
+                #
+                #
+		setgrbconsts
+                #
+                set nb=rhob/mb
+                set ne=tdynorye*nb
+                #
+                set mecc=me*c**2
+		set restmassuee=mecc*ne
+                #
+                #set kazsden=(dptot+dutot)/(kb*tempk)
+                # Kaz says it's:
+                set kazsdenee=(p_eleposi+rho_eleposi)/(kb*tempk)
+                # TIMMES says it's:
+                #set etaenorest = etae - (me*c**2/(kb*tempk))
+                set timmessdenee=kazsdenee-etae*ne
+                #set timmessdenee=kazsdenee-etae*ne + restmassuee/(kb*tempk)
+                #set timmessdenee=kazsdenee-etaenorest*ne
+                #set timmessdenee=(p_eleposi+rho_eleposi-restmassuee)/(kb*tempk)-etaenorest*ne
+                #
+                # seems to be that eele+epos is missing rest-mass from epos since apparently TIMMES subtracts me c^2 n_{e_+} from epos!  So my rest-mass correction in jon_lsbox.f is then wrong!  Compare with KAZ!
+                #
+                plc 0 (LG(kazsdenee))
+                #
+                plc 0 (LG(timmessdenee))
+                #
+                # actual:
+                plc 0 (LG(s_eleposi))
+		#
+                # photons:
+                set sphoton1=(p_photon+rho_photon)/(kb*tempk)
+                set sphoton2=s_photon
+		plc 0 (LG(sphoton1))
+		plc 0 (LG(sphoton2))
+		plc 0 (abs(sphoton1-sphoton2)/(abs(sphoton1)+abs(sphoton2)))
+                #
+                #
+                #
+		# entropy density (1/cc) 
+		set seerest = restmassuee/(kb*tempk)
+		#
+		plc 0 (LG(dstot+seerest))
+		#
+		plc 0 (LG(s_eleposi/rhob))
+		#
+ 		plc 0 (LG((s_eleposi-seerest)/rhob+1E29))
+		#
+		set nb=rhob/mb
+		set ne=tdynorye*nb
+		set etaenorest = etae-me*c**2/(kb*tempk)
+		set rho_eleposinorest = rho_eleposi-me*c**2*ne
+		set gods_eleposi = (rho_eleposinorest+p_eleposi)/(kb*tempk) - etaenorest*ne
+		plc 0 (LG(gods_eleposi/rhob))
+		#
+		set god2s_eleposi = (rho_eleposi+p_eleposi)/(kb*tempk) - etae*ne
+		plc 0 (LG(god2s_eleposi/rhob))
+		#
+		set god3s_eleposi = (rho_eleposi+p_eleposi)/(kb*tempk)
+		plc 0 (LG(god3s_eleposi/rhob))
+		#
+		# checking what lowest limit is:
+                # Can't really work due to machine error level subtraction.  Have to wait till produce new table without stupid entropy offset.
+		setgrbconsts
+		set nb=rhob/mb
+		set s_N_lsoffset=lsoffset*ergPmev/(kb*tempk)*nb
+		set specelsoffset=s_N_lsoffset/rhob
+                set toplot=(dstot-s_N_lsoffset)/nb
+		plc 0 toplot
+                #
+                set beforestot = dstot
+                set beforespecdimless = dstot/nb
+                print '%21.15g %21.15g\n' {beforestot beforespecdimless}
+                #
+                set afterstot = dstot-s_N_lsoffset
+                set afterspecdimless = (dstot-s_N_lsoffset)/nb
+                print {afterstot afterspecdimless}
+                #
+                #
+                set diff=dstot-s_N_lsoffset
+                # min=-9.464e+37
+                #
+                # dstot
+                # min=5.935e+26
+                #
+                # print file.txt {toplot}
+                # sort -g file.txt > filesort.txt
+                # head -10 filesort.txt
+                #
+                #
+		agzplc 0 toplot
+		#
+		# min:-12.94
+		#
+		#
 		# See Y_e dependence
 		agzplc 0 (LG(dptot))
 		#
@@ -234,22 +336,92 @@ checkpretables  0 #
 		#
 		agzplc 0 (LG(dstot))
 		#
+		#
 		# So far noticed things:
 		# 1) Unlike post-Matlab, pre-Matlab dptot,dutot,dstot looks good ... no feature at rhob=2E9 near low-temperatures
 		# 2) None of results are noisy, so Matlab must be producing the noise
 		#
                 # check entropy monotonicity
 		define WHICHLEV (ntdynorye-4)
+		#
+		#
+		plc 0 (LG(s_N/rhob))
+		#
+		plc 0 (LG(specelsoffset))
+		#
+		plc 0 (LG((s_N-s_N_lsoffset)/rhob))
+		#
                 #
                 plc 0 (LG(s_eleposi/rhob))
+		#
+                plc 0 (LG((s_eleposi+seerest)/rhob))
                 #
+		#
                 plc 0 (LG(s_photon/rhob))
                 #
                 plc 0 (LG(s_N/rhob))
                 #
-                plc 0 (LG((s_eleposi+s_photon+s_N)/rhob))
+		#
+		#
+                set sspectotfake=(s_eleposi+s_photon+s_N)/rhob
+                set sspectottrue=(s_eleposi+seerest+s_photon+s_N)/rhob
+                #
+                set sspeceefake=(s_eleposi)/rhob
+                set sspeceetrue=(s_eleposi+seerest)/rhob
+                #
+                set sspecN=(s_N)/rhob
+                set sspecphoton=(s_photon)/rhob
+                #
+                plc 0 (LG((s_eleposi+seerest+s_photon+s_N)/rhob))
                 #
                 plc 0 (LG(abar))    
+                #
+                set mymm=INT(mm[dimen(mm)-1]/2)
+		set myoo=INT(oo[dimen(oo)-1]-4)
+		set mypp=INT(pp[dimen(pp)-1]*0)
+		print {mymm myoo mypp}
+		#
+                set myuse=((mm==mymm && oo==myoo && pp==mypp) ? 1 : 0)
+                #
+                # extract only if myuse is true
+                set mysspectottrue = sspectottrue if(myuse)
+                set mysspectotfake = sspectotfake if(myuse)
+                set mysspeceetrue = sspeceetrue if(myuse)
+                set mysspeceefake = sspeceefake if(myuse)
+                set mysspecN = sspecN if(myuse)
+                set mysspecphoton = sspecphoton if(myuse)
+                set myrhob = rhob if(myuse)
+                set mydutot = dutot if(myuse)
+                #
+                set myddutot=(mydutot-mydutot[0]*0.999999)
+                #
+                #
+                # TOT:
+                ctype default
+		pl 0 myddutot (mysspectottrue) 1101 (myddutot[0]*.8) (myddutot[dimen(myddutot)-1]*1.2) 1E15 1E34
+                ctype magenta
+		pl 0 myddutot (mysspectotfake) 1111 (myddutot[0]*.8) (myddutot[dimen(myddutot)-1]*1.2) 1E15 1E34
+                # ee only:
+                ctype red
+		pl 0 myddutot (mysspeceetrue) 1111 (myddutot[0]*.8) (myddutot[dimen(myddutot)-1]*1.2) 1E15 1E34
+                ctype yellow
+		pl 0 myddutot (mysspeceefake) 1111 (myddutot[0]*.8) (myddutot[dimen(myddutot)-1]*1.2) 1E15 1E34
+                # N only:
+                ctype blue
+		pl 0 myddutot (mysspecN) 1111 (myddutot[0]*.8) (myddutot[dimen(myddutot)-1]*1.2) 1E15 1E34
+                # photon only:
+                ctype green
+		pl 0 myddutot (mysspecphoton) 1111 (myddutot[0]*.8) (myddutot[dimen(myddutot)-1]*1.2) 1E15 1E34
+                #
+                #
+                # OTHERS:
+		pl 0 mydutot (mysspectottrue) 1101 1E26 1E27 1E24 2E24
+                #
+                ctype default
+                pl 0 mydutot (mysspectottrue) 1101 1.8E26 2E26 1E24 1.4E24
+                ctype red
+                pl 0 mydutot (mysspectotfake) 1111 1.8E26 2E26 1E24 1.4E24
+                #
                 #
                 #
 checkpremonotables  0 #
@@ -265,6 +437,8 @@ checkpremonotables  0 #
 		plc 0 (LG(dutot))
 		#
 		plc 0 (LG(dstot))
+		#
+		plc 0 (LG(cs2rhoT))
 		#
 		# See Y_e dependence
 		agzplc 0 (LG(dptot))
@@ -289,8 +463,10 @@ checkpremonotables  0 #
                 set mydptot = dptot if(myuse)
                 set mydutot = dutot if(myuse)
                 set mydstot = dstot if(myuse)
+                set myrhob = rhob if(myuse)
                 #
-		pl 0 mydutot mydstot 1100
+		#pl 0 mydutot mydstot 1100
+		pl 0 mydutot (mydstot/myrhob) 1100
                 #
                 #
 		#
@@ -305,6 +481,12 @@ checkposttables 0 #
 		# 2) dpofchidchi noisy at ye~0.43
 		# 3) pofchi has sharp jump around 2E9 for ye~0.43 for all temperatures up to 1E8K
 		#
+                # New noticed:
+                # 1) tkofS poorly resolves temperature near tk=1E9.  Probably degenoffset is too close to bottom and overresolves very low tk.  Should push bottom further down.
+                # 2) cs2cgs messed up near nuclear density (AND NOW TOTALLY INVERTED VALUES!)
+                # 3) Things are somewhat non-monotonic.   Should monotonize at end as well! Then derivatives not quite right.  Maybe monotonize before derivatives.
+                # 4) How to avoid jump-up in tkofU/etc. at high density?  Ruins temperature resolution.  Maybe degen offset is bad?
+                #
 		# By plotting tkofU,CHI,P,S, one sees how well-resolved temperature is.
 		#
 		# Ynu=0 and Ye~.43
@@ -313,18 +495,29 @@ checkposttables 0 #
 		plc 0 (LG(pofu))
 		#
 		#
-		plc 0 (LG(tkofU)) 
+		plc 0 (LG(tkofU))
 		#
 		plc 0 (LG(tkofP)) 
 		#
 		plc 0 (LG(tkofCHI)) 
 		#
-		# tkofS seems fine
+		#
 		plc 0 (LG(tkofS))
+		#
+		#
+		plc 0 (LG(cs2cgs))
+		#
 		#
 		# See Y_e dependence
 		agzplc 0 (LG(tkofCHI))
 		#
+                #
+                setgrbconsts
+                set nb=rhob/mb
+                set ssdimenless = ssofchi*rhob*c*c/nb
+                plc 0 (LG(ssdimenless))
+                #
+                #
 		#
 		#
 checkeossimplenew 0
