@@ -628,6 +628,8 @@ rdkazheadernew 0 #
 		read '%d %g %g' {ntdynorynu tdynorynumin tdynorynumax}
 		lines 7 7
 		read '%d %g %g' {nhcm hcmmin hcmmax}
+		lines 8 8
+		read '%g %g' {lsoffset fakelsoffset}
 		#
 		#
 rdmykazeosold 1      #
@@ -837,13 +839,15 @@ rdmykazmonoeos 1      # eos_extract.m outputs this after processing input data a
 		#
 		# 5+22=27 basic and 24 extra = 51
 		if(whichdatatype==4){
-		read '%d %d %d %d %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		read '%d %d %d %d %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {mmin nnin ooin ppin qqin \
-		       rhob tempk tdynorye tdynorynu hcm \
-                     dptot dutot dchi dstot \
-		    pdegenfit udegenfit chidegenfit sdegenfit \
-		    ptotoffset utotoffset chioffset stotoffset \
-		    ptotdiff utotdiff chidiff stotdiff \
+		     rhob tempk tdynorye tdynorynu hcm \
+                     dptot dutot dchi dstot dsspec \
+		    utotdegenfit ptotdegenfit chidegenfit stotdegenfit sspecdegenfit \
+		    utotoffset ptotoffset chioffset stotoffset sspecoffset \
+		    utotin ptotin chiin stotin sspecin \
+		    utotout ptotout chiout stotout sspecout \
+		    utotdiff ptotdiff chidiff stotdiff sspecdiff \
 		    cs2rhoT \
                         qtautnueohcm  qtauanueohcm \
                     qtautnuebarohcm  qtauanuebarohcm \
