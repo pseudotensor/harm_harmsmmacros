@@ -203,7 +203,7 @@ rdjondegeneos 1	# rdjondegeneos 'test1'
 		lines 1 100000000
 		read '%d %d %d %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {sdm sdo sdp sdq \
-		       rhobdegen hcmdegen tdynoryedegen tdynorynudegen \
+		       rhobdegen tdynoryedegen tdynorynudegen hcmdegen \
 		       utotoffset ptotoffset chioffset stotoffset \
 		       utotin ptotin chiin stotin \
 		       utotout ptotout chiout stotout \
@@ -518,6 +518,16 @@ checkposttables 0 #
                 plc 0 (LG(ssdimenless))
                 #
                 #
+		#
+postdegencheck 0 # degen check
+		#
+		rdjondegeneos ''
+		setupplc nrhob ntdynorye ntdynorynu rhobdegen tdynoryedegen tdynorynudegen
+		define x1label "\rho_b"
+		define x2label "Y_e"
+		#
+		plc 0 (LG(utotoffset))
+		#
 		#
 		#
 checkeossimplenew 0

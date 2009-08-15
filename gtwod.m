@@ -1079,6 +1079,40 @@ jrdp3du	1	#
                 }
                 #
                 #
+jrdpfailfloordu	1 # reads-in failfloordu???? files with ANY NPR!
+		jrdpheader3d dumps/$1
+		da dumps/$1
+		lines 2 10000000
+		#
+		set totalcolumns=dimen(nprlist)
+                if(totalcolumns!=_numcolumns){\
+                 echo "Wrong format"
+                 print {totalcolumns _numcolumns}
+                }\
+                else{\
+                     define numcol (totalcolumns)
+                     set mystring='1-$numcol'
+                     define colstring (mystring)
+                     echo "Getting dUintgen columns: $!!colstring"
+                     read {dUintgen $!!colstring}
+		     #
+		     gsetupfromheader
+                     #
+                     set iii = 0,($numcol*$nx*$ny*$nz-1)
+                     set indexdu=INT((iii%$($numcol))/1)
+                     set indexi =INT((iii%($numcol*$nx))/$numcol)
+                     set indexj =INT((iii%($numcol*$nx*$ny))/($numcol*$nx))
+                     set indexk =INT((iii%($numcol*$nx*$ny*$nz))/($numcol*$nx*$ny))
+                     #
+                     do iii=0,$numcol-1,1 {\
+                      set dUint$iii = dUintgen if(indexdu==$iii)
+                     }
+                     #
+                     echo "Created $numcol versions of dUint? variables (e.g. dUint0).  Compare this with (e.g.) U0*gdet*dV when performing purely spatial integral."
+                     #
+                }
+                #
+                #
 jrdp3duentropy	1	# with NPRDUMP=8 even if doing entropy since entropy primitive not really used
 		jrdpheader3d dumps/$1
 		da dumps/$1
@@ -1768,7 +1802,7 @@ rdrdump         1
 		lines 2 10000000
 		read {rho2 1 u2 2 u2r 3 u2h 4 u2p 5 b2r 6 b2h 7 b2p 8}
 		#
-gsetup          0 # grid stuff
+gsetupfromheader  0 # grid stuff only from jrdp3dheader contents
                 #
                 # for jon
 		set _mag=1
@@ -1796,11 +1830,16 @@ gsetup          0 # grid stuff
                 set Rout=_Rout
 		set hslope=_hslope
 		#
+gsetupgrid    0 # grid stuff
 		# makes assumption about grid
 		set ii=0,_n1*_n2-1,1
                 set dr=$dx1*exp(tx1)
                 set dh=pi*$dx2*(1+(1-hslope)*cos(2*pi*tx2))
 		set dp=2.0*pi*$dx3
+                #
+gsetup  0       #
+		gsetupfromheader
+		gsetupgrid
 		#
 gcalc           0 # physics stuff
 		#

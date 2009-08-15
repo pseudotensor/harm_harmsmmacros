@@ -796,7 +796,7 @@ rdmykazmonoeos 1      # eos_extract.m outputs this after processing input data a
 		read '%d %d %d %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {mmin nnin ooin ppin \
 		       rhob tempk hcm tdynorye tdynorynu \
-                     dptot dutot dchi stot \
+                     dptot dutot dchi dstot \
 		    pdegenfit udegenfit chidegenfit \
 		    ptotoffset utotoffset chioffset \
 		    ptotdiff utotdiff chidiff \
@@ -811,7 +811,7 @@ rdmykazmonoeos 1      # eos_extract.m outputs this after processing input data a
 		read '%d %d %d %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {mmin nnin ooin ppin \
 		       rhob tempk hcm tdynorye tdynorynu \
-                     dptot dutot dchi stot \
+                     dptot dutot dchi dstot \
 		    pdegenfit udegenfit chidegenfit \
 		    ptotoffset utotoffset chioffset \
 		    ptotdiff utotdiff chidiff \
@@ -826,7 +826,8 @@ rdmykazmonoeos 1      # eos_extract.m outputs this after processing input data a
 		if(whichdatatype==3){
 		read '%d %d %d %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {mmin nnin ooin ppin \
-		       rhob tempk hcm tdynorye tdynorynu dptot dutot dchi stot \
+		       rhob tempk hcm tdynorye tdynorynu \
+                     dptot dutot dchi dstot \
 		    pdegenfit udegenfit chidegenfit \
 		    ptotoffset utotoffset chioffset \
 		    ptotdiff utotdiff chidiff \
