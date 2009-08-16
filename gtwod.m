@@ -1668,6 +1668,8 @@ jrdpdebuggen 1  #
 		da dumps/$1
 		lines 2 10000000
 		#
+                # 2 sections correspond to (1) (e.g. fail0) original full counter (2) (e.g. fsfail0)
+                #
                 # rows shown below in formatted way are TSCALE:
 		# ALLTS 0
 		# ENERTS 1
@@ -1688,53 +1690,87 @@ jrdpdebuggen 1  #
                 #define COUNTCOLD 10
                 #define COUNTEOSLOOKUPFAIL 11
 		#
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-		    {fail0 floor0 limitgamma0 inflow0 failrho0 failu0 failrhou0 precgam0 precu0 toentropy0 tocold0 eosfail0 \
-		       fail1 floor1 limitgamma1 inflow1 failrho1 failu1 failrhou1 precgam1 precu1 toentropy1 tocold1 eosfail1 \
-		    fail2 floor2 limitgamma2 inflow2 failrho2 failu2 failrhou2 precgam2 precu2 toentropy2 tocold2 eosfail2 \
-		    fail3 floor3 limitgamma3 inflow3 failrho3 failu3 failrhou3 precgam3 precu3 toentropy3 tocold3 eosfail3 }
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		    {\
+                    nmfail0 nmfloor0 nmlimitgamma0 nminflow0 nmfailrho0 nmfailu0 nmfailrhou0 nmprecgam0 nmprecu0 nmtoentropy0 nmtocold0 nmeosfail0 \
+		    nmfail1 nmfloor1 nmlimitgamma1 nminflow1 nmfailrho1 nmfailu1 nmfailrhou1 nmprecgam1 nmprecu1 nmtoentropy1 nmtocold1 nmeosfail1\
+		    nmfail2 nmfloor2 nmlimitgamma2 nminflow2 nmfailrho2 nmfailu2 nmfailrhou2 nmprecgam2 nmprecu2 nmtoentropy2 nmtocold2 nmeosfail2 \
+		    nmfail3 nmfloor3 nmlimitgamma3 nminflow3 nmfailrho3 nmfailu3 nmfailrhou3 nmprecgam3 nmprecu3 nmtoentropy3 nmtocold3 nmeosfail3 \
+                    fsfail0 fsfloor0 fslimitgamma0 fsinflow0 fsfailrho0 fsfailu0 fsfailrhou0 fsprecgam0 fsprecu0 fstoentropy0 fstocold0 fseosfail0 \
+		    fsfail1 fsfloor1 fslimitgamma1 fsinflow1 fsfailrho1 fsfailu1 fsfailrhou1 fsprecgam1 fsprecu1 fstoentropy1 fstocold1 fseosfail1\
+		    fsfail2 fsfloor2 fslimitgamma2 fsinflow2 fsfailrho2 fsfailu2 fsfailrhou2 fsprecgam2 fsprecu2 fstoentropy2 fstocold2 fseosfail2 \
+		    fsfail3 fsfloor3 fslimitgamma3 fsinflow3 fsfailrho3 fsfailu3 fsfailrhou3 fsprecgam3 fsprecu3 fstoentropy3 fstocold3 fseosfail3 \
+                    }
 		#
+                debuggencompute 1
+                debuggencompute 2
+                #
+                #
+debuggencompute 1 #                
+                #
+                #
+                if($1==1){\
+                          set it='nm'
+                          }
+                if($1==2){\
+                          set it='fs'
+                          }
+                 # set it='fs'
+                #set it=$1
+                define fsit (it)
+                #
 		# shows where *ever* failed or not
-		set lg1fail=lg(fail0+1)
-		set lg1tot=lg(fail0+failrho0+failu0+failrhou0+1)
+		set lg1"$!!fsit"fail=lg("$!!fsit"fail0+1)
+		set lg1"$!!fsit"tot=lg("$!!fsit"fail0+"$!!fsit"failrho0+"$!!fsit"failu0+"$!!fsit"failrhou0+1)
 		#
-		set lg1precgam=lg(precgam0+1)
-		set lg1precu=lg(precu0+1)
+		set lg1"$!!fsit"precgam=lg("$!!fsit"precgam0+1)
+		set lg1"$!!fsit"precu=lg("$!!fsit"precu0+1)
 		#
-		set failtot0=fail0+failrho0+failu0+failrhou0
-		set failtot1=fail1+failrho1+failu1+failrhou1
-		set failtot2=fail2+failrho2+failu2+failrhou2
-		set failtot3=fail3+failrho3+failu3+failrhou3
+		set "$!!fsit"failtot0="$!!fsit"fail0 + "$!!fsit"failrho0 + "$!!fsit"failu0 + "$!!fsit"failrhou0
+		set "$!!fsit"failtot1="$!!fsit"fail1 + "$!!fsit"failrho1 + "$!!fsit"failu1 + "$!!fsit"failrhou1
+		set "$!!fsit"failtot2="$!!fsit"fail2 + "$!!fsit"failrho2 + "$!!fsit"failu2 + "$!!fsit"failrhou2
+		set "$!!fsit"failtot3="$!!fsit"fail3 + "$!!fsit"failrho3 + "$!!fsit"failu3 + "$!!fsit"failrhou3
 		#
-		set lgftot0=lg(failtot0+1)
-		set lgftot1=lg(failtot1+1)
-		set lgftot2=lg(failtot2+1)
-		set lgftot3=lg(failtot3+1)
+		set lg"$!!fsit"ftot0=lg("$!!fsit"failtot0+1)
+		set lg"$!!fsit"ftot1=lg("$!!fsit"failtot1+1)
+		set lg"$!!fsit"ftot2=lg("$!!fsit"failtot2+1)
+		set lg"$!!fsit"ftot3=lg("$!!fsit"failtot3+1)
 		#
-		set failtot0sum=SUM(failtot0)
-		set failtot1sum=SUM(failtot1)
-		set failtot2sum=SUM(failtot2)
-		set failtot3sum=SUM(failtot3)
+		set "$!!fsit"failtot0sum=SUM("$!!fsit"failtot0)
+		set "$!!fsit"failtot1sum=SUM("$!!fsit"failtot1)
+		set "$!!fsit"failtot2sum=SUM("$!!fsit"failtot2)
+		set "$!!fsit"failtot3sum=SUM("$!!fsit"failtot3)
 		#
-		print {failtot0sum failtot1sum failtot2sum failtot3sum}
+                # print didn't like direct use of "$!!fsit"var
+                set toprint1="$!!fsit"failtot0sum
+                set toprint2="$!!fsit"failtot1sum
+                set toprint3="$!!fsit"failtot2sum
+                set toprint4="$!!fsit"failtot3sum
+                echo "toprint? is failtot?sum"
+		print {toprint1 toprint2 toprint3 toprint4}
 		#
 		# absolute totals
-		set dtot0=fail0+floor0+limitgamma0+failrho0+failu0+failrhou0+precgam0+precu0
-		set dtot1=fail1+floor1+limitgamma1+failrho1+failu1+failrhou1+precgam1+precu1
-		set dtot2=fail2+floor2+limitgamma2+failrho2+failu2+failrhou2+precgam2+precu2
-		set dtot3=fail3+floor3+limitgamma3+failrho3+failu3+failrhou3+precgam3+precu3
+		set "$!!fsit"dtot0="$!!fsit"fail0+"$!!fsit"floor0+"$!!fsit"limitgamma0+"$!!fsit"failrho0+"$!!fsit"failu0+"$!!fsit"failrhou0+"$!!fsit"precgam0+"$!!fsit"precu0
+		set "$!!fsit"dtot1="$!!fsit"fail1+"$!!fsit"floor1+"$!!fsit"limitgamma1+"$!!fsit"failrho1+"$!!fsit"failu1+"$!!fsit"failrhou1+"$!!fsit"precgam1+"$!!fsit"precu1
+		set "$!!fsit"dtot2="$!!fsit"fail2+"$!!fsit"floor2+"$!!fsit"limitgamma2+"$!!fsit"failrho2+"$!!fsit"failu2+"$!!fsit"failrhou2+"$!!fsit"precgam2+"$!!fsit"precu2
+		set "$!!fsit"dtot3="$!!fsit"fail3+"$!!fsit"floor3+"$!!fsit"limitgamma3+"$!!fsit"failrho3+"$!!fsit"failu3+"$!!fsit"failrhou3+"$!!fsit"precgam3+"$!!fsit"precu3
 		#
-		set lgdtot0=lg(dtot0+1)
-		set lgdtot1=lg(dtot1+1)
-		set lgdtot2=lg(dtot2+1)
-		set lgdtot3=lg(dtot3+1)
+		set lg"$!!fsit"dtot0=lg("$!!fsit"dtot0+1)
+		set lg"$!!fsit"dtot1=lg("$!!fsit"dtot1+1)
+		set lg"$!!fsit"dtot2=lg("$!!fsit"dtot2+1)
+		set lg"$!!fsit"dtot3=lg("$!!fsit"dtot3+1)
 		#
-		set dtot0sum=SUM(dtot0)
-		set dtot1sum=SUM(dtot1)
-		set dtot2sum=SUM(dtot2)
-		set dtot3sum=SUM(dtot3)
+		set "$!!fsit"dtot0sum=SUM("$!!fsit"dtot0)
+		set "$!!fsit"dtot1sum=SUM("$!!fsit"dtot1)
+		set "$!!fsit"dtot2sum=SUM("$!!fsit"dtot2)
+		set "$!!fsit"dtot3sum=SUM("$!!fsit"dtot3)
 		#
-		print {dtot0sum dtot1sum dtot2sum dtot3sum}
+		set toprint1="$!!fsit"dtot0sum
+                set toprint2="$!!fsit"dtot1sum
+                set toprint3="$!!fsit"dtot2sum
+                set toprint4="$!!fsit"dtot3sum
+                echo "toprint? is dtot?sum"
+		print {toprint1 toprint2 toprint3 toprint4}
 		#
 		#
 jrdpdebugold3   1   #
