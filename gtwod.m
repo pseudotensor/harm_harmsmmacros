@@ -1081,6 +1081,9 @@ jrdp3du	1	#
                 #
 jrdpfailfloordu	1 # reads-in failfloordu???? files with ANY NPR!
 		jrdpheader3d dumps/$1
+                #
+                gsetupfromheader
+                #
 		da dumps/$1
 		lines 2 10000000
 		#
@@ -1091,28 +1094,43 @@ jrdpfailfloordu	1 # reads-in failfloordu???? files with ANY NPR!
                 }\
                 else{\
                      define numcol (totalcolumns)
-                     set mystring='1-$numcol'
-                     define colstring (mystring)
-                     echo "Getting dUintgen columns: $!!colstring"
-                     read {dUintgen $!!colstring}
+                     setupcolstring $numcol
+                     #
+		     # had to make below submacro or else SM messes up and doesn't create colstring correctly
 		     #
-		     gsetupfromheader
-                     #
-                     set iii = 0,($numcol*$nx*$ny*$nz-1)
-                     set indexdu=INT((iii%$($numcol))/1)
-                     set indexi =INT((iii%($numcol*$nx))/$numcol)
-                     set indexj =INT((iii%($numcol*$nx*$ny))/($numcol*$nx))
-                     set indexk =INT((iii%($numcol*$nx*$ny*$nz))/($numcol*$nx*$ny))
-                     #
-                     do iii=0,$numcol-1,1 {\
-                      set dUint$iii = dUintgen if(indexdu==$iii)
-                     }
-                     #
-                     echo "Created $numcol versions of dUint? variables (e.g. dUint0).  Compare this with (e.g.) U0*gdet*dV when performing purely spatial integral."
+		     subfailfloordu
                      #
                 }
                 #
                 #
+subfailfloordu 0 #
+		echo "Getting dUintgen columns: $!!colstring"
+		read {dUintgen $!!colstring}
+		#
+		# SM sucks, fails to setup colstring
+		if(dimen(dUintgen)!=$numcol*$nx*$ny*$nz){
+		   read {dUintgen $!!colstring}
+		}
+		#
+		set iii = 0,($numcol*$nx*$ny*$nz-1)
+		set indexdu=INT((iii%$($numcol))/1)
+		set indexi =INT((iii%($numcol*$nx))/$numcol)
+		set indexj =INT((iii%($numcol*$nx*$ny))/($numcol*$nx))
+		set indexk =INT((iii%($numcol*$nx*$ny*$nz))/($numcol*$nx*$ny))
+		#
+		do iii=0,$numcol-1,1 {\
+	         set dUint$iii = dUintgen if(indexdu==$iii)
+                }  
+		#  
+		echo "Created $numcol versions of dUint? variables (e.g. dUint0).  Compare this with (e.g.) U0*gdet*dV when performing purely spatial integral."
+		#
+		#
+setupcolstring 1 # setupcolstring $numcol
+		define thecol $numcol
+		set mystring='1-$thecol'
+		define colstring (mystring)
+		#
+		#
 jrdp3duentropy	1	# with NPRDUMP=8 even if doing entropy since entropy primitive not really used
 		jrdpheader3d dumps/$1
 		da dumps/$1
