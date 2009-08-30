@@ -990,7 +990,8 @@ jrdpeos	1	#
 		# gogrmhd
 		# jre kazpostmatlab.m
 		# gets whichdatatype and numextras
-		rdjonheadernew eosnew.head
+		rdjonheadernew eosextranew.head
+                #rdjonheadernew eosnew.head
 		#
 		jrdpheader3d dumps/$1
 		da dumps/$1
