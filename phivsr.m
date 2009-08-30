@@ -1,4 +1,5 @@
-gogrb 0        #
+		#
+gogrb 0         #
 		#
                 #gogrmhd
                 echo "Load phivsr.m"
@@ -602,8 +603,10 @@ setupstarcompare 0 #
 		#
 gotoharmdir  0  #              
 		#cd /data/jon/testfulleostable2/harm/run/
-		cd /data/jon/testfulleostable2/harm.test/run/
+		#cd /data/jon/testfulleostable2/harm.test/run/
                 #cd /data/jon/testfulleostable2/harm.test.oldgoodpressure/run
+		#
+		cd /data/jon/latestcode/testnewkazstuffwithgrbmodel/run/
                 #
                 #
 gotogrbmodeldir  0  #

@@ -40,7 +40,7 @@ rdjonheadernew 1 #
 		lines 1 1
 		read '%d %d %d' {whichrnpmethod whichynumethod whichhcmmethod}
                 lines 2 2
-                read '%d %d %d' {whichdatatype numoutcolumns numextras}
+                read '%d %d %d %d' {whichdatatype utotdegencut numoutcolumns numextras}
 		lines 3 3
 		read '%g %g %g %g %g %g' {nrhob lrhobmin lrhobmax steplrhob baselrhob linearoffsetlrhob}
 		lines 4 4
@@ -213,6 +213,81 @@ rdjondegeneos 1	# rdjondegeneos 'test1'
 		#
 		#
 		#
+setuptaunse 0   #              
+                #
+                set AA=179.7*1.0D9
+                set BB=39.0d0
+                set CC=0.2d0
+                set taunse=(rhob)**(CC)*exp(AA/(tempk)-BB)
+                set taunselimit=1.0
+                #
+                set tminnse = AA/(BB+lg(taunselimit/(rhob)**(CC)))
+                #
+                plc 0 (LG(taunse))
+		#
+                plc 0 (LG(tminnse))
+		#
+		#
+checkpretableslarge 0 #
+		#
+		da eosother.dat
+		lines 1 100000000
+		read {s_eleposi 19}
+		#
+		rdkazheadernew
+		da eos.dat
+		lines 1 100000000
+		read {rhob 1 tempk 2 tdynorye 3}
+		#
+		setgrbconsts
+		#
+		set Nb=rhob/mb
+		#
+                set ne=tdynorye*Nb
+		set mecc=me*c**2
+		set restmassuee=mecc*ne
+		set sspeceecor=restmassuee/Nb/(kb*tempk)
+		#
+                set sspecee=(s_eleposi)/Nb
+		#
+		set iii=0,dimen(rhob)-1
+                set mm=iii%nrhob
+                set nn=INT(iii%(nrhob*ntk)/nrhob)
+                set oo=INT(iii%(nrhob*ntk*ntdynorye)/(nrhob*ntk))
+                set pp=INT(iii%(nrhob*ntk*ntdynorye*ntdynorynu)/(nrhob*ntk*ntdynorye))
+		#
+		print {nrhob ntk ntdynorye ntdynorynu}
+		#
+                set mymm=INT(mm[dimen(mm)-1]-39*2)
+		set myoo=INT(oo[dimen(oo)-1]-3)
+		set mypp=INT(pp[dimen(pp)-1]*0)
+		print {mymm myoo mypp}
+		#
+                set myuse=((mm==mymm && oo==myoo && pp==mypp) ? 1 : 0)
+                #
+                # extract only if myuse is true
+                set mysspecee = sspecee if(myuse)
+                set mysspeceecor = sspeceecor if(myuse)
+                set myrhob = rhob if(myuse)
+		set mytdynorye = tdynorye if(myuse)
+                set mytempk = tempk if(myuse)
+		#
+		set  mathsspecee={7.055919815517668e-10 1.2401168594559556e-9 2.179599068283459e-9 3.830874597704539e-9  \    
+		   6.733330286199586e-9 1.1835249675169102e-8 2.080403303107157e-8 3.657215554008075e-8          \
+		   6.429859746698151e-8 1.1306344031209896e-7 1.988586164390799e-7 3.498761520659816e-7  \
+		   6.158842420342546e-7 1.0849159030911979e-6 1.9131386942718805e-6 2.811825195356003 \
+		   -1.1473803208797961 0.8917831965413787 -0.2320016945965825 0.01295714278912186 \
+		   0.018046121146650593 0.026176716270725955 0.03812005186461481 0.055508742334277515 \
+		   0.08081739820751385 0.11762850101351115 0.17109349009971123 0.24851588789211418 \
+		   0.35994623323425334 0.5184038993944239 0.7392206649801661 1.0437599274032634 \
+		   1.5360205517906127 2.959937760458456 8.104073081155828 24.540120911262548 75.22592952263565 \
+		   231.15671151888208 711.3398059425236 2191.4111494651347 6756.437999178434 20842.881988839843 \
+		   64323.50175803371 198564.17598391196 613076.3887717722 1.8931506070191357e6 \
+		    5.846485993088243e6 1.805641863490493e7 5.576822858237962e7 1.7224825148071504e8 }
+		#
+		#
+		print {mytempk mysspecee mysspeceecor mathsspecee}
+		#
 		#
 		#
 checkpretables  0 #
@@ -237,6 +312,10 @@ checkpretables  0 #
 		#
                 #
                 #
+                plc 0 (LG(abar))
+                #
+                #
+                #
 		setgrbconsts
                 #
                 set nb=rhob/mb
@@ -245,9 +324,29 @@ checkpretables  0 #
                 set mecc=me*c**2
 		set restmassuee=mecc*ne
                 #
+		# reproduce TIMMES entropy
+		set kazsdenee=(p_eleposi+rho_eleposi)/(kb*tempk)
+		set timmessdenee=kazsdenee-etae*ne
+		set timmessspecee=timmessdenee/nb
+                #
+                set rho_eleposinorest = rho_eleposi - restmassuee
+		set etaenorest = etae-me*c**2/(kb*tempk)
+		set kazsdeneenorest=(p_eleposi+rho_eleposinorest)/(kb*tempk)
+		set timmessdeneenorest=kazsdenee-etaenorest*ne
+		set timmessspeceenorest=timmessdenee/nb
+		#
+		#
+                #
+		set nb=rhob/mb
+		set ne=tdynorye*nb
+		set etaenorest = etae-me*c**2/(kb*tempk)
+		set rho_eleposinorest = rho_eleposi-me*c**2*ne
+		# entropy density (1/cc) 
+		set seerest = restmassuee/(kb*tempk)
+                #
                 #set kazsden=(dptot+dutot)/(kb*tempk)
                 # Kaz says it's:
-                set kazsdenee=(p_eleposi+rho_eleposi)/(kb*tempk)
+                set kazsdenee=(p_eleposi+rho_eleposi-restmassuee)/(kb*tempk)
                 # TIMMES says it's:
                 #set etaenorest = etae - (me*c**2/(kb*tempk))
                 set timmessdenee=kazsdenee-etae*ne
@@ -264,6 +363,9 @@ checkpretables  0 #
                 # actual:
                 plc 0 (LG(s_eleposi))
 		#
+                #
+                #
+                #
                 # photons:
                 set sphoton1=(p_photon+rho_photon)/(kb*tempk)
                 set sphoton2=s_photon
@@ -272,9 +374,6 @@ checkpretables  0 #
 		plc 0 (abs(sphoton1-sphoton2)/(abs(sphoton1)+abs(sphoton2)))
                 #
                 #
-                #
-		# entropy density (1/cc) 
-		set seerest = restmassuee/(kb*tempk)
 		#
 		plc 0 (LG(dstot+seerest))
 		#
@@ -282,10 +381,6 @@ checkpretables  0 #
 		#
  		plc 0 (LG((s_eleposi-seerest)/rhob+1E29))
 		#
-		set nb=rhob/mb
-		set ne=tdynorye*nb
-		set etaenorest = etae-me*c**2/(kb*tempk)
-		set rho_eleposinorest = rho_eleposi-me*c**2*ne
 		set gods_eleposi = (rho_eleposinorest+p_eleposi)/(kb*tempk) - etaenorest*ne
 		plc 0 (LG(gods_eleposi/rhob))
 		#
@@ -344,6 +439,7 @@ checkpretables  0 #
                 # check entropy monotonicity
 		define WHICHLEV (ntdynorye-4)
 		#
+checksmono 0    #              
 		#
 		plc 0 (LG(s_N/rhob))
 		#
@@ -354,6 +450,9 @@ checkpretables  0 #
                 #
                 plc 0 (LG(s_eleposi/rhob))
 		#
+                #
+                #
+                #
                 plc 0 (LG((s_eleposi+seerest)/rhob))
                 #
 		#
@@ -421,6 +520,71 @@ checkpretables  0 #
                 pl 0 mydutot (mysspectottrue) 1101 1.8E26 2E26 1E24 1.4E24
                 ctype red
                 pl 0 mydutot (mysspectotfake) 1111 1.8E26 2E26 1E24 1.4E24
+                #
+                #
+checksmono2 0   #              
+		#
+		set Nb=rhob/mb
+		#
+                plc 0 (LG(s_eleposi/Nb))
+		#
+                #
+                #
+                set sspecee=(s_eleposi)/Nb
+                set sspecN=(s_N)/Nb
+                set sspecphoton=(s_photon)/Nb
+		set sspectot=sspecee+sspecN+sspecphoton
+                #
+                set mymm=INT(mm[dimen(mm)-1]-39)
+		set myoo=INT(oo[dimen(oo)-1]-3)
+		set mypp=INT(pp[dimen(pp)-1]*0)
+		print {mymm myoo mypp}
+		#
+                set myuse=((mm==mymm && oo==myoo && pp==mypp) ? 1 : 0)
+                #
+                # extract only if myuse is true
+                set mysspectot = sspectot if(myuse)
+                set mysspecee = sspecee if(myuse)
+                set mysspecN = sspecN if(myuse)
+                set mysspecphoton = sspecphoton if(myuse)
+                set myrhob = rhob if(myuse)
+                set myNb = Nb if(myuse)
+                set mytdynorye = tdynorye if(myuse)
+                set mytempk = tempk if(myuse)
+                set mydutot = dutot if(myuse)
+		set myetae = etae if(myuse)
+                #
+                set myddutot=(mydutot-mydutot[0]*0.999999)
+                #
+		set  mathsspecee={7.055919815517668e-10 1.2401168594559556e-9 2.179599068283459e-9 3.830874597704539e-9  \    
+		   6.733330286199586e-9 1.1835249675169102e-8 2.080403303107157e-8 3.657215554008075e-8          \
+		   6.429859746698151e-8 1.1306344031209896e-7 1.988586164390799e-7 3.498761520659816e-7  \
+		   6.158842420342546e-7 1.0849159030911979e-6 1.9131386942718805e-6 2.811825195356003 \
+		   -1.1473803208797961 0.8917831965413787 -0.2320016945965825 0.01295714278912186 \
+		   0.018046121146650593 0.026176716270725955 0.03812005186461481 0.055508742334277515 \
+		   0.08081739820751385 0.11762850101351115 0.17109349009971123 0.24851588789211418 \
+		   0.35994623323425334 0.5184038993944239 0.7392206649801661 1.0437599274032634 \
+		   1.5360205517906127 2.959937760458456 8.104073081155828 24.540120911262548 75.22592952263565 \
+		   231.15671151888208 711.3398059425236 2191.4111494651347 6756.437999178434 20842.881988839843 \
+		   64323.50175803371 198564.17598391196 613076.3887717722 1.8931506070191357e6 \
+		    5.846485993088243e6 1.805641863490493e7 5.576822858237962e7 1.7224825148071504e8 }
+		#
+		# print {mytempk mysspecee mathsspecee}       
+		#
+                #
+                # TOT:
+                ctype default
+		pl 0 myddutot (mysspectot) 1101 (myddutot[0]*.8) (myddutot[dimen(myddutot)-1]*1.2) 1E15 1E34
+                # ee only:
+                ctype red
+		pl 0 myddutot (mysspecee) 1111 (myddutot[0]*.8) (myddutot[dimen(myddutot)-1]*1.2) 1E15 1E34
+                # N only:
+                ctype blue
+		pl 0 myddutot (mysspecN) 1111 (myddutot[0]*.8) (myddutot[dimen(myddutot)-1]*1.2) 1E15 1E34
+                # photon only:
+                ctype green
+		pl 0 myddutot (mysspecphoton) 1111 (myddutot[0]*.8) (myddutot[dimen(myddutot)-1]*1.2) 1E15 1E34
+                #
                 #
                 #
                 #
@@ -1981,7 +2145,30 @@ checkhelmcs0  0 #
 		#
 		#
 		#
+		#xnut,xprot,xalfa,xh,a,x
 		#
 		#
+		#
+death1 0        #
+		#
+		set xnut=8.875070451931031E-003
+		set xprot=8.863457202678457E-006
+		set xalfa=4.620834513710024E-002
+		set xh=0.944907720953766
+		set a=60.6643737084135
+		set x=0.430610272414859
+		#
+		set ytot1   = xnut  + xprot + 0.25d0*xalfa 
+		set ytot1 = ytot1 + xh/a
+		#
+		set zbarxx  = xprot + 0.5d0*xalfa
+		set zbarxx = zbarxx + x*xh
+		#
+		set abarnum    = 1.0d0/ytot1
+		set abar=abarnum
+		set zbar    = zbarxx * abar
+		set yelocal = zbar/abarnum
+		#
+		print {abar zbar}
 		#
 		#
