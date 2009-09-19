@@ -1018,8 +1018,8 @@ jrdpeos	1	#
                                      }
                 #
                 if(readdata){\
-		 read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-		    {YE YNU0 YNU0OLD YNUOLD Height1 Height2 Height3 Height4 UNU PNU SNU IG JG KG \
+		 read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		    {YE YNU0 YNU0OLD YNUOLD Height1 Height2 Height3 Height4 UNU PNU SNU PGAS IG JG KG \
 		      temp \
 		      qtautnueohcm      qtauanueohcm      qtautnuebarohcm      qtauanuebarohcm      qtautmuohcm      qtauamuohcm      ntautnueohcm      ntauanueohcm      ntautnuebarohcm      ntauanuebarohcm      ntautmuohcm      ntauamuohcm      unue0      unuebar0      unumu0      nnue0      nnuebar0      nnumu0      lambdatot      lambdaintot      tauphotonohcm      tauphotonabsohcm      nnueth0      nnuebarth0 \
                       qphoton qm graddotrhouyl tthermaltot tdifftot rho_nu p_nu s_nu ynulocal Ynuthermal enu enue enuebar \
@@ -1703,8 +1703,10 @@ jrdpdebuggen 1  #
 		    fsfail3 fsfloor3 fslimitgamma3 fsinflow3 fsfailrho3 fsfailu3 fsfailrhou3 fsprecgam3 fsprecu3 fstoentropy3 fstocold3 fseosfail3 \
                     }
 		#
+                echo "Begin debug computations"
                 debuggencompute 1
                 debuggencompute 2
+                echo "End debug computations"
                 #
                 #
 debuggencompute 1 #                
@@ -1713,11 +1715,14 @@ debuggencompute 1 #
                 if($1==1){\
                           set it='nm'
                           }
+                #
                 if($1==2){\
                           set it='fs'
                           }
-                 # set it='fs'
+                #
+                # set it='fs'
                 #set it=$1
+                #
                 define fsit (it)
                 #
 		# shows where *ever* failed or not
@@ -1770,7 +1775,9 @@ debuggencompute 1 #
                 set toprint2="$!!fsit"dtot1sum
                 set toprint3="$!!fsit"dtot2sum
                 set toprint4="$!!fsit"dtot3sum
+                #
                 echo "toprint? is dtot?sum"
+                #
 		print {toprint1 toprint2 toprint3 toprint4}
 		#
 		#

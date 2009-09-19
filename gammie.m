@@ -1492,7 +1492,7 @@ grid3d  1	# read in grid data with extra connection2 and all dxdxp's
 		       set h=V2
 		       set ph=V3
 		       #
-		 jre gtwod.m
+                       #jre gtwod.m
 		 gsetup
 		 setgrd
 		}

@@ -451,6 +451,8 @@ setupharmcompare 1 # setupharmcompare 0000
 		set rharm = (r*Lunit)
 		set rhoharm = (rho*1)
 		set uharm = (u*Pressureunit)
+                set Sdenharm = (Sden/Lunit**3)
+                set SNUdenharm = (SNU/Lunit**3)
 		set ylharm = yl
 		set yeharm = YE
 		set ynuharm = ynu
@@ -539,6 +541,13 @@ setupstarcompare 0 #
 		set rhostar = rhob
                 # utot itself has table offset, while utottrue is  true utot
 		set ustar = utottrue
+		# stottrue is true stot, while original dstot has offset in s_N
+		set sdenstar = stottrue
+                #
+		# in this context, dstot is really total entropy but needs to be corrected with offset
+                set Sdenstar = dstot - fakeentropylsoffset*(rhob/mb)
+                set SNUdenstar = s_nu
+                #
 		set yestar = tdynorye
 		set ynustar = tdynorynu
 		set ynu0star = Ynu0
@@ -626,42 +635,77 @@ plotstarharm 0  #
 		#############
 		# Plot star and HARM versions
 		#
+                #####################
+                # MOSTLY NON-NEUTRINO STUFF:
+                #
+                # P
+		ctype default pl 0 rharm pharm 1100
+                ctype blue pl 0 rharm PNUharm 1110
+		ctype red pl 0 rstar pstar 1110
+                ctype green pl 0 rstar p_nustar 1110
+		#
+                # U
+		ctype default pl 0 rharm uharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E15 1E40
+                ctype blue pl 0 rharm UNUharm 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E15 1E40
+		ctype red pl 0 rstar ustar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E15 1E40
+		ctype cyan pl 0 rstar (fakelsoffset*rhostar*C*C/(mb*C*C)) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E15 1E40
+		#
+                # Temp
+		ctype default pl 0 rharm tempharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E5 1E13
+		ctype red pl 0 rstar tempstar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E5 1E13
+		#
+                # rho
+		ctype default pl 0 rharm rhoharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-10 1E15
+		ctype red pl 0 rstar rhostar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-10 1E15
+		ctype blue pl 0 rstar (rho_nustar/C**2) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-10 1E15
+                #
+                # Temp
+                ctype default pl 0 rhoharm tempharm 1100
+                ctype red pl 0 rhostar tempstar 1110
+		#
+                # Sden
+		ltype 0
+		ctype default pl 0 rharm Sdenharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E20 1E40
+		ctype red pl 0 rstar Sdenstar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E20 1E40
+                ctype cyan  pl 0 rharm SNUdenharm 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E20 1E40
+                ctype blue  pl 0 rstar SNUdenstar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E20 1E40
+                ctype green  pl 0 rstar s_photon 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E20 1E40
+                ctype magenta  pl 0 rstar s_eleposi 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E20 1E40
+                ctype yellow  pl 0 rstar (s_N-fakeentropylsoffset*rhostar*C*C/(mb*C*C)) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E20 1E40
+                ltype 3 ctype yellow  pl 0 rstar (s_N) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E20 1E40
+		ltype 2 ctype cyan   pl 0 rstar (fakeentropylsoffset*rhostar*C*C/(mb*C*C)) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E20 1E40
+		ltype 0
+		#
+                # c_s : sound speed
+                ctype default pl 0 rharm (sqrt(cs2harm)) 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
+                ctype green pl 0 rharm (c+rharm*0) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
+                ctype blue pl 0 rharm (c/3+rharm*0) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
+                set cs2starapprox=(4.0/3.0)*p/(rho0+u+p)
+                ctype cyan pl 0 rharm (sqrt(cs2starapprox)*c) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
+                ctype red pl 0 rstar (sqrt(cs2star)) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
+                #
+                #
+                # YE
+		ctype default pl 0 rharm yeharm 1100
+		ctype red pl 0 rstar yestar 1110
+		#
+                #####################
+                # NEUTRINO STUFF:
+                #
+                # H
 		ctype default pl 0 rharm h1harm 1100
 		ctype blue pl 0 rharm h2harm 1110
 		ctype blue pl 0 rharm h3harm 1110
 		ctype blue pl 0 rharm h4harm 1110
 		ctype red pl 0 rstar hstar 1110
 		#
-		ctype default pl 0 rharm pharm 1100
-                ctype blue pl 0 rharm PNUharm 1110
-		ctype red pl 0 rstar pstar 1110
-                ctype green pl 0 rstar p_nustar 1110
-		#
-		ctype default pl 0 rharm uharm 1100
-                ctype blue pl 0 rharm UNUharm 1110
-		ctype red pl 0 rstar ustar 1110
-		#
-		ctype default pl 0 rharm tempharm 1100
-		ctype red pl 0 rstar tempstar 1110
-		#
-		ctype default pl 0 rharm rhoharm 1100
-		ctype red pl 0 rstar rhostar 1110
-		ctype blue pl 0 rstar rho_nustar 1110
-                #
-                ctype default pl 0 rhoharm tempharm 1100
-                ctype red pl 0 rhostar tempstar 1110
-		#
-                # YE
-		ctype default pl 0 rharm yeharm 1100
-		ctype red pl 0 rstar yestar 1110
-		#
                 # YNU
                 # ynuharm : initial primitive YNU read-in from stellar model
-		ctype default pl 0 rharm ynuharm 1100
+		ctype default pl 0 rharm ynuharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-21 1
                 # ynustar : initial stellar model value of YNU
-		ctype red pl 0 rstar ynustar 1110
+		ctype red pl 0 rstar ynustar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-21 1
                 # ynulocalharm: Using latest Ynu0 to get Ynu[Ynu0] (currently 3 iterations)
-		ctype green pl 0 rharm ynulocalharm 1110
+		ctype green pl 0 rharm ynulocalharm 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-21 1
 		#
                 # YNU0
                 # ynu0harm : Latest Ynu0 (after 3 iterations so far) for the lookup table
@@ -672,66 +716,65 @@ plotstarharm 0  #
 		ctype default pl 0 rstar ynu0star 1101 (rstar[0]) (rstar[dimen(rstar)-1]) 1E-21 1
 		ctype green pl 0 rstar ynustar 1110
                 #
-		ctype default pl 0 rharm tauharm 1100
-		ctype red pl 0 rstar taustar 1110
+		ctype default pl 0 rharm tauharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-10 10
+		ctype red pl 0 rstar taustar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-10 10
                 #
-		ctype default pl 0 rharm lambdatotharm 1100
-		ctype red pl 0 rstar lambdatotstar 1110
+		ctype default pl 0 rharm lambdatotharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1 1E20
+		ctype red pl 0 rstar lambdatotstar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1 1E20
 		#
-		ctype default pl 0 rharm qmharm 1100
-		ctype red pl 0 rstar qmstar 1110
+		ctype default pl 0 rharm qmharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1 1E45
+		ctype red pl 0 rstar qmstar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1 1E45
 		#
-		# 1  (rharm[0]) (rharm[dimen(rharm)-1]) 1E-15 1E30
-		ctype default pl 0 rharm graddotrhouylharm 1100
-		ctype red pl 0 rstar graddotrhouylstar 1110
-                ctype blue pl 0 rharm expectedgraddotrhouylharm 1110
+		# 
+		ctype default pl 0 rharm graddotrhouylharm 1101  (rharm[0]) (rharm[dimen(rharm)-1]) 1E-15 1E30
+		ctype red pl 0 rstar graddotrhouylstar 1111  (rharm[0]) (rharm[dimen(rharm)-1]) 1E-15 1E30
+                ctype blue pl 0 rharm expectedgraddotrhouylharm 1111  (rharm[0]) (rharm[dimen(rharm)-1]) 1E-15 1E30
 		#
                 set Nmharm = (qm/enu)/Tunit/Lunit**3
 		set tscaleharm = (ylharm*rhoharm)/(mb*Nmharm)
                 set tscalestar= ((rhostar*ye)/(graddotrhouylstar+1E-30))
-		ctype default pl 0 rharm tscaleharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-15 1E5
-                ctype red pl 0 rstar tscalestar 1110
+		ctype default pl 0 rharm tscaleharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-15 1E10
+                ctype red pl 0 rstar tscalestar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-15 1E10
                 #
-		ctype default pl 0 rharm tthermaltotharm 1100
-		ctype red pl 0 rstar tthermaltotstar 1110
-		ctype blue pl 0 rharm tdifftotharm 1110
-		ctype cyan pl 0 rstar tdifftotstar 1110
-		ctype green pl 0 rharm (hharm/c) 1110
-		ctype magenta pl 0 rstar (hstar/c) 1110
+		ctype default pl 0 rharm tthermaltotharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-10 1E10
+		ctype red pl 0 rstar tthermaltotstar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-10 1E10
+		ctype blue pl 0 rharm tdifftotharm 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-10 1E10
+		ctype cyan pl 0 rstar tdifftotstar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-10 1E10
+		ctype green pl 0 rharm (hharm/c) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-10 1E10
+		ctype magenta pl 0 rstar (hstar/c) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-10 1E10
 		#
-		ctype default pl 0 rharm rho_nuharm 1100
-		ctype red pl 0 rstar rho_nustar 1110
+		ctype default pl 0 rharm rho_nuharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1 1E40
+		ctype red pl 0 rstar rho_nustar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1 1E40
 		#
-		ctype default pl 0 rharm p_nuharm 1100
-		ctype red pl 0 rstar p_nustar 1110
+		ctype default pl 0 rharm p_nuharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1 1E40
+		ctype red pl 0 rstar p_nustar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1 1E40
 		#
-		ctype default pl 0 rharm s_nuharm 1100
-		ctype red pl 0 rstar s_nustar 1110
+		ctype default pl 0 rharm s_nuharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1 1E40
+		ctype red pl 0 rstar s_nustar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1 1E40
 		#
-		ctype default pl 0 rharm enuharm 1100
-		ctype red pl 0 rstar enustar 1110
+		ctype default pl 0 rharm enuharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-3 10
+		ctype red pl 0 rstar enustar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-3 10
 		#
-		ctype default pl 0 rharm enueharm 1100
-		ctype red pl 0 rstar enuestar 1110
+		ctype default pl 0 rharm enueharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-3 10
+		ctype red pl 0 rstar enuestar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-3 10
 		#
-		ctype default pl 0 rharm enuebarharm 1100
-		ctype red pl 0 rstar enuebarstar 1110
+		ctype default pl 0 rharm enuebarharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-3 10
+		ctype red pl 0 rstar enuebarstar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-3 10
 		#
-		#
-                # c_s : sound speed
-                ctype default pl 0 rharm (sqrt(cs2harm)) 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
-                ctype green pl 0 rharm (c+rharm*0) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
-                ctype blue pl 0 rharm (c/3+rharm*0) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
-                set cs2starapprox=(4.0/3.0)*p/(rho0+u+p)
-                ctype cyan pl 0 rharm (sqrt(cs2starapprox)*c) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
-                ctype red pl 0 rstar (sqrt(cs2star)) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
-                #
 		#
 		#
 		# check interpolation (related to DEBUG code in kazfulleos.c)
 		#
 		#ctype default pl 0 rharm tauphotonabsohcm 1100
                 #
+checkynuharm 0  # when debug on and doing loopit
+		#
+		!grep TOPLOT nohup.out | sed 's/TOPLOT//g'  > mydata.dat
+		#
+		da mydata.dat
+		lines 1 1000000
+		read '%g %g' {ynu0 ynu}
+		pl 0 ynu0 ynu 1100
                 #
 testynueos 0    #
 		#
