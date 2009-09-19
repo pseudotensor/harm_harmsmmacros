@@ -1273,6 +1273,8 @@ processeos2 0   #
 		#
                 # Correct for arbitrary fake lsoffset so that HARM has true utot
                 set utottrue=u_tot - fakelsoffset*ergPmev*(rhob/mb)
+                # currently below is not used
+                set stottrue=s_tot - fakeentropylsoffset*(rhob/mb)
 		#
 		#
 processeos 0    #
@@ -1337,8 +1339,8 @@ outputmodel 0   #
 		#
 		#
 		#
-		print + $filename '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
-                {r rho utottrue vr temp ye Ynu Hcm nucleons helium carbon oxygen neon magnesium si iron j omega inertia}
+		print + $filename '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
+                {r rho utottrue vr temp ye Ynu Ynu0 Hcm nucleons helium carbon oxygen neon magnesium si iron j omega inertia}
 		#
 		#
 		#

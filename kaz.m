@@ -615,7 +615,7 @@ rdkazheaderold 0 #
 rdkazheadernew 0 #
 		da eos.head
 		lines 1 1
-		read '%d %d %d' {whichrnpmethod whichynumethod whichhcmmethod}
+		read '%d %d %d %d' {whichrnpmethod whichynumethod whichhcmmethod whichyelooptype}
 		lines 2 2
 		read '%d %d %d %d %d' {whichdatatype numdims numcol1 numcol2 numextras}
 		lines 3 3
@@ -629,7 +629,9 @@ rdkazheadernew 0 #
 		lines 7 7
 		read '%d %g %g' {nhcm hcmmin hcmmax}
 		lines 8 8
-		read '%g %g' {lsoffset fakelsoffset}
+		read '%g %g %g' {lsoffset fakelsoffset fakeentropylsoffset}
+		lines 9 9
+		read '%g %g %g %g' {yegrid1 yegrid2 xgrid1 xgrid2}
 		#
 		#
 rdmykazeosold 1      #

@@ -38,7 +38,7 @@ rdjonheadernew 1 #
 		da $1
 		#
 		lines 1 1
-		read '%d %d %d' {whichrnpmethod whichynumethod whichhcmmethod}
+		read '%d %d %d %d' {whichrnpmethod whichynumethod whichhcmmethod whichyelooptype}
                 lines 2 2
                 read '%d %d %d %d' {whichdatatype utotdegencut numoutcolumns numextras}
 		lines 3 3
@@ -58,8 +58,10 @@ rdjonheadernew 1 #
 		lines 10 10
 		read '%g %g %g %g %g %g' {nhcm lhcmmin lhcmmax steplhcm baselhcm linearoffsetlhcm}
 		lines 11 11
-		read '%g %g' {lsoffset fakelsoffset}
+		read '%g %g %g' {lsoffset fakelsoffset fakeentropylsoffset}
 		lines 12 12
+		read '%g %g %g %g' {yegrid1 yegrid2 xgrid1 xgrid2}
+		lines 13 13
 		read '%g %g %g %g %g %g' {ntk ltkmin ltkmax stepltk baseltk linearoffsetltk}
 		#
 		#
@@ -183,6 +185,207 @@ rdjoneos 1      # E.g.:
 		 # end whichdatatype==4
                   #
 		#		#
+rdjoneosnoextra 1      # E.g.:
+		# rdjoneosnoextra ''
+		#
+		# see eos_extract.m
+		#
+		#
+		# here the utot, ptot, chi are really offsets from the degenerate (sn==0) case
+		# eos_extract.m has interpolated to U/P/CHI space for this data
+		#
+		#
+		set h1=$1
+		set h2='eosnew'
+		set h3='.dat'
+		set _fname=h2+h1+h3
+                define filename (_fname)
+		#
+		set h3='.head'
+		set _fname=h2+h1+h3
+                define filenamehead (_fname)
+		#
+		#
+		#
+		# get header info that has whichrnpmethod
+		rdjonheadernew $filenamehead
+		#
+		da $filename
+		lines 1 100000000
+		#
+                  #
+		  set totalcolumnsA=5+8+4+1+2+2+1+3+3+3+4
+		  set totalcolumnsB=0
+		  set totalcolumns=totalcolumnsA+totalcolumnsB
+		  print {totalcolumns}
+		  #
+                  # RECALL:  utotdiff, etc. are really lutotdiff in eos_extract.m
+		  # 36 base things, 0 extra, for 36 total things
+		  read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		    {sm sn so sp sq \
+		       rhob utotdiff ptotdiff chidiff stotdiff tdynorye tdynorynu hcm \
+                       uofutotdiff pofptotdiff chiofchidiff sofstotdiff \
+		       pofu \
+		       uofp uofs \
+		       dpofudrho0 dpofudu \
+		       cs2cgs \
+		       sofu dsofudrho0 dsofudu \
+		       ssofchi dssofchidrho0 dssofchidchi \
+		    pofchi dpofchidrho0 dpofchidchi \
+		    tkofU tkofP tkofCHI tkofS \
+		  }
+		#		#
+rdjoneospureextra 1      # E.g.:
+		# rdjoneospureextra ''
+		#
+		# see eos_extract.m
+		#
+		#
+		# here the utot, ptot, chi are really offsets from the degenerate (sn==0) case
+		# eos_extract.m has interpolated to U/P/CHI space for this data
+		#
+		#
+		set h1=$1
+		set h2='eosextranew'
+		set h3='.dat'
+		set _fname=h2+h1+h3
+                define filename (_fname)
+		#
+		set h3='.head'
+		set _fname=h2+h1+h3
+                define filenamehead (_fname)
+		#
+		#
+		#
+		# get header info that has whichrnpmethod
+		rdjonheadernew $filenamehead
+		#
+		da $filename
+		lines 1 100000000
+		#
+		#
+		  set totalcolumnsA=5+8+4 +4
+		  set totalcolumnsB=24
+		  set totalcolumns=totalcolumnsA+totalcolumnsB
+		  print {totalcolumns}
+		  #
+                  # RECALL:  utotdiff, etc. are really lutotdiff in eos_extract.m
+		  # 45 total things
+		  read '%d %d %d %d %d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		    {sm sn so sp sq \
+		       rhob utotdiff ptotdiff chidiff stotdiff tdynorye tdynorynu hcm \
+                     uofutotdiff pofptotdiff chiofchidiff sofstotdiff \
+		    tkofU tkofP tkofCHI tkofS \
+                     \
+                        qtautnueohcm  qtauanueohcm \
+                    qtautnuebarohcm  qtauanuebarohcm \
+                    qtautmuohcm  qtauamuohcm \
+                    ntautnueohcm  ntauanueohcm \
+                    ntautnuebarohcm  ntauanuebarohcm \
+                    ntautmuohcm  ntauamuohcm \
+                    unue0 unuebar0 unumu0 \
+                    nnue0 nnuebar0 nnumu0 \
+                    lambdatot lambdaintot \
+                    tauphotonohcm tauphotonabsohcm \
+		    nnueth0 nnuebarth0 }
+                  #
+		  #
+		  ###########################
+		  # convert units
+		  gotoharmdir
+		 jrdpunits
+		#
+		#
+		#
+		set       qtautnueohcm=qtautnueohcm/(1.0/Lunit)
+		set       qtauanueohcm=qtauanueohcm/(1.0/Lunit) 
+		set       qtautnuebarohcm=qtautnuebarohcm/(1.0/Lunit) 
+		set       qtauanuebarohcm=qtauanuebarohcm/(1.0/Lunit) 
+		set       qtautmuohcm=qtautmuohcm/(1.0/Lunit) 
+		set       qtauamuohcm=qtauamuohcm/(1.0/Lunit) 
+		set       ntautnueohcm=ntautnueohcm/(1.0/Lunit) 
+		set       ntauanueohcm=ntauanueohcm/(1.0/Lunit) 
+		set       ntautnuebarohcm=ntautnuebarohcm/(1.0/Lunit) 
+		set       ntauanuebarohcm=ntauanuebarohcm/(1.0/Lunit) 
+		set       ntautmuohcm=ntautmuohcm/(1.0/Lunit) 
+		set       ntauamuohcm=ntauamuohcm/(1.0/Lunit) 
+		set       unue0=unue0/(energyunit/(Lunit**3.0)) 
+		set       unuebar0=unuebar0/(energyunit/(Lunit**3.0)) 
+		set       unumu0=unumu0/(energyunit/(Lunit**3.0)) 
+		set       nnue0=nnue0/(1.0/(Lunit**3.0)) 
+		set       nnuebar0=nnuebar0/(1.0/(Lunit**3.0)) 
+		set       nnumu0=nnumu0/(1.0/(Lunit**3.0)) 
+		set       lambdatot=lambdatot/(Lunit) 
+		set       lambdaintot=lambdaintot/(Lunit) 
+		set       tauphotonohcm=tauphotonohcm/(1.0/Lunit) 
+		set       tauphotonabsohcm=tauphotonabsohcm/(1.0/Lunit) 
+		set       nnueth0=nnueth0/(1.0/(Lunit**3.0)) 
+		set       nnuebarth0=nnuebarth0/(1.0/(Lunit**3.0)) 
+		#
+		#
+		#
+		#
+		# go back
+		cd /data/jon/testfulleostable8/
+                #
+checkynustuff 0 #
+		#
+		set myuse=(sm==32 && sn==9 && sp==6 && sq==0) ? 1 : 0
+		set myrhob=rhob if(myuse)
+		set mytk=tkofU if(myuse)
+		set mytdynorynu=tdynorynu if(myuse)
+		set myu = uofutotdiff if(myuse)
+		set myextra2=qtauanueohcm if(myuse)
+		set mytdynorye=tdynorye if(myuse)
+		ctype default pl 0 mytdynorye myextra2 1101 (mytdynorye[0]) (mytdynorye[dimen(mytdynorye)-1]) 1E-15 1
+		points (LG(mytdynorye)) (LG(myextra2))
+		#
+		set myuse=(sm==2 && sn==3 && sp==6 && sq==0) ? 1 : 0
+		set myrhob=rhob if(myuse)
+		set mytk=tkofU if(myuse)
+		set mytdynorynu=tdynorynu if(myuse)
+		set myu = uofutotdiff if(myuse)
+		set myextra2=qtauanueohcm if(myuse)
+		set mytdynorye=tdynorye if(myuse)
+		ctype cyan pl 0 mytdynorye myextra2 1111 (mytdynorye[0]) (mytdynorye[dimen(mytdynorye)-1]) 1E-15 1
+		points (LG(mytdynorye)) (LG(myextra2))
+		#
+		ctype red vertline (LG(0.428493))
+		#
+		# print {myrhob mytk myu mytdynorye mytdynorynu} 
+                #
+                #
+                #
+		#ctype default pl 0 mytdynorye myextra2 0101 (mytdynorye[0]) (mytdynorye[dimen(mytdynorye)-1]) 1E-15 1
+                #points (mytdynorye) (LG(myextra2))
+		#ctype red vertline ((0.428493))
+                #
+                cd /data/jon/testextra2vste_2/
+                da eos.dat
+                lines 1 10000
+                read {thetdynorye 3 theextra2 10}
+                set theextra2 = theextra2/(1.0/Lunit)
+		# go back
+		cd /data/jon/testfulleostable8/
+                #
+                #set NN=dimen(theextra2)
+                #set iiiii=0,NN-1,1
+                #set sx=lg(1E-2)
+                #set ex=lg(0.56)
+                #set dx=(ex-sx)/(NN-1)
+                #set xx=sx+iiiii*dx
+                #set myye=10**xx
+                ctype cyan pl 0 thetdynorye theextra2 1111 (mytdynorye[0]) (mytdynorye[dimen(mytdynorye)-1]) 1E-15 1
+                points (LG(thetdynorye)) (LG(theextra2))
+                #
+		#
+		#
+		#ctype default pl 0 tdynorye qtauanueohcm 0100
+		#erase
+		#box
+		#points tdynorye (LG(qtauanueohcm))
+                #
+                #
 rdjondegeneos 1	# rdjondegeneos 'test1'
 		#
 		#
