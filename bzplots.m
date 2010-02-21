@@ -2342,7 +2342,7 @@ core2   0       #
 		#
 4panelinflow   0  # 4-panel inflow model comparison
 		#
-		define doinflowread (1)
+		define doinflowread (0)
 		#
                    fdraft
                    ctype default window 1 1 1 1
@@ -2378,7 +2378,7 @@ core2   0       #
 		                 limits $rinner $router 0 1.7
 		              }
 		   #
-		   limits $rinner $router -0.5 2.5
+		   limits $rinner $router -0.5 4
                    ctype default window 2 2 2 2 box 1 2 0 0
 		   define x1label "r c^2/(GM)"
 		   define x2label "\dot{L}/\dot{M}_0"
@@ -2387,8 +2387,8 @@ core2   0       #
 		   ctype default ltype 1 plo 0 newr tdflvsr
 		   #ctype default ltype 0 plo 0 newr FLtotvsr
 		   #ctype blue ltype 0 plo 0 gr gFLtot
-		   ctype green ltype 0 plo 0 newr FLEMvsr
-		   ctype magenta ltype 0 plo 0 newr FLIEvsr
+		   ctype green ltype 0 plo 0 newr (FLEMvsr/Dphi)
+		   ctype magenta ltype 0 plo 0 newr (FLIEvsr/Dphi)
 		   #
 		   #
 		   if($doinflowread==0){ ctype blue ltype 0 plo 0 gr gFLEM }
@@ -2396,7 +2396,7 @@ core2   0       #
 		   if($doinflowread==1){ ctype blue ltype 0 plo 0 inewr iFLIEvsr }
 		   #
 		   #ctype cyan ltype 0 plo 0 newr FLPAvsr
-		   ctype cyan ltype 0 plo 0 newr ud3vsr
+		   ctype cyan ltype 0 plo 0 newr (ud3vsr/Dphi)
 		   # particle term for gammie
 		   #
 		   if($doinflowread==0){ ctype blue ltype 0 plo 0 gr gl }
@@ -2420,7 +2420,7 @@ core2   0       #
 		                 #limits $rinner $router 0 0.05
 		                 limits $rinner $router 0 1.0
 		              }
-		   limits $rinner $router -3 1
+		   limits $rinner $router -5 1
 		   notation -2 2 -2 2
 		   #
  	           ticksize 0 0 -1 0
@@ -2454,7 +2454,7 @@ core2   0       #
 		   ctype red ltype 0 vertline risco
 		   #
 		   limits $rinner $router -0.1 1.0
-		   #limits $rinner $router -2 1.0
+		   #limits $rinner $router -5 1.0
 		   ticksize 0 0 0 0
 		   ctype default window 2 2 2 1 box 1 2 0 0
 		   #
@@ -2484,7 +2484,7 @@ core2   0       #
 		   #
 		   if($doprint) {\
 		          device X11
-		          !scp $fname metric:research/papers/bz/
+		          #!scp $fname metric:research/papers/bz/
 		       }
                    #
 cinflowB1   0 #

@@ -193,29 +193,14 @@ gammieparavg  0 #
 		ctype red pl 0 newr grat2 0010
 		#
 		#
-getgammie 1     # getgammie 1.09
-		#
-                # get gammie solution
-                define magpar ($1)
-                define bhspin (a)
-                define numpoints (1024)
-                !inf_const $magpar $bhspin $numpoints > ./gammiesol1.txt
-                !tail -1 gammiesol1.txt > gammiesol2.txt
-                da gammiesol2.txt
-                lines 1 1
-                read {gfl 3 gfe 4}
-                print {gfl tdlinfisco gfe tdeinfisco}
-                set tdfevsr=tdeinfisco+newr*0
-                set tdflvsr=tdlinfisco+newr*0
-                #
-                define gammieFL (gfl)
-                define gammieFE (gfe)
-                define size (dimen(newr))
-                !inf_solv $magpar $bhspin $gammieFL $gammieFE $size > gammiesolve1.txt
-                da gammiesolve1.txt
-                lines 1 10000
-                read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-                    {gr guu0 guu1 guu2 guu3 gl grho gE gfdd02 gfdd12 gMaf ged gB1 gB3}
-                #
-                # gfdd02 should be constant
-                #
+		  # jre bzplots.m
+                   #
+                  #
+                  # for Ldot/Mdot terms
+		  set Dphi=pi/2
+                  #
+		  stresscalc 1
+		  #4panelinflowdoall 0.05 _Rin (6) 0.5 1 0
+                  4panelinflowdoall 0.05 _Rin (6) 0.5 0 0
+
+4panelinflowpre2
