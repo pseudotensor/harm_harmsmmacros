@@ -1588,10 +1588,10 @@ setupplc 6      #  setup contour plotting of post-Matlab EOSs
 		#
 		set i=0,$nx*$ny*$nz-1,1
 		#
-		set ti = i%$nx
-		set tj = int(i/$nx)
-                set tk=INT(i/($nx*$ny))
-                set tl=INT(i/($nx*$ny*$nz))
+		set ti = INT(i%$nx)
+		set tj = INT((i%($nx*$ny))/$nx)
+                set tk = INT((i%($nx*$ny*$nz))/($nx*$ny))
+                set tl = INT((i/($nx*$ny*$nz)))
 		#set tk=(i+1)/(i+1)-1
 		#
 		set tx1=$4

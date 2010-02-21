@@ -184,6 +184,9 @@ rdjoneos 1      # E.g.:
 		  }
 		 # end whichdatatype==4
                   #
+                  #
+                  postmatlabsetupplc
+                  #
 		#		#
 rdjoneosnoextra 1      # E.g.:
 		# rdjoneosnoextra ''
@@ -234,7 +237,10 @@ rdjoneosnoextra 1      # E.g.:
 		    pofchi dpofchidrho0 dpofchidchi \
 		    tkofU tkofP tkofCHI tkofS \
 		  }
-		#		#
+		#
+		postmatlabsetupplc
+                #
+                #
 rdjoneospureextra 1      # E.g.:
 		# rdjoneospureextra ''
 		#
@@ -324,6 +330,7 @@ rdjoneospureextra 1      # E.g.:
 		#
 		#
 		#
+                postmatlabsetupplc
 		#
 		# go back
 		cd /data/jon/testfulleostable8/
@@ -912,7 +919,11 @@ checkeossimplenew 0
 		#
 		rdjoneos ''
 		rdjondegeneos ''
+                #
+                postmatlabsetupplc
+                #
 		#
+postmatlabsetupplc 0 #               
 		#set myuse=(sm==115 && sn==105 && so==0 && sp==0) ? 1 : 0
 		#set myrhob=rhob if(myuse)
 		#set myie=utotdiff if(myuse)

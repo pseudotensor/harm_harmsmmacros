@@ -137,6 +137,18 @@ jrdpallgrb 1    # for latest code (3d, with metric and EOS stuff)
                 #
                 jrdpdebug $filenamedebugdump
 		#
+                #
+jrdpallgrbvst 0 #               
+                # load time-dependent stuff
+                #
+                jrdpgrbener
+                #
+                flenergrb flener.out
+                #
+                debugener
+                #
+                #
+                #
 		#
 jrdpcf2d 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
 		jrdpheader2d $1
@@ -206,6 +218,45 @@ jrdpcf3du 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
                   gammienew
                 }
  		#
+jrdpcf3dudipole 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
+		jrdpheader3dold dumps/$1
+		da dumps/$1
+		lines 2 10000000
+		#
+                     read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+                     {ti tj tk x1 x2 x3 r h ph rho u v1 v2 v3 \
+		      B1 B2 B3 \
+		      p cs2 Sden \
+		      U0 U1 U2 U3 U4 U5 U6 U7 \
+		      divb \
+		      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
+		      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
+                      v1m v1p v2m v2p v3m v3p gdet \
+                      ju0 ju1 ju2 ju3  \
+                      jd0 jd1 jd2 jd3  \
+                      fu0 fu1 fu2 fu3 fu4 fu5 \
+                      fd0 fd1 fd2 fd3 fd4 fd5 }
+                     #
+                     set tx1=x1
+                     set tx2=x2
+                     set tx3=x3
+                     gsetup
+                     if($DOGCALC) { gcalc }
+                  # gcalc
+                  abscompute
+                  #
+                  gammienew
+ 		#
+jrdpdissdipole 1	# for dissdump????
+		jrdpheader3dold dumps/$1
+		da dumps/$1
+		lines 2 10000000
+		#
+                     read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+                     {diss0 diss1 diss2 diss3 diss4 diss5 diss6 diss7 diss8 diss9 \
+                     diss10 diss11 diss12 diss13 diss14 diss15 diss16 diss17 dissfail }
+                     #
+ 		#
                 #
 jrdpcf3duentropy 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
 		jrdpheader3d dumps/$1
@@ -246,6 +297,41 @@ jrdpcf3duentropy 1	# for reading file with current (jcon/jcov) and faraday (fcon
                 }
  		#
                 #
+jrdppenna 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
+		jrdpheader3dold dumps/$1
+		da dumps/$1
+		lines 2 10000000
+		#
+                # 9+8+3+8+1+16+6+1+8+12 = 72
+                #
+                read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+                     {ti tj tk x1 x2 x3 r h ph \
+                      rho u v1 v2 v3 \
+		      B1 B2 B3 \
+		      p cs2 Sden \
+		      U0 U1 U2 U3 U4 U5 U6 U7 \
+		      divb \
+		      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
+		      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
+                      v1m v1p v2m v2p v3m v3p \
+                      gdet \
+                      ju0 ju1 ju2 ju3  \
+                      jd0 jd1 jd2 jd3  \
+                      fu0 fu1 fu2 fu3 fu4 fu5 \
+                      fd0 fd1 fd2 fd3 fd4 fd5 }
+                     #
+                     set tx1=x1
+                     set tx2=x2
+                     set tx3=x3
+                     gsetup
+                     if($DOGCALC) { gcalc }
+                  # gcalc
+                  abscompute
+                  #
+                  gammienew
+                #
+ 		#
+                #
 jrdpcf3dugrb 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
 		jrdpheader3d dumps/$1
 		da dumps/$1
@@ -259,9 +345,12 @@ jrdpcf3dugrb 1	# for reading file with current (jcon/jcov) and faraday (fcon,fco
                  print {totalcolumns _numcolumns}
                 }\
                 else{\
+                     #
+                     #
+                     # note that used to have "yl ynu" but now have "ye ynu"
                      read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
                      {ti tj tk x1 x2 x3 r h ph \
-                      rho u v1 v2 v3 B1 B2 B3 yl ynu \
+                      rho u v1 v2 v3 B1 B2 B3 ye ynu \
 		      p cs2 Sden \
 		      U0 U1 U2 U3 U4 U5 U6 U7 U8 U9 U10 \
 		      divb \
@@ -1018,11 +1107,11 @@ jrdpeos	1	#
                                      }
                 #
                 if(readdata){\
-		 read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		 read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {YE YNU0 YNU0OLD YNUOLD Height1 Height2 Height3 Height4 UNU PNU SNU PGAS IG JG KG \
 		      temp \
 		      qtautnueohcm      qtauanueohcm      qtautnuebarohcm      qtauanuebarohcm      qtautmuohcm      qtauamuohcm      ntautnueohcm      ntauanueohcm      ntautnuebarohcm      ntauanuebarohcm      ntautmuohcm      ntauamuohcm      unue0      unuebar0      unumu0      nnue0      nnuebar0      nnumu0      lambdatot      lambdaintot      tauphotonohcm      tauphotonabsohcm      nnueth0      nnuebarth0 \
-                      qphoton qm graddotrhouyl tthermaltot tdifftot rho_nu p_nu s_nu ynulocal Ynuthermal enu enue enuebar \
+                      qphoton qm graddotrhouyl tthermaltot tdifftot rho_nu p_nu s_nu ynulocal Ynuthermal Ynuthermal0 enu enue enuebar \
                     }
                 }
 	        #
@@ -1198,6 +1287,9 @@ jrdp3duentropyold	1	#
 		#
 		gammienew
  		#
+                #
+                #
+                #
 jrdp3dugrb	1	#
 		jrdpheader3d dumps/$1
 		da dumps/$1
@@ -2869,14 +2961,14 @@ fieldcollcalc 5   # fieldcollcalc aphi newh rat pdh ratavg
 getfline     0  #
 		!scp metric:research/grmhdcodes/newgrmhdmpi/smcalc metric:research/grmhdcodes/newgrmhdmpi/iinterp ~/sm/
 		#
-fieldcalcavg 3     #start end aphitavg          # time average
+fieldcalcavg 3  #start end aphitavg          # time average
 		#
 		avgtimeg2 'dump' $1 $2
 		define print_noheader (1)
-                print "dumps/forfldump" {_t _n1 _n2 _startx1 _startx2 _dx1 _dx2 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
-		print + "dumps/forfldump" {ti tj btimex btimey btimez gdet}
+                print "dumps/forfldump" {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
+		print + "dumps/forfldump" {ti tj tk btimex btimey btimez gdet}
                 # then run:
-                !$!HOME/bin/smcalc 1 1 0 $nx $ny ./dumps/forfldump ./dumps/tavgfl
+                !$!HOME/bin/smcalc 1 1 0 $nx $ny $nz ./dumps/forfldump ./dumps/tavgfl
 		#
 		da ./dumps/tavgfl
 		lines 2 100000000
@@ -2889,11 +2981,11 @@ fieldcalc 2	#dumpnum aphi
 		# computes A_\phi
 		#
 		define print_noheader (1)
-                print "dumps/forfldump" '%21.15g %d %d %21.15g %21.15g %21.15g %21.15g %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %d\n' \
-		    {_t _n1 _n2 _startx1 _startx2 _dx1 _dx2 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
-                print + "dumps/forfldump" '%d %d %21.15g %21.15g %21.15g %21.15g\n' {ti tj B1 B2 B3 gdet}
-		#!$!HOME/bin/smcalc 1 1 0 $nx $ny ./dumps/forfldump ./dumps/fl$1
-                !~/sm/smcalc 1 1 0 $nx $ny ./dumps/forfldump ./dumps/fl$1
+                print "dumps/forfldump" '%21.15g %d %d %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %d\n' \
+		    {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
+                print + "dumps/forfldump" '%d %d %d %21.15g %21.15g %21.15g %21.15g\n' {ti tj tk B1 B2 B3 gdet}
+		#!$!HOME/bin/smcalc 1 1 0 $nx $ny $nz ./dumps/forfldump ./dumps/fl$1
+                !~/bin/smcalc 1 1 0 $nx $ny $nz ./dumps/forfldump ./dumps/fl$1
 		da ./dumps/fl$1
 		lines 2 100000000		
 		read {aphitemp 1}
@@ -2905,16 +2997,16 @@ ficalc 0	#
 		# computes PPM reduction parameter
 		#
 		define print_noheader (1)
-                print "dumps/forficalcdump" '%21.15g %d %d %21.15g %21.15g %21.15g %21.15g %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %d\n' \
-		    {_t _n1 _n2 _startx1 _startx2 _dx1 _dx2 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
+                print "dumps/forficalcdump" '%21.15g %d %d %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %d\n' \
+                {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
                 #
-                print + "dumps/forficalcdump" '%d %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
-                    {ti tj rho u v1 v2 v3 B1 B2 B3 ptot gdet}
+                print + "dumps/forficalcdump" '%d %d %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
+                    {ti tj tk rho u v1 v2 v3 B1 B2 B3 ptot gdet}
                 #
-		!$!HOME/bin/smcalc 10 4 0 $nx $ny ./dumps/forficalcdump ./dumps/ficalc
+		!$!HOME/bin/smcalc 10 4 0 $nx $ny $nz ./dumps/forficalcdump ./dumps/ficalc
 		da ./dumps/ficalc
 		lines 2 100000000		
-		read '%g %g' {ficalc1 ficalc2}
+		read '%g %g %g' {ficalc1 ficalc2 ficalc3}
 		#
 		#
 fieldtcalc 2	#dumpnum aphi
@@ -2923,13 +3015,15 @@ fieldtcalc 2	#dumpnum aphi
 		faraday
 		#
 		define print_noheader (1)
-                print "dumps/forfldump" '%21.15g %d %d %21.15g %21.15g %21.15g %21.15g %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %d\n' \
-		    {_t _n1 _n2 _startx1 _startx2 _dx1 _dx2 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
+                print "dumps/forfldump" '%21.15g %d %d %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %d\n' \
+                {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
+                #
 		    set B1omegaf2=B1*omegaf2
 		    set B2omegaf2=B2*omegaf2
 		    set B3omegaf2=B3*omegaf2
-                print + "dumps/forfldump" '%d %d %21.15g %21.15g %21.15g %21.15g\n' {ti tj B1omegaf2 B2omegaf2 B3omegaf2 gdet}
-		!$!HOME/bin/smcalc 1 1 0 $nx $ny ./dumps/forfldump ./dumps/fl$1
+		    #
+                print + "dumps/forfldump" '%d %d %d %21.15g %21.15g %21.15g %21.15g\n' {ti tj tk B1omegaf2 B2omegaf2 B3omegaf2 gdet}
+		!$!HOME/bin/smcalc 1 1 0 $nx $ny $nz ./dumps/forfldump ./dumps/fl$1
 		da ./dumps/fl$1
 		lines 2 100000000		
 		read {aphitemp 1}
@@ -2948,10 +3042,11 @@ fieldcalci 4	#dumpnum aphi $nx $ny
 		jrdp1ci2 igdet igdet
 		#
 		define print_noheader (1)
-                print "dumps/forfldump" '%21.15g %d %d %21.15g %21.15g %21.15g %21.15g %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %d\n' \
-		    {_t _n1 _n2 _startx1 _startx2 _dx1 _dx2 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
-                print + "dumps/forfldump" '%d %d %21.15g %21.15g %21.15g %21.15g\n' {ti tj iB1 iB2 iB3 igdet}
-		!$!HOME/bin/smcalc 1 1 0 $nx $ny ./dumps/forfldump ./dumps/fl$1
+                print "dumps/forfldump" '%21.15g %d %d %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %d\n' \
+                {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
+                #
+                print + "dumps/forfldump" '%d %d %d %21.15g %21.15g %21.15g %21.15g\n' {ti tj tk iB1 iB2 iB3 igdet}
+		!$!HOME/bin/smcalc 1 1 0 $nx $ny $nz ./dumps/forfldump ./dumps/fl$1
 		da ./dumps/fl$1
 		lines 2 100000000		
 		read {aphitemp 1}
@@ -2963,16 +3058,17 @@ dercalc 3	# dercalc 0 it itd
 		#
 		define print_noheader (1)
 		# 16 terms
-                print "dumps/forder" '%21.15g %d %d %21.15g %21.15g %21.15g %21.15g %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %d\n' \
-		    {_t _n1 _n2 _startx1 _startx2 _dx1 _dx2 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
+                print "dumps/forder" '%21.15g %d %d %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %d\n' \
+		    {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
 		set sendtemp=$2
-                print + "dumps/forder" '%d %d %21.15g\n' {ti tj sendtemp}
-		!$!HOME/bin/smcalc 1 2 $1 $nx $ny ./dumps/forder ./dumps/$3
+                print + "dumps/forder" '%d %d %d %21.15g\n' {ti tj tk sendtemp}
+		!$!HOME/bin/smcalc 1 2 $1 $nx $ny $nz ./dumps/forder ./dumps/$3
 		da ./dumps/$3
 		lines 2 100000000		
-		read {dertempx 1 dertempy 2}
+		read {dertempx 1 dertempy 2 dertempz 3}
 		set $3x=dertempx
 		set $3y=dertempy
+		set $3z=dertempz
 		#
 plcergo 17      # as with plc
 		if($?3 == 1) { define tobebits ($3) } else { define tobebits (0x0) }
@@ -3280,7 +3376,9 @@ agpl  18	# agpl 'dump' r fun 000 <0 0 0 0>
 		  #
 		  # NEW
                   #jrdpall $ii
-                  jrdp3du $filename
+                  #jrdp3du $filename
+                  define arg (h2)
+                  jrdpallgrb $arg
 		  #
 		  # OLD
 		  #jrdp3duold $filename
@@ -3290,7 +3388,7 @@ agpl  18	# agpl 'dump' r fun 000 <0 0 0 0>
                   #
 		  #set dphidt = c000*gv300 + c100*gv301 + c200*gv302 + c300*gv303
 		  #
-                  jrdpdebug $filenamedebug
+                  #jrdpdebug $filenamedebug
                   #faraday
 		  ctype default
 		  #set hor=sqrt(cs2)/(r*omega3)
@@ -3319,13 +3417,13 @@ agpl  18	# agpl 'dump' r fun 000 <0 0 0 0>
                   #}
 		  #
 		  #
-		  lweight 5
-		  points $2 $3
-		  lweight 3
+		  #lweight 5
+		  #points $2 $3
+		  #lweight 3
 		  #
                   #
-                  ctype red
-                  plo 0 $2 fail0
+                  # ctype red
+                  #plo 0 $2 fail0
                   #
 		  #set god=$3
 		  #set myfit=2.0*god[0]*(r/r[0])**(-5/4)

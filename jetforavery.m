@@ -2,14 +2,16 @@
 		#
 		#
 		#
-getdump 0       #
+getdump 0       # jre jetforavery.m
 		#
 		!head -2 dumps/dump0050 | tail -1 | wc
                 #
 		jrdpheader3dold dumps/dump0055
-		jrdpcf3du dump0055
+		jrdpcf3dudipole dump0055
+                jrdpdissdipole dissdump0055
 		#
 		grid3d gdump
+		jrdpheader3dold dumps/dump0055
 		#
 getmanydumps 0  #
 		set startanim=0
@@ -24,6 +26,9 @@ getmanydumps 0  #
 		  jrdpheader3dold dumps/$filename
 		  #
 		  processdump
+                  #
+		  computenumberdensity
+                  #
 		  outputdump $filename _t
 		  #
 		}
@@ -122,7 +127,81 @@ processdump 0   #
 		set bd2bl=bd2ks
 		set bd3bl=bd3ks
 		#
-outputdump 2    #
+		#
+		#
+computenumberdensity 0 #
+		#
+		# erg K^{-1} g^{-1}
+		set kb=1.3807*10**(-16)
+		set mp=1.67262E-24
+		set me=9.11E-28
+		set C=2.99792458E10
+		set hbar=1.0545716293001394e-27
+		set mion=mp
+		set mb=1.660540186674939e-24
+		#
+		#set thetaion=p/(rho)
+		#set Tion=thetaion*(mion*C**2/kb)
+		#set Tele=me/mp*Tion
+		#
+		# just p=(\gamma-1)u
+		#set ndenrad = (1.80309)*(u/5.6822)/(kb*T)
+		# P = \rho_b (k_b/m_b) T
+		#
+		set Tpart = p/rho*mb/kb
+		set ndenpart=(rho/mb*me)
+		#
+		set Trad = (u*(2*pi*hbar**3*C**3/(kb**4*5.6822)))**(1/4)
+		set ndenrad = (kb**3*Trad**3)/(2*pi**2*hbar**3*C**3*1.80309)
+		#
+		set cut=0.5/(1 + exp(rho/(bsq/2)))
+                #
+                #
+                set lptot=lg(ptot)
+		dercalc 0 lptot dlptot
+		#dercalc 0 p dp
+                #dercalc 0 bsq dbsq
+		set mydptot=(dlptotx*$dx1+dlptoty*$dx2+dlptotz*$dx3)/3.0
+		#
+		set guu1=gdet*uu1
+		set guu2=gdet*uu2
+                set guu3=gdet*uu3
+		dercalc 0 guu1 dguu1
+		dercalc 0 guu2 dguu2
+		dercalc 0 guu3 dguu3
+		set divv=dguu1x+dguu2y+dguu3z
+		set shockind1=(divv<0) ? 1 : 0
+		#
+		set gammamin=1
+		set coefmax=1.0
+		#set coefjon=0.5*abs(mydbsq/bsq + (dpx+dpy+dpz)/p)
+		#set coefjon=0.5*abs(mydptot/ptot)
+		set coefjon=abs(mydptot)
+                #*(3*p-2)/(2*p-1)
+                set thetaion=p/rho
+		set coefjon2=coefjon*thetaion*mion/me/gammamin
+		set coef=(shockind1<0.5) ? 0 : coefjon2
+		#set coef=coefjon2
+		#set coef=(coef>coefmax) ? coefmax : coef
+		#
+                #
+                set truediss=(diss9>0 ? diss9 : 0)
+		#
+		####### versions of number density of non-thermal electrons
+		set nden1 = cut*u
+		set nden2 = ndenpart*cut
+		set nden3 = ndenrad*cut
+                set nden4 = rho*coef
+                set nden5 = u*coef
+                set nden6 = truediss
+                set nden7 = truediss*cut
+		#
+		#
+		#
+		#
+		#
+outputdump 2    # outputdump $filename _t
+		#
 		##############
 		# Print out Avery's desired quantities
 		#
@@ -130,7 +209,16 @@ outputdump 2    #
 		define mydump $1
 		define mytime ($2)
 		#
-		print averydata_dipole_$!!mydump.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' {r h ph rho u uu0bl uu1bl uu2bl uu3bl bu0bl bu1bl bu2bl bu3bl}
+                #*sqrt(4.0*pi)
+                # Obtain field strength in Gaussian units
+		set bu0blG=bu0bl*sqrt(4.0*pi)
+		set bu1blG=bu1bl*sqrt(4.0*pi)
+		set bu2blG=bu2bl*sqrt(4.0*pi)
+		set bu3blG=bu3bl*sqrt(4.0*pi)
+		#
+		#
+                #
+		print averydata_dipole_$!!mydump.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' {r h ph rho u nden1 nden2 nden3 nden4 nden5 nden6 nden7 uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG}
 		#
                 #
 		#
