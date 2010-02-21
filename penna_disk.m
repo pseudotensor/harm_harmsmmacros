@@ -118,31 +118,55 @@ gammieparavg  0 #
 		#define myangle 0.1
 		define myangle (pi/4)
 		#define myangle (pi/4)
+                #
+                # only do below if using single dump
+                if(0){\
+                      set absB1=abs(B1)
+                      set auu1=abs(uu1)
+                      set absE2=abs(B3*uu1/uu0-uu3/uu0*B1)
+                      }
+                #
 		#
 		set ftp=ABS(gdet*absB1)
+                set frp=ABS(gdet*absE2)
 		set fm=abs(gdet*rho*auu1)
 		gcalc2 3 2 $myangle fm fmvsr
 		gcalc2 3 2 $myangle ftp ftpvsr
+		gcalc2 3 2 $myangle frp frpvsr
 		#
 		# get local true parameter
 		set singlehorvalue=fmvsr[0]
 		set grat1=sqrt(2)*(ftp/fm)*sqrt(singlehorvalue)
+		set grat1b=sqrt(2)*(frp/fm)*sqrt(singlehorvalue)
 		gcalc2 3 2 $myangle grat1 grat1vsr
+		gcalc2 3 2 $myangle grat1b grat1bvsr
 		#
 		# get local old parameter
 		set grat1old=(ftp/sqrt(fm))
+		set grat1bold=(frp/sqrt(fm))
 		gcalc2 3 2 $myangle grat1old grat1oldvsr
+		gcalc2 3 2 $myangle grat1bold grat1boldvsr
 		#
 		# get old global ratio
 		set grat2old=ftpvsr/sqrt(abs(-fmvsr))
+		set grat2bold=frpvsr/sqrt(abs(-fmvsr))
 		# get true global ratio
 		set grat2=sqrt(2)*(ftpvsr/fmvsr)*sqrt(singlehorvalue)
+		set grat2b=sqrt(2)*(frpvsr/fmvsr)*sqrt(singlehorvalue)
 		#
 		#
 		ctype default pl 0 newr grat1vsr 1001 Rin Rout 0 10
 		ctype blue pl 0 newr grat1oldvsr 1011 Rin Rout 0 10
 		ctype cyan pl 0 newr grat2 1011 Rin Rout 0 10
 		ctype red pl 0 newr grat2old 1011 Rin Rout 0 10
+		#
+		ctype red vertline (LG(risco))
+                #
+                # \Omega_F related thing:
+		ctype default pl 0 newr grat1bvsr 1001 Rin Rout 0 0.1
+		ctype blue pl 0 newr grat1boldvsr 1011 Rin Rout 0 0.1
+		ctype cyan pl 0 newr grat2b 1011 Rin Rout 0 0.1
+		ctype red pl 0 newr grat2bold 1011 Rin Rout 0 0.1
 		#
 		ctype red vertline (LG(risco))
                 #
@@ -169,3 +193,29 @@ gammieparavg  0 #
 		ctype red pl 0 newr grat2 0010
 		#
 		#
+getgammie 1     # getgammie 1.09
+		#
+                # get gammie solution
+                define magpar ($1)
+                define bhspin (a)
+                define numpoints (1024)
+                !inf_const $magpar $bhspin $numpoints > ./gammiesol1.txt
+                !tail -1 gammiesol1.txt > gammiesol2.txt
+                da gammiesol2.txt
+                lines 1 1
+                read {gfl 3 gfe 4}
+                print {gfl tdlinfisco gfe tdeinfisco}
+                set tdfevsr=tdeinfisco+newr*0
+                set tdflvsr=tdlinfisco+newr*0
+                #
+                define gammieFL (gfl)
+                define gammieFE (gfe)
+                define size (dimen(newr))
+                !inf_solv $magpar $bhspin $gammieFL $gammieFE $size > gammiesolve1.txt
+                da gammiesolve1.txt
+                lines 1 10000
+                read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+                    {gr guu0 guu1 guu2 guu3 gl grho gE gfdd02 gfdd12 gMaf ged gB1 gB3}
+                #
+                # gfdd02 should be constant
+                #
