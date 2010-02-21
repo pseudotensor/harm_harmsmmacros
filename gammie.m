@@ -666,13 +666,15 @@ flener2     0   #
 flener 1	# flener flener.out
 		da $1 #
 		lines 1 10000000
-		# 426 total = 2+8*7*(4+2)+7*8+4*8
+		# 418 total
+                set numcolumns = 2+8*7*(4+2)+7*8+3*8
+                print {numcolumns}
 		# t,nstep: 2
 		# pdot: 4 DIRECTIONS, 8=NPR primary terms, 7=flux secondary parts to each primary term
-		# floor: 8=NPR primary terms, 7 source parts to eac
-		# src: 4 parts of 8=NPR floors (4*8)
+		# floor: 8=NPR primary terms, 7 parts to each
+		# src: 3 parts of 8=NPR floors (3*8)
 		# jet2special: 2 DIRECTIONS, 8=NPR primary terms, 7=flux secondary parts to each primary term
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {  t realnstep \
 		       u0dot0part0 u0dot0part1 u0dot0part2 u0dot0part3 u0dot0part4 u0dot0part5 u0dot0part6 \
 		       u1dot0part0 u1dot0part1 u1dot0part2 u1dot0part3 u1dot0part4 u1dot0part5 u1dot0part6 \
@@ -719,14 +721,14 @@ flener 1	# flener flener.out
 		       u6flpart0 u6flpart1 u6flpart2 u6flpart3 \
 		       u7flpart0 u7flpart1 u7flpart2 u7flpart3 \
 		    \
-  		       u0srcpart0 u0srcpart1 u0srcpart2 u0srcpart3 u0srcpart4 u0srcpart5 u0srcpart6 \
-		       u1srcpart0 u1srcpart1 u1srcpart2 u1srcpart3 u1srcpart4 u1srcpart5 u1srcpart6 \
-		       u2srcpart0 u2srcpart1 u2srcpart2 u2srcpart3 u2srcpart4 u2srcpart5 u2srcpart6 \
-		       u3srcpart0 u3srcpart1 u3srcpart2 u3srcpart3 u3srcpart4 u3srcpart5 u3srcpart6 \
-		       u4srcpart0 u4srcpart1 u4srcpart2 u4srcpart3 u4srcpart4 u4srcpart5 u4srcpart6 \
-		       u5srcpart0 u5srcpart1 u5srcpart2 u5srcpart3 u5srcpart4 u5srcpart5 u5srcpart6 \
-		       u6srcpart0 u6srcpart1 u6srcpart2 u6srcpart3 u6srcpart4 u6srcpart5 u6srcpart6 \
-		       u7srcpart0 u7srcpart1 u7srcpart2 u7srcpart3 u7srcpart4 u7srcpart5 u7srcpart6 \
+  		       u0srcpart0 u0srcpart1 u0srcpart2 u0srcpart3 \
+		       u1srcpart0 u1srcpart1 u1srcpart2 u1srcpart3 \
+		       u2srcpart0 u2srcpart1 u2srcpart2 u2srcpart3 \
+		       u3srcpart0 u3srcpart1 u3srcpart2 u3srcpart3 \
+		       u4srcpart0 u4srcpart1 u4srcpart2 u4srcpart3 \
+		       u5srcpart0 u5srcpart1 u5srcpart2 u5srcpart3 \
+		       u6srcpart0 u6srcpart1 u6srcpart2 u6srcpart3 \
+		       u7srcpart0 u7srcpart1 u7srcpart2 u7srcpart3 \
 		    \
 		       u0dotj0part0 u0dotj0part1 u0dotj0part2 u0dotj0part3 u0dotj0part4 u0dotj0part5 u0dotj0part6 \
 		       u1dotj0part0 u1dotj0part1 u1dotj0part2 u1dotj0part3 u1dotj0part4 u1dotj0part5 u1dotj0part6 \
@@ -752,15 +754,22 @@ flener 1	# flener flener.out
 		    flenerdefs3
 		    #
 		#
-flenerjet 1	# flenerjet flenerjet0.out
+flenergrb 1	# flener flener.out
 		da $1 #
 		lines 1 10000000
-		# 314 total = 2+8*7*4+7*8+4*8
-		# 4 DIRECTIONS, 8=NPR primary terms, 7=flux secondary parts to each primary term
-		# 8=NPR primary terms, 7 source parts to eac
-		# 4 parts of 8=NPR floors (4*8)
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-		    {  t realnstep \
+                #
+                # 783
+                set NPR=11
+                set numcolumns = 2 + NPR*7*(6) + 12*NPR + 3*NPR + NPR*7*(2)
+                print {numcolumns}
+                #
+		# t,nstep: 2
+		# pdot: 6 DIRECTIONS, 11=NPR primary terms, 7=flux secondary parts to each primary term
+		# floor: 11=NPR primary terms, 12 types each
+		# src: 3 parts of 11=NPR floors (3*8)
+		# jet2special: 2 DIRECTIONS, 11=NPR primary terms, 7=flux secondary parts to each primary term
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		 { t realnstep \
 		       u0dot0part0 u0dot0part1 u0dot0part2 u0dot0part3 u0dot0part4 u0dot0part5 u0dot0part6 \
 		       u1dot0part0 u1dot0part1 u1dot0part2 u1dot0part3 u1dot0part4 u1dot0part5 u1dot0part6 \
 		       u2dot0part0 u2dot0part1 u2dot0part2 u2dot0part3 u2dot0part4 u2dot0part5 u2dot0part6 \
@@ -769,6 +778,9 @@ flenerjet 1	# flenerjet flenerjet0.out
 		       u5dot0part0 u5dot0part1 u5dot0part2 u5dot0part3 u5dot0part4 u5dot0part5 u5dot0part6 \
 		       u6dot0part0 u6dot0part1 u6dot0part2 u6dot0part3 u6dot0part4 u6dot0part5 u6dot0part6 \
 		       u7dot0part0 u7dot0part1 u7dot0part2 u7dot0part3 u7dot0part4 u7dot0part5 u7dot0part6 \
+		       u8dot0part0 u8dot0part1 u8dot0part2 u8dot0part3 u8dot0part4 u8dot0part5 u8dot0part6 \
+		       u9dot0part0 u9dot0part1 u9dot0part2 u9dot0part3 u9dot0part4 u9dot0part5 u9dot0part6 \
+		       u10dot0part0 u10dot0part1 u10dot0part2 u10dot0part3 u10dot0part4 u10dot0part5 u10dot0part6 \
 		    \
   		       u0dot1part0 u0dot1part1 u0dot1part2 u0dot1part3 u0dot1part4 u0dot1part5 u0dot1part6 \
 		       u1dot1part0 u1dot1part1 u1dot1part2 u1dot1part3 u1dot1part4 u1dot1part5 u1dot1part6 \
@@ -778,6 +790,9 @@ flenerjet 1	# flenerjet flenerjet0.out
 		       u5dot1part0 u5dot1part1 u5dot1part2 u5dot1part3 u5dot1part4 u5dot1part5 u5dot1part6 \
 		       u6dot1part0 u6dot1part1 u6dot1part2 u6dot1part3 u6dot1part4 u6dot1part5 u6dot1part6 \
 		       u7dot1part0 u7dot1part1 u7dot1part2 u7dot1part3 u7dot1part4 u7dot1part5 u7dot1part6 \
+		       u8dot1part0 u8dot1part1 u8dot1part2 u8dot1part3 u8dot1part4 u8dot1part5 u8dot1part6 \
+		       u9dot1part0 u9dot1part1 u9dot1part2 u9dot1part3 u9dot1part4 u9dot1part5 u9dot1part6 \
+		       u10dot1part0 u10dot1part1 u10dot1part2 u10dot1part3 u10dot1part4 u10dot1part5 u10dot1part6 \
 		    \
   		       u0dot2part0 u0dot2part1 u0dot2part2 u0dot2part3 u0dot2part4 u0dot2part5 u0dot2part6 \
 		       u1dot2part0 u1dot2part1 u1dot2part2 u1dot2part3 u1dot2part4 u1dot2part5 u1dot2part6 \
@@ -787,6 +802,9 @@ flenerjet 1	# flenerjet flenerjet0.out
 		       u5dot2part0 u5dot2part1 u5dot2part2 u5dot2part3 u5dot2part4 u5dot2part5 u5dot2part6 \
 		       u6dot2part0 u6dot2part1 u6dot2part2 u6dot2part3 u6dot2part4 u6dot2part5 u6dot2part6 \
 		       u7dot2part0 u7dot2part1 u7dot2part2 u7dot2part3 u7dot2part4 u7dot2part5 u7dot2part6 \
+		       u8dot2part0 u8dot2part1 u8dot2part2 u8dot2part3 u8dot2part4 u8dot2part5 u8dot2part6 \
+		       u9dot2part0 u9dot2part1 u9dot2part2 u9dot2part3 u9dot2part4 u9dot2part5 u9dot2part6 \
+		       u10dot2part0 u10dot2part1 u10dot2part2 u10dot2part3 u10dot2part4 u10dot2part5 u10dot2part6 \
 		    \
   		       u0dot3part0 u0dot3part1 u0dot3part2 u0dot3part3 u0dot3part4 u0dot3part5 u0dot3part6 \
 		       u1dot3part0 u1dot3part1 u1dot3part2 u1dot3part3 u1dot3part4 u1dot3part5 u1dot3part6 \
@@ -796,30 +814,88 @@ flenerjet 1	# flenerjet flenerjet0.out
 		       u5dot3part0 u5dot3part1 u5dot3part2 u5dot3part3 u5dot3part4 u5dot3part5 u5dot3part6 \
 		       u6dot3part0 u6dot3part1 u6dot3part2 u6dot3part3 u6dot3part4 u6dot3part5 u6dot3part6 \
 		       u7dot3part0 u7dot3part1 u7dot3part2 u7dot3part3 u7dot3part4 u7dot3part5 u7dot3part6 \
+		       u8dot3part0 u8dot3part1 u8dot3part2 u8dot3part3 u8dot3part4 u8dot3part5 u8dot3part6 \
+		       u9dot3part0 u9dot3part1 u9dot3part2 u9dot3part3 u9dot3part4 u9dot3part5 u9dot3part6 \
+		       u10dot3part0 u10dot3part1 u10dot3part2 u10dot3part3 u10dot3part4 u10dot3part5 u10dot3part6 \
 		    \
-  		       u0flpart0 u0flpart1 u0flpart2 u0flpart3 \
-		       u1flpart0 u1flpart1 u1flpart2 u1flpart3 \
-		       u2flpart0 u2flpart1 u2flpart2 u2flpart3 \
-		       u3flpart0 u3flpart1 u3flpart2 u3flpart3 \
-		       u4flpart0 u4flpart1 u4flpart2 u4flpart3 \
-		       u5flpart0 u5flpart1 u5flpart2 u5flpart3 \
-		       u6flpart0 u6flpart1 u6flpart2 u6flpart3 \
-		       u7flpart0 u7flpart1 u7flpart2 u7flpart3 \
+  		       u0dot4part0 u0dot4part1 u0dot4part2 u0dot4part3 u0dot4part4 u0dot4part5 u0dot4part6 \
+		       u1dot4part0 u1dot4part1 u1dot4part2 u1dot4part3 u1dot4part4 u1dot4part5 u1dot4part6 \
+		       u2dot4part0 u2dot4part1 u2dot4part2 u2dot4part3 u2dot4part4 u2dot4part5 u2dot4part6 \
+		       u3dot4part0 u3dot4part1 u3dot4part2 u3dot4part3 u3dot4part4 u3dot4part5 u3dot4part6 \
+		       u4dot4part0 u4dot4part1 u4dot4part2 u4dot4part3 u4dot4part4 u4dot4part5 u4dot4part6 \
+		       u5dot4part0 u5dot4part1 u5dot4part2 u5dot4part3 u5dot4part4 u5dot4part5 u5dot4part6 \
+		       u6dot4part0 u6dot4part1 u6dot4part2 u6dot4part3 u6dot4part4 u6dot4part5 u6dot4part6 \
+		       u7dot4part0 u7dot4part1 u7dot4part2 u7dot4part3 u7dot4part4 u7dot4part5 u7dot4part6 \
+		       u8dot4part0 u8dot4part1 u8dot4part2 u8dot4part3 u8dot4part4 u8dot4part5 u8dot4part6 \
+		       u9dot4part0 u9dot4part1 u9dot4part2 u9dot4part3 u9dot4part4 u9dot4part5 u9dot4part6 \
+		       u10dot4part0 u10dot4part1 u10dot4part2 u10dot4part3 u10dot4part4 u10dot4part5 u10dot4part6 \
 		    \
-  		       u0srcpart0 u0srcpart1 u0srcpart2 u0srcpart3 u0srcpart4 u0srcpart5 u0srcpart6 \
-		       u1srcpart0 u1srcpart1 u1srcpart2 u1srcpart3 u1srcpart4 u1srcpart5 u1srcpart6 \
-		       u2srcpart0 u2srcpart1 u2srcpart2 u2srcpart3 u2srcpart4 u2srcpart5 u2srcpart6 \
-		       u3srcpart0 u3srcpart1 u3srcpart2 u3srcpart3 u3srcpart4 u3srcpart5 u3srcpart6 \
-		       u4srcpart0 u4srcpart1 u4srcpart2 u4srcpart3 u4srcpart4 u4srcpart5 u4srcpart6 \
-		       u5srcpart0 u5srcpart1 u5srcpart2 u5srcpart3 u5srcpart4 u5srcpart5 u5srcpart6 \
-		       u6srcpart0 u6srcpart1 u6srcpart2 u6srcpart3 u6srcpart4 u6srcpart5 u6srcpart6 \
-		       u7srcpart0 u7srcpart1 u7srcpart2 u7srcpart3 u7srcpart4 u7srcpart5 u7srcpart6 \
+  		       u0dot5part0 u0dot5part1 u0dot5part2 u0dot5part3 u0dot5part4 u0dot5part5 u0dot5part6 \
+		       u1dot5part0 u1dot5part1 u1dot5part2 u1dot5part3 u1dot5part4 u1dot5part5 u1dot5part6 \
+		       u2dot5part0 u2dot5part1 u2dot5part2 u2dot5part3 u2dot5part4 u2dot5part5 u2dot5part6 \
+		       u3dot5part0 u3dot5part1 u3dot5part2 u3dot5part3 u3dot5part4 u3dot5part5 u3dot5part6 \
+		       u4dot5part0 u4dot5part1 u4dot5part2 u4dot5part3 u4dot5part4 u4dot5part5 u4dot5part6 \
+		       u5dot5part0 u5dot5part1 u5dot5part2 u5dot5part3 u5dot5part4 u5dot5part5 u5dot5part6 \
+		       u6dot5part0 u6dot5part1 u6dot5part2 u6dot5part3 u6dot5part4 u6dot5part5 u6dot5part6 \
+		       u7dot5part0 u7dot5part1 u7dot5part2 u7dot5part3 u7dot5part4 u7dot5part5 u7dot5part6 \
+		       u8dot5part0 u8dot5part1 u8dot5part2 u8dot5part3 u8dot5part4 u8dot5part5 u8dot5part6 \
+		       u9dot5part0 u9dot5part1 u9dot5part2 u9dot5part3 u9dot5part4 u9dot5part5 u9dot5part6 \
+		       u10dot5part0 u10dot5part1 u10dot5part2 u10dot5part3 u10dot5part4 u10dot5part5 u10dot5part6 \
+		    \
+  		       u0flpart0 u0flpart1 u0flpart2 u0flpart3 u0flpart4 u0flpart5 u0flpart6 u0flpart7 u0flpart8 u0flpart9 u0flpart10 u0flpart11 \
+  		       u1flpart0 u1flpart1 u1flpart2 u1flpart3 u1flpart4 u1flpart5 u1flpart6 u1flpart7 u1flpart8 u1flpart9 u1flpart10 u1flpart11 \
+  		       u2flpart0 u2flpart1 u2flpart2 u2flpart3 u2flpart4 u2flpart5 u2flpart6 u2flpart7 u2flpart8 u2flpart9 u2flpart10 u2flpart11 \
+  		       u3flpart0 u3flpart1 u3flpart2 u3flpart3 u3flpart4 u3flpart5 u3flpart6 u3flpart7 u3flpart8 u3flpart9 u3flpart10 u3flpart11 \
+  		       u4flpart0 u4flpart1 u4flpart2 u4flpart3 u4flpart4 u4flpart5 u4flpart6 u4flpart7 u4flpart8 u4flpart9 u4flpart10 u4flpart11 \
+  		       u5flpart0 u5flpart1 u5flpart2 u5flpart3 u5flpart4 u5flpart5 u5flpart6 u5flpart7 u5flpart8 u5flpart9 u5flpart10 u5flpart11 \
+  		       u6flpart0 u6flpart1 u6flpart2 u6flpart3 u6flpart4 u6flpart5 u6flpart6 u6flpart7 u6flpart8 u6flpart9 u6flpart10 u6flpart11 \
+  		       u7flpart0 u7flpart1 u7flpart2 u7flpart3 u7flpart4 u7flpart5 u7flpart6 u7flpart7 u7flpart8 u7flpart9 u7flpart10 u7flpart11 \
+  		       u8flpart0 u8flpart1 u8flpart2 u8flpart3 u8flpart4 u8flpart5 u8flpart6 u8flpart7 u8flpart8 u8flpart9 u8flpart10 u8flpart11 \
+  		       u9flpart0 u9flpart1 u9flpart2 u9flpart3 u9flpart4 u9flpart5 u9flpart6 u9flpart7 u9flpart8 u9flpart9 u9flpart10 u9flpart11 \
+  		       u10flpart0 u10flpart1 u10flpart2 u10flpart3 u10flpart4 u10flpart5 u10flpart6 u10flpart7 u10flpart8 u10flpart9 u10flpart10 u10flpart11 \
+		    \
+  		       u0srcpart0 u0srcpart1 u0srcpart2 \
+		       u1srcpart0 u1srcpart1 u1srcpart2 \
+		       u2srcpart0 u2srcpart1 u2srcpart2 \
+		       u3srcpart0 u3srcpart1 u3srcpart2 \
+		       u4srcpart0 u4srcpart1 u4srcpart2 \
+		       u5srcpart0 u5srcpart1 u5srcpart2 \
+		       u6srcpart0 u6srcpart1 u6srcpart2 \
+		       u7srcpart0 u7srcpart1 u7srcpart2 \
+		       u8srcpart0 u8srcpart1 u8srcpart2 \
+		       u9srcpart0 u9srcpart1 u9srcpart2 \
+		       u10srcpart0 u10srcpart1 u10srcpart2 \
+		    \
+		       u0dotj0part0 u0dotj0part1 u0dotj0part2 u0dotj0part3 u0dotj0part4 u0dotj0part5 u0dotj0part6 \
+		       u1dotj0part0 u1dotj0part1 u1dotj0part2 u1dotj0part3 u1dotj0part4 u1dotj0part5 u1dotj0part6 \
+		       u2dotj0part0 u2dotj0part1 u2dotj0part2 u2dotj0part3 u2dotj0part4 u2dotj0part5 u2dotj0part6 \
+		       u3dotj0part0 u3dotj0part1 u3dotj0part2 u3dotj0part3 u3dotj0part4 u3dotj0part5 u3dotj0part6 \
+		       u4dotj0part0 u4dotj0part1 u4dotj0part2 u4dotj0part3 u4dotj0part4 u4dotj0part5 u4dotj0part6 \
+		       u5dotj0part0 u5dotj0part1 u5dotj0part2 u5dotj0part3 u5dotj0part4 u5dotj0part5 u5dotj0part6 \
+		       u6dotj0part0 u6dotj0part1 u6dotj0part2 u6dotj0part3 u6dotj0part4 u6dotj0part5 u6dotj0part6 \
+		       u7dotj0part0 u7dotj0part1 u7dotj0part2 u7dotj0part3 u7dotj0part4 u7dotj0part5 u7dotj0part6 \
+		       u8dotj0part0 u8dotj0part1 u8dotj0part2 u8dotj0part3 u8dotj0part4 u8dotj0part5 u8dotj0part6 \
+		       u9dotj0part0 u9dotj0part1 u9dotj0part2 u9dotj0part3 u9dotj0part4 u9dotj0part5 u9dotj0part6 \
+		       u10dotj0part0 u10dotj0part1 u10dotj0part2 u10dotj0part3 u10dotj0part4 u10dotj0part5 u10dotj0part6 \
+		    \
+  		       u0dotj1part0 u0dotj1part1 u0dotj1part2 u0dotj1part3 u0dotj1part4 u0dotj1part5 u0dotj1part6 \
+		       u1dotj1part0 u1dotj1part1 u1dotj1part2 u1dotj1part3 u1dotj1part4 u1dotj1part5 u1dotj1part6 \
+		       u2dotj1part0 u2dotj1part1 u2dotj1part2 u2dotj1part3 u2dotj1part4 u2dotj1part5 u2dotj1part6 \
+		       u3dotj1part0 u3dotj1part1 u3dotj1part2 u3dotj1part3 u3dotj1part4 u3dotj1part5 u3dotj1part6 \
+		       u4dotj1part0 u4dotj1part1 u4dotj1part2 u4dotj1part3 u4dotj1part4 u4dotj1part5 u4dotj1part6 \
+		       u5dotj1part0 u5dotj1part1 u5dotj1part2 u5dotj1part3 u5dotj1part4 u5dotj1part5 u5dotj1part6 \
+		       u6dotj1part0 u6dotj1part1 u6dotj1part2 u6dotj1part3 u6dotj1part4 u6dotj1part5 u6dotj1part6 \
+		       u7dotj1part0 u7dotj1part1 u7dotj1part2 u7dotj1part3 u7dotj1part4 u7dotj1part5 u7dotj1part6 \
+		       u8dotj1part0 u8dotj1part1 u8dotj1part2 u8dotj1part3 u8dotj1part4 u8dotj1part5 u8dotj1part6 \
+		       u9dotj1part0 u9dotj1part1 u9dotj1part2 u9dotj1part3 u9dotj1part4 u9dotj1part5 u9dotj1part6 \
+		       u10dotj1part0 u10dotj1part1 u10dotj1part2 u10dotj1part3 u10dotj1part4 u10dotj1part5 u10dotj1part6 \
 		    }
 		    #
 		    flenerdefs1
 		    flenerdefs2
-		#
+		    flenerdefs3
 		    #
+		#
 flenerold1 0	#
 		da flener.out  # was .dat
 		lines 1 10000000
@@ -916,6 +992,9 @@ flenerdefs1 0   #
 		        set u5dot0tot=u5dot0part0+u5dot0part1+u5dot0part2+u5dot0part3+u5dot0part4+u5dot0part5+u5dot0part6 
 		        set u6dot0tot=u6dot0part0+u6dot0part1+u6dot0part2+u6dot0part3+u6dot0part4+u6dot0part5+u6dot0part6 
 		        set u7dot0tot=u7dot0part0+u7dot0part1+u7dot0part2+u7dot0part3+u7dot0part4+u7dot0part5+u7dot0part6 
+		        set u8dot0tot=u8dot0part0+u8dot0part1+u8dot0part2+u8dot0part3+u8dot0part4+u8dot0part5+u8dot0part6 
+		        set u9dot0tot=u9dot0part0+u9dot0part1+u9dot0part2+u9dot0part3+u9dot0part4+u9dot0part5+u9dot0part6 
+		        set u10dot0tot=u10dot0part0+u10dot0part1+u10dot0part2+u10dot0part3+u10dot0part4+u10dot0part5+u10dot0part6 
 		    #
   		        set u0dot1tot=u0dot1part0+u0dot1part1+u0dot1part2+u0dot1part3+u0dot1part4+u0dot1part5+u0dot1part6 
 		        set u1dot1tot=u1dot1part0+u1dot1part1+u1dot1part2+u1dot1part3+u1dot1part4+u1dot1part5+u1dot1part6 
@@ -927,6 +1006,9 @@ flenerdefs1 0   #
 		        set u5dot1tot=u5dot1part0+u5dot1part1+u5dot1part2+u5dot1part3+u5dot1part4+u5dot1part5+u5dot1part6 
 		        set u6dot1tot=u6dot1part0+u6dot1part1+u6dot1part2+u6dot1part3+u6dot1part4+u6dot1part5+u6dot1part6 
 		        set u7dot1tot=u7dot1part0+u7dot1part1+u7dot1part2+u7dot1part3+u7dot1part4+u7dot1part5+u7dot1part6 
+		        set u8dot1tot=u8dot1part0+u8dot1part1+u8dot1part2+u8dot1part3+u8dot1part4+u8dot1part5+u8dot1part6 
+		        set u9dot1tot=u9dot1part0+u9dot1part1+u9dot1part2+u9dot1part3+u9dot1part4+u9dot1part5+u9dot1part6 
+		        set u10dot1tot=u10dot1part0+u10dot1part1+u10dot1part2+u10dot1part3+u10dot1part4+u10dot1part5+u10dot1part6 
 		    #
   		        set u0dot2tot=u0dot2part0+u0dot2part1+u0dot2part2+u0dot2part3+u0dot2part4+u0dot2part5+u0dot2part6 
 		        set u1dot2tot=u1dot2part0+u1dot2part1+u1dot2part2+u1dot2part3+u1dot2part4+u1dot2part5+u1dot2part6
@@ -938,6 +1020,9 @@ flenerdefs1 0   #
 		        set u5dot2tot=u5dot2part0+u5dot2part1+u5dot2part2+u5dot2part3+u5dot2part4+u5dot2part5+u5dot2part6 
 		        set u6dot2tot=u6dot2part0+u6dot2part1+u6dot2part2+u6dot2part3+u6dot2part4+u6dot2part5+u6dot2part6 
 		        set u7dot2tot=u7dot2part0+u7dot2part1+u7dot2part2+u7dot2part3+u7dot2part4+u7dot2part5+u7dot2part6 
+		        set u8dot2tot=u8dot2part0+u8dot2part1+u8dot2part2+u8dot2part3+u8dot2part4+u8dot2part5+u8dot2part6 
+		        set u9dot2tot=u9dot2part0+u9dot2part1+u9dot2part2+u9dot2part3+u9dot2part4+u9dot2part5+u9dot2part6 
+		        set u10dot2tot=u10dot2part0+u10dot2part1+u10dot2part2+u10dot2part3+u10dot2part4+u10dot2part5+u10dot2part6 
 		    #
   		        set u0dot3tot=u0dot3part0+u0dot3part1+u0dot3part2+u0dot3part3+u0dot3part4+u0dot3part5+u0dot3part6 
 		        set u1dot3tot=u1dot3part0+u1dot3part1+u1dot3part2+u1dot3part3+u1dot3part4+u1dot3part5+u1dot3part6 
@@ -949,32 +1034,41 @@ flenerdefs1 0   #
 		        set u5dot3tot=u5dot3part0+u5dot3part1+u5dot3part2+u5dot3part3+u5dot3part4+u5dot3part5+u5dot3part6 
 		        set u6dot3tot=u6dot3part0+u6dot3part1+u6dot3part2+u6dot3part3+u6dot3part4+u6dot3part5+u6dot3part6 
 		        set u7dot3tot=u7dot3part0+u7dot3part1+u7dot3part2+u7dot3part3+u7dot3part4+u7dot3part5+u7dot3part6 
+		        set u8dot3tot=u8dot3part0+u8dot3part1+u8dot3part2+u8dot3part3+u8dot3part4+u8dot3part5+u8dot3part6 
+		        set u9dot3tot=u9dot3part0+u9dot3part1+u9dot3part2+u9dot3part3+u9dot3part4+u9dot3part5+u9dot3part6 
+		        set u10dot3tot=u10dot3part0+u10dot3part1+u10dot3part2+u10dot3part3+u10dot3part4+u10dot3part5+u10dot3part6 
 		    #
-  		        set u0srctot=u0srcpart0+u0srcpart1+u0srcpart2+u0srcpart3+u0srcpart4+u0srcpart5+u0srcpart6 
-		        set u1srctot=u1srcpart0+u1srcpart1+u1srcpart2+u1srcpart3+u1srcpart4+u1srcpart5+u1srcpart6
+  		        set u0srctot=u0srcpart0+u0srcpart1+u0srcpart2
+		        set u1srctot=u1srcpart0+u1srcpart1+u1srcpart2
 		        set realu1srctot=u1srctot
 		        # do same for source
 		        set u1srctot=u1srctot+u0srctot
-		        set u2srctot=u2srcpart0+u2srcpart1+u2srcpart2+u2srcpart3+u2srcpart4+u2srcpart5+u2srcpart6 
-		        set u3srctot=u3srcpart0+u3srcpart1+u3srcpart2+u3srcpart3+u3srcpart4+u3srcpart5+u3srcpart6 
-		        set u4srctot=u4srcpart0+u4srcpart1+u4srcpart2+u4srcpart3+u4srcpart4+u4srcpart5+u4srcpart6 
-		        set u5srctot=u5srcpart0+u5srcpart1+u5srcpart2+u5srcpart3+u5srcpart4+u5srcpart5+u5srcpart6 
-		        set u6srctot=u6srcpart0+u6srcpart1+u6srcpart2+u6srcpart3+u6srcpart4+u6srcpart5+u6srcpart6 
-		        set u7srctot=u7srcpart0+u7srcpart1+u7srcpart2+u7srcpart3+u7srcpart4+u7srcpart5+u7srcpart6 
+		        set u2srctot=u2srcpart0+u2srcpart1+u2srcpart2
+		        set u3srctot=u3srcpart0+u3srcpart1+u3srcpart2
+		        set u4srctot=u4srcpart0+u4srcpart1+u4srcpart2
+		        set u5srctot=u5srcpart0+u5srcpart1+u5srcpart2
+		        set u6srctot=u6srcpart0+u6srcpart1+u6srcpart2
+		        set u7srctot=u7srcpart0+u7srcpart1+u7srcpart2
+		        set u8srctot=u8srcpart0+u8srcpart1+u8srcpart2
+		        set u9srctot=u9srcpart0+u9srcpart1+u9srcpart2
+		        set u10srctot=u10srcpart0+u10srcpart1+u10srcpart2
 		        #
                 #
 flenerdefs2 0       # floors, added Dec 3, 2004
-  		        set u0fltot=u0flpart0+u0flpart1+u0flpart2+u0flpart3 
-		        set u1fltot=u1flpart0+u1flpart1+u1flpart2+u1flpart3
+  		        set u0fltot=u0flpart0+u0flpart1+u0flpart2+u0flpart3+u0flpart4+u0flpart5+u0flpart6+u0flpart7+u0flpart8+u0flpart9+u0flpart10+u0flpart11
+		        set u1fltot=u1flpart0+u1flpart1+u1flpart2+u1flpart3+u1flpart4+u1flpart5+u1flpart6+u1flpart7+u1flpart8+u1flpart9+u1flpart10+u1flpart11
 		        set realu1fltot=u1fltot
 		        # do same for floor
 		        set u1fltot=u1fltot+u0fltot
-		        set u2fltot=u2flpart0+u2flpart1+u2flpart2+u2flpart3 
-		        set u3fltot=u3flpart0+u3flpart1+u3flpart2+u3flpart3 
-		        set u4fltot=u4flpart0+u4flpart1+u4flpart2+u4flpart3 
-		        set u5fltot=u5flpart0+u5flpart1+u5flpart2+u5flpart3 
-		        set u6fltot=u6flpart0+u6flpart1+u6flpart2+u6flpart3 
-		        set u7fltot=u7flpart0+u7flpart1+u7flpart2+u7flpart3 
+		        set u2fltot=u2flpart0+u2flpart1+u2flpart2+u2flpart3+u2flpart4+u2flpart5+u2flpart6+u2flpart7+u2flpart8+u2flpart9+u2flpart10+u2flpart11
+		        set u3fltot=u3flpart0+u3flpart1+u3flpart2+u3flpart3+u3flpart4+u3flpart5+u3flpart6+u3flpart7+u3flpart8+u3flpart9+u3flpart10+u3flpart11 
+		        set u4fltot=u4flpart0+u4flpart1+u4flpart2+u4flpart3+u4flpart4+u4flpart5+u4flpart6+u4flpart7+u4flpart8+u4flpart9+u4flpart10+u4flpart11 
+		        set u5fltot=u5flpart0+u5flpart1+u5flpart2+u5flpart3+u5flpart4+u5flpart5+u5flpart6+u5flpart7+u5flpart8+u5flpart9+u5flpart10+u5flpart11 
+		        set u6fltot=u6flpart0+u6flpart1+u6flpart2+u6flpart3+u6flpart4+u6flpart5+u6flpart6+u6flpart7+u6flpart8+u6flpart9+u6flpart10+u6flpart11 
+		        set u7fltot=u7flpart0+u7flpart1+u7flpart2+u7flpart3+u7flpart4+u7flpart5+u7flpart6+u7flpart7+u7flpart8+u7flpart9+u7flpart10+u7flpart11 
+		        set u8fltot=u8flpart0+u8flpart1+u8flpart2+u8flpart3+u8flpart4+u8flpart5+u8flpart6+u8flpart7+u8flpart8+u8flpart9+u8flpart10+u8flpart11 
+		        set u9fltot=u9flpart0+u9flpart1+u9flpart2+u9flpart3+u9flpart4+u9flpart5+u9flpart6+u9flpart7+u9flpart8+u9flpart9+u9flpart10+u9flpart11 
+		        set u10fltot=u10flpart0+u10flpart1+u10flpart2+u10flpart3+u10flpart4+u10flpart5+u10flpart6+u10flpart7+u10flpart8+u10flpart9+u10flpart10+u10flpart11 
 		    #
 		    #
 flenerdefs3 0       #
@@ -990,6 +1084,9 @@ flenerdefs3 0       #
 		        set u5dotj0tot=u5dotj0part0+u5dotj0part1+u5dotj0part2+u5dotj0part3+u5dotj0part4+u5dotj0part5+u5dotj0part6 
 		        set u6dotj0tot=u6dotj0part0+u6dotj0part1+u6dotj0part2+u6dotj0part3+u6dotj0part4+u6dotj0part5+u6dotj0part6 
 		        set u7dotj0tot=u7dotj0part0+u7dotj0part1+u7dotj0part2+u7dotj0part3+u7dotj0part4+u7dotj0part5+u7dotj0part6 
+		        set u8dotj0tot=u8dotj0part0+u8dotj0part1+u8dotj0part2+u8dotj0part3+u8dotj0part4+u8dotj0part5+u8dotj0part6 
+		        set u9dotj0tot=u9dotj0part0+u9dotj0part1+u9dotj0part2+u9dotj0part3+u9dotj0part4+u9dotj0part5+u9dotj0part6 
+		        set u10dotj0tot=u10dotj0part0+u10dotj0part1+u10dotj0part2+u10dotj0part3+u10dotj0part4+u10dotj0part5+u10dotj0part6 
 		    #
   		        set u0dotj1tot=u0dotj1part0+u0dotj1part1+u0dotj1part2+u0dotj1part3+u0dotj1part4+u0dotj1part5+u0dotj1part6 
 		        set u1dotj1tot=u1dotj1part0+u1dotj1part1+u1dotj1part2+u1dotj1part3+u1dotj1part4+u1dotj1part5+u1dotj1part6 
@@ -1001,6 +1098,9 @@ flenerdefs3 0       #
 		        set u5dotj1tot=u5dotj1part0+u5dotj1part1+u5dotj1part2+u5dotj1part3+u5dotj1part4+u5dotj1part5+u5dotj1part6 
 		        set u6dotj1tot=u6dotj1part0+u6dotj1part1+u6dotj1part2+u6dotj1part3+u6dotj1part4+u6dotj1part5+u6dotj1part6 
 		        set u7dotj1tot=u7dotj1part0+u7dotj1part1+u7dotj1part2+u7dotj1part3+u7dotj1part4+u7dotj1part5+u7dotj1part6 
+		        set u8dotj1tot=u8dotj1part0+u8dotj1part1+u8dotj1part2+u8dotj1part3+u8dotj1part4+u8dotj1part5+u8dotj1part6 
+		        set u9dotj1tot=u9dotj1part0+u9dotj1part1+u9dotj1part2+u9dotj1part3+u9dotj1part4+u9dotj1part5+u9dotj1part6 
+		        set u10dotj1tot=u10dotj1part0+u10dotj1part1+u10dotj1part2+u10dotj1part3+u10dotj1part4+u10dotj1part5+u10dotj1part6 
 		    #
 flenercheck 1   #
 		    # check whether totals from components equals total actual from pdot

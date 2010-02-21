@@ -76,7 +76,8 @@ checkplM 0    #
 		points (LG(myr)) Mrat
 		#
 		#
-rdvsr 3              # read in dump first
+rdvsr 3         # Reads-in F(r,t) data
+		# First read-in dump
 		#
 		# rdphivsr phivsr.out 1280
 		# plc 0 phivsr
@@ -151,14 +152,14 @@ rdvsr 3              # read in dump first
                      define coord (1)
 	             define x1label "r c^2/GM"
 	             define x2label "t c^3/GM"
+		     define coord 1
 pickmap 3      #
-     set timepre=t if($1==nstep)
-     define time (timepre[0])
-     set steppre=nstep if(($1==nstep))
-     define nstep (steppre[0])
-     
-     set $3=$2 if(nstep==$1)
-     #
+		set timepre=t if($1==nstep)
+		define time (timepre[0])
+		set steppre=nstep if(($1==nstep))
+		define nstep (steppre[0])
+		set $3=$2 if(nstep==$1)
+		#
 dopow1 0 #
 		jrdpener 500 2000
 		der t u1src td u1srcd
@@ -411,7 +412,7 @@ checkmass3 0    #
 		#
 		set tmdiff=((totalmass-totalmass[0])/totalmass[0])
 		#
-checkforcebal 0  #
+checkforcebalharm 0  #
 		#jrdp3du dump0000
 		#grid3d gdump
 		#
@@ -419,7 +420,7 @@ checkforcebal 0  #
 		#
 		set vfromphi = sqrt(-phi)
 		#
-		ctype default pl 0 r vfromphi
+		#ctype default pl 0 r vfromphi
 		#
 		# so at most v/c\sim 0.1, so mostly non-relativistic gravity
 		#
@@ -433,8 +434,8 @@ checkforcebal 0  #
 		#ctype default pl 0 r gravaccx 
 		#ctype red pl 0 r (-pressureaccx) 0010
 		#
-		ctype default pl 0 r gravaccx 1101 1 1E4 1E-10 10
-		ctype red pl 0 r (-pressureaccx) 1111 1 1E4 1E-10 10
+		ctype default pl 0 (r*Lunit) gravaccx 1101 (1*Lunit) (1E4*Lunit) 1E-10 100
+		ctype red pl 0 (r*Lunit) (-pressureaccx) 1111 (1*Lunit) (1E4*Lunit) 1E-10 100
                 #
                 #
 setupharmcompare 1 # setupharmcompare 0000
@@ -450,16 +451,16 @@ setupharmcompare 1 # setupharmcompare 0000
 		# below are independent variables
 		set rharm = (r*Lunit)
 		set rhoharm = (rho*1)
+                set nbharm=rhoharm/mb
 		set uharm = (u*Pressureunit)
                 set Sdenharm = (Sden/Lunit**3)
                 set SNUdenharm = (SNU/Lunit**3)
-		set ylharm = yl
-		set yeharm = YE
-		set ynuharm = ynu
-		set ynu0harm = YNU0
+		set yeharm = ye # YE can be used too
+		set ynu0harm = ynu # YNU0 can be used too
 		set ynu0oldharm = YNU0OLD
                 set ynuold = YNUOLD
 		set ynulocalharm = ynulocal
+		set ylharm = ye+YNUOLD # with new ye evolution method, YNUOLD is actually just true final ynu
 		#
 		# below is from tau integral
 		set h1harm = (Height1*Lunit)
@@ -510,6 +511,8 @@ setupharmcompare 1 # setupharmcompare 0000
 		set s_nuharm = (s_nu*Pressureunit/energyunit)
 		set ynulocalharm = ynulocal
 		set Ynuthermalharm = Ynuthermal
+                set Ynuthermal0harm = Ynuthermal0
+                set supposedYnuthermal0harm=(nnueth0harm-nnuebarth0harm)/nbharm
 		set enuharm = (enu*energyunit/ergPmev)
 		set enueharm = (enue*energyunit/ergPmev)
 		set enuebarharm = (enuebar*energyunit/ergPmev)
@@ -600,6 +603,8 @@ setupstarcompare 0 #
 		set s_nustar = s_nu
 		set ynulocalstar = Ynu
 		set Ynuthermalstar = 0
+                set nb=rhostar/mb
+                #set Ynuthermal0star = (nnueth0-nnuebarth0)/nb # terms don't exist yet
 		# back to primary eos.dat:
 		set enustar = (Enutot/ergPmev)
 		set enuestar = (Enue/ergPmev)
@@ -648,7 +653,8 @@ plotstarharm 0  #
 		ctype default pl 0 rharm uharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E15 1E40
                 ctype blue pl 0 rharm UNUharm 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E15 1E40
 		ctype red pl 0 rstar ustar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E15 1E40
-		ctype cyan pl 0 rstar (fakelsoffset*rhostar*C*C/(mb*C*C)) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E15 1E40
+		ltype 2 ctype cyan pl 0 rstar (fakelsoffset*rhostar*C*C/(mb*C*C)) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E15 1E40
+                ltype 0
 		#
                 # Temp
 		ctype default pl 0 rharm tempharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E5 1E13
@@ -678,8 +684,10 @@ plotstarharm 0  #
 		#
                 # c_s : sound speed
                 ctype default pl 0 rharm (sqrt(cs2harm)) 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
+                ltype 2
                 ctype green pl 0 rharm (c+rharm*0) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
                 ctype blue pl 0 rharm (c/3+rharm*0) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
+                ltype 0
                 set cs2starapprox=(4.0/3.0)*p/(rho0+u+p)
                 ctype cyan pl 0 rharm (sqrt(cs2starapprox)*c) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
                 ctype red pl 0 rstar (sqrt(cs2star)) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E6 (10*c)
@@ -701,11 +709,12 @@ plotstarharm 0  #
 		#
                 # YNU
                 # ynuharm : initial primitive YNU read-in from stellar model
-		ctype default pl 0 rharm ynuharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-21 1
+		#ctype default pl 0 rharm ynuharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-21 1
+                # above not used anymore
+                # ynulocalharm: Using latest Ynu0 to get Ynu[Ynu0] (currently 3 iterations)
+		ctype default pl 0 rharm ynulocalharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-21 1
                 # ynustar : initial stellar model value of YNU
 		ctype red pl 0 rstar ynustar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-21 1
-                # ynulocalharm: Using latest Ynu0 to get Ynu[Ynu0] (currently 3 iterations)
-		ctype green pl 0 rharm ynulocalharm 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-21 1
 		#
                 # YNU0
                 # ynu0harm : Latest Ynu0 (after 3 iterations so far) for the lookup table
@@ -723,6 +732,7 @@ plotstarharm 0  #
 		ctype red pl 0 rstar lambdatotstar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1 1E20
 		#
 		ctype default pl 0 rharm qmharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1 1E45
+		ctype blue pl 0 rharm qphoton 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1 1E45
 		ctype red pl 0 rstar qmstar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1 1E45
 		#
 		# 
@@ -740,7 +750,7 @@ plotstarharm 0  #
 		ctype red pl 0 rstar tthermaltotstar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-10 1E10
 		ctype blue pl 0 rharm tdifftotharm 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-10 1E10
 		ctype cyan pl 0 rstar tdifftotstar 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-10 1E10
-		ctype green pl 0 rharm (hharm/c) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-10 1E10
+		ctype green pl 0 rharm (h1harm/c) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-10 1E10
 		ctype magenta pl 0 rstar (hstar/c) 1111 (rharm[0]) (rharm[dimen(rharm)-1]) 1E-10 1E10
 		#
 		ctype default pl 0 rharm rho_nuharm 1101 (rharm[0]) (rharm[dimen(rharm)-1]) 1 1E40
@@ -1193,6 +1203,125 @@ plotsm 0        #
 		erase box
 		connect lgr lgp
 		#
+                #
+checkinv 0      #
+		#
+		set rho0=1.00405028296078e+15
+		set uu0=1.21624915276967
+		set ud0=-0.822288519792998
+		set u=127146518574121
+		set p=178276753.620458 # (4/3-1)*u #  hack, don't have pressure
+		set bu0=0
+		set bu1=0
+		set bu2=-1.4772753983733e-08
+		set bu3=0
+		set bd0=0
+		set bd1=0
+		set bd2=-1.57269994118938e-09
+		set bd3=0
+		set bsq=bu0*bd0+bu1*bd1+bu2*bd2+bu3*bd3
+		#
+		set Tud00geomfree = rho0*uu0*(1+ud0) + (u+p)*uu0*ud0 -bu0*bd0 + (p+bsq/2)
+		print '%21.15g\n' {Tud00geomfree}
+checkinv2 0      #
+		#
+		set rho0=1.01237058317292e+15
+		set uu0=1.26711016899635
+		set ud0=-0.92615821012561
+		set u=3.77278085970973e+16
+		set p=1.31885760048493e+16
+		set bu0=0
+		set bu1=0
+		set bu2=0.0112773290431803
+		set bu3=0
+		set bd0=0
+		set bd1=0
+		set bd2=0.0103778561751287
+		set bd3=0
+		set bsq=bu0*bd0+bu1*bd1+bu2*bd2+bu3*bd3
+		#
+		set Tud00geomfree = rho0*uu0*(1+ud0) + (u+p+bsq)*uu0*ud0 -bu0*bd0 + (p+bsq/2)
+		print '%21.15g\n' {Tud00geomfree}
+                #
+		set U1old=-4.69307390202212e+16
+                set U1new=-4.646934325453e+16
+                #
+                set olddiff=(Tud00geomfree-U1old)/(abs(Tud00geomfree)+abs(U1old))
+                set newdiff=(Tud00geomfree-U1new)/(abs(Tud00geomfree)+abs(U1new))
+                print {olddiff newdiff}
+                #
+		#
+		#
+		#
+plotvst 0       #
+		#
+		der t u1srcpart1 dt du1srcpart1
+		set god=(du1srcpart1*energyunit/Tunit)
+		pl 0 dt god
+		#
+		#
+		ctype default
+		pl 0 t (-u1srcpart1*energyunit) 0101 (t[0]) (t[dimen(t)-1]) 1E40 1E53
+		#
+		ctype red
+		pl 0 t (-u8srcpart1*energyunit/(mb*c**2)*(4*ergPmev)) 0111 (t[0]) (t[dimen(t)-1]) 1E45 1E55
+		#
+		#
+		#checkforcebalharm
+agplgrb  0	# agplgrb
+		#
+		set startanim=6000
+		set endanim=10000
+		#
+                #defaults
+		define PLANE (3)
+		define WHICHLEV (0)
+                set h1='dump'
+		set h1gdump='gdump'
+		set h1debug='debug'
+		set h1eosdump='eosdump'
+		#
+                do ii=startanim,endanim,$ANIMSKIP {
+		   set h2=sprintf('%04d',$ii)
+		   set _fname=h1+h2
+		   set _fnamedebug=h1debug+h2
+		   set _fnamegdump=h1gdump+h2
+		   set _fnameeosdump=h1eosdump+h2
+                  define filename (_fname)
+                  define filenameeosdump (_fnameeosdump)
+                  define filenamedebug (_fnamedebug)
+                  define filenamegdump (_fnamegdump)
+		  #jrdp2d $filename
+		  #
+		  # NEW
+                  #jrdpall $ii
+                  #jrdp3du $filename
+                  define arg (h2)
+                  jrdpallgrb $arg
+		  #
+		  # OLD
+		  #jrdp3duold $filename
+		  #
+		  # GENERAL
+		  #grid3d $filenamegdump
+                  #
+		  #set dphidt = c000*gv300 + c100*gv301 + c200*gv302 + c300*gv303
+		  #
+		  #
+		  #
+		  checkforcebalharm
+		  #
+		  #
+		  ctype cyan pl 0 (r*Lunit) (rho/1E14) 1111 (1*Lunit) (1E4*Lunit) 1E-10 100
+		  #
+		  #
+                  #delay loop
+		  #set jj=0
+		  #while {jj<10000} {set jj=jj+1}
+		  #!sleep .5s
+		}
+		#
+		# animate pls in HARM
 		#
                 # End HARM phivsr.m macros
                 #####################

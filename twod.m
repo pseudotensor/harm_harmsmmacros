@@ -15,6 +15,9 @@ plc    17	# plc <file> <function> <type of plot=100,000,overlay=010,000,limits=0
                  set thebits=0x$tobebits
 		}
 		set inputfun=$2
+                # initial trial of newfun:
+                set newfun=inputfun
+                #
 		if(thebits & 0x001) {
                     echo "Shrink"
                   shrink3 inputfun x12 x22 $4 $5 $6 $7

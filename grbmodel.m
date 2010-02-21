@@ -375,7 +375,7 @@ stellarwind 1   #
                 set rhoatedge=Mdot/(4.0*pi*r[myiedge]**2*vratedge)
 		#
 		set iii=myiedge
-		while {iii<dimen(helium)} {
+		while {iii<dimen(helium)} {\
 		   set rho[iii] = rhoatedge *(r[myiedge]/r[iii])**2
 		   set vr[iii] = 1E3*1E5
 		   #
@@ -408,7 +408,7 @@ findheedge 1   #
 		define HFRAC (0.01)
 		#
 		set iii=dimen(helium)-1
-		while {iii>=0} {
+		while {iii>=0} {\
 		   if(helium[iii]>nucleons[iii] && nucleons[iii]<$HFRAC){ set $1=iii break }
 		   set hefrac=helium[iii]
 		   set hfrac=nucleons[iii]
