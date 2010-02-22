@@ -1215,7 +1215,8 @@ bzplot95 0      #
                    window -8 -3 2:8 2 box 0 2 0 0
 		   define thisy (1.7/2)
 		   relocate -500 $thisy
-		   putlabel 5 "\dot{E}/\dot{M}_0"
+		   #putlabel 5 "\dot{E}/\dot{M}_0"
+		   putlabel 5 "e"
 		   #yla "\dot{E}/\dot{M}_0"
                    ltype 0
                    plo 0 t tempf
@@ -1238,7 +1239,8 @@ bzplot95 0      #
                    window -8 -3 2:8 1 box 1 2 0 0
 		   define thisy (3.9/2)
 		   relocate -500 $thisy
-		   putlabel 5 "\dot{L}/\dot{M}_0"
+		   #putlabel 5 "\dot{L}/\dot{M}_0"
+		   putlabel 5 "j"
 		   #
 		   #yla "\dot{L}/\dot{M}_0"
 		   xla t c^3/(G M)
@@ -1918,6 +1920,10 @@ sonicplots 0    #
 		# let's adjust this so perfect match
 		if(hor<0.4) { set FMvsrg=-FMvsr/(2*hor*0.98)}
 		if(hor>1.4) { set FMvsrg=-FMvsr/(2*hor/1.35/newr)}
+                #set FMvsrg=FMvsrg*(2*pi)/(Dphi)
+                set FMvsrg=FMvsrg[0]*(2*pi)/(Dphi) + FMvsrg*0
+		#set FMvsrg=rhovsr[0]/grho[0]
+                #set FMvsrg=myfmvsrg
 		#
 		#
 		# rest of primitive variables
@@ -2092,6 +2098,11 @@ readinflowrun 1 #
 		# let's adjust this so perfect match
 		if(hor<0.4) { set FMvsrg=-FMvsr/(2*hor*0.98)}
 		if(hor>1.4) { set FMvsrg=-FMvsr/(2*hor/1.35/newr)}
+                #
+                #set FMvsrg=FMvsrg*(2*pi)/(Dphi)
+                set FMvsrg=FMvsrg[0]*(2*pi)/(Dphi) + FMvsrg*0
+		#set FMvsrg=rhovsr[0]/grho[0]
+                #set FMvsrg=myfmvsrg
 		#
 		radialfluxes
 		#
@@ -2108,7 +2119,7 @@ readinflowrun 1 #
 		# however, these quantities need to be converted to gam99 form.
 		set rhovsrg=rhovsr/(FMvsrg)
 		set uvsrg=uvsr/(FMvsrg)
-		set bcog=bco/(FMvsrg)
+		set bcog=bco/(FMvsrg)*2
 		set ecovsrg=rhovsrg+uvsrg+bcog
 		#
 		#
@@ -2362,7 +2373,8 @@ core2   0       #
 		   #
                    ctype default window 2 2 1 2 box 1 2 0 0
                    yla u^r
-		   xla r c^2/(GM)
+		   #xla r c^2/(GM)
+                   xla r/M
                    ctype default ltype 0 plo 0 newr uu1vsr
 		   #
 		   if($doinflowread==1) { ctype blue ltype 0 plo 0 inewr iuu1vsr }
@@ -2380,8 +2392,10 @@ core2   0       #
 		   #
 		   limits $rinner $router -0.5 4
                    ctype default window 2 2 2 2 box 1 2 0 0
-		   define x1label "r c^2/(GM)"
-		   define x2label "\dot{L}/\dot{M}_0"
+		   #define x1label "r c^2/(GM)"
+                   define x1label "r/M"
+		   #define x2label "\dot{L}/\dot{M}_0"
+                   define x2label "j"
 		   xla $x1label
 		   yla $x2label
 		   ctype default ltype 1 plo 0 newr tdflvsr
@@ -2396,7 +2410,7 @@ core2   0       #
 		   if($doinflowread==1){ ctype blue ltype 0 plo 0 inewr iFLIEvsr }
 		   #
 		   #ctype cyan ltype 0 plo 0 newr FLPAvsr
-		   ctype cyan ltype 0 plo 0 newr (ud3vsr/Dphi)
+		   ctype cyan ltype 0 plo 0 newr (ud3vsr*$dx3*_n3/(Dphi))
 		   # particle term for gammie
 		   #
 		   if($doinflowread==0){ ctype blue ltype 0 plo 0 gr gl }
@@ -2425,7 +2439,8 @@ core2   0       #
 		   #
  	           ticksize 0 0 -1 0
                    ctype default window 2 2 1 1 box 1 2 0 0
-                   xla r c^2/(GM)
+                   #xla r c^2/(GM)
+                   xla r/M
                    yla "comoving energy density"
 		   set lbcog=LG(bcog)
 		   ctype green ltype 0 plo 0 newr lbcog
@@ -2458,8 +2473,10 @@ core2   0       #
 		   ticksize 0 0 0 0
 		   ctype default window 2 2 2 1 box 1 2 0 0
 		   #
-		   define x1label "r c^2/(GM)"
-		   define x2label "\dot{E}/\dot{M}_0"
+		   #define x1label "r c^2/(GM)"
+                   define x1label "r/M"
+		   #define x2label "\dot{E}/\dot{M}_0"
+                   define x2label "e"
 		   xla $x1label
 		   yla $x2label
 		   ctype default ltype 1 plo 0 newr tdfevsr
@@ -2467,13 +2484,13 @@ core2   0       #
 		   #ctype blue ltype 0 plo 0 gr gFEtot
 		   ctype green ltype 0 plo 0 newr FEEMvsr
 		   #
-		   if($doinflowread==0) { ctype blue ltype 0 plo 0 gr gFEEM }
-		   if($doinflowread==1) { ctype blue ltype 0 plo 0 inewr iFEEMvsr }
-		   #
 		   #ctype cyan ltype 0 plo 0 newr FEPAvsr
 		   ctype cyan ltype 0 plo 0 newr myud0vsr
 		   ctype magenta ltype 0 plo 0 newr FEIEvsr
 		   # particle term for gammie
+		   #
+		   if($doinflowread==0) { ctype blue ltype 0 plo 0 gr gFEEM }
+		   if($doinflowread==1) { ctype blue ltype 0 plo 0 inewr iFEEMvsr }
 		   #
 		   if($doinflowread==0) { ctype blue ltype 0 plo 0 gr gE }
 		   if($doinflowread==1) { ctype blue ltype 0 plo 0 inewr imyud0vsr }
