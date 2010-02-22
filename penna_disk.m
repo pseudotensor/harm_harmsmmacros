@@ -193,14 +193,25 @@ gammieparavg  0 #
 		ctype red pl 0 newr grat2 0010
 		#
 		#
+penna4panelgammie 0    #
 		  # jre bzplots.m
                    #
                   #
-                  # for Ldot/Mdot terms
+		set aphi=0*ti
+		avgtimegfull2 'dump' $startdump $enddump
+		gwritedump2 dumptavg3
+		greaddump2 dumptavg3
+                  #
+                  # for Ldot/Mdot terms and normalization for Fm
 		  set Dphi=pi/2
                   #
+		  #
 		  stresscalc 1
 		  #4panelinflowdoall 0.05 _Rin (6) 0.5 1 0
-                  4panelinflowdoall 0.05 _Rin (6) 0.5 0 0
+                  #4panelinflowdoall 0.05 _Rin (6) 0.5 0 0
+		  4panelinflowdoall 0.05 _Rin 7 0.25 1 0  
+		  #
+                  #set myfmvsrg=.5 4panelinflowdoall 0.1 _Rin 7 0.45 1 0
+                  #
+ set myfmvsrg=.57 4panelinflowdoall 0.1 _Rin 7 0.42 1 0 
 
-4panelinflowpre2

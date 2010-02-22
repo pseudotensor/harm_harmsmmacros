@@ -1484,7 +1484,8 @@ avgtimegfull   3	# avgtimegfull (e.g. avgtimeg 'dump' start end)
                   set h2=sprintf('%04d',$ii)
                   set _fname=h1+h2
                   define filename (_fname)
-		  jrdp2d $filename
+		  #jrdp2d $filename
+                  jrdppenna $filename
 		  define nz (1)
 		  #
  		set rhotavg=rhotavg+rho
@@ -1914,7 +1915,8 @@ avgtimegfull2   3	# avgtimegfull2 (e.g. avgtimeg 'dump' start end)
                   set h2=sprintf('%04d',$ii)
                   set _fname=h1+h2
                   define filename (_fname)
-		  jrdpcf2d $filename
+		  #jrdpcf2d $filename
+                  jrdppenna $filename
 		  # could use read-in faraday
 		  faraday
 		  jsq
@@ -1926,7 +1928,7 @@ avgtimegfull2   3	# avgtimegfull2 (e.g. avgtimeg 'dump' start end)
 		  #set absb2=ABS(bsq*uu0*ud0)
 		  #set absb3=ABS(bsq*ud0*ud0-bd0*bd0)
 		  #
-		  fieldcalc 0 aphi
+		  #fieldcalc 0 aphi
 		  #
  		set rhotavg=rhotavg+rho
 		set utavg=utavg+u
