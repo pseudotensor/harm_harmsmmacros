@@ -127,46 +127,59 @@ gammieparavg  0 #
                       }
                 #
 		#
-		set ftp=ABS(gdet*absB1)
-                set frp=ABS(gdet*absE2)
+		set Dphi=(pi/2)
+                set boxfactor=(2*pi)/(Dphi)
+                #
+                # F_{\theta\phi} = \detg *F^{rt} = \detg B^r = constant
+                # d\phi/dt = dx3/dt dphi/dx3 = dx3/dt (Dphi)
+                set ftp=ABS(gdet*absB1)/Dphi
+                # \detg *F^{r\phi} = \detg (u^r b^\phi - u^\phi b^r) == constant
+                set frp=ABS(gdet*absE2)*Dphi
+		gcalc2 3 0 $myangle ftp ftpvsr
+		gcalc2 3 0 $myangle frp frpvsr
+                set unity=ftp*0+1
+		gcalc2 3 0 $myangle unity unityvsr
+                #
+                # account for small \phi wedge
+                set ftpvsr=ftpvsr*boxfactor
+                set frpvsr=frpvsr*boxfactor
+                #
+                set omegafavg=frpvsr/ftpvsr
+                #
+                ctype default pl 0 newr omegafavg 1000
+                ctype blue pl 0 newr (1/(newr**(3/2)+a)) 1010
+                ctype red vertline (LG(risco))
+		#
 		set fm=abs(gdet*rho*auu1)
-		gcalc2 3 2 $myangle fm fmvsr
-		gcalc2 3 2 $myangle ftp ftpvsr
-		gcalc2 3 2 $myangle frp frpvsr
-		#
+		gcalc2 3 0 $myangle fm fmvsr
+                set mdotvsr=fmvsr*boxfactor
+                #
 		# get local true parameter
-		set singlehorvalue=fmvsr[0]
-		set grat1=sqrt(2)*(ftp/fm)*sqrt(singlehorvalue)
-		set grat1b=sqrt(2)*(frp/fm)*sqrt(singlehorvalue)
-		gcalc2 3 2 $myangle grat1 grat1vsr
-		gcalc2 3 2 $myangle grat1b grat1bvsr
+                set grat1=sqrt(4*pi)*(ftpvsr/unityvsr)/(sqrt(abs(mdotvsr/(2*$myangle))))
+		set omegakisco=1/(risco**(3/2)+a)
+                set grat1b=(frpvsr/ftpvsr)/omegakisco
+		set horgrat1=grat1[0]
+		set horgrat1b=grat1b[0]
+		print {horgrat1 horgrat1b}
 		#
-		# get local old parameter
-		set grat1old=(ftp/sqrt(fm))
-		set grat1bold=(frp/sqrt(fm))
-		gcalc2 3 2 $myangle grat1old grat1oldvsr
-		gcalc2 3 2 $myangle grat1bold grat1boldvsr
 		#
-		# get old global ratio
-		set grat2old=ftpvsr/sqrt(abs(-fmvsr))
-		set grat2bold=frpvsr/sqrt(abs(-fmvsr))
+		set grat2=sqrt(4*pi)*ftp/sqrt(abs(mdotvsr[0]/(2*$myangle)))
+		gcalc2 3 2 $myangle grat2 grat2vsr
+		set horgrat2vsr=grat2vsr[0] print {horgrat2vsr}
+		#
 		# get true global ratio
 		set grat2=sqrt(2)*(ftpvsr/fmvsr)*sqrt(singlehorvalue)
 		set grat2b=sqrt(2)*(frpvsr/fmvsr)*sqrt(singlehorvalue)
 		#
 		#
 		ctype default pl 0 newr grat1vsr 1001 Rin Rout 0 10
-		ctype blue pl 0 newr grat1oldvsr 1011 Rin Rout 0 10
 		ctype cyan pl 0 newr grat2 1011 Rin Rout 0 10
-		ctype red pl 0 newr grat2old 1011 Rin Rout 0 10
 		#
 		ctype red vertline (LG(risco))
                 #
                 # \Omega_F related thing:
 		ctype default pl 0 newr grat1bvsr 1001 Rin Rout 0 0.1
-		ctype blue pl 0 newr grat1boldvsr 1011 Rin Rout 0 0.1
 		ctype cyan pl 0 newr grat2b 1011 Rin Rout 0 0.1
-		ctype red pl 0 newr grat2bold 1011 Rin Rout 0 0.1
 		#
 		ctype red vertline (LG(risco))
                 #
@@ -213,5 +226,6 @@ penna4panelgammie 0    #
 		  #
                   #set myfmvsrg=.5 4panelinflowdoall 0.1 _Rin 7 0.45 1 0
                   #
- set myfmvsrg=.57 4panelinflowdoall 0.1 _Rin 7 0.42 1 0 
+                  set myfmvsrg=.57 4panelinflowdoall 0.1 _Rin 7 0.42 1 0 
+                  #
 
