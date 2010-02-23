@@ -228,4 +228,61 @@ penna4panelgammie 0    #
                   #
                   set myfmvsrg=.57 4panelinflowdoall 0.1 _Rin 7 0.42 1 0 
                   #
-
+		  #
+gammiedata 0      #
+		#
+		#da lookat.dat
+		da lookatall.dat
+		 read '%g %g %g %g %g %g' {a Fhp joneff reldeff jonl reldl}
+		 #
+		set numa=8
+		set numFhp=dimen(a)/numa
+		 #
+		 pl 0 Fhp reldl 1101 1E-3 10 1E-3 300
+		 erase
+		 box
+		 points (LG(Fhp)) (LG(-reldl))
+		#
+		#
+		#set picka=numFhp*(numa-2)
+		set picka=numFhp*2
+		 set ii=0,dimen(a)-1,1
+		 set myuse=(a==a[picka] ? 1 : 0)
+		 set mya=a if(myuse)
+		 set myFhp=Fhp if(myuse)
+		 set myreldeff=reldeff if(myuse)
+		 set myreldl=reldl if(myuse)
+		 #
+		 pl 0 myFhp myreldl 1101 1E-3 10 1E-3 300
+		 erase
+		 box
+		 points (LG(myFhp)) (LG(-myreldl))
+		 set myfit=((1.1*pi*myFhp)**(5/3))
+		 set myfit2=((1.15*pi*myFhp)**(1.6))
+		 set myfit3=((1.15*pi*myFhp)**(1.55))
+		 ctype red pl 0 myFhp myfit 1111 1E-3 10 1E-3 300
+		 ctype blue pl 0 myFhp myfit2 1111 1E-3 10 1E-3 300
+		 ctype cyan pl 0 myFhp myfit3 1111 1E-3 10 1E-3 300
+		#
+		#
+		#
+		set pickFhp=3
+		 set ii=0,dimen(a)-1,1
+		 set myuse=(Fhp==Fhp[pickFhp] ? 1 : 0)
+		 set mya=a if(myuse)
+		 set myFhp=Fhp if(myuse)
+		 set myreldeff=reldeff if(myuse)
+		 set myreldl=reldl if(myuse)
+		 #
+		 #
+		 print {myFhp mya myreldl}
+		 #
+		 #
+		 pl 0 mya (-myreldl) 0101 -0.1 1 1E-3 1
+		 erase
+		 box
+		 points mya (LG(-myreldl))
+		 set myfit=((1.1*pi*myFhp)**(5/3)+(mya/myFhp/70)**(6/3))
+		 ctype red pl 0 mya myfit 0111 -0.1 1 1E-3 1
+		#
+		#
