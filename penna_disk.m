@@ -286,23 +286,112 @@ gammiedata 0      #
 		 ctype red pl 0 mya myfit 0111 -0.1 1 1E-3 1
 		#
 		#
-redogammieplot 0 #
+fullredo 2      # fullredo <hor> <Fhp>
+		# fullredo 0.1 0.4 $rhor 7
+		# jre bzplots.m
+		#gammieparavgbob
 		#
-		set hor=0.1
+		set hor=$1
+		set Fhp=$2
+		4panelinflowpre1 $2
 		#
-		set aphi=0*ti
-		avgtimegfull2 'dump' $startdump $enddump
-		gwritedump2 dumptavg3
-		greaddump2 dumptavg3
+		define rhor (2)
 		#
-		# for Ldot/Mdot terms and normalization for Fm
+		define rinner $rhor
+		define router 7
+		#
+		redogammiecompute
+		redogammieplot
+		#
+		device postencap truebz4panelhor0.1mag0.43.eps
+		redogammieplot
+		device X11
+		#
+		#
+redogammiecompute 0 #
+		#
 		set Dphi=pi/2
+		# r = R0 + exp(x1) -> dr/dx1 = exp(x1) = (r-r0)
+		set dxdxp11=(r-R0)
+		# d\phi/dx3 = Dphi
+		set dxdxp33=Dphi
+		set boxfactor=(2*pi)/(Dphi)
 		#
-		set FM=gdet*rho0*auu1
-		#
+		# integral, not average : use auu1 since numerator will use uu1
+		set FM=rho*auu1
 		gcalc2 8 0 hor FM FMvsr $rinner $router
 		#
+		# Gammie F_M = -1  = 2*pi*r**2*rho*uur
+		# use uur since need to use to make dimensionless from Gammie definition
+		#set FMden=2*pi*gdet*rho*auur/(4*pi)*boxfactor
+		#gcalc2 8 2 hor FMden FMdenvsr $rinner $router
+		# correct FMden for quantities that aren't flux integrals for which FM is divisor
+		set FMvsrg=FMvsr[0]/(2*hor)*boxfactor + FMvsr*0
+		#set FMvsrg=FMdenvsr[0] + FMdenvsr*0
+		#set FMvsrg=FMdenvsr
 		#
+		# average, not integral
+		define averagetype (2)
+		# dr/dt = dx1/dt dr/dx1 = uu1*dxdxp11
+		set uur=-auu1*dxdxp11
+		gcalc2 8 $averagetype hor uur uurvsr $rinner $router
+		#
+		trueminmax newr uurvsr
+		define uurvsrmin (truemin)
+		#
+		gcalc2 8 $averagetype hor bsq bsqvsr $rinner $router
+		gcalc2 8 $averagetype hor rho rhovsr $rinner $router
+		gcalc2 8 $averagetype hor u uvsr $rinner $router
+		#
+		set bcog=(bsqvsr*0.5)/(FMvsrg)
+		set rhovsrg=rhovsr/(FMvsrg)
+		set uvsrg=uvsr/(FMvsrg)
+		#
+		# total comoving energy density
+		set ecovsrg=rhovsrg+uvsrg+bcog
+		#
+		# for below, signs shouldn't be problem
+		gcalc2 8 $averagetype hor gdet gdetvsr $rinner $router
+		gcalc2 8 $averagetype hor uu0 uu0vsr $rinner $router
+		gcalc2 8 $averagetype hor ud0 ud0vsr $rinner $router
+		set uuphi=uu3*dxdxp33
+		gcalc2 8 $averagetype hor uuphi uuphivsr $rinner $router
+		# u_\phi = dt/d\phi = dt/dx3 dx3/d\phi = ud3/dxdxp33
+		set udphi=ud3/dxdxp33
+		gcalc2 8 $averagetype hor udphi udphivsr $rinner $router
+		gcalc2 8 $averagetype hor ud0 ud0vsr $rinner $router
+		#
+		# integral, not average
+		# FE and FL parts (these use FMvsr directly, since flux ratio)
+		gcalc2 8 0 hor Tud10B Tud10Bvsr $rinner $router
+		gcalc2 8 0 hor Tud10PA Tud10PAvsr $rinner $router
+		gcalc2 8 0 hor Tud10IE Tud10IEvsr $rinner $router
+		set Tud10totvsr=(Tud10PAvsr+Tud10Bvsr+Tud10IEvsr)
+		set factor=(Tud10totvsr[0]/FMvsr[0])/(Tud10totvsr/FMvsr)
+		#set factor=1
+		set FEPAvsr=-Tud10PAvsr/(FMvsr)*factor
+		set FEEMvsr=-Tud10Bvsr/(FMvsr)*factor
+		set FEIEvsr=-Tud10IEvsr/(FMvsr)*factor
+		set FEtotvsr=FEPAvsr+FEEMvsr+FEIEvsr
+		#
+		gcalc2 8 0 hor Tud13B Tud13Bvsr $rinner $router
+		gcalc2 8 0 hor Tud13PA Tud13PAvsr $rinner $router
+		gcalc2 8 0 hor Tud13IE Tud13IEvsr $rinner $router
+		set Tud13totvsr=Tud13PAvsr+Tud13Bvsr+Tud13IEvsr
+		set factor=(Tud13totvsr[0]/FMvsr[0])/(Tud13totvsr/FMvsr)
+		#set factor=1
+		set FLPAvsr=Tud13PAvsr/dxdxp33/(FMvsr)*factor
+		set FLEMvsr=Tud13Bvsr/dxdxp33/(FMvsr)*factor
+		set FLIEvsr=Tud13IEvsr/dxdxp33/(FMvsr)*factor
+		set FLtotvsr=FLPAvsr+FLEMvsr+FLIEvsr
+		#
+		# print {newr FMvsr FEtotvsr FLtotvsr}
+		#
+		# redo vs. radius
+		set tdfevsr=tdeinfisco+newr*0
+		set tdflvsr=tdlinfisco+newr*0
+		#
+redogammieplot 0 #
 		#
 		fdraft
 		ctype default window 1 1 1 1
@@ -313,23 +402,23 @@ redogammieplot 0 #
 		ctype default window 1 1 1 1
 		notation -4 4 -4 4
 		erase
-		#now setup
 		#
-		set uu1vsr=uu1vsr
-		trueminmax newr uu1vsr
-		define uu1min (truemin)
+		###########################
+		# now real plots
 		#
-		limits  $rinner $router $uu1min 0
+		##########################
+		#limits  $rinner $router $uurvsrmin 0
+		limits  $rinner $router -1.1 0
 		#
 		ctype default window 2 2 1 2 box 1 2 0 0
 		yla u^r
-		#xla r c^2/(GM)
 		xla r/M
-		ctype default ltype 0 plo 0 newr uu1vsr
+		ctype default ltype 0 plo 0 newr uurvsr
 		#
 		ctype blue ltype 0 plo 0 gr guu1
 		ctype red ltype 0 vertline risco
 		#
+		###################################
 		limits $rinner $router -0.5 4
 		ctype default window 2 2 2 2 box 1 2 0 0
 		define x1label "r/M"
@@ -337,18 +426,18 @@ redogammieplot 0 #
 		xla $x1label
 		yla $x2label
 		ctype default ltype 1 plo 0 newr tdflvsr
-		ctype green ltype 0 plo 0 newr (FLEMvsr/Dphi)
-		ctype magenta ltype 0 plo 0 newr (FLIEvsr/Dphi)
-		#
+		ctype green ltype 0 plo 0 newr (FLEMvsr)
+		ctype magenta ltype 0 plo 0 newr (FLIEvsr)
 		#
 		ctype blue ltype 0 plo 0 gr gFLEM
-		#ctype cyan ltype 0 plo 0 newr FLPAvsr
-		ctype cyan ltype 0 plo 0 newr (ud3vsr*$dx3*_n3/(Dphi))
+		ctype cyan ltype 0 plo 0 newr FLPAvsr
+		#ctype cyan ltype 0 plo 0 newr (udphivsr)
 		# particle term for gammie
 		ctype blue ltype 0 plo 0 gr gl
 		#
 		ctype red ltype 0 vertline risco
 		#
+		#####################################
 		limits $rinner $router -5 1
 		notation -2 2 -2 2
 		#
@@ -375,12 +464,31 @@ redogammieplot 0 #
 		#set lgco=LG(gco)
 		ctype red ltype 0 vertline risco
 		#
+		########################################
+		#
 		limits $rinner $router -0.1 1.0
 		#limits $rinner $router -5 1.0
 		ticksize 0 0 0 0
 		ctype default window 2 2 2 1 box 1 2 0 0
 		#
-		#define x1label "r c^2/(GM)"
+		define x1label "r/M"
+		define x2label "e"
+		xla $x1label
+		yla $x2label
+		ctype default ltype 1 plo 0 newr tdfevsr
+		#ctype default ltype 0 plo 0 newr FEtotvsr
+		#ctype blue ltype 0 plo 0 gr gFEtot
+		ctype green ltype 0 plo 0 newr FEEMvsr
+		#
+		ctype cyan ltype 0 plo 0 newr FEPAvsr
+		#ctype cyan ltype 0 plo 0 newr (-ud0vsr)
+		ctype magenta ltype 0 plo 0 newr FEIEvsr
+		# particle term for gammie
+		#
+		ctype blue ltype 0 plo 0 gr gFEEM
+		ctype blue ltype 0 plo 0 gr gE
+		#
+		ctype red ltype 0 vertline risco
 		#
 		#
 		#
@@ -391,3 +499,41 @@ redogammieplot 0 #
 		#
 		#
 		#
+		#
+gammieparavgbob  0 #
+		#	
+		define startdump (170)
+		define enddump (179)
+		#
+                set _defcoord=0
+		set _n3=1
+		define dx3 1
+                set _dx3=$dx3
+                jrdppenna dump0170
+		set dV=$dx1*$dx2*$dx3
+		#
+                set ju0=0*ti
+                set ju1=0*ti
+                set ju2=0*ti
+                set ju3=0*ti
+                set jd0=0*ti
+		set jd1=0*ti
+		set jd2=0*ti
+		set jd3=0*ti
+                set fu0=0*ti
+		set fu1=0*ti
+		set fu2=0*ti
+		set fu3=0*ti
+		set fu4=0*ti
+		set fu5=0*ti
+                set fd0=0*ti
+		set fd1=0*ti
+		set fd2=0*ti
+		set fd3=0*ti
+		set fd4=0*ti
+		set fd5=0*ti
+		set aphi=0*ti
+		avgtimegfull2 'dump' $startdump $enddump
+		gwritedump2 dumptavg3
+		greaddump2 dumptavg3
+                #
