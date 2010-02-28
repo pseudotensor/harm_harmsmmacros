@@ -228,6 +228,25 @@ penna4panelgammie 0    #
                   #
                   set myfmvsrg=.57 4panelinflowdoall 0.1 _Rin 7 0.42 1 0 
                   #
+powerfit 0        #
+                  #
+		  set a=0.0
+		  set Fhp=0.45
+		  4panelinflowpre1 Fhp
+		  ctype default pl 0 gr ged 1100
+		  #set n0=0.7
+		  set n0=0.9
+		  ctype red pl 0 gr (ged[0]*(gr/gr[0])**(-n0*2)) 1110
+		  #
+		  set a=0.0
+		  set Fhp=0.8
+		  #set Fhp=1.0
+		  4panelinflowpre1 Fhp
+		  ctype default pl 0 gr ged 1100
+		  set n0=0.8
+		  ctype red pl 0 gr (ged[0]*(gr/gr[0])**(-n0*2)) 1110
+		  #
+		  #
 		  #
 gammiedata 0      #
 		#
@@ -285,4 +304,29 @@ gammiedata 0      #
 		 set myfit=((1.1*pi*myFhp)**(5/3)+(mya/myFhp/70)**(6/3))
 		 ctype red pl 0 mya myfit 0111 -0.1 1 1E-3 1
 		#
+		#
+		#set picka=numFhp*(numa-2)
+		set picka=numFhp*2
+		 set ii=0,dimen(a)-1,1
+		 set myuse=(a==a[picka] ? 1 : 0)
+		 set mya=a if(myuse)
+		 set myFhp=Fhp if(myuse)
+		 set myreldeff=reldeff if(myuse)
+		 set myreldl=reldl if(myuse)
+		 #
+                 #
+                 # fit near \Upsilon~1
+                 #
+		 ctype default
+		 pl 0 myFhp myreldl 0101 1E-1 1 1E-1 40
+		 points (Fhp) (LG(-reldl))
+		 #
+		 set myfit=((1.1*pi*myFhp)**(8/5))
+		 set y0=-0.5
+		 set x0=0.2
+		 set y1=-10
+		 set x1=1
+		 set myfit2=y0 + (y1-y0)/(x1-x0)*(myFhp-x0)
+		 ctype red pl 0 myFhp myfit 0111 1E-1 1 1E-1 40
+		 ctype blue  pl 0 myFhp myfit2 0111 1E-1 1 1E-1 40
 		#

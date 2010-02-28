@@ -1484,8 +1484,7 @@ avgtimegfull   3	# avgtimegfull (e.g. avgtimeg 'dump' start end)
                   set h2=sprintf('%04d',$ii)
                   set _fname=h1+h2
                   define filename (_fname)
-		  #jrdp2d $filename
-                  jrdppenna $filename
+		  jrdp2d $filename
 		  define nz (1)
 		  #
  		set rhotavg=rhotavg+rho
@@ -1906,6 +1905,10 @@ avgtimegfull2   3	# avgtimegfull2 (e.g. avgtimeg 'dump' start end)
 		set absB2tavg=rhotavg*0
 		set absB3tavg=rhotavg*0
 		#
+		set auu1tavg=rhotavg*0
+		set auu2tavg=rhotavg*0
+		set auu3tavg=rhotavg*0
+		#
 		set bsqtavg=rhotavg*0
 		#
 		set numstart=$2
@@ -1916,7 +1919,11 @@ avgtimegfull2   3	# avgtimegfull2 (e.g. avgtimeg 'dump' start end)
                   set _fname=h1+h2
                   define filename (_fname)
 		  #jrdpcf2d $filename
-                  jrdppenna $filename
+                    jrdp2d $filename
+                    set _n3=1
+                    set _startx3=1
+                    define dx3 1
+                    set dV=$dx1*$dx2*$dx3
 		  # could use read-in faraday
 		  faraday
 		  jsq
@@ -1924,11 +1931,16 @@ avgtimegfull2   3	# avgtimegfull2 (e.g. avgtimeg 'dump' start end)
 		  set absB2=ABS(B2)
 		  set absB3=ABS(B3)
 		  #
+                  set auu1=ABS(uu1)
+		  set auu2=ABS(uu2)
+		  set auu3=ABS(uu3)
+                  #
 		  #set absb1=ABS(bsq*uu0)
 		  #set absb2=ABS(bsq*uu0*ud0)
 		  #set absb3=ABS(bsq*ud0*ud0-bd0*bd0)
 		  #
 		  #fieldcalc 0 aphi
+                    set aphi=0*ti
 		  #
  		set rhotavg=rhotavg+rho
 		set utavg=utavg+u
@@ -1976,6 +1988,10 @@ avgtimegfull2   3	# avgtimegfull2 (e.g. avgtimeg 'dump' start end)
 		set absB1tavg=absB1tavg+absB1
 		set absB2tavg=absB2tavg+absB2
 		set absB3tavg=absB3tavg+absB3
+		#
+		set auu1tavg=auu1tavg+auu1
+		set auu2tavg=auu2tavg+auu2
+		set auu3tavg=auu3tavg+auu3
 		#
 		set bsqtavg=bsqtavg+bsq
 		#
@@ -2029,6 +2045,10 @@ avgtimegfull2   3	# avgtimegfull2 (e.g. avgtimeg 'dump' start end)
 		set absB1tavg=absB1tavg/numtotal
 		set absB2tavg=absB2tavg/numtotal
 		set absB3tavg=absB3tavg/numtotal
+		#
+		set auu1tavg=auu1tavg/numtotal
+		set auu2tavg=auu2tavg/numtotal
+		set auu3tavg=auu3tavg/numtotal
 		#
 		set bsqtavg=bsqtavg/numtotal
 		#
@@ -2085,6 +2105,10 @@ gfull2normal2    0
 		set absB2=absB2tavg
 		set absB3=absB3tavg
 		#
+		set auu1=auu1tavg
+		set auu2=auu2tavg
+		set auu3=auu3tavg
+		#
 		set bsq=bsqtavg
 		#
 		set aphi=aphitavg
@@ -2109,7 +2133,7 @@ greaddump2       1 # with currents
 		jrdpcf2d $1
 		da ./dumps/$1
 		lines 2 10000000
-		read {rhoqtavg 57 zetatavg 58 jsqtavg 59 fsqtavg 60 absB1 61 absB2 62 absB3 63 bsq 64 aphi 65}
+		read {rhoqtavg 57 zetatavg 58 jsqtavg 59 fsqtavg 60 absB1 61 absB2 62 absB3 63 bsq 64 aphi 65 auu1 66 auu2 67 auu3 68}
 		#
 		#
 gwritedump2       1 # writedump name
@@ -2119,7 +2143,7 @@ gwritedump2       1 # writedump name
 		    {_t _n1 _n2 _startx1 _startx2 _dx1 _dx2 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
 		    #
 		    # 11+4+8+8+4+1+4+4+6+6=56
-		print + "./dumps/$!!1" '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
+		print + "./dumps/$!!1" '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
 		    {ti tj x1 x2 r h rho u v1 v2 v3 \
                       B1 B2 B3 divb \
                       uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
@@ -2131,7 +2155,8 @@ gwritedump2       1 # writedump name
                     fd0 fd1 fd2 fd3 fd4 fd5 \
 		        rhoq zeta jsq fsq \
 		        absB1 absB2 absB3 \
-		        bsq aphi}
+		        bsq aphi \
+		        auu1 auu2 auu3}
 		      #
 		define print_noheader (1)
 		#
@@ -2763,8 +2788,7 @@ printg42     1   #
 		     Tud33part0tavg Tud33part1tavg  Tud33part2tavg  Tud33part3tavg  Tud33part4tavg  Tud33part5tavg  Tud33part6tavg }
 		     #
 		     #
-doavgavg 2 # (out of date)
-		# !$!HOME/bin/smcalc 329 3 256 256 ./dumps/avg ./dumps/avg 10 39
+doavgavg 2       # !$!HOME/bin/smcalc 329 3 256 256 ./dumps/avg ./dumps/avg 10 39
 		!$!HOME/bin/smcalc 329 3 $nx $ny ./dumps/avg ./dumps/avg $1 $2
 		#
 		#
