@@ -2119,7 +2119,7 @@ readinflowrun 1 #
 		# however, these quantities need to be converted to gam99 form.
 		set rhovsrg=rhovsr/(FMvsrg)
 		set uvsrg=uvsr/(FMvsrg)
-		set bcog=bco/(FMvsrg)*2
+		set bcog=bco/(FMvsrg)
 		set ecovsrg=rhovsrg+uvsrg+bcog
 		#
 		#
@@ -2401,8 +2401,8 @@ core2   0       #
 		   ctype default ltype 1 plo 0 newr tdflvsr
 		   #ctype default ltype 0 plo 0 newr FLtotvsr
 		   #ctype blue ltype 0 plo 0 gr gFLtot
-		   ctype green ltype 0 plo 0 newr (FLEMvsr/Dphi)
-		   ctype magenta ltype 0 plo 0 newr (FLIEvsr/Dphi)
+		   ctype green ltype 0 plo 0 newr (FLEMvsr)
+		   ctype magenta ltype 0 plo 0 newr (FLIEvsr)
 		   #
 		   #
 		   if($doinflowread==0){ ctype blue ltype 0 plo 0 gr gFLEM }
