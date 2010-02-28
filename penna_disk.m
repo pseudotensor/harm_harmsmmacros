@@ -228,25 +228,6 @@ penna4panelgammie 0    #
                   #
                   set myfmvsrg=.57 4panelinflowdoall 0.1 _Rin 7 0.42 1 0 
                   #
-powerfit 0        #
-                  #
-		  set a=0.0
-		  set Fhp=0.45
-		  4panelinflowpre1 Fhp
-		  ctype default pl 0 gr ged 1100
-		  #set n0=0.7
-		  set n0=0.9
-		  ctype red pl 0 gr (ged[0]*(gr/gr[0])**(-n0*2)) 1110
-		  #
-		  set a=0.0
-		  set Fhp=0.8
-		  #set Fhp=1.0
-		  4panelinflowpre1 Fhp
-		  ctype default pl 0 gr ged 1100
-		  set n0=0.8
-		  ctype red pl 0 gr (ged[0]*(gr/gr[0])**(-n0*2)) 1110
-		  #
-		  #
 		  #
 gammiedata 0      #
 		#
@@ -305,28 +286,108 @@ gammiedata 0      #
 		 ctype red pl 0 mya myfit 0111 -0.1 1 1E-3 1
 		#
 		#
-		#set picka=numFhp*(numa-2)
-		set picka=numFhp*2
-		 set ii=0,dimen(a)-1,1
-		 set myuse=(a==a[picka] ? 1 : 0)
-		 set mya=a if(myuse)
-		 set myFhp=Fhp if(myuse)
-		 set myreldeff=reldeff if(myuse)
-		 set myreldl=reldl if(myuse)
-		 #
-                 #
-                 # fit near \Upsilon~1
-                 #
-		 ctype default
-		 pl 0 myFhp myreldl 0101 1E-1 1 1E-1 40
-		 points (Fhp) (LG(-reldl))
-		 #
-		 set myfit=((1.1*pi*myFhp)**(8/5))
-		 set y0=-0.5
-		 set x0=0.2
-		 set y1=-10
-		 set x1=1
-		 set myfit2=y0 + (y1-y0)/(x1-x0)*(myFhp-x0)
-		 ctype red pl 0 myFhp myfit 0111 1E-1 1 1E-1 40
-		 ctype blue  pl 0 myFhp myfit2 0111 1E-1 1 1E-1 40
+redogammieplot 0 #
+		#
+		set hor=0.1
+		#
+		set aphi=0*ti
+		avgtimegfull2 'dump' $startdump $enddump
+		gwritedump2 dumptavg3
+		greaddump2 dumptavg3
+		#
+		# for Ldot/Mdot terms and normalization for Fm
+		set Dphi=pi/2
+		#
+		set FM=gdet*rho0*auu1
+		#
+		gcalc2 8 0 hor FM FMvsr $rinner $router
+		#
+		#
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#now setup
+		#
+		set uu1vsr=uu1vsr
+		trueminmax newr uu1vsr
+		define uu1min (truemin)
+		#
+		limits  $rinner $router $uu1min 0
+		#
+		ctype default window 2 2 1 2 box 1 2 0 0
+		yla u^r
+		#xla r c^2/(GM)
+		xla r/M
+		ctype default ltype 0 plo 0 newr uu1vsr
+		#
+		ctype blue ltype 0 plo 0 gr guu1
+		ctype red ltype 0 vertline risco
+		#
+		limits $rinner $router -0.5 4
+		ctype default window 2 2 2 2 box 1 2 0 0
+		define x1label "r/M"
+		define x2label "j"
+		xla $x1label
+		yla $x2label
+		ctype default ltype 1 plo 0 newr tdflvsr
+		ctype green ltype 0 plo 0 newr (FLEMvsr/Dphi)
+		ctype magenta ltype 0 plo 0 newr (FLIEvsr/Dphi)
+		#
+		#
+		ctype blue ltype 0 plo 0 gr gFLEM
+		#ctype cyan ltype 0 plo 0 newr FLPAvsr
+		ctype cyan ltype 0 plo 0 newr (ud3vsr*$dx3*_n3/(Dphi))
+		# particle term for gammie
+		ctype blue ltype 0 plo 0 gr gl
+		#
+		ctype red ltype 0 vertline risco
+		#
+		limits $rinner $router -5 1
+		notation -2 2 -2 2
+		#
+		ticksize 0 0 -1 0
+		ctype default window 2 2 1 1 box 1 2 0 0
+		xla r/M
+		yla "comoving energy density"
+		set lbcog=LG(bcog)
+		ctype green ltype 0 plo 0 newr lbcog
+		set lrhovsrg=LG(rhovsrg)
+		ctype cyan ltype 0 plo 0 newr lrhovsrg
+		set luvsrg=LG(uvsrg)
+		ctype magenta ltype 0 plo 0 newr luvsrg
+		#
+		set lmygbsqvsr=LG(mygbsqvsr)
+		set lged=LG(ged)
+		#
+		ctype blue ltype 0 plo 0 gr lged
+		#
+		set lgrho=LG(grho)
+		#
+		ctype blue ltype 0 plo 0 gr lgrho
+		#
+		#set lgco=LG(gco)
+		ctype red ltype 0 vertline risco
+		#
+		limits $rinner $router -0.1 1.0
+		#limits $rinner $router -5 1.0
+		ticksize 0 0 0 0
+		ctype default window 2 2 2 1 box 1 2 0 0
+		#
+		#define x1label "r c^2/(GM)"
+		#
+		#
+		#
+		#
+		#
+		#
+		#
+		#
+		#
 		#
