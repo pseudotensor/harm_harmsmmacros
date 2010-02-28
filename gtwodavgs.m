@@ -1477,6 +1477,8 @@ avgtimegfull   3	# avgtimegfull (e.g. avgtimeg 'dump' start end)
 		#
 		set mdottavg=rhotavg*0
 		#
+		#
+		#
 		set numstart=$2
 		set numend=$3
                 set numtotal=numend-numstart+1
@@ -1911,6 +1913,16 @@ avgtimegfull2   3	# avgtimegfull2 (e.g. avgtimeg 'dump' start end)
 		#
 		set bsqtavg=rhotavg*0
 		#
+		#
+		#
+		set Tud10PAtavg=rhotavg*0
+		set Tud10IEtavg=rhotavg*0
+		set Tud10Btavg=rhotavg*0
+		set Tud13PAtavg=rhotavg*0
+		set Tud13IEtavg=rhotavg*0
+		set Tud13Btavg=rhotavg*0
+		#
+		#
 		set numstart=$2
 		set numend=$3
                 set numtotal=numend-numstart+1
@@ -1919,7 +1931,8 @@ avgtimegfull2   3	# avgtimegfull2 (e.g. avgtimeg 'dump' start end)
                   set _fname=h1+h2
                   define filename (_fname)
 		  #jrdpcf2d $filename
-                    jrdp2d $filename
+                    #jrdp2d $filename
+                    jrdppenna $filename
                     set _n3=1
                     set _startx3=1
                     define dx3 1
@@ -1941,6 +1954,17 @@ avgtimegfull2   3	# avgtimegfull2 (e.g. avgtimeg 'dump' start end)
 		  #
 		  #fieldcalc 0 aphi
                     set aphi=0*ti
+		  #
+		  #
+		  stresscalc 1
+		  set Tud10PA=-Tud10part1
+		  set Tud10IE=-(Tud10part0+Tud10part2+Tud10part4)
+		  set Tud10B=-Tud10EM
+		  set Tud13PA=-Tud13part1
+		  set Tud13IE=-(Tud13part0+Tud13part2+Tud13part4)
+		  set Tud13B=-Tud13EM
+		  #
+		  #
 		  #
  		set rhotavg=rhotavg+rho
 		set utavg=utavg+u
@@ -1997,6 +2021,12 @@ avgtimegfull2   3	# avgtimegfull2 (e.g. avgtimeg 'dump' start end)
 		#
 		set aphitavg=aphitavg+aphi
 		#
+		set Tud10PAtavg=Tud10PAtavg+Tud10PA
+		set Tud10IEtavg=Tud10IEtavg+Tud10IE
+		set Tud10Btavg=Tud10Btavg+Tud10B
+		set Tud13PAtavg=Tud13PAtavg+Tud13PA
+		set Tud13IEtavg=Tud13IEtavg+Tud13IE
+		set Tud13Btavg=Tud13Btavg+Tud13B
 		#		
 		}
 		set rhotavg=rhotavg/numtotal
@@ -2053,6 +2083,13 @@ avgtimegfull2   3	# avgtimegfull2 (e.g. avgtimeg 'dump' start end)
 		set bsqtavg=bsqtavg/numtotal
 		#
 		set aphitavg=aphitavg/numtotal
+		#
+		set Tud10PAtavg=Tud10PAtavg/numtotal
+		set Tud10IEtavg=Tud10IEtavg/numtotal
+		set Tud10Btavg=Tud10Btavg/numtotal
+		set Tud13PAtavg=Tud13PAtavg/numtotal
+		set Tud13IEtavg=Tud13IEtavg/numtotal
+		set Tud13Btavg=Tud13Btavg/numtotal
 		#
 		define DOGCALC (1)
 		gfull2normal2
@@ -2113,6 +2150,13 @@ gfull2normal2    0
 		#
 		set aphi=aphitavg
 		#
+		set Tud10PA=Tud10PAtavg
+		set Tud10IE=Tud10IEtavg
+		set Tud10B=Tud10Btavg
+		set Tud13PA=Tud13PAtavg
+		set Tud13IE=Tud13IEtavg
+		set Tud13B=Tud13Btavg
+		#
 gcalcother      0
 		#
 		set lbrel=lg(bsq/rho)
@@ -2133,7 +2177,7 @@ greaddump2       1 # with currents
 		jrdpcf2d $1
 		da ./dumps/$1
 		lines 2 10000000
-		read {rhoqtavg 57 zetatavg 58 jsqtavg 59 fsqtavg 60 absB1 61 absB2 62 absB3 63 bsq 64 aphi 65 auu1 66 auu2 67 auu3 68}
+		read {rhoqtavg 57 zetatavg 58 jsqtavg 59 fsqtavg 60 absB1 61 absB2 62 absB3 63 bsq 64 aphi 65 auu1 66 auu2 67 auu3 68 Tud10PA 69 Tud10IE 70 Tud10B 71 Tud13PA 72 Tud13IE 73 Tud13B 74 }
 		#
 		#
 gwritedump2       1 # writedump name
@@ -2143,7 +2187,7 @@ gwritedump2       1 # writedump name
 		    {_t _n1 _n2 _startx1 _startx2 _dx1 _dx2 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
 		    #
 		    # 11+4+8+8+4+1+4+4+6+6=56
-		print + "./dumps/$!!1" '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
+		print + "./dumps/$!!1" '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
 		    {ti tj x1 x2 r h rho u v1 v2 v3 \
                       B1 B2 B3 divb \
                       uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
@@ -2156,7 +2200,10 @@ gwritedump2       1 # writedump name
 		        rhoq zeta jsq fsq \
 		        absB1 absB2 absB3 \
 		        bsq aphi \
-		        auu1 auu2 auu3}
+		        auu1 auu2 auu3 \
+		        Tud10PA Tud10IE Tud10B \
+		        Tud13PA Tud13IE Tud13B \
+		        }
 		      #
 		define print_noheader (1)
 		#
