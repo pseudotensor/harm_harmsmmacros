@@ -324,7 +324,7 @@ makeredoplot 0  #
 		#
 redogammiecompute 0 #
 		#
-		# below depeends upon the simulation!
+		# below Dphi depeends upon the simulation!
 		set Dphi=pi/2
 		# r = R0 + exp(x1) -> dr/dx1 = exp(x1) = (r-r0)
 		set dxdxp11=(r-R0)
