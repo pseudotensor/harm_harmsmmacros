@@ -290,10 +290,10 @@ fullredo 2      # fullredo <hor> <Fhp>
 		# fullredo 0.1 0.4 $rhor 7
 		# jre bzplots.m
 		#gammieparavgbob
+		# gammieparavgbobjustread
 		#
 		set hor=$1
 		set Fhp=$2
-		4panelinflowpre1 $2
 		#
 		define rhor (2)
 		#
@@ -301,6 +301,9 @@ fullredo 2      # fullredo <hor> <Fhp>
 		define router 7
 		#
 		redogammiecompute
+		#
+		4panelinflowpre1 Fhp
+		#
 		redogammieplot
 		#
 		device postencap truebz4panelhor0.1mag0.43.eps
@@ -534,6 +537,21 @@ gammieparavgbob  0 #
 		set fd5=0*ti
 		set aphi=0*ti
 		avgtimegfull2 'dump' $startdump $enddump
-		gwritedump2 dumptavg3
-		greaddump2 dumptavg3
+		gwritedumppenna  dumptavg3
+		greaddumppenna dumptavg3
+                #
+gammieparavgbobjustread  0 #
+		#	
+		define startdump (170)
+		define enddump (179)
+		#
+                set _defcoord=0
+		set _n3=1
+		define dx3 1
+                set _dx3=$dx3
+                jrdppenna dump0170
+		set dV=$dx1*$dx2*$dx3
+		#
+		greaddumppenna dumptavg3
+		#greaddump2 dumptavg3
                 #
