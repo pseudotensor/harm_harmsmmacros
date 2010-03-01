@@ -286,19 +286,19 @@ gammiedata 0      #
 		 ctype red pl 0 mya myfit 0111 -0.1 1 1E-3 1
 		#
 		#
-fullredo 2      # fullredo <hor> <Fhp>
-		# fullredo 0.1 0.4 $rhor 7
+fullredo 6      # fullredo <hor> <Fhp> <rinner> <router> <dumpstart> <dumpend>
+		# fullredo 0.1 0.43 2 7 170 179
 		# jre bzplots.m
-		#gammieparavgbob
+		gammieparavgbob $5 $6
 		# gammieparavgbobjustread
 		#
 		set hor=$1
 		set Fhp=$2
 		#
-		define rhor (2)
+		#define rhor (2)
 		#
-		define rinner $rhor
-		define router 7
+		define rinner $3
+		define router $4
 		#
 		redogammiecompute
 		#
@@ -306,6 +306,7 @@ fullredo 2      # fullredo <hor> <Fhp>
 		#
 		redogammieplot
 		#
+makeredoplot 0  #
 		device postencap truebz4panelhor0.1mag0.43.eps
 		redogammieplot
 		device X11
@@ -332,6 +333,12 @@ redogammiecompute 0 #
 		set FMvsrg=FMvsr[0]/(2*hor)*boxfactor + FMvsr*0
 		#set FMvsrg=FMdenvsr[0] + FMdenvsr*0
 		#set FMvsrg=FMdenvsr
+		#
+		set topupsilon=sqrt(2)*absB1*sqrt(boxfactor*FMvsr[0])
+		gcalc2 8 0 hor topupsilon topupsilonvsr $rinner $router
+		#set factor=(topupsilonvsr[0]/FMvsr[0])/(topupsilonvsr/FMvsr)
+		set factor=1
+		set upsilon=topupsilonvsr/FMvsr*factor
 		#
 		# average, not integral
 		define averagetype (2)
@@ -503,10 +510,12 @@ redogammieplot 0 #
 		#
 		#
 		#
-gammieparavgbob  0 #
+gammieparavgbob  2 #
 		#	
-		define startdump (170)
-		define enddump (179)
+		#define startdump (170)
+		#define enddump (179)
+		define startdump ($1)
+		define enddump ($2)
 		#
                 set _defcoord=0
 		set _n3=1
@@ -537,18 +546,11 @@ gammieparavgbob  0 #
 		set fd5=0*ti
 		set aphi=0*ti
 		avgtimegfull2 'dump' $startdump $enddump
-		gwritedumppenna  dumptavg3
-		greaddumppenna dumptavg3
+		gwritedumppenna  dumptavg_$1_$2
+		greaddumppenna dumptavg_$1_$2
                 #
 gammieparavgbobjustread  0 #
 		#	
-		define startdump (170)
-		define enddump (179)
-		#
-                set _defcoord=0
-		set _n3=1
-		define dx3 1
-                set _dx3=$dx3
                 jrdppenna dump0170
 		set dV=$dx1*$dx2*$dx3
 		#
