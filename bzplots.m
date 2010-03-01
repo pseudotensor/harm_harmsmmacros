@@ -1819,7 +1819,7 @@ sonicplots 0    #
 		# get gammie solution
 		define magpar ($1)
 		define bhspin (a)
-		define numpoints (1024)
+		define numpoints (4000)
 		!./inf_const $magpar $bhspin $numpoints > ./gammiesol1.txt
 		!tail -1 gammiesol1.txt > gammiesol2.txt
 		da gammiesol2.txt
@@ -1831,7 +1831,8 @@ sonicplots 0    #
 		#
 		define gammieFL (gfl)
 		define gammieFE (gfe)
-		define size (dimen(newr))
+		#		define size (dimen(newr))
+		define size (1024)
 		!./inf_solv $magpar $bhspin $gammieFL $gammieFE $size > gammiesolve1.txt
 		da gammiesolve1.txt
 		lines 1 10000

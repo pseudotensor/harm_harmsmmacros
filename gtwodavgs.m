@@ -1913,6 +1913,7 @@ avgtimegfull2   3	# avgtimegfull2 (e.g. avgtimeg 'dump' start end)
 		#
 		set bsqtavg=rhotavg*0
 		#
+		set aphitavg=rhotavg*0
 		#
 		#
 		set Tud10PAtavg=rhotavg*0
@@ -1933,10 +1934,11 @@ avgtimegfull2   3	# avgtimegfull2 (e.g. avgtimeg 'dump' start end)
 		  #jrdpcf2d $filename
                     #jrdp2d $filename
                     jrdppenna $filename
-                    set _n3=1
-                    set _startx3=1
-                    define dx3 1
-                    set dV=$dx1*$dx2*$dx3
+		    # For 2D:
+		    #set _n3=1
+                    #set _startx3=1
+                    #define dx3 1
+                    #set dV=$dx1*$dx2*$dx3
 		  # could use read-in faraday
 		  faraday
 		  jsq
@@ -2174,17 +2176,32 @@ greaddumpold       1 # 2D only right now
 		gcalcother
 		#
 greaddump2       1 # with currents
-		jrdpcf2d $1
+		#jrdpcf2d $1
+		jrdppenna $1
 		da ./dumps/$1
 		lines 2 10000000
-		read {rhoqtavg 57 zetatavg 58 jsqtavg 59 fsqtavg 60 absB1 61 absB2 62 absB3 63 bsq 64 aphi 65 auu1 66 auu2 67 auu3 68 Tud10PA 69 Tud10IE 70 Tud10B 71 Tud13PA 72 Tud13IE 73 Tud13B 74 }
+		read {rhoq 57 zeta 58 jsq 59 fsq 60 absB1 61 absB2 62 absB3 63 bsq 64 aphi 65 auu1 66 auu2 67 auu3 68 Tud10PA 69 Tud10IE 70 Tud10B 71 Tud13PA 72 Tud13IE 73 Tud13B 74 }
+		#
+greaddumppenna  1 # with currents
+	        jrdppenna $1
+		#
+		da ./dumps/$1
+		lines 2 10000000
+		read {rhoq 73 zeta 74 jsq 75 fsq 76 absB1 77 absB2 78 absB3 79 bsq 80 aphi 81 auu1 82 auu2 83 auu3 84 Tud10PA 85 Tud10IE 86 Tud10B 87 Tud13PA 88 Tud13IE 89 Tud13B 90 }
 		#
 		#
 gwritedump2       1 # writedump name
 		#
 		define print_noheader (1)
+		#
+		# 2D:
 		print "./dumps/$!!1" '%21.15g %d %d %21.15g %21.15g %21.15g %21.15g %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
 		    {_t _n1 _n2 _startx1 _startx2 _dx1 _dx2 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
+		#
+		# 3D:
+		#print "./dumps/$!!1" '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
+		 #   {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
+		    #
 		    #
 		    # 11+4+8+8+4+1+4+4+6+6=56
 		print + "./dumps/$!!1" '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
@@ -2193,6 +2210,40 @@ gwritedump2       1 # writedump name
                       uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
                       bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
                      v1m v1p v2m v2p gdet \
+                    ju0 ju1 ju2 ju3  \
+                    jd0 jd1 jd2 jd3  \
+                    fu0 fu1 fu2 fu3 fu4 fu5 \
+                    fd0 fd1 fd2 fd3 fd4 fd5 \
+		        rhoq zeta jsq fsq \
+		        absB1 absB2 absB3 \
+		        bsq aphi \
+		        auu1 auu2 auu3 \
+		        Tud10PA Tud10IE Tud10B \
+		        Tud13PA Tud13IE Tud13B \
+		        }
+		      #
+		define print_noheader (1)
+		#
+gwritedumppenna       1 # writedump name
+		#
+		define print_noheader (1)
+		#
+		print "./dumps/$!!1" '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
+		    {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
+		    #
+		    # 9+8+3+8+1+16+6+1+8+12+4+3+2+3+6=90
+		    # 
+		print + "./dumps/$!!1" '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
+		    {ti tj tk x1 x2 x3 r h ph \
+                    rho u v1 v2 v3 \
+      B1 B2 B3 \
+      p cs2 Sden \
+      U0 U1 U2 U3 U4 U5 U6 U7 \
+      divb \
+      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
+      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
+                    v1m v1p v2m v2p v3m v3p \
+                    gdet \
                     ju0 ju1 ju2 ju3  \
                     jd0 jd1 jd2 jd3  \
                     fu0 fu1 fu2 fu3 fu4 fu5 \
