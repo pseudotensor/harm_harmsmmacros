@@ -364,7 +364,7 @@ redogammiecompute 0 #
 		#set divfactor=1/(2*hor)
 		set divfactor=1/(2*sin(hor))
 		set FMvsrg=FMvsr[0]/(2*hor)*boxfactor + FMvsr*0
-		# below better when there is stratification
+		# below better when there is stratification, but requires u^r be similar to Gammie model at horizon.
 		set FMgammie=grho*guu1
 		set FMvsrg=(rhovsr[0]*uurvsr[0])/FMgammie[0]
 		#
