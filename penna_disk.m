@@ -300,9 +300,19 @@ fullredo 6      # fullredo <hor> <Fhp> <rinner> <router> <dumpstart> <dumpend>
 		define rinner $3
 		define router $4
 		#
-		redogammiecompute
+		# just get newr
+		set FM=rho*auu1
+		gcalc2 8 0 hor FM FMvsr $rinner $router
 		#
 		4panelinflowpre1 Fhp
+		#
+		redogammiecompute
+		#
+		redogammieplot
+		#
+partialredo 1   #	
+		#
+		4panelinflowpre1 $1
 		#
 		redogammieplot
 		#
@@ -325,14 +335,6 @@ redogammiecompute 0 #
 		set FM=rho*auu1
 		gcalc2 8 0 hor FM FMvsr $rinner $router
 		#
-		# Gammie F_M = -1  = 2*pi*r**2*rho*uur
-		# use uur since need to use to make dimensionless from Gammie definition
-		#set FMden=2*pi*gdet*rho*auur/(4*pi)*boxfactor
-		#gcalc2 8 2 hor FMden FMdenvsr $rinner $router
-		# correct FMden for quantities that aren't flux integrals for which FM is divisor
-		set FMvsrg=FMvsr[0]/(2*hor)*boxfactor + FMvsr*0
-		#set FMvsrg=FMdenvsr[0] + FMdenvsr*0
-		#set FMvsrg=FMdenvsr
 		#
 		set topupsilon=sqrt(2)*absB1*sqrt(boxfactor*FMvsr[0])
 		gcalc2 8 0 hor topupsilon topupsilonvsr $rinner $router
@@ -352,6 +354,19 @@ redogammiecompute 0 #
 		gcalc2 8 $averagetype hor bsq bsqvsr $rinner $router
 		gcalc2 8 $averagetype hor rho rhovsr $rinner $router
 		gcalc2 8 $averagetype hor u uvsr $rinner $router
+		#
+		# Gammie F_M = -1  = 2*pi*r**2*rho*uur
+		# use uur since need to use to make dimensionless from Gammie definition
+		#set FMden=2*pi*gdet*rho*auur/(4*pi)*boxfactor
+		#gcalc2 8 2 hor FMden FMdenvsr $rinner $router
+		# correct FMden for quantities that aren't flux integrals for which FM is divisor
+		# below works for no stratification.
+		#set divfactor=1/(2*hor)
+		set divfactor=1/(2*sin(hor))
+		set FMvsrg=FMvsr[0]/(2*hor)*boxfactor + FMvsr*0
+		# below better when there is stratification
+		set FMgammie=grho*guu1
+		set FMvsrg=(rhovsr[0]*uurvsr[0])/FMgammie[0]
 		#
 		set bcog=(bsqvsr*0.5)/(FMvsrg)
 		set rhovsrg=rhovsr/(FMvsrg)
