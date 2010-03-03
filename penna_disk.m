@@ -289,7 +289,32 @@ gammiedata 0      #
 fullredo 6      # fullredo <hor> <Fhp> <rinner> <router> <dumpstart> <dumpend>
 		# fullredo 0.1 0.43 2 7 170 179
 		# jre bzplots.m
+		#greaddumppenna dumptavg_"$startdump"_"$enddump"
 		gammieparavgbob $5 $6
+		# gammieparavgbobjustread
+		#
+		set hor=$1
+		set Fhp=$2
+		#
+		#define rhor (2)
+		#
+		define rinner $3
+		define router $4
+		#
+		# just get newr
+		set FM=rho*auu1
+		gcalc2 8 0 hor FM FMvsr $rinner $router
+		#
+		4panelinflowpre1 Fhp
+		#
+		redogammiecompute
+		#
+		redogammieplot
+		#
+semifullredo 4  # semifullredo <hor> <Fhp> <rinner> <router>
+		# semifullredo 0.1 0.43 2 7
+		# jre bzplots.m
+		#greaddumppenna dumptavg_"$startdump"_"$enddump"
 		# gammieparavgbobjustread
 		#
 		set hor=$1
@@ -317,7 +342,7 @@ partialredo 1   #
 		redogammieplot
 		#
 makeredoplot 0  #
-		device postencap truebz4panelhor0.1mag0.43.eps
+		device postencap finalgammie.eps
 		redogammieplot
 		device X11
 		#
@@ -338,6 +363,8 @@ redogammiecompute 0 #
 		set FM=rho*auu1
 		gcalc2 8 0 hor FM FMvsr $rinner $router
 		#
+		# dr/dt = dx1/dt dr/dx1 = uu1*dxdxp11
+		set uur=-auu1*dxdxp11
 		#
 		set topupsilon=sqrt(2)*absB1*sqrt(boxfactor*FMvsr[0])
 		gcalc2 8 0 hor topupsilon topupsilonvsr $rinner $router
@@ -345,10 +372,29 @@ redogammiecompute 0 #
 		set factor=1
 		set upsilon=topupsilonvsr/FMvsr*factor
 		#
+		set unity=1 + rho*0
+		#gcalc2 8 0 hor unity unityvsr $rinner $router
+		#
+		set topnew=sqrt(4*pi)*absB1*boxfactor
+		set bottomnew=rho*auu1*boxfactor
+		gcalc2 8 0 hor topnew topnewvsr $rinner $router
+		gcalc2 8 0 hor bottomnew bottomnewvsr $rinner $router
+		set AA=bottomnewvsr[0]/(2*pi*(2*pi*2*sin(hor)))
+		set upsilonnew=(topnewvsr/bottomnewvsr)*sqrt(AA)
+		#
+		set bottomnew2=r**2*rho*uur*boxfactor
+		gcalc2 8 2 hor bottomnew2 bottomnew2vsr $rinner $router
+		set upsilonnew2=(topnewvsr/bottomnewvsr)*sqrt(abs(bottomnew2vsr[0]/(2*pi)))
+		#
+		set rhoks=sqrt(r**2+a**2*cos(h)**2)
+		set gdetks=rhoks**2*ABS(sin(h))
+		set it=gdetks*rho*uur if(ti==0 && tj==$ny/2 && tk==0)
+		set upsilonnew3=(topnewvsr/bottomnewvsr)*sqrt(abs(it/(2*pi)))
+		#
+		#print {newr upsilon upsilonnew upsilonnew2 upsilonnew3}
+		#
 		# average, not integral
 		define averagetype (2)
-		# dr/dt = dx1/dt dr/dx1 = uu1*dxdxp11
-		set uur=-auu1*dxdxp11
 		gcalc2 8 $averagetype hor uur uurvsr $rinner $router
 		#
 		trueminmax newr uurvsr
