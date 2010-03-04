@@ -3273,7 +3273,11 @@ agplc 17	# animplc 'dump' r 000 <0 0 0 0>
 		  #jrdp2d $filename
 		  #define coord 1
                   #jrdpcf3duold $filename
-                    echo $filename $filenameflux $filenamedebug
+		  #
+		  #jrdppenna $filename
+		  #
+		  # GRB STUFF
+		  #echo $filename $filenameflux $filenamedebug
                   jrdp3du $filename
                   jrdpflux $filenameflux
                   jrdpdebug $filenamedebug

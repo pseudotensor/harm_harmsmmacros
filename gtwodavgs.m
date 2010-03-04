@@ -1911,6 +1911,9 @@ avgtimegfull2   3	# avgtimegfull2 (e.g. avgtimeg 'dump' start end)
 		set auu2tavg=rhotavg*0
 		set auu3tavg=rhotavg*0
 		#
+		set pabsB1tavg=rhotavg*0
+		set pauu1tavg=rhotavg*0
+		#
 		set bsqtavg=rhotavg*0
 		#
 		set aphitavg=rhotavg*0
@@ -1950,6 +1953,27 @@ avgtimegfull2   3	# avgtimegfull2 (e.g. avgtimeg 'dump' start end)
 		  set auu2=ABS(uu2)
 		  set auu3=ABS(uu3)
                   #
+		  #
+		  # Get penna versions that are averaged in phi before time-averaging
+		  #
+		  set pabsB1=B1*0
+		  set pauu1=auu1*0
+		  #
+		  if(0){\
+		  do peni=0,$nx-1,1 {\
+		   do penj=0,$ny-1,1 {\
+		         set temp = B1 if(ti==$peni && tj==$penj)
+		         set sumtempB1=SUM(temp)/dimen(temp)
+		         set temp = uu1 if(ti==$peni && tj==$penj)
+		         set sumtempuu1=SUM(temp)/dimen(temp)
+		         do penk=0,$nz-1,1 {\
+		          set pabsB1[$peni + $penj*$nx + $penk*$nx*$ny] = sumtempB1
+		          set pauu1[$peni + $penj*$nx + $penk*$nx*$ny] = sumtempuu1
+		       }
+		   }
+		  }
+		  }
+		  #
 		  #set absb1=ABS(bsq*uu0)
 		  #set absb2=ABS(bsq*uu0*ud0)
 		  #set absb3=ABS(bsq*ud0*ud0-bd0*bd0)
@@ -2019,6 +2043,9 @@ avgtimegfull2   3	# avgtimegfull2 (e.g. avgtimeg 'dump' start end)
 		set auu2tavg=auu2tavg+auu2
 		set auu3tavg=auu3tavg+auu3
 		#
+		set pabsB1tavg=pabsB1tavg+pabsB1
+		set pauu1tavg=pauu1tavg+pauu1
+		#
 		set bsqtavg=bsqtavg+bsq
 		#
 		set aphitavg=aphitavg+aphi
@@ -2081,6 +2108,9 @@ avgtimegfull2   3	# avgtimegfull2 (e.g. avgtimeg 'dump' start end)
 		set auu1tavg=auu1tavg/numtotal
 		set auu2tavg=auu2tavg/numtotal
 		set auu3tavg=auu3tavg/numtotal
+		#
+		set pabsB1tavg=pabsB1tavg/numtotal
+		set pauu1tavg=pauu1tavg/numtotal
 		#
 		set bsqtavg=bsqtavg/numtotal
 		#
@@ -2148,6 +2178,9 @@ gfull2normal2    0
 		set auu2=auu2tavg
 		set auu3=auu3tavg
 		#
+		set pabsB1=pabsB1tavg
+		set pauu1=pauu1tavg
+		#
 		set bsq=bsqtavg
 		#
 		set aphi=aphitavg
@@ -2180,14 +2213,14 @@ greaddump2       1 # with currents
 		jrdppenna $1
 		da ./dumps/$1
 		lines 2 10000000
-		read {rhoq 57 zeta 58 jsq 59 fsq 60 absB1 61 absB2 62 absB3 63 bsq 64 aphi 65 auu1 66 auu2 67 auu3 68 Tud10PA 69 Tud10IE 70 Tud10B 71 Tud13PA 72 Tud13IE 73 Tud13B 74 }
+		read {rhoq 57 zeta 58 jsq 59 fsq 60 absB1 61 absB2 62 absB3 63 bsq 64 aphi 65 auu1 66 auu2 67 auu3 68 Tud10PA 69 Tud10IE 70 Tud10B 71 Tud13PA 72 Tud13IE 73 Tud13B 74 pabsB1 75 pauu1 76}
 		#
 greaddumppenna  1 # with currents
 	        jrdppenna $1
 		#
 		da ./dumps/$1
 		lines 2 10000000
-		read {rhoq 73 zeta 74 jsq 75 fsq 76 absB1 77 absB2 78 absB3 79 bsq 80 aphi 81 auu1 82 auu2 83 auu3 84 Tud10PA 85 Tud10IE 86 Tud10B 87 Tud13PA 88 Tud13IE 89 Tud13B 90 }
+		read {rhoq 73 zeta 74 jsq 75 fsq 76 absB1 77 absB2 78 absB3 79 bsq 80 aphi 81 auu1 82 auu2 83 auu3 84 Tud10PA 85 Tud10IE 86 Tud10B 87 Tud13PA 88 Tud13IE 89 Tud13B 90 pabsB1 91 pauu1 92}
 		#
 		#
 gwritedump2       1 # writedump name
@@ -2204,7 +2237,7 @@ gwritedump2       1 # writedump name
 		    #
 		    #
 		    # 11+4+8+8+4+1+4+4+6+6=56
-		print + "./dumps/$!!1" '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
+		print + "./dumps/$!!1" '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
 		    {ti tj x1 x2 r h rho u v1 v2 v3 \
                       B1 B2 B3 divb \
                       uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
@@ -2220,6 +2253,7 @@ gwritedump2       1 # writedump name
 		        auu1 auu2 auu3 \
 		        Tud10PA Tud10IE Tud10B \
 		        Tud13PA Tud13IE Tud13B \
+		        pabsB1 pauu1 \
 		        }
 		      #
 		define print_noheader (1)
@@ -2233,7 +2267,7 @@ gwritedumppenna       1 # writedump name
 		    #
 		    # 9+8+3+8+1+16+6+1+8+12+4+3+2+3+6=90
 		    # 
-		print + "./dumps/$!!1" '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
+		print + "./dumps/$!!1" '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
 		    {ti tj tk x1 x2 x3 r h ph \
                     rho u v1 v2 v3 \
       B1 B2 B3 \
@@ -2254,6 +2288,7 @@ gwritedumppenna       1 # writedump name
 		        auu1 auu2 auu3 \
 		        Tud10PA Tud10IE Tud10B \
 		        Tud13PA Tud13IE Tud13B \
+		        pabsB1 pauu1 \
 		        }
 		      #
 		define print_noheader (1)
