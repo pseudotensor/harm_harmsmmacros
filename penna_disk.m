@@ -285,8 +285,19 @@ gammiedata 0      #
 		 set myfit=((1.1*pi*myFhp)**(5/3)+(mya/myFhp/70)**(6/3))
 		 ctype red pl 0 mya myfit 0111 -0.1 1 1E-3 1
 		#
+chooseabsversion 1
+		# 0 = normal 1 = penna which takes abs only after phi-averaging
+		if($1==0){\
+		 set theuu1=auu1
+		 set theB1=absB1
+		}\
+	        else{\
+		 set theuu1=abs(pauu1)
+		 set theB1=abs(pabsB1)
+		}
 		#
-fullredo 6      # fullredo <hor> <Fhp> <rinner> <router> <dumpstart> <dumpend>
+		#
+fullredo 7      # fullredo <hor> <Fhp> <rinner> <router> <dumpstart> <dumpend> <whichversion>
 		# fullredo 0.1 0.43 2 7 170 179
 		# jre bzplots.m
 		#greaddumppenna dumptavg_"$startdump"_"$enddump"
@@ -301,8 +312,10 @@ fullredo 6      # fullredo <hor> <Fhp> <rinner> <router> <dumpstart> <dumpend>
 		define rinner $3
 		define router $4
 		#
+		chooseabsversion $7
+		#
 		# just get newr
-		set FM=rho*auu1
+		set FM=rho*theuu1
 		gcalc2 8 0 hor FM FMvsr $rinner $router
 		#
 		4panelinflowpre1 Fhp
@@ -311,8 +324,8 @@ fullredo 6      # fullredo <hor> <Fhp> <rinner> <router> <dumpstart> <dumpend>
 		#
 		redogammieplot
 		#
-semifullredo 4  # semifullredo <hor> <Fhp> <rinner> <router>
-		# semifullredo 0.1 0.43 2 7
+semifullredo 5  # semifullredo <hor> <Fhp> <rinner> <router> <whichversion>
+		# semifullredo 0.1 0.43 2 7 0
 		# jre bzplots.m
 		#greaddumppenna dumptavg_"$startdump"_"$enddump"
 		# gammieparavgbobjustread
@@ -325,8 +338,10 @@ semifullredo 4  # semifullredo <hor> <Fhp> <rinner> <router>
 		define rinner $3
 		define router $4
 		#
+		chooseabsversion $5
+		#
 		# just get newr
-		set FM=rho*auu1
+		set FM=rho*theuu1
 		gcalc2 8 0 hor FM FMvsr $rinner $router
 		#
 		4panelinflowpre1 Fhp
@@ -359,14 +374,14 @@ redogammiecompute 0 #
 		set dxdxp33=Dphi
 		set boxfactor=(2*pi)/(Dphi)
 		#
-		# integral, not average : use auu1 since numerator will use uu1
-		set FM=rho*auu1
+		# integral, not average : use theuu1 since numerator will use uu1
+		set FM=rho*theuu1
 		gcalc2 8 0 hor FM FMvsr $rinner $router
 		#
 		# dr/dt = dx1/dt dr/dx1 = uu1*dxdxp11
-		set uur=-auu1*dxdxp11
+		set uur=-theuu1*dxdxp11
 		#
-		set topupsilon=sqrt(2)*absB1*sqrt(boxfactor*FMvsr[0])
+		set topupsilon=sqrt(2)*theB1*sqrt(boxfactor*FMvsr[0])
 		gcalc2 8 0 hor topupsilon topupsilonvsr $rinner $router
 		#set factor=(topupsilonvsr[0]/FMvsr[0])/(topupsilonvsr/FMvsr)
 		set factor=1
@@ -375,8 +390,8 @@ redogammiecompute 0 #
 		set unity=1 + rho*0
 		#gcalc2 8 0 hor unity unityvsr $rinner $router
 		#
-		set topnew=sqrt(4*pi)*absB1*boxfactor
-		set bottomnew=rho*auu1*boxfactor
+		set topnew=sqrt(4*pi)*theB1*boxfactor
+		set bottomnew=rho*theuu1*boxfactor
 		gcalc2 8 0 hor topnew topnewvsr $rinner $router
 		gcalc2 8 0 hor bottomnew bottomnewvsr $rinner $router
 		set AA=bottomnewvsr[0]/(2*pi*(2*pi*2*sin(hor)))
