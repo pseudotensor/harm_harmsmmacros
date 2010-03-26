@@ -330,6 +330,11 @@ semifullredo 5  # semifullredo <hor> <Fhp> <rinner> <router> <whichversion>
 		#greaddumppenna dumptavg_"$startdump"_"$enddump"
 		# gammieparavgbobjustread
 		#
+		# below Dphi depeends upon the simulation!
+		set Dphi=pi/2
+		# d\phi/dx3 = Dphi
+		set dxdxp33=Dphi
+		#
 		set hor=$1
 		set Fhp=$2
 		#
@@ -362,16 +367,43 @@ makeredoplot 0  #
 		device X11
 		#
 		#
+                #
+setupjonoldsims 0 #
+		# on ki-rh39:
+		# /afs/slac.stanford.edu/u/ki/jmckinne/nfsslac/nobackup/usbdisk/jon/rundata/grmhd-a.9375-456by456-fl46-compareoldutoprim
+		jrdp2d dump0020
+		#
+		# /afs/slac.stanford.edu/u/ki/jmckinne/nfsslac/nobackup/usbdisk/jon/rundata/grmhd-a.9375-256by256-fl46-newtopology-vert2
+		jrdp2d dump0018
+		#
+		set auu1=abs(uu1)
+		set absB1=abs(B1)
+		#
+		define dx3 (2*pi)
+		set area=$dx2*$dx3
+		set dV=area*$dx1
+		set Dphi=2*pi
+		# d\phi/dx3 = 1
+		set dxdxp33=1
+                #
+		define rinner (1+sqrt(1-a**2))
+		define router (3)
+		#
+		set tk=0*rho
+		#
+		set hor=0.2
+                #
 redogammiecompute 0 #
 		#
+		redogammiecompute1
+		redogammiecompute2
+		#
+redogammiecompute1 0 #
 		#
 		#
-		# below Dphi depeends upon the simulation!
-		set Dphi=pi/2
+		#
 		# r = R0 + exp(x1) -> dr/dx1 = exp(x1) = (r-r0)
 		set dxdxp11=(r-R0)
-		# d\phi/dx3 = Dphi
-		set dxdxp33=Dphi
 		set boxfactor=(2*pi)/(Dphi)
 		#
 		# integral, not average : use theuu1 since numerator will use uu1
@@ -407,6 +439,9 @@ redogammiecompute 0 #
 		set upsilonnew3=(topnewvsr/bottomnewvsr)*sqrt(abs(it/(2*pi)))
 		#
 		#print {newr upsilon upsilonnew upsilonnew2 upsilonnew3}
+		#
+		#
+redogammiecompute2 0 #
 		#
 		# average, not integral
 		define averagetype (2)
