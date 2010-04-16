@@ -15,19 +15,37 @@ mricalc 0               #
 		#
 		set mydr=dxdxp1*$dx1
 		set mydH=r*dxdxp2*$dx2
+		set mydP=r*sin(h)*dxdxp33*$dx3
 		set dxrat=mydr/mydH
 		#
-		set omegamax=3*sqrt(3)/2/pi*ABS(omega3)
+                set omegarot=uu3/uu0*dxdxp33
+		set omegamax=3*sqrt(3)/2/pi*ABS(omegarot)
 		set taumax=2*pi/omegamax
 		#
 		set lambdamax=sqrt(val2)/omegamax
+                set WW = rho + u + p
+                set EF = bsq + WW
+                set val21 = abs(bu1*bd1)/EF
+                set val22 = abs(bu2*bd2)/EF
+                set val23 = abs(bu3*bd3)/EF
+		set lambda1max=sqrt(val21)/omegamax
+		set lambda2max=sqrt(val22)/omegamax
+		set lambda3max=sqrt(val23)/omegamax
 		#
-		set dx1mri=mydr/lambdamax
-		set dx2mri=mydH/lambdamax
+		set dx1mri=mydr/lambda1max
+		set dx2mri=mydH/lambda2max
+		set dx3mri=mydP/lambda3max
+		set dx1fakemri=mydr/lambdamax
+		set dx2fakemri=mydH/lambdamax
+		set dx3fakemri=mydP/lambdamax
 		#
 		# number of zones per wavelength
 		set idx1mri=1/dx1mri
 		set idx2mri=1/dx2mri
+		set idx3mri=1/dx3mri
+		set idx1fakemri=1/dx1fakemri
+		set idx2fakemri=1/dx2fakemri
+		set idx3fakemri=1/dx3fakemri
 		#
 		# don't weight if not in range
 		#
