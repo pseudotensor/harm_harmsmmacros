@@ -1,6 +1,31 @@
 		#
 		#
+linkage 0       #
 		#
+		plc 0 aphi 001 Rin 300 0 pi
+		#
+		set dirlink=(-B3*sqrt(gv333))/(B1*sqrt(gv311))/(r*sin(h)*uu3*sqrt(gv333))
+		plc0 0 dirlink 011 Rin 300 0 pi
+		#
+bounded 0       #
+		set bunbound=-1-ud0
+		set hspec=(rho+u+p)/rho
+		set tbunbound=-1-hspec*ud0
+		stresscalc 1
+		set mtbunbound=(-1-Tud10/(rho*uu1))
+		#
+		#
+		plc0 0 bunbound
+		#
+		plc0 0 tbunbound
+		#
+		plc0 0 mtbunbound
+		#
+		#
+		#
+		#######################
+		#
+                #/u/ki/jmckinne/nfsslac/lonestar.runs/runlocaldipole3dfiducial
 		#
 getdump 0       # jre jetforavery.m
 		#
@@ -9,6 +34,13 @@ getdump 0       # jre jetforavery.m
 		jrdpheader3dold dumps/dump0055
 		jrdpcf3dudipole dump0055
                 jrdpdissdipole dissdump0055
+		#
+                jrdpdissdipole dissdump0054
+		set diss9past=diss9
+                jrdpdissdipole dissdump0055
+		set diss9now=diss9
+		#
+		set diss9diff=diss9now-diss9past
 		#
 		grid3d gdump
 		jrdpheader3dold dumps/dump0055
@@ -21,9 +53,27 @@ getmanydumps 0  #
                   set h1='dump'
                   set h2=sprintf('%04d',$ii) set _fname=h1+h2
                   define filename (_fname)
+		  if($ii>0){\
+                   set h2=sprintf('%04d',$ii-1) set _fname=h1+h2
+                   define filenameold (_fname)
+		  }
 		  #
-		  jrdpcf3du $filename
+		  if($ii==0){ define filenameold $filename }
+		  #
+		  #
+		  #jrdpcf3du $filename
+		  #jrdpheader3dold dumps/$filename
+		  #
 		  jrdpheader3dold dumps/$filename
+		  jrdpcf3dudipole $filename
+		  jrdpdissdipole diss$filename
+		  #
+		  jrdpdissdipole diss$filenameold
+		  set diss9past=diss9
+		  jrdpdissdipole diss$filename
+		  set diss9now=diss9
+		  #
+		  set diss9diff=diss9now-diss9past
 		  #
 		  processdump
                   #
