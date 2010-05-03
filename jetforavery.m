@@ -252,14 +252,14 @@ computenumberdensity 0 #
 		#
 		set gammamin=1
 		set coefmax=1.0
-		#set coefjon=0.5*abs(mydbsq/bsq + (dpx+dpy+dpz)/p)
-		#set coefjon=0.5*abs(mydptot/ptot)
-		set coefjon=abs(mydptot)
+		#set absdptot=0.5*abs(mydbsq/bsq + (dpx+dpy+dpz)/p)
+		#set absdptot=0.5*abs(mydptot/ptot)
+		set absdptot=abs(mydptot)
                 #*(3*p-2)/(2*p-1)
                 set thetaion=p/rho
-		set coefjon2=coefjon*thetaion*mion/me/gammamin
-		set coef=(shockind1<0.5) ? 0 : coefjon2
-		#set coef=coefjon2
+		set absdptot2=absdptot*thetaion*mion/me/gammamin
+		set coef=(shockind1<0.5) ? 0 : absdptot2
+		#set coef=absdptot2
 		#set coef=(coef>coefmax) ? coefmax : coef
 		#
                 #
@@ -314,7 +314,7 @@ outputdump 2    # outputdump $filename _t
 		#{r h ph rho u nden1 nden2 nden3 nden4 nden5 nden6 nden7 uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG}
 		# new:
 		print averydata_dipole_$!!mydump.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
-		    {r h ph rho u cut coef shockind1 ficalc1 ficalc2 ficalc3 ficalc truediss1 truediss2 truediss3 truediss4 uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG}
+		    {r h ph rho u cut absdptot shockind1 ficalc1 ficalc2 ficalc3 ficalc truediss1 truediss2 truediss3 truediss4 uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG}
 		#
                 #
 		#
