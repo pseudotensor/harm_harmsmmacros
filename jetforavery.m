@@ -58,11 +58,16 @@ getmanydumps 0  #
                   set h2=sprintf('%04d',$ii) set _fname=h1+h2
                   define filename (_fname)
 		  if($ii>0){\
-                   set h2=sprintf('%04d',$ii-1) set _fname=h1+h2
-                   define filenameold (_fname)
+		   set h2=sprintf('%04d',$ii-1) set _fname=h1+h2
+                   define filenameold1 (_fname)
+		  }
+		  if($ii>10){\
+		         set h2=sprintf('%04d',10) set _fname=h1+h2
+                   define filenameold2 (_fname)
 		  }
 		  #
-		  if($ii==0){ define filenameold $filename }
+		  if($ii<=0){ define filenameold1 $filename }
+		  if($ii<=10){ define filenameold2 $filename }
 		  #
 		  #
 		  #jrdpcf3du $filename
@@ -71,13 +76,16 @@ getmanydumps 0  #
 		  jrdpheader3dold dumps/$filename
 		  jrdpcf3dudipole $filename
 		  jrdpdissdipole diss$filename
-		  #
-		  jrdpdissdipole diss$filenameold
-		  set diss9past=diss9
-		  jrdpdissdipole diss$filename
 		  set diss9now=diss9
 		  #
+		  jrdpdissdipole diss$filenameold1
+		  set diss9past=diss9
+		  #
+		  jrdpdissdipole diss$filenameold2
+		  set diss9superpast=diss9
+		  #
 		  set diss9diff=diss9now-diss9past
+		  set diss9superdiff=diss9now-diss9superpast
 		  #
 		  processdump
                   #
@@ -246,6 +254,7 @@ computenumberdensity 0 #
                 set truediss1=(diss9past>0 ? diss9past : 0)
                 set truediss2=(diss9now>0 ? diss9now : 0)
                 set truediss3=(diss9diff>0 ? diss9diff : 0)
+                set truediss4=(diss9superdiff>0 ? diss9superdiff : 0)
 		#
 		#
 		####### versions of number density of non-thermal electrons
@@ -260,6 +269,8 @@ computenumberdensity 0 #
                 set nden9 = truediss2*cut
                 set nden10 = truediss3
                 set nden11 = truediss3*cut
+                set nden12 = truediss4
+                set nden13 = truediss4*cut
 		#
 		#
 		#
@@ -285,7 +296,7 @@ outputdump 2    # outputdump $filename _t
 		# old:
 		#print averydata_dipole_$!!mydump.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' {r h ph rho u nden1 nden2 nden3 nden4 nden5 nden6 nden7 uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG}
 		# new:
-		print averydata_dipole_$!!mydump.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' {r h ph rho u nden1 nden2 nden3 nden4 nden5 nden6 nden7 nden8 nden9 nden10 nden11 uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG}
+		print averydata_dipole_$!!mydump.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' {r h ph rho u nden1 nden2 nden3 nden4 nden5 nden6 nden7 nden8 nden9 nden10 nden11 nden12 nden13 uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG}
 		#
                 #
 		#
