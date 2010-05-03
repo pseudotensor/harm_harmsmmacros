@@ -39,12 +39,15 @@ getdump 0       # jre jetforavery.m
 		jrdpcf3dudipole dump0055
                 jrdpdissdipole dissdump0055
 		#
+                jrdpdissdipole dissdump0010
+		set diss9superpast=diss9
                 jrdpdissdipole dissdump0054
 		set diss9past=diss9
                 jrdpdissdipole dissdump0055
 		set diss9now=diss9
 		#
 		set diss9diff=diss9now-diss9past
+		set diss9superdiff=diss9now-diss9superpast
 		#
 		grid3d gdump
 		jrdpheader3dold dumps/dump0055
