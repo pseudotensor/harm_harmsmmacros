@@ -261,27 +261,26 @@ computenumberdensity 0 #
 		# PPM shock stuff
 		############################
 		#
-		ficalc
+		# don't use 0.75 since only then would find strong shocks
 		#
+		ficalc 0.2
+		#
+		set ficalc=(ficalc1>ficalc2 ? ficalc1 : ficalc2)
+		set ficalc=(ficalc>ficalc3 ? ficalc : ficalc3)
 		#
 		#
                 #
                 set truediss1=(diss9past>0 ? diss9past : 0)
                 set truediss2=(diss9now>0 ? diss9now : 0)
                 set truediss3=(diss9diff>0 ? diss9diff : 0)
-                set truediss4=(diss9superdiff>0 ? diss9superdiff : 0)
+		set truediss4=(diss9superdiff>0 ? diss9superdiff : 0)
 		#
 		#
 		####### versions of number density of non-thermal electrons
-		set nden1 = cut*u
-		set nden2 = ndenpart*cut
-		set nden3 = ndenrad*cut
-                set nden4 = rho*coef
-                set nden5 = u*coef
-                set nden6 = truediss1
-                set nden7 = truediss2
-                set nden8 = truediss3
-                set nden9 = truediss4
+                #set nden1 = truediss1
+                #set nden2 = truediss2
+                #set nden3 = truediss3
+                #set nden4 = truediss4
 		#
 		#
 		#
@@ -308,8 +307,8 @@ outputdump 2    # outputdump $filename _t
 		#print averydata_dipole_$!!mydump.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
 		#{r h ph rho u nden1 nden2 nden3 nden4 nden5 nden6 nden7 uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG}
 		# new:
-		print averydata_dipole_$!!mydump.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
-		    {r h ph rho u cut coef coef2 nden1 nden2 nden3 nden4 nden5 nden6 nden7 nden8 nden9 uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG}
+		print averydata_dipole_$!!mydump.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
+		    {r h ph rho u cut coef ficalc1 ficalc2 ficalc3 ficalc truediss1 truediss2 truediss3 truediss4 uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG}
 		#
                 #
 		#
