@@ -46,11 +46,11 @@ getdump 0       # jre jetforavery.m
                 jrdpdissdipole dissdump0055
 		#
                 jrdpdissdipole dissdump0010
-		set diss9superpast=diss9
+		set diss9superpast=(diss9>0 ? diss9 : 0)
                 jrdpdissdipole dissdump0054
-		set diss9past=diss9
+		set diss9past=(diss9>0 ? diss9 : 0)
                 jrdpdissdipole dissdump0055
-		set diss9now=diss9
+		set diss9now=(diss9>0 ? diss9 : 0)
 		#
 		set diss9diff=diss9now-diss9past
 		set diss9superdiff=diss9now-diss9superpast
@@ -85,13 +85,13 @@ getmanydumps 0  #
 		  jrdpheader3dold dumps/$filename
 		  jrdpcf3dudipole $filename
 		  jrdpdissdipole diss$filename
-		  set diss9now=diss9
+		  set diss9now=(diss9>0 ? diss9 : 0)
 		  #
 		  jrdpdissdipole diss$filenameold1
-		  set diss9past=diss9
+		  set diss9past=(diss9>0 ? diss9 : 0)
 		  #
 		  jrdpdissdipole diss$filenameold2
-		  set diss9superpast=diss9
+		  set diss9superpast=(diss9>0 ? diss9 : 0)
 		  #
 		  set diss9diff=diss9now-diss9past
 		  set diss9superdiff=diss9now-diss9superpast
