@@ -244,8 +244,8 @@ computenumberdensity 0 #
 		#
                 #
                 set truediss1=(diss9past>0 ? diss9past : 0)
-                set truediss1=(diss9now>0 ? diss9now : 0)
-                set truediss2=(diss9diff>0 ? diss9diff : 0)
+                set truediss2=(diss9now>0 ? diss9now : 0)
+                set truediss3=(diss9diff>0 ? diss9diff : 0)
 		#
 		#
 		####### versions of number density of non-thermal electrons
