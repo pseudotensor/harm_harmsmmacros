@@ -221,6 +221,9 @@ computenumberdensity 0 #
 		#
 		set cut=0.5/(1 + exp(rho/(bsq/2)))
                 #
+		############################
+		# Jon original shock stuff
+		############################
                 #
                 set lptot=lg(ptot)
 		dercalc 0 lptot dlptot
@@ -254,6 +257,15 @@ computenumberdensity 0 #
 		#set coef=(coef>coefmax) ? coefmax : coef
 		#
                 #
+		############################
+		# PPM shock stuff
+		############################
+		#
+		ficalc
+		#
+		#
+		#
+                #
                 set truediss1=(diss9past>0 ? diss9past : 0)
                 set truediss2=(diss9now>0 ? diss9now : 0)
                 set truediss3=(diss9diff>0 ? diss9diff : 0)
@@ -267,13 +279,9 @@ computenumberdensity 0 #
                 set nden4 = rho*coef
                 set nden5 = u*coef
                 set nden6 = truediss1
-                set nden7 = truediss1*cut
-                set nden8 = truediss2
-                set nden9 = truediss2*cut
-                set nden10 = truediss3
-                set nden11 = truediss3*cut
-                set nden12 = truediss4
-                set nden13 = truediss4*cut
+                set nden7 = truediss2
+                set nden8 = truediss3
+                set nden9 = truediss4
 		#
 		#
 		#
@@ -301,7 +309,7 @@ outputdump 2    # outputdump $filename _t
 		#{r h ph rho u nden1 nden2 nden3 nden4 nden5 nden6 nden7 uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG}
 		# new:
 		print averydata_dipole_$!!mydump.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
-		    {r h ph rho u nden1 nden2 nden3 nden4 nden5 nden6 nden7 nden8 nden9 nden10 nden11 nden12 nden13 uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG}
+		    {r h ph rho u cut coef coef2 nden1 nden2 nden3 nden4 nden5 nden6 nden7 nden8 nden9 uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG}
 		#
                 #
 		#

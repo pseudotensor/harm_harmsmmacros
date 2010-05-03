@@ -2992,7 +2992,7 @@ fieldcalc 2	#dumpnum aphi
 		set $2=aphitemp
 		#
 		#
-ficalc 0	#
+ficalc 1	# ficalc 0.75
 		#
 		# computes PPM reduction parameter
 		#
@@ -3003,7 +3003,7 @@ ficalc 0	#
                 print + "dumps/forficalcdump" '%d %d %d %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
                     {ti tj tk rho u v1 v2 v3 B1 B2 B3 ptot gdet}
                 #
-		!$!HOME/bin/smcalc 10 4 0 $nx $ny $nz ./dumps/forficalcdump ./dumps/ficalc
+		!$!HOME/bin/smcalc 10 4 0 $1 $nx $ny $nz ./dumps/forficalcdump ./dumps/ficalc
 		da ./dumps/ficalc
 		lines 2 100000000		
 		read '%g %g %g' {ficalc1 ficalc2 ficalc3}
