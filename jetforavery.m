@@ -27,6 +27,12 @@ bounded 0       #
 		#
                 #/u/ki/jmckinne/nfsslac/lonestar.runs/runlocaldipole3dfiducial
 		#
+do55 0          #
+		getdump
+		processdump
+		computenumberdensity
+		outputdump $filename _t
+		#
 getdump 0       # jre jetforavery.m
 		#
 		!head -2 dumps/dump0050 | tail -1 | wc
