@@ -309,12 +309,21 @@ outputdump 2    # outputdump $filename _t
 		set bu3blG=bu3bl*sqrt(4.0*pi)
 		#
 		#
+		#
+		######################
 		# old:
 		#print averydata_dipole_$!!mydump.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
 		#{r h ph rho u nden1 nden2 nden3 nden4 nden5 nden6 nden7 uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG}
+		#
+		######################
 		# new:
-		print averydata_dipole_$!!mydump.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
+		#print averydata_dipole_$!!mydump.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
 		    {r h ph rho u cut absdptot shockind1 ficalc1 ficalc2 ficalc3 ficalc truediss1 truediss2 truediss3 truediss4 uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG}
+		#
+		######################
+		# new2:
+		print averydata_dipole_$!!mydump.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
+		    {r h ph rho u uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG cut absdptot shockind1 ficalc1 ficalc2 ficalc3 ficalc truediss1 truediss2 truediss3 truediss4}
 		#
                 #
 		#
