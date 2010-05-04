@@ -225,7 +225,7 @@ computenumberdensity 0 #
 		set Trad = (u*(2*pi*hbar**3*C**3/(kb**4*5.6822)))**(1/4)
 		set ndenrad = (kb**3*Trad**3)/(2*pi**2*hbar**3*C**3*1.80309)
 		#
-		set cut=0.5/(1 + exp(rho/(bsq/2)))
+		set cut=2/(1 + exp(rho/(bsq/2)))
                 #
 		############################
 		# Jon original shock stuff
