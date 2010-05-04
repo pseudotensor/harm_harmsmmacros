@@ -238,8 +238,11 @@ computenumberdensity 0 #
 		# old way:
 		#set mydptot=(dlptotx*$dx1+dlptoty*$dx2+dlptotz*$dx3)/3.0
 		# new way:
-		set mydptot=(dlptotx*$dx1>dlptoty*$dx2 ? dlptotx*$dx1 : dlptoty*$dx2)
-		set mydptot=(mydptot>dlptotz*$dx3 ? mydptot : dlptotz*$dx3)
+		set mydpoptot1=abs(dlptotx*$dx1)
+		set mydpoptot2=abs(dlptoty*$dx2)
+		set mydpoptot3=abs(dlptotz*$dx3)
+		set mydpoptot=(mydpoptot1>mydpoptot2 ? mydpoptot1 : mydpoptot2)
+		set mydpoptot=(mydpoptot>mydpoptot3 ? mydpoptot : mydpoptot3)
 		#
 		set guu1=rho*gdet*uu1
 		set guu2=rho*gdet*uu2
@@ -252,14 +255,14 @@ computenumberdensity 0 #
 		#
 		set gammamin=1
 		set coefmax=1.0
-		#set absdptot=0.5*abs(mydbsq/bsq + (dpx+dpy+dpz)/p)
-		#set absdptot=0.5*abs(mydptot/ptot)
-		set absdptot=abs(mydptot)
+		#set absdpoptot=0.5*abs(mydbsq/bsq + (dpx+dpy+dpz)/p)
+		#set absdpoptot=0.5*abs(mydpoptot/ptot)
+		set absdpoptot=abs(mydpoptot)
                 #*(3*p-2)/(2*p-1)
                 set thetaion=p/rho
-		set absdptot2=absdptot*thetaion*mion/me/gammamin
-		set coef=(shockind1<0.5) ? 0 : absdptot2
-		#set coef=absdptot2
+		set absdpoptot2=absdpoptot*thetaion*mion/me/gammamin
+		set coef=(shockind1<0.5) ? 0 : absdpoptot2
+		#set coef=absdpoptot2
 		#set coef=(coef>coefmax) ? coefmax : coef
 		#
                 #
@@ -318,12 +321,12 @@ outputdump 2    # outputdump $filename _t
 		######################
 		# new:
 		#print averydata_dipole_$!!mydump.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
-		    {r h ph rho u cut absdptot shockind1 ficalc1 ficalc2 ficalc3 ficalc truediss1 truediss2 truediss3 truediss4 uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG}
+		    {r h ph rho u cut absdpoptot shockind1 ficalc1 ficalc2 ficalc3 ficalc truediss1 truediss2 truediss3 truediss4 uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG}
 		#
 		######################
 		# new2:
 		print averydata_dipole_$!!mydump.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
-		    {r h ph rho u uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG cut absdptot shockind1 ficalc1 ficalc2 ficalc3 ficalc truediss1 truediss2 truediss3 truediss4}
+		    {r h ph rho u uu0bl uu1bl uu2bl uu3bl bu0blG bu1blG bu2blG bu3blG cut absdpoptot shockind1 ficalc1 ficalc2 ficalc3 ficalc truediss1 truediss2 truediss3 truediss4}
 		#
                 #
 		#
