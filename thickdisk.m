@@ -8,7 +8,11 @@ dothick1 0      #
 		jrdpcf3duentropy dump0000
 		#jrdpcf3duentropy dump0096
 		#jrdpcf3duentropy dump0170
-		grid3d gdump
+		#grid3d gdump
+                grid3ddxdxp gdump
+                set dxdxp1=dxdxp11
+                set dxdxp2=dxdxp22
+                set dxdxp3=dxdxp33
 		#
 		mricalc
 		fieldcalc 0 aphi
@@ -26,7 +30,12 @@ dothick1 0      #
 		plc 0 idx2mri 010
 		plc0 0 (HoR-1) 010
 		#
-		#
+                # how many wavelengths inside the disk
+                # \gtrsim 3 for thickdisk1
+                set hor=cs/(r*uu3*dxdxp33)
+                set hdisk=hor*r
+		plc 0 (hdisk/lambda2max)
+                #
 		plc 0 (rho-1)
 		plc 0 (sqrt(cs2)/(R*omegak)) 010
 		#

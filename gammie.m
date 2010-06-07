@@ -1554,6 +1554,7 @@ grid3d  1	# read in grid data with extra connection2 and all dxdxp's
 		 jrdpheader3d dumps/$1
 		 da dumps/$1
 		 lines 2 10000000
+                                      # 9+4*4*4+4*4*2+1+4+4*4
 		 #
 		 read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {  ti   tj   tk  x1   x2   x3   V1   V2  V3 \
@@ -1595,6 +1596,28 @@ grid3d  1	# read in grid data with extra connection2 and all dxdxp's
                        #jre gtwod.m
 		 gsetup
 		 setgrd
+		}
+		#
+grid3ddxdxp  1	# read in diagonal dxdxp's only
+		#
+                !if [ -f dumps/$1 ]; then echo "1" > testifexists.$1.temp ; else echo "0" > testifexists.$1.temp; fi
+		da testifexists.$1.temp
+		read '%d' {fileexists}
+		!rm -rf testifexists.$1.temp
+		define filexistsdef (fileexists)
+		#
+		if($filexistsdef ==0){\
+		 echo "File dumps/$!!1 does not exist"
+		}
+                #
+		if($filexistsdef ==1){\
+		 #
+		 jrdpheader3d dumps/$1
+		 da dumps/$1
+		 lines 2 10000000
+		 #
+		 read {dxdxp11 116 dxdxp22 121 dxdxp33 126}
+                 #
 		}
 		#
 gammiestress 5 # gammiestress tot2em tot2ma totmdot 6 PI/2
