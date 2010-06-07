@@ -51,7 +51,7 @@ mdotvst 2       # mdotvst 0 66
 		#
 		# output results to file
 		#
-		print mdotvstime.txt '%21.15g %21.15g\n' {mdottime mdotvstime}
+		print mdotvstime$1$2.txt '%21.15g %21.15g\n' {mdottime mdotvstime}
                 #
                 #
 bounded 0       #
