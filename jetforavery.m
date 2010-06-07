@@ -18,9 +18,9 @@ mdotvst 2       # mdotvst 0 66
 		set mdottime=mdotvstime*0
 		#
 		#
-		do ii=startanim,endanim,$ANIMSKIP {
+		do iii=startanim,endanim,$ANIMSKIP {
                   set h1='dump'
-                  set h2=sprintf('%04d',$ii) set _fname=h1+h2
+                  set h2=sprintf('%04d',$iii) set _fname=h1+h2
                   define filename (_fname)
 		  #
 		  #jrdpcf3du $filename
@@ -30,10 +30,10 @@ mdotvst 2       # mdotvst 0 66
 		  jrdpcf3dudipole $filename
 		  #
                   #
-		  echo $ii
-		  set mdottime[$ii]=_t
+		  echo $iii
+		  set mdottime[$iii]=_t
 		  set god=gdet*$dx1*$dx2*$dx3*rho*uu1 if(ti==0)
-		  set mdotvstime[$ii]=SUM(god)
+		  set mdotvstime[$iii]=SUM(god)
 		  #
 		  #
 		}
