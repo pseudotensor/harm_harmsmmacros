@@ -2628,6 +2628,7 @@ faraday   0  #
 		# these 2 are equal in degen electrodynamics when d/dt=d/dphi->0
 		set omegaf1=fdd01/fdd13 # = ftr/frp
 		set omegaf2=fdd02/fdd23 # = fth/fhp
+                set omegaf=(abs(fdd01)+abs(fdd02))/(abs(fdd13)+abs(fdd23))
 		#
 		set aomegaf1=afdd01/afdd13 # = ftr/frp
 		set aomegaf2=afdd02/afdd23 # = fth/fhp

@@ -7,6 +7,53 @@ linkage 0       #
 		set dirlink=(-B3*sqrt(gv333))/(B1*sqrt(gv311))/(r*sin(h)*uu3*sqrt(gv333))
 		plc0 0 dirlink 011 Rin 300 0 pi
 		#
+                #
+mdotvst 2       # mdotvst 0 66
+		#
+		set startanim=$1
+		set endanim=$2
+		#
+		set mdotvstime=0,endanim-startanim,1
+		set mdotvstime=mdotvstime*0
+		set mdottime=mdotvstime*0
+		#
+		#
+		do ii=startanim,endanim,$ANIMSKIP {
+                  set h1='dump'
+                  set h2=sprintf('%04d',$ii) set _fname=h1+h2
+                  define filename (_fname)
+		  if($ii>0){\
+		   set h2=sprintf('%04d',$ii-1) set _fname=h1+h2
+                   define filenameold1 (_fname)
+		  }
+		  if($ii>10){\
+		         set h2=sprintf('%04d',10) set _fname=h1+h2
+                   define filenameold2 (_fname)
+		  }
+		  #
+		  if($ii<=0){ define filenameold1 $filename }
+		  if($ii<=10){ define filenameold2 $filename }
+		  #
+		  #
+		  #jrdpcf3du $filename
+		  #jrdpheader3dold dumps/$filename
+		  #
+		  jrdpheader3dold dumps/$filename
+		  jrdpcf3dudipole $filename
+		  #
+                  #
+		  set mdottime[$ii]=_t
+		  set god=gdet*$dx1*$dx2*$dx3*rho*uu1 if(ti==0)
+		  set mdotvstime[$ii]=SUM(god)
+		  #
+		  #
+		}
+		#
+		# output results to file
+		#
+		print mdotvstime.txt '%21.15g %21.15g\n' {mdottime mdotvstime}
+                #
+                #
 bounded 0       #
 		set bunbound=-1-ud0
 		set hspec=(rho+u+p)/rho
@@ -17,10 +64,20 @@ bounded 0       #
 		#
 		plc0 0 bunbound
 		#
-		plc0 0 tbunbound
+		plc0 0 tbunbound 010
 		#
-		plc0 0 mtbunbound
+		plc0 0 mtbunbound 010
 		#
+		#
+		set god=(bunbound>0 && tbunbound>0 && mtbunbound>0 ? 1 : 0)
+		set myB3=(sqrt(gv333)*B3*god)
+		#
+		faraday
+		set myomegaf2=omegaf2*god
+		#
+		set myud3=ud3*god
+		#
+		plc0 0 myB3
 		#
 		#
 		#######################

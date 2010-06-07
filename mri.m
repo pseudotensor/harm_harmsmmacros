@@ -17,6 +17,7 @@ mricalc 0               #
 		set mydH=r*dxdxp2*$dx2
 		set mydP=r*sin(h)*dxdxp33*$dx3
 		set dxrat=mydr/mydH
+		set dxrat=mydr/mydP
 		#
                 set omegarot=uu3/uu0*dxdxp33
 		set omegamax=3*sqrt(3)/2/pi*ABS(omegarot)
