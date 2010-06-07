@@ -22,18 +22,6 @@ mdotvst 2       # mdotvst 0 66
                   set h1='dump'
                   set h2=sprintf('%04d',$ii) set _fname=h1+h2
                   define filename (_fname)
-		  if($ii>0){\
-		   set h2=sprintf('%04d',$ii-1) set _fname=h1+h2
-                   define filenameold1 (_fname)
-		  }
-		  if($ii>10){\
-		         set h2=sprintf('%04d',10) set _fname=h1+h2
-                   define filenameold2 (_fname)
-		  }
-		  #
-		  if($ii<=0){ define filenameold1 $filename }
-		  if($ii<=10){ define filenameold2 $filename }
-		  #
 		  #
 		  #jrdpcf3du $filename
 		  #jrdpheader3dold dumps/$filename
@@ -42,6 +30,7 @@ mdotvst 2       # mdotvst 0 66
 		  jrdpcf3dudipole $filename
 		  #
                   #
+		  echo $ii
 		  set mdottime[$ii]=_t
 		  set god=gdet*$dx1*$dx2*$dx3*rho*uu1 if(ti==0)
 		  set mdotvstime[$ii]=SUM(god)
