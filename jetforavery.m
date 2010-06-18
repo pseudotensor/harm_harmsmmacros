@@ -104,6 +104,7 @@ getdump 0       # jre jetforavery.m
 		grid3d gdump
 		jrdpheader3dold dumps/dump0055
 		#
+                #
 getmanydumps 0  #
 		set startanim=0
 		set endanim=66
@@ -150,6 +151,92 @@ getmanydumps 0  #
 		  #
 		}
 		#
+overallroger 0  # just writing what done anywhere
+		#
+		# 1) get on ki-rh39 and cd ~/nfsslac/lonestar.runs/runlocaldipole3dfiducial/
+		#
+		# 2) start SM
+		#
+		# 3) gogrmhd and jre jetforavery.m
+		#
+		# 4) getmanydumpsroger
+		#
+		# 5) create list of dumps (and edit list if desired -- e.g. to shorten or cut-off transients):
+		# ls rogerdata*.dat > inputlistfull.txt
+		#
+		# 6) Check how many words (file names), and use in bin2txt and iinterp below:
+		# wc inputlistfull.txt
+		#
+		# 6) Install new bin2txt and do in the same directory as above (or just cat the files without their headers):
+		# ./bin2txt 2 2 0 0 3 256 128 32 +12 inputlistfull.txt dumpalltimes.txt.nohead f 6
+		#
+		# BELOW 1 LINE DOESNT GIVE CONSISTENT HEADER WITH JONINTERP, SO DONT DO
+		# head -1 dumps/dump0000 > dumpalltimes.txt.head
+		#
+		# DO INSTEAD (before any interpolation) (in SM):
+		createfakeheader
+		#
+		# THEN DO (in bash):
+		cat dumpalltimes.txt.nohead | awk '{print $1}' > dumpalltimes.txt.nohead.1 ; cat dumpalltimes.txt.nohead | awk '{print $2}' > dumpalltimes.txt.nohead.2 ; cat dumpalltimes.txt.nohead | awk '{print $3}' > dumpalltimes.txt.nohead.3 ; cat dumpalltimes.txt.nohead | awk '{print $4}' > dumpalltimes.txt.nohead.4 ; cat dumpalltimes.txt.nohead | awk '{print $5}' > dumpalltimes.txt.nohead.5 ; cat dumpalltimes.txt.nohead | awk '{print $6}' > dumpalltimes.txt.nohead.6
+		#
+		cat dumpalltimes.txt.head dumpalltimes.txt.nohead.1 > dumpalltimes.1.txt ; cat dumpalltimes.txt.head dumpalltimes.txt.nohead.2 > dumpalltimes.2.txt ; cat dumpalltimes.txt.head dumpalltimes.txt.nohead.3 > dumpalltimes.3.txt ; cat dumpalltimes.txt.head dumpalltimes.txt.nohead.4 > dumpalltimes.4.txt ; cat dumpalltimes.txt.head dumpalltimes.txt.nohead.5 > dumpalltimes.5.txt ; cat dumpalltimes.txt.head dumpalltimes.txt.nohead.6 > dumpalltimes.6.txt
+		#
+		#
+		# 7) Run macro "plotjetfeatures" or directly use command like below:
+		# ~/bin/iinterp.rh39 1 1 1 1  12 256 128 32  1 0 0  1 5  32 32 32 32  0 12 -950 950 -950 950 -950 950   1.1 1000 0 0.3  9 1 0 1 < dumpalltimes.1.txt > observerdumpalltimes.1.txt
+		# etc. for rest of files
+		#
+		#
+		# ISSUES:
+		# 1) Probably should create invidual columns up front in SM
+		# 2) How can dxdxp[][] be used in general for Jac?  Should only be for getting SPC grid from PRIMECOORDS grid.
+		# 3) first test just produced constant values!
+		#
+                #
+createfakeheader 0 creates header as required by new joninterp so consistent header read-in (otherwise reads past into data block)
+		#
+		#
+		jrdpheader3dold dumps/dump0055
+		jrdpcf3dudipole dump0055
+		set _MBH=1
+		set _QBH=0
+		set _is=0
+		set _ie=$nx
+		set _js=0
+		set _je=$ny
+		set _ks=0
+		set _ke=$nx
+		set _whichdump=0
+		set _whichdumpversion=0
+		set _numcolumns=74
+		#
+		print dumpalltimes.txt.head {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a \
+		       _R0 _Rin _Rout _hslope _dt _defcoord _MBH _QBH _is _ie _js _je _ks _ke _whichdump _whichdumpversion _numcolumns}
+		#
+		#
+getmanydumpsroger 0  #
+		set startanim=0
+		set endanim=66
+		#
+		do ii=startanim,endanim,$ANIMSKIP {
+                  set h1='dump'
+                  set h2=sprintf('%04d',$ii) set _fname=h1+h2
+                  define filename (_fname)
+		  #
+		  #
+		  #jrdpcf3du $filename
+		  #jrdpheader3dold dumps/$filename
+		  #
+		  jrdpheader3dold dumps/$filename
+		  jrdpcf3dudipole $filename
+		  #
+                  #
+		  computenumberdensityroger
+                  #
+		  outputdumproger $filename _t
+		  #
+		}
+                #
 processdump 0   #
 		##############
 		# KSP -> KS
@@ -340,6 +427,49 @@ computenumberdensity 0 #
 		#
 		#
 		#
+computenumberdensityroger 0 #
+		#
+		# erg K^{-1} g^{-1}
+		set kb=1.3807*10**(-16)
+		set mp=1.67262E-24
+		set me=9.11E-28
+		set C=2.99792458E10
+		set hbar=1.0545716293001394e-27
+		set mion=mp
+		set mb=1.660540186674939e-24
+		#
+		#set thetaion=p/(rho)
+		#set Tion=thetaion*(mion*C**2/kb)
+		#set Tele=me/mp*Tion
+		#
+		#
+		set cut=2/(1 + exp(rho/(bsq/2)))
+                #
+                set fun1=p
+                set fun2=bsq/2
+                set fun3=p*sqrt(abs(bsq/2))**(1.5)
+                set fun4=fun1*cut
+                set fun5=fun2*cut
+                set fun6=fun3*cut
+		#
+		#
+		#
+		#
+outputdumproger 2    # outputdump $filename _t
+		#
+		##############
+		# Print out Roger's desired quantities
+		#
+		define print_noheader (1)
+		define mydump $1
+		define mytime ($2)
+		#
+		#
+		######################
+		print rogerdata_dipole_$!!mydump.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
+		    {fun1 fun2 fun3 fun4 fun5 fun6}
+		#
+                #
 		#
 outputdump 2    # outputdump $filename _t
 		#
@@ -393,7 +523,7 @@ plotjetfeatures 0 #
 		# get HARM data file
 		#
 		jrdpheader3dold dumps/dump0055
-		jrdpcf3du dump0055
+		jrdpcf3dudipole dump0055
 		#
 		#
 		############################
@@ -450,6 +580,18 @@ plotjetfeatures 0 #
 		#
 interpaverysingle 2   #
 		#
+		set _MBH=1
+		set _QBH=0
+		set _is=0
+		set _ie=$nx
+		set _js=0
+		set _je=$ny
+		set _ks=0
+		set _ke=$nx
+		set _whichdump=0
+		set _whichdumpversion=0
+		set _numcolumns=74
+		#
 		# interpaverysingle 0055 lrho 
 		#
 		# GODMARK: might consider just breaking up file directly, but have to read into SM anyways so probably ok
@@ -479,11 +621,16 @@ interpaverysingle 2   #
 		#
 		# from vis5dpremake:
 		#
+		define nt 1
+		#
+		define int $nt
 		define inx 128
                 define iny 128
                 define inz 128
 		#
 		set myRout=950.0
+                define itmin (0)
+                define itmax (0)
                 define ixmin (-myRout)
                 define ixmax (myRout)
                 define iymin (-myRout)
@@ -491,10 +638,13 @@ interpaverysingle 2   #
                 define izmin (-myRout)
                 define izmax (myRout)
 		#
+		define iint ($int)
 		define iinx ($inx)
                 define iiny ($inz)
                 define iinz ($iny)
                 #
+                define iitmin ($itmin)
+                define iitmax ($itmax)
                 define iixmin ($ixmin)
                 define iixmax ($ixmax)
                 define iiymin ($izmin)
@@ -540,19 +690,23 @@ interpaverysingle 2   #
 		define dofull2pi 1
 		#
 		echo ~/bin/$program $DATATYPE $interptype $READHEADERDATA $WRITEHEADERDATA \
-                    $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
-                    $iinx $iiny $iinz  $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
+                    $nt $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
+                    $iint $iinx $iiny $iinz  $iitmin $iitmax $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
                     $iRin $iRout $iR0 $ihslope  $idefcoord $dofull2pi $EXTRAPOLATE $DEFAULTVALUETYPE
 		#
 		#
+		# below source line must be called on command line before entering SM:
 		#
 		!source /u/ki/jmckinne/intel/mkl/10.0.3.020/tools/environment/mklvarsem64t.sh
 		#
 		!~/bin/$program $DATATYPE $interptype $READHEADERDATA $WRITEHEADERDATA \
-                    $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
-                    $iinx $iiny $iinz  $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
-                    $iRin $iRout $iR0 $ihslope  $idefcoord $dofull2pi $EXTRAPOLATE $DEFAULTVALUETYPE < $filein > $fileout
+                    $nt $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
+                    $iint $iinx $iiny $iinz  $iitmin $iitmax $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
+                    $iRin $iRout $iR0 $ihslope  $idefcoord $dofull2pi $EXTRAPOLATE $DEFAULTVALUETYPE \
+		    < $filein > $fileout
                 #
+		#
+		# if $filout is blank, ensure heaeder is correctly filled as consistent with iinterp program
 		#
 othercrap 0     #
 		#
