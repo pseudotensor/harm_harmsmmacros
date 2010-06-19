@@ -1674,7 +1674,7 @@ jrdp3d1ci    2  #
 		set x3=_startx3+_dx3*tk
                 set x12=_startx1+_dx1*(ti+0.5)
                 set x22=_startx2+_dx2*(tj+0.5)
-                set x33=_startx3+_dx3*(tk+0.5)
+                set x32=_startx3+_dx3*(tk+0.5)
                 set r=x1
                 set h=x2
                 set p=x3

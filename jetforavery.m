@@ -159,41 +159,181 @@ overallroger 0  # just writing what done anywhere
 		#
 		# 3) gogrmhd and jre jetforavery.m
 		#
-		# 4) getmanydumpsroger
+		#4)
+		#
+		getmanydumpsroger
 		#
 		# 5) create list of dumps (and edit list if desired -- e.g. to shorten or cut-off transients):
 		# ls rogerdata*.dat > inputlistfull.txt
+		# or some shorter domain to keep size down (e.g. every 5 from 10 to 65 -- or maybe already only created such files!)
 		#
 		# 6) Check how many words (file names), and use in bin2txt and iinterp below:
 		# wc inputlistfull.txt
 		#
 		# 6) Install new bin2txt and do in the same directory as above (or just cat the files without their headers):
-		# ./bin2txt 2 2 0 0 3 256 128 32 +12 inputlistfull.txt dumpalltimes.txt.nohead f 6
 		#
-		# BELOW 1 LINE DOESNT GIVE CONSISTENT HEADER WITH JONINTERP, SO DONT DO
-		# head -1 dumps/dump0000 > dumpalltimes.txt.head
+		!./bin2txt 2 2 0 0 3 256 128 32 +12 inputlistfull.txt dumpalltimes.txt.nohead f 9
+		#
+		# #########BELOW 1 LINE DOESNT GIVE CONSISTENT HEADER WITH JONINTERP, SO DONT DO
+		# #########head -1 dumps/dump0000 > dumpalltimes.txt.head
 		#
 		# DO INSTEAD (before any interpolation) (in SM):
 		createfakeheader
 		#
 		# THEN DO (in bash):
-		cat dumpalltimes.txt.nohead | awk '{print $1}' > dumpalltimes.txt.nohead.1 ; cat dumpalltimes.txt.nohead | awk '{print $2}' > dumpalltimes.txt.nohead.2 ; cat dumpalltimes.txt.nohead | awk '{print $3}' > dumpalltimes.txt.nohead.3 ; cat dumpalltimes.txt.nohead | awk '{print $4}' > dumpalltimes.txt.nohead.4 ; cat dumpalltimes.txt.nohead | awk '{print $5}' > dumpalltimes.txt.nohead.5 ; cat dumpalltimes.txt.nohead | awk '{print $6}' > dumpalltimes.txt.nohead.6
 		#
-		cat dumpalltimes.txt.head dumpalltimes.txt.nohead.1 > dumpalltimes.1.txt ; cat dumpalltimes.txt.head dumpalltimes.txt.nohead.2 > dumpalltimes.2.txt ; cat dumpalltimes.txt.head dumpalltimes.txt.nohead.3 > dumpalltimes.3.txt ; cat dumpalltimes.txt.head dumpalltimes.txt.nohead.4 > dumpalltimes.4.txt ; cat dumpalltimes.txt.head dumpalltimes.txt.nohead.5 > dumpalltimes.5.txt ; cat dumpalltimes.txt.head dumpalltimes.txt.nohead.6 > dumpalltimes.6.txt
+		# just get the 3 things I want:
+		#
+		echo "Getting noheads"
+		!cat dumpalltimes.txt.nohead | awk '{print \\$2}' > dumpalltimes.txt.nohead.2
+		!cat dumpalltimes.txt.nohead | awk '{print \\$5}' > dumpalltimes.txt.nohead.5
+		!cat dumpalltimes.txt.nohead | awk '{print \\$8}' > dumpalltimes.txt.nohead.8
+		echo "Catting heads with noheads"
+		!cat dumpalltimes.txt.head dumpalltimes.txt.nohead.2 > dumpalltimes.2.txt
+		!cat dumpalltimes.txt.head dumpalltimes.txt.nohead.5 > dumpalltimes.5.txt
+		!cat dumpalltimes.txt.head dumpalltimes.txt.nohead.8 > dumpalltimes.8.txt
+		#
+		#
 		#
 		#
 		# 7) Run macro "plotjetfeatures" or directly use command like below:
-		# ~/bin/iinterp.rh39 1 1 1 1  12 256 128 32  1 0 0  1 5  32 32 32 32  0 12 -950 950 -950 950 -950 950   1.1 1000 0 0.3  9 1 0 1 < dumpalltimes.1.txt > observerdumpalltimes.1.txt
+		# ~/bin/iinterp.rh39 1 1 1 1  12 256 128 32  1 0 0  1 5  32 32 32 32  0 12 -950 950 -950 950 -950 950   1.1 1000 0 0.3  9 1 0 1 < dumpalltimes.1.txt > idumps/observerdumpalltimes.1.txt
 		# etc. for rest of files
 		#
+		#OR:
 		#
+		###################
+		# 4D at low-resolution
+		#
+		# OR run (note, times are put in as values for dump times, but iinterp assumes data at CENT
+		# So iinterp first translates inputted starttc and endtc into FACE values so that data appears at CENT positions
+		# ~/bin/iinterp.rh39 1 1 1 1  12 256 128 32  1 0 0  1 5  32 32 32 32   500 3250  -300 300 -300 300 -950 950   1.1 1000 0 0.3  9 1  500 3250 10  0 1 < dumpalltimes.1.txt > idumps/observerdumpalltimes.1.true.txt
+		#
+		#
+		#
+		################
+		# 2D focused box on z-axis
+		#
+		# ORDER: t,x,z,y
+		# To get just constant x and constant tobs, do:
+		# ~/bin/iinterp.rh39 1 1 1 1  12 256 128 32  1 0 0  1 5  1 1 256 256   2750 2750  -10 10 -950 950 -300 300   1.1 1000 0 0.3  9 1  500 3250 10  0 1 < dumpalltimes.1.txt > idumps/observerdumpalltimes.1.true.txt
+		# To get just constant x and constant tlab, do:
+		# ~/bin/iinterp.rh39 1 1 1 1  12 256 128 32  1 0 0  1 0  1 1 256 256   2750 2750  -10 10  -950 950 -300 300  1.1 1000 0 0.3  9 1  500 3250 10  0 1 < dumpalltimes.1.txt > idumps/observerdumpalltimes.1.txt
+		#
+		# OR:
+		#
+		################
+		# 2D full box (do for 2,5,8):
+		#
+		#
+		rogerinterp1
+		rogerplot1
+		3panelplot1
+		#
+		device postencap rz3panel.eps
+		3panelplot1replot
+		device X11
+		#
+		# !scp rz3panel.eps jon@ki-rh42:
+		#
+rogerinterp1 0  #
+		#For constant time (tlab or tobs) and constant y (since same as x), do:
+		#
+		define myrout 1E3
+		define myZout $myrout
+		define myRout 300
+		#
+		define iny 512
+		define inz 512
+		#
+		# ORDER: t,x,z,y
+		# To get just constant x and constant tobs, do:
+		!~/bin/iinterp.rh39 1 1 1 1  12 256 128 32  1 0 0  1 5  1 1 $iny $inz   2750 2750  -10 10 -$myrout $myrout -300 300   1.1 1000 0 0.3  9 1  500 3250 10  0 1 < dumpalltimes.2.txt > idumps/observerdumpalltimes.2.true.txt
+		!~/bin/iinterp.rh39 1 1 1 1  12 256 128 32  1 0 0  1 0  1 1 $iny $inz   2750 2750  -10 10 -$myrout $myrout -300 300  1.1 1000 0 0.3  9 1  500 3250 10  0 1 < dumpalltimes.2.txt > idumps/observerdumpalltimes.2.txt
+		#
+		!~/bin/iinterp.rh39 1 1 1 1  12 256 128 32  1 0 0  1 5  1 1 $iny $inz   2750 2750  -10 10 -$myrout $myrout -300 300   1.1 1000 0 0.3  9 1  500 3250 10  0 1 < dumpalltimes.5.txt > idumps/observerdumpalltimes.5.true.txt
+		!~/bin/iinterp.rh39 1 1 1 1  12 256 128 32  1 0 0  1 0  1 1 $iny $inz   2750 2750  -10 10 -$myrout $myrout -300 300  1.1 1000 0 0.3  9 1  500 3250 10  0 1 < dumpalltimes.5.txt > idumps/observerdumpalltimes.5.txt
+		#
+		!~/bin/iinterp.rh39 1 1 1 1  12 256 128 32  1 0 0  1 5  1 1 $iny $inz   2750 2750  -10 10 -$myrout $myrout -300 300   1.1 1000 0 0.3  9 1  500 3250 10  0 1 < dumpalltimes.8.txt > idumps/observerdumpalltimes.8.true.txt
+		!~/bin/iinterp.rh39 1 1 1 1  12 256 128 32  1 0 0  1 0  1 1 $iny $inz   2750 2750  -10 10 -$myrout $myrout -300 300  1.1 1000 0 0.3  9 1  500 3250 10  0 1 < dumpalltimes.8.txt > idumps/observerdumpalltimes.8.txt
+		#
+		# then call rogerplot1
+		#
+rogerplot1 0    #		
+		define idumpsdir "idumps/"
+		#
+		!mkdir $idumpsdir
+		#
+		jrdp3d1ci observerdumpalltimes.2.true.txt ptobs
+		jrdp3d1ci observerdumpalltimes.2.txt ptlab
+		#
+		jrdp3d1ci observerdumpalltimes.5.true.txt pcuttobs
+		jrdp3d1ci observerdumpalltimes.5.txt pcuttlab
+		jrdp3d1ci observerdumpalltimes.8.true.txt pcutboosttobs
+		jrdp3d1ci observerdumpalltimes.8.txt pcutboosttlab
+		#
+		define PLANE 1
+		define WHICHLEV 0
+		#
+		plc 0 (LG(pcuttlab+1E-15))
+		#plc 0 (LG(pcuttobs+1E-15))
+		#
+		####################
 		# ISSUES:
 		# 1) Probably should create invidual columns up front in SM
-		# 2) How can dxdxp[][] be used in general for Jac?  Should only be for getting SPC grid from PRIMECOORDS grid.
-		# 3) first test just produced constant values!
+		#
+		#
+3panelplot1   0 #
+		#
+		#
+		define myrout 1E3
+		define myZout $myrout
+		define myRout 300
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+		3panelplot1replot
+		#
+3panelplot1replot 0 #		
+		###################################
+		limits -$myZout $myZout -$myRout $myRout
+                #
+                ctype default window 1 -3 1 3 box 0 2 0 0
+                yla R/M
+		#xla z/M
+                #
+		plc 0 (LG(pcuttlab+1E-15)) 010
+                #
+		###################################
+		limits -$myZout $myZout -$myRout $myRout
+                #
+                ctype default window 1 -3 1 2 box 0 2 0 0
+                yla R/M
+		#xla z/M
+                #
+		plc 0 (LG(pcuttobs+1E-15)) 010
+                #
+		###################################
+		limits -$myZout $myZout -$myRout $myRout
+                #
+                ctype default window 1 -3 1 1 box 1 2 0 0
+                yla R/M
+		xla z/M
+                #
+		plc 0 (LG(pcutboosttobs+1E-15)) 010
+                #
+		##########################
 		#
                 #
-createfakeheader 0 creates header as required by new joninterp so consistent header read-in (otherwise reads past into data block)
+createfakeheader 0 #creates header as required by new joninterp so consistent header read-in (otherwise reads past into data block)
 		#
 		#
 		jrdpheader3dold dumps/dump0055
@@ -210,13 +350,19 @@ createfakeheader 0 creates header as required by new joninterp so consistent hea
 		set _whichdumpversion=0
 		set _numcolumns=74
 		#
+		define print_noheader (1)
 		print dumpalltimes.txt.head {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a \
 		       _R0 _Rin _Rout _hslope _dt _defcoord _MBH _QBH _is _ie _js _je _ks _ke _whichdump _whichdumpversion _numcolumns}
 		#
 		#
 getmanydumpsroger 0  #
-		set startanim=0
-		set endanim=66
+		#
+		grid3d gdump
+		#
+		#
+		define ANIMSKIP 5
+		set startanim=10
+		set endanim=65
 		#
 		do ii=startanim,endanim,$ANIMSKIP {
                   set h1='dump'
@@ -445,12 +591,40 @@ computenumberdensityroger 0 #
 		#
 		set cut=2/(1 + exp(rho/(bsq/2)))
                 #
+		set maxgam=4.5
+		set maxvr=sqrt(1-1/maxgam**2)
+		#
+		# approx
+		set myvr=sqrt(gv311)*uu1/uu0
+		set myvh=sqrt(gv322)*uu2/uu0
+		set myvp=sqrt(gv333)*uu3/uu0
+		#
+		# approx
+		set myz=r*cos(h)
+		# below conditional on "myz" can be >0 or <0 : arbitrary for now (well, maybe not quite given tnrdegrees in right direction of rotation)
+		set myvz=(myz<0 ? myvr : -myvr)
+		set myvz=(myvz>maxvr ? maxvr : myvz)
+		set myvz=(myvz<-maxvr ? -maxvr : myvz)
+		#
+		set mygamma=sqrt(-gv300)*uu0
+		set mygamma=(mygamma<1.0 ? 1.0 : mygamma)
+		# don't trust beyond maxgam (truncating lower than this leaves large holes, so I trust those large regions enough to keep them)
+		set mygamma=(mygamma>maxgam ? maxgam : mygamma)
+		#
+		#
+		set Dop=1.0/(mygamma*(1.0-myvz))
+		#
+		#
+		#
                 set fun1=p
                 set fun2=bsq/2
                 set fun3=p*sqrt(abs(bsq/2))**(1.5)
                 set fun4=fun1*cut
                 set fun5=fun2*cut
                 set fun6=fun3*cut
+                set fun7=fun1*cut*Dop**2
+                set fun8=fun2*cut*Dop**2
+                set fun9=fun3*cut*Dop**2
 		#
 		#
 		#
@@ -466,8 +640,8 @@ outputdumproger 2    # outputdump $filename _t
 		#
 		#
 		######################
-		print rogerdata_dipole_$!!mydump.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
-		    {fun1 fun2 fun3 fun4 fun5 fun6}
+		print rogerdata_dipole_$!!mydump.dat '%21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g %21.15g\n' \
+		    {fun1 fun2 fun3 fun4 fun5 fun6 fun7 fun8 fun9}
 		#
                 #
 		#
@@ -511,6 +685,10 @@ outputdump 2    # outputdump $filename _t
 		#
 plotjetfeatures 0 #		  
 		#
+		# 0 : normal 3D case
+		# 1 : special testing 2D case
+		define whichcase 1
+		#
 		# gogrmhd
 		# jre blandford.m
 		# jet jetforavery.m
@@ -529,9 +707,19 @@ plotjetfeatures 0 #
 		############################
 		# interpolate
 		#
-		interpaverysingle 0055 lrho
-		interpaverysingle 0055 lbrel
-		interpaverysingle 0055 ud0
+		if($whichcase==0){\
+		       interpaverysingle 0055 lrho
+		       interpaverysingle 0055 lbrel
+		       interpaverysingle 0055 ud0
+		}
+		#
+		#
+		if($whichcase==1){\
+		       #interpaverysingle2 0055 lrho
+		       #interpaverysingle2 0055 lbrel
+		       #interpaverysingle2 0055 ud0
+		       interpaverysingle2 0055 p
+		}
 		#
 		#
 		##################
@@ -543,21 +731,42 @@ plotjetfeatures 0 #
 		jrdp3d1ci idumpsingle0055_lrho ilrho
 		jrdp3d1ci idumpsingle0055_lbrel ilbrel
 		jrdp3d1ci idumpsingle0055_ud0 iud0
+		jrdp3d1ci idumpsingle0055_p ip
                 #
 		#
 		###################
 		# plot results
 		#
-		# for WHICHPLANE==3:
-		define LOGTYPE 0
-		define coord 1
-		# plane 3 and 1
-		define PLANE 1
-		define WHICHLEV ($nz/2)
+		if($whichcase==0){\
+		       # for WHICHPLANE==3:
+		       define LOGTYPE 0
+		       define coord 1
+		       # plane 3 and 1
+		       define PLANE 1
+		       define WHICHLEV ($ny/2)
+		}
 		#
 		#
-		define x1label "R"
-                define x2label "z"
+		if($whichcase==1){\
+		       # for WHICHPLANE==3:
+		       define LOGTYPE 0
+		       define coord 1
+		       # plane 3 and 1
+		       # PLANE 1 means "x"-direction=y and "y"-direction=z
+		       # Well, but iinterp outputs always in canonical x,z,y (since normal 2D would be x,z) order regardless of permutability
+		       # So then "x"-direction=z and "y"-direction=y
+		       define PLANE 1
+		       define WHICHLEV (0)
+		}
+		#
+		#
+		#
+		if($whichcase==0){\
+		#
+		if($PLANE==1){\
+		 define x1label "z"
+                 define x2label "R"
+		}
 		#
 		define POSCONTCOLOR red
 		define NEGCONTCOLOR default
@@ -572,6 +781,17 @@ plotjetfeatures 0 #
 		define NEGCONTCOLOR yellow
 		plc 0 iud0 010
 		#
+		}
+		#
+		if($whichcase==1){\
+		       define x1label "z"
+		       define x2label "R"
+		       #
+		       define POSCONTCOLOR red
+		       define NEGCONTCOLOR default
+		       plc 0 (LG(ip))
+		#
+		}
 		#
 		# can animage 3D result:
 		#agzplc 0 ilrho
@@ -692,7 +912,7 @@ interpaverysingle 2   #
 		echo ~/bin/$program $DATATYPE $interptype $READHEADERDATA $WRITEHEADERDATA \
                     $nt $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
                     $iint $iinx $iiny $iinz  $iitmin $iitmax $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
-                    $iRin $iRout $iR0 $ihslope  $idefcoord $dofull2pi $EXTRAPOLATE $DEFAULTVALUETYPE
+                    $iRin $iRout $iR0 $ihslope  $idefcoord $dofull2pi $iitmin $iitmax 0 $EXTRAPOLATE $DEFAULTVALUETYPE
 		#
 		#
 		# below source line must be called on command line before entering SM:
@@ -702,7 +922,139 @@ interpaverysingle 2   #
 		!~/bin/$program $DATATYPE $interptype $READHEADERDATA $WRITEHEADERDATA \
                     $nt $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
                     $iint $iinx $iiny $iinz  $iitmin $iitmax $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
-                    $iRin $iRout $iR0 $ihslope  $idefcoord $dofull2pi $EXTRAPOLATE $DEFAULTVALUETYPE \
+                    $iRin $iRout $iR0 $ihslope  $idefcoord $dofull2pi $iitmin $iitmax 0 $EXTRAPOLATE $DEFAULTVALUETYPE \
+		    < $filein > $fileout
+                #
+		#
+		# if $filout is blank, ensure heaeder is correctly filled as consistent with iinterp program
+		#
+interpaverysingle2 2   # // just a copy o f interpaverysingle but a slice similar to a 2D slice trying to create while testing iinterp
+		#
+		set _MBH=1
+		set _QBH=0
+		set _is=0
+		set _ie=$nx
+		set _js=0
+		set _je=$ny
+		set _ks=0
+		set _ke=$nx
+		set _whichdump=0
+		set _whichdumpversion=0
+		set _numcolumns=74
+		#
+		# interpaverysingle 0055 lrho 
+		#
+		# GODMARK: might consider just breaking up file directly, but have to read into SM anyways so probably ok
+		#
+		set _whichdump=0
+		set _whichdumpversion=0
+		set _numcolumns=0
+		#
+		set todump=$2
+		#
+		define dumpsingle "dumpsingle$!!1_$!!2"
+		#
+		define print_noheader (1)
+                # must keep header in line with code's expectation
+		print "dumps/$!!dumpsingle" {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a \
+		       _R0 _Rin _Rout _hslope _dt _defcoord _MBH _QBH _is _ie _js _je _ks _ke _whichdump _whichdumpversion _numcolumns}
+		#
+                print + "dumps/$!!dumpsingle" '%21.15g\n' {todump}
+		#
+                #
+		#
+		#
+		define idumpsdir "idumps/"
+		#
+		!mkdir $idumpsdir
+		#
+		#
+		# from vis5dpremake:
+		#
+		define nt 1
+		#
+		define int $nt
+		define inx 1
+                define iny 256
+                define inz 256
+		#
+		set myRout=950.0
+                define itmin (0)
+                define itmax (0)
+                define ixmin (-10)
+                define ixmax (10)
+		#define iymin (-300)
+                #define iymax (300)
+                define iymin (-myRout)
+                define iymax (myRout)
+                define izmin (-myRout)
+                define izmax (myRout)
+		#
+		define iint ($int)
+		define iinx ($inx)
+                define iiny ($inz)
+                define iinz ($iny)
+                #
+                define iitmin ($itmin)
+                define iitmax ($itmax)
+                define iixmin ($ixmin)
+                define iixmax ($ixmax)
+                define iiymin ($izmin)
+                define iiymax ($izmax)
+                define iizmin ($iymin)
+                define iizmax ($iymax)
+		#
+		#
+		# from vis5dmakepart2:
+		#
+		define filein "dumps/$!!dumpsingle"
+		define fileout "idumps/i$!!dumpsingle"
+		#
+		# bi-linear (works for 3D and very fast)
+                define interptype (1)
+		define refinement (1.0)
+		define iRin (_Rin)
+                define iRout (_Rout)
+                define ihslope (_hslope)
+                define idt (_dt)
+                define iR0 (_R0)
+		#
+		define READHEADERDATA 1
+                define WRITEHEADERDATA 1
+                #
+                define WRITEHEADER 0
+                define igrid (0)
+                #
+                define idefcoord (_defcoord)
+                define oldgrid (1)
+                define doing3d ($nz>1)
+                define doing2d (!$doing3d)
+		#
+		#
+		define DATATYPE 1
+                # want extrapolation so smoothly connects at outer edges
+                # GODMARK: sets to 0 otherwise, and should really choose (maybe) min for scalars and 0 for vectors
+                define program "iinterp.rh39"
+                define EXTRAPOLATE 0
+		#define DEFAULTVALUETYPE 4
+		define DEFAULTVALUETYPE 1
+		#
+		define dofull2pi 1
+		#
+		echo ~/bin/$program $DATATYPE $interptype $READHEADERDATA $WRITEHEADERDATA \
+                    $nt $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
+                    $iint $iinx $iiny $iinz  $iitmin $iitmax $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
+                    $iRin $iRout $iR0 $ihslope  $idefcoord $dofull2pi $iitmin $iitmax 0 $EXTRAPOLATE $DEFAULTVALUETYPE
+		#
+		#
+		# below source line must be called on command line before entering SM:
+		#
+		!source /u/ki/jmckinne/intel/mkl/10.0.3.020/tools/environment/mklvarsem64t.sh
+		#
+		!~/bin/$program $DATATYPE $interptype $READHEADERDATA $WRITEHEADERDATA \
+                    $nt $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
+                    $iint $iinx $iiny $iinz  $iitmin $iitmax $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
+                    $iRin $iRout $iR0 $ihslope  $idefcoord $dofull2pi $iitmin $iitmax 0 $EXTRAPOLATE $DEFAULTVALUETYPE \
 		    < $filein > $fileout
                 #
 		#
