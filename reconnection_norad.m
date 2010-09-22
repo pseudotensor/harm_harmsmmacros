@@ -4,7 +4,8 @@ loadrmac1  0    #
 		jre grbmodel.m
 		jre reconnection_norad.m
 		#
-renocoolplc1  0 #
+renocoolplc1  2 # renocoolplc1 3 1
+		#
 		# gogrmhd
 		# jre kaz.m
 		# jre grbmodel.m
@@ -14,25 +15,45 @@ renocoolplc1  0 #
 		#2) readnocoolblock?
 		#3) AND inside which file to read
 		#
-		set nothing=S*0
 		#
-		#readnocoolblock1
-		#setupplc 100 67 1 S sigma nothing
-                #setupplc 100 72 1 S sigma nothing
-                #setupplc 100 69 1 S sigma nothing
+		if($1==1){\
+		       define IMAGEORDER 0
+		       readnocoolblock1 $2
+		       #setupplc 100 67 1 S sigma nothing
+		       #setupplc 100 72 1 S sigma nothing
+		       setupplc 100 69 1 S sigma nothing
+		       define x1label "\tilde{S}"
+		       define x2label "\sigma"
+		}
 		#
-                #readnocoolblock2
-                #setupplc 100 70 1 S sigma nothing
-                #setupplc 100 100 1 S sigma nothing
-		#setupplc 150 150 1 S sigma nothing
+		if($1==2){\
+		       define IMAGEORDER 0
+		       readnocoolblock2 $2
+		       #setupplc 100 70 1 S sigma nothing
+		       #setupplc 100 100 1 S sigma nothing
+		       setupplc 150 150 1 S sigma nothing
+		       define x1label "\tilde{S}"
+		       define x2label "\sigma"
+		}
 		#
-		readnocoolblock3
-                setupplc 150 150 1 S sigma nothing
+		if($1==3){\
+		       define IMAGEORDER 0
+		       readnocoolblock3 $2
+		       setupplc 150 150 1 S sigma nothing
+		       define x1label "\tilde{S}"
+		       define x2label "\sigma"
+		}
+		#
+		if($1==4){\
+		       define IMAGEORDER 1
+		       readnocoolblock4 $2
+		       setupplc 150 150 1 S sigma guidefactor
+		       define x1label "\tilde{S}"
+		       define x2label "\sigma"
+		}
 		#
 		#
 		#
-		define x1label "S"
-		define x2label "\sigma"
 		define PLANE 3
 		define WHICHLEV 0
 		#
@@ -46,50 +67,57 @@ renocoolplc1  0 #
 		#
 		#
 fixupdata 0     #
+		#
+		set nothing=S*0
+		#
+		set error=(error<1E-30 ? 0 : 1)
+		#
 		define missing_data (7.13321362362E-16)
 		define largevalue (1E30)
-		set d=(abs(d)>$largevalue ? $missing_data : d)
-		set ux=(abs(ux)>$largevalue ? $missing_data : ux)
-		set rhoc=(abs(rhoc)>$largevalue ? $missing_data : rhoc)
-		set iec=(abs(iec)>$largevalue ? $missing_data : iec)
-		set rhoout=(abs(rhoout)>$largevalue ? $missing_data : rhoout)
-		set ieout=(abs(ieout)>$largevalue ? $missing_data : ieout)
-		set Bx=(abs(Bx)>$largevalue ? $missing_data : Bx)
-		set uy=(abs(uy)>$largevalue ? $missing_data : uy)
-		set Bzc=(abs(Bzc)>$largevalue ? $missing_data : Bzc)
-		set Bzout=(abs(Bzout)>$largevalue ? $missing_data : Bzout)
+		set d=(abs(d)>2 || error==1 ? $missing_data : abs(d))
+		set ux=(abs(ux)>$largevalue || d==$missing_data ? $missing_data : ux)
+		set rhoc=(abs(rhoc)>$largevalue  || d==$missing_data? $missing_data : rhoc)
+		set iec=(abs(iec)>$largevalue || d==$missing_data ? $missing_data : iec)
+		set rhoout=(abs(rhoout)>$largevalue || d==$missing_data ? $missing_data : rhoout)
+		set ieout=(abs(ieout)>$largevalue || d==$missing_data ? $missing_data : ieout)
+		set Bx=(abs(Bx)>$largevalue || d==$missing_data ? $missing_data : Bx)
+		set uy=(abs(uy)>$largevalue || d==$missing_data ? $missing_data : uy)
+		set Bzc=(abs(Bzc)>$largevalue || d==$missing_data ? $missing_data : Bzc)
+		set Bzout=(abs(Bzout)>$largevalue || d==$missing_data ? $missing_data : Bzout)
+                #
+                set anymissing=(d==$missing_data || ux==$missing_data || rhoc==$missing_data || iec==$missing_data || rhoout==$missing_data || ieout==$missing_data || Bx==$missing_data || uy==$missing_data || Bzc==$missing_data || Bzout==$missing_data ? 1 : 0)
 		#
 setratios 0	#
 		#
 		set drat=(d==$missing_data ? $missing_data : d/dnonrel)
-		set uxrat=(ux==$missing_data ? $missing_data : ux/uxnonrel)
-		set rhocrat=(rhoc==$missing_data ? $missing_data : rhoc/rhocnonrel)
-		set iecrat=(iec==$missing_data ? $missing_data : iec/iecnonrel)
-		set rhooutrat=(rhoout==$missing_data ? $missing_data : rhoout/rhooutnonrel)
-		set ieoutrat=(ieout==$missing_data ? $missing_data : ieout/ieoutnonrel)
-		set Bxrat=(Bx==$missing_data ? $missing_data : Bx/Bxnonrel)
-		set uyrat=(uy==$missing_data ? $missing_data : uy/uynonrel)
-		set Bzcrat=(Bzc==$missing_data ? $missing_data : Bzc/Bzcnonrel)
-		set Bzoutrat=(Bzout==$missing_data ? $missing_data : Bzout/Bzoutnonrel)
+		set uxrat=(ux==$missing_data || anymissing ? $missing_data : ux/uxnonrel)
+		set rhocrat=(rhoc==$missing_data || anymissing ? $missing_data : rhoc/rhocnonrel)
+		set iecrat=(iec==$missing_data || anymissing ? $missing_data : iec/iecnonrel)
+		set rhooutrat=(rhoout==$missing_data || anymissing ? $missing_data : rhoout/rhooutnonrel)
+		set ieoutrat=(ieout==$missing_data || anymissing ? $missing_data : ieout/ieoutnonrel)
+		set Bxrat=(Bx==$missing_data || anymissing ? $missing_data : Bx/Bxnonrel)
+		set uyrat=(uy==$missing_data || anymissing ? $missing_data : uy/uynonrel)
+		set Bzcrat=(Bzc==$missing_data || anymissing ? $missing_data : Bzc/Bzcnonrel)
+		set Bzoutrat=(Bzout==$missing_data || anymissing ? $missing_data : Bzout/Bzoutnonrel)
 		#
-		set dmrat=(d==$missing_data ? $missing_data : d/dmixed)
-		set uxmrat=(ux==$missing_data ? $missing_data : ux/uxmixed)
-		set rhocmrat=(rhoc==$missing_data ? $missing_data : rhoc/rhocmixed)
-		set iecmrat=(iec==$missing_data ? $missing_data : iec/iecmixed)
-		set rhooutmrat=(rhoout==$missing_data ? $missing_data : rhoout/rhooutmixed)
-		set ieoutmrat=(ieout==$missing_data ? $missing_data : ieout/ieoutmixed)
-		set Bxmrat=(Bx==$missing_data ? $missing_data : Bx/Bxmixed)
-		set uymrat=(uy==$missing_data ? $missing_data : uy/uymixed)
-		set Bzcmrat=(Bzc==$missing_data ? $missing_data : Bzc/Bzcmixed)
-		set Bzoutmrat=(Bzout==$missing_data ? $missing_data : Bzout/Bzoutmixed)
+		set dmrat=(d==$missing_data || anymissing ? $missing_data : d/dmixed)
+		set uxmrat=(ux==$missing_data || anymissing ? $missing_data : ux/uxmixed)
+		set rhocmrat=(rhoc==$missing_data || anymissing ? $missing_data : rhoc/rhocmixed)
+		set iecmrat=(iec==$missing_data || anymissing ? $missing_data : iec/iecmixed)
+		set rhooutmrat=(rhoout==$missing_data || anymissing ? $missing_data : rhoout/rhooutmixed)
+		set ieoutmrat=(ieout==$missing_data || anymissing ? $missing_data : ieout/ieoutmixed)
+		set Bxmrat=(Bx==$missing_data || anymissing ? $missing_data : Bx/Bxmixed)
+		set uymrat=(uy==$missing_data || anymissing ? $missing_data : uy/uymixed)
+		set Bzcmrat=(Bzc==$missing_data || anymissing ? $missing_data : Bzc/Bzcmixed)
+		set Bzoutmrat=(Bzout==$missing_data || anymissing ? $missing_data : Bzout/Bzoutmixed)
 		#
 		#
-readnocoolblock1   0       #
+readnocoolblock1   1       #
 		#
                 da spdata_100._100._1.e-10_1.e10_100._1.e15.dat
 		#
 		lines 1 10000000
-		#
+                #
 		# 2*2+1 + 8*3 = 29
 		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {tj ti sigma S error \
@@ -110,12 +138,20 @@ readnocoolblock1   0       #
 		    #
                     computeblock
                     #
-readnocoolblock2   0       #
+readnocoolblock2   1       #
 		#
-                #da tempspdata_100._100._1.e-10_1.e10_1_100_1_100_100._1.e25.dat
-		da 1e25case/spdata_100._100._1.e-10_1.e10_1_100_1_100_100._1.e25.dat
-		#da 1e25case/spdata_1guide__150._150._1.e-10_1.e10_1_150_1_150_10._1.e25.dat
+		if($1==1){\
+		       da tempspdata_100._100._1.e-10_1.e10_1_100_1_100_100._1.e25.dat
+		}
 		#
+		if($1==2){\
+		       da 1e25case/spdata_100._100._1.e-10_1.e10_1_100_1_100_100._1.e25.dat
+		}
+		#
+		if($1==3){\
+		       da 1e25case/spdata_1guide__150._150._1.e-10_1.e10_1_150_1_150_10._1.e25.dat
+		}
+                #
 		lines 1 10000000
 		#
 		# 2*2+1 + 8*4 = 37
@@ -138,10 +174,15 @@ readnocoolblock2   0       #
 		    setratios
 		    #
                     computeblock
-readnocoolblock3   0       #
+readnocoolblock3   1       #
 		#
-                da 1e25case/guide0.dat
-		#da 1e25case/guide1.dat
+		if($1==1){\
+		       da 1e25case/guide0.dat
+		}
+		#
+		if($1==2){\
+		       da 1e25case/guide1.dat
+		}
 		#
 		lines 1 10000000
 		#
@@ -151,6 +192,33 @@ readnocoolblock3   0       #
                      dnonrel uxnonrel rhocnonrel iecnonrel rhooutnonrel ieoutnonrel Bxnonrel uynonrel Bzcnonrel Bzoutnonrel \
                      dmixed uxmixed rhocmixed iecmixed rhooutmixed ieoutmixed Bxmixed uymixed Bzcmixed Bzoutmixed \
                      d ux rhoc iec rhoout ieout Bx uy Bzc Bzout \
+                    }
+                    #
+		    fixupdata
+		    setratios
+                    #
+                    computeblock
+                    #
+readnocoolblock4   0       # ALSO HAS now sigma fastest!
+		#
+		if($1==1){\
+		       da 1e25case/guide1em2.dat # bad righ now -- redoing
+		}
+		#
+		if($1==2){\
+		       da 1e25case/guide1em4.dat
+		}
+		#
+                #
+		lines 1 10000000
+		#
+		# 2*4 + 1 + 11*3 = 42
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		    {ti tj tk tl sigma S guidefactor eff2 \
+                     error \
+                     effemnonrel dnonrel uxnonrel rhocnonrel iecnonrel rhooutnonrel ieoutnonrel Bxnonrel uynonrel Bzcnonrel Bzoutnonrel \
+                     effemmixed dmixed uxmixed rhocmixed iecmixed rhooutmixed ieoutmixed Bxmixed uymixed Bzcmixed Bzoutmixed \
+                     effemrel d ux rhoc iec rhoout ieout Bx uy Bzc Bzout \
                     }
                     #
 		    fixupdata
@@ -417,6 +485,8 @@ setupget 1      # produces same final variable names (not rat and mrat) for easy
 		}
 		#
 		if($1==1){\
+                          #
+                          # same as above, but for mrat not rat
 		#
 		set myti=ti if(myuse)
 		set mytj=tj if(myuse)
@@ -503,6 +573,207 @@ getit1 1        #
 		#
 		#
 		#
+plot1  1        #
+		# plot1 0 = no writing to file
+		# plot1 1 = write .eps to file
+		#
+		# no guide field
+		#
+		define POSCONTCOLOR default
+		define NEGCONTCOLOR default
+		define BOXCOLOR default
+		define POSCONTLTYPE 0
+		define NEGCONTLTYPE 0
+		#
+		renocoolplc1 3 1
+		#
+		#
+		#
+		# temp fix
+		set myd=(sigma>1E5 && S>1E17 ? dmixed : d)
+		#set myd=(d)
+		#
+		fdraft
+		lweight 5
+		define cres 15
+		define POSCONTCOLOR default
+		define NEGCONTCOLOR default
+		define BOXCOLOR default
+		define POSCONTLTYPE 0
+		define NEGCONTLTYPE 0
+		#
+		#
+		set fun=(LG(myd))
+		plc 0 fun
+		#
+		erase
+		#
+		if($1==1){\
+		       device postencap f2.eps
+		}
+		#
+		#
+		plc 0 fun 010
+		#
+		define cres 2
+		lweight 7
+		ltype 2
+		#set cut0 = (50*sigma>S**(4/5) ? 1 : 0) plc 0 cut0 010
+		set cut0 = (10*sigma>S**(30/40) ? 1 : 0) plc 0 cut0 010
+		#set cut1 = (10*sigma>S**(1) ? 1 : 0) plc 0 cut1 010
+		#set cut1 = (45*sigma>S**(1) ? 1 : 0) plc 0 cut1 010
+		#
+		#set cut2 = (10*sigma>S**(6/4) ? 1 : 0) plc 0 cut2 010
+		#
+		#set cut3 = (2*sigma>S**(3/5) ? 1 : 0) plc 0 cut3 010
+		#
+		#set cut3 = (8*sigma>S**(3/5) ? 1 : 0) plc 0 cut3 010
+		#
+		set cut3 = (10*sigma>S**(3/2) ? 1 : 0) plc 0 cut3 010
+		#
+		set cut3 = (sigma<1 ? 1 : 0) plc 0 cut3 010
+		#
+		ltype 0
+		lweight 5
+		define cres 15
+		#
+		relocate 12.1 -4.5
+		putlabel 5 "RI"
+		#
+		relocate 16.2 4.4
+		putlabel 5 "RII"
+		#
+		relocate 11 10.2
+		putlabel 5 "RIII"
+		#
+		relocate 4.6 10.8
+		putlabel 5 "RIV"
+		#
+		###
+		box 0 0 0 0
+		myxaxis 2
+		myyaxis 2
+		xla $x1label
+		yla $x2label
+		#
+		if($1==1){\
+		       device X11
+		}
+		#
+		#
+		############
+notworkingaxis 0 #
+		#
+		erase
+		SET s=1,25,.5 SET b=1,25,2
+		#set vlab={'1' '10^{3}' '10^{5}' '10^{7}' '10^{9}' '10^{11}' '10^{13}' '10^{15}' '10^{17}' '10^{19}' '10^{21}' '10^{23}' '10^{25}'}
+		#set vlab={1 10^{3} 10^{5} 10^{7} 10^{9} 10^{11} 10^{13} 10^{15} 10^{17} 10^{19} 10^{21} 10^{23} 10^{25}}
+		set vlab={10^1 10^3 10^5 10^7 10^9 10^11 10^13 10^15 10^17 10^19 10^21 10^23 10^25}
+		angle 0
+		AXIS $fx1 $fx2 s b vlab $gx1 $gy1 $($gx2-$gx1) 1 0
+		#
+		SET s=-10,15,.5 SET b=-10,15,2
+		set vlab={10^-10 10^-8 10^-6 10^-4 10^-2 10^0 10^2 10^4 10^6 10^8 10^10 10^12 10^14}
+		angle 90
+		AXIS $fy1 $fy2 s b vlab $gx1 $gy1 $($gy2-$gy1) 2 3
+		angle 0
+		#
+myxaxis 1       #
+		#
+		define maxdec (INT($fx2))
+		define mindec (INT($fx1))
+		set vlab = $mindec,$maxdec,1
+		set opbrace='{'
+		set clbrace='}'
+		define numlabelskip $1
+		do i=0,dimen(vlab)-1 {
+		   if( vlab[$i]>=-1 && vlab[$i]<=1 ) {
+		      set newlab = sprintf('%g',10**vlab[$i])
+		   } else {
+		      set newlab='10^'+opbrace
+		      if( vlab[$i]<0){
+		         set newlab=newlab+'-'
+		         set newlab=newlab+sprintf('%g',ABS(vlab[$i]))
+		      } else {
+		         set newlab=newlab+sprintf('%g',vlab[$i])
+		      }
+  		      set newlab=newlab+clbrace
+		   }
+		   #skip numbers by deleting the label
+		   if( $i%$numlabelskip!=0 ) {
+		      set newlab = ' '
+		   }
+		   if( $i==0 ) {
+		      set xlab = newlab
+		   } else {
+		      set xlab = xlab concat newlab
+		   }
+		}
+		set s = vlab
+		set b = s
+		#box 0 0 0 0
+		#
+		ANGLE 0
+		AXIS $fx1 $fx2 s b xlab $gx1 $gy1 $($gx2-$gx1) 1 0
+		#AXIS $fy1 $fy2 0 0 $gx2 $gy1 $($gy2-$gy1) 0 $(0|8)
+		ANGLE 0
+		#
+myyaxis 1       # myyaxis 2
+		#
+		define maxdec (INT($fy2))
+		define mindec (INT($fy1))
+		set vlab = $mindec,$maxdec,1
+		set opbrace='{'
+		set clbrace='}'
+		define numlabelskip $1
+		do i=0,dimen(vlab)-1 {
+		   if( vlab[$i]>=-1 && vlab[$i]<=1 ) {
+		      set newlab = sprintf('%g',10**vlab[$i])
+		   } else {
+		      set newlab='10^'+opbrace
+		      if( vlab[$i]<0){
+		         set newlab=newlab+'-'
+		         set newlab=newlab+sprintf('%g',ABS(vlab[$i]))
+		      } else {
+		         set newlab=newlab+sprintf('%g',vlab[$i])
+		      }
+  		      set newlab=newlab+clbrace
+		   }
+		   #skip numbers by deleting the label
+		   if( $i%$numlabelskip!=0 ) {
+		      set newlab = ' '
+		   }
+		   if( $i==0 ) {
+		      set ylab = newlab
+		   } else {
+		      set ylab = ylab concat newlab
+		   }
+		}
+		set s = vlab
+		set b = s
+		#box 0 0 0 0
+		#
+		ANGLE 90
+		AXIS $fy1 $fy2 s b ylab $gx1 $gy1 $($gy2-$gy1) 2 3
+		#AXIS $fy1 $fy2 0 0 $gx2 $gy1 $($gy2-$gy1) 0 $(0|8)
+		ANGLE 0
+		#
+axistest 0 #
+		NOTATION -1 2 -1 2
+		window 1 1 1 1
+		ticksize 0.2 1 -1 0
+		limits 0 10 -2.2 12.2
+		box 1 0 0 0
+		myyaxis 3
+		#
+axistest2 0 #
+		NOTATION -1 2 -1 2
+		window 1 1 1 1
+		ticksize -1 0 -1 0
+		limits -2.2 12.2 -2.2 12.2
+		box 0 0 0 0
+		myxaxis 2
+		myyaxis 2
 		#
 		#
 		###############################################
