@@ -230,11 +230,6 @@ overallroger 0  # just writing what done anywhere
 		rogerplot1
 		3panelplot1
 		#
-		device postencap rz3panel.eps
-		3panelplot1replot
-		device X11
-		#
-		# !scp rz3panel.eps jon@ki-rh42:
 		#
 rogerinterp1 0  #
 		#For constant time (tlab or tobs) and constant y (since same as x), do:

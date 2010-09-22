@@ -38,9 +38,12 @@ plc    17	# plc <file> <function> <type of plot=100,000,overlay=010,000,limits=0
                 #
                 setupplc2
                 #
+                if($IMAGEORDER==0){ set fix=ix set fiy=iy }
+                if($IMAGEORDER==1){ set fix=iy set fiy=ix }
+                #
 		image ($rnx,$rny) $txl $txh $tyl $tyh
 		#
-                set image[ix,iy] = newfun
+                set image[fix,fiy] = newfun
                 #limits $rxl $rxh $ryl $ryh
                 #device ppm file1.ppm
                 # default(0) to not overlay
@@ -96,7 +99,7 @@ plc    17	# plc <file> <function> <type of plot=100,000,overlay=010,000,limits=0
 		         #
 		         # necessary in order to get symmetric result.
 		         # that is, even if lev is symmetric, contours of negative values leads to different result than positive contours of the positive values of the negative values
-		         set image[ix,iy] = -newfun
+		         set image[fix,fiy] = -newfun
 			 levels lev
 		         ltype $NEGCONTLTYPE
 		         ctype $NEGCONTCOLOR
@@ -119,7 +122,7 @@ plc    17	# plc <file> <function> <type of plot=100,000,overlay=010,000,limits=0
 		         levels lev
 		         ltype $NEGCONTLTYPE
 		         ctype $NEGCONTCOLOR
-		         set image[ix,iy] = newfun
+		         set image[fix,fiy] = newfun
 		         contour		        
 		         #
 		     }

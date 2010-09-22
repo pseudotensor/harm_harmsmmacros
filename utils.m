@@ -582,6 +582,7 @@ defaults
                 define COMPDIM (3)
                 define DODIV3 (1)
 	        expand 1.00001
+                define IMAGEORDER 0
 	        define PLANE (3)
 		define PLOTERASE (1)
 		define CONSTLEVELS (0)
