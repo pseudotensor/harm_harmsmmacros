@@ -84,7 +84,7 @@ der        4            # derivative (e.g. der t min1 td min1d)
 		  set $3[0]=$1[0]
                   set $4[0]=$4[1]
                   # hack to avoid problem at end with same time data
-                  set $4[$length-1]=$4[$length-2]
+                  #set $4[$length-1]=$4[$length-2]
                   #
 grad       4      # (e.g. grad  pot gpot 3 2) div <fun> <newfun> <coord> <grid>
 	          # <coord> 3->spc 2->cyl 1->cart
