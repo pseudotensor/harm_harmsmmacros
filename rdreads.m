@@ -1088,7 +1088,7 @@ myrd   12       # (checks filename, loads if name, does not if name is 0)
 	           }
                   }
 	         }
-                 echo "rd done"
+                 #echo "rd done"
                  #
 rd	12	# read macro for all data
                 # e.g. rd 0_loss.dat  e.g. rd adump0000.dat 2
