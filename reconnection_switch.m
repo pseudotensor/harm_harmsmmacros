@@ -220,6 +220,7 @@ readtypelong1 1   # # first have to get rid of "'s in file.
 		set Pbjet=(bsq/2)
 		set ratco=(bsq/(rhob*c**2))
 		#
+                #
 		#
 		#
 		set taunse=rhob**(0.2)*exp(179.7*1E9/T-39)
@@ -241,6 +242,7 @@ readtypelong1 1   # # first have to get rid of "'s in file.
 		set pem=bsq/2
 		set myconditionpt=sqrt(2*rhob*c**2/(pem*tauradsca))
 		#
+                # below doesn't happen -- synch cooling timescale too short
 		set etaacc=0.1
 		set um=bsq*0.5
 		set umfrac=(etaacc*um)
@@ -259,6 +261,9 @@ readtypelong1 1   # # first have to get rid of "'s in file.
 		set omegapeak=0.29*omegac
 		set Epeak=hbar*omegapeak
 		set Epeakobskev=gammalorentz*Epeak/ergPmev*1E3
+                #
+                # instead, assume quasi-thermal
+                set Epeakobskev = gammalorentz*T*kb/ergPmev*1E3
 		#
 		#
 		set sigmat=6.65E-25
@@ -271,6 +276,7 @@ readtypelong1 1   # # first have to get rid of "'s in file.
                 #
                 set omegape=sqrt(4*pi*(necenter+npairsrad)*qe**2/me)
                 set deltapete=c/omegape
+		set conditionpe=deltapete/deltaspt
                 #
                 # proton totel mass-energy density
                 set MEproton=mp*ne*c**2 + Ye*Ubaryon
@@ -287,7 +293,29 @@ readtypelong1 1   # # first have to get rid of "'s in file.
                 # v1s,v1g: ""
                 # ctherms,cthermg: ""
                 # vdprime: low field at large radius
+                #
+		set vrecl=0.018*c
 		#
+		set fakem=0.1
+		set TF=2*pi/((fakem*omegaf))
+		set vrecm=0.018*c
+		set dtminobsm=(c/vrecm)*TF
+                set dtdissfast=lp/(4*vrecm)
+                set dtdissfastobs=dtdissfast/(2*gammalorentz)
+                #
+                # correct for factor of 2
+ 		set dttransitobs=dttransitobs/2
+		set Tdiffabs1obs=(Tdiffabs1obs/2)
+		set Tdiffsca1obs=(Tdiffsca1obs/2)
+		set dtradobs=(dtradobs/2)
+		#
+		set Bc=4.41E13
+		#
+                set taualongjetalt=taualongjet - necenter*sigmaesosigmat*sigmat*rjet
+                # other term already there
+                set taualongjetother=necenter*sigmaesosigmat*sigmat*ljet/(2*gammalorentz)
+		#
+                #
 testissue 0     #
 		ctype default ltype 0 pl 0 ljet MEproton 1100
 		ctype red ltype 0 pl 0 ljet MEpairs 1110
@@ -296,6 +324,7 @@ testissue 0     #
 readtypelong2 1 #
 		readtypelong1 $1
 		read {muconst 202 u4r 203 u4h 204 u4p 205 u4phi 206 B3r 207 B3h 208 B3p 209}
+		set sigmaem=muconst/gammalorentz - 1
 		#
 		#
 readtypelong3 1 #
@@ -313,6 +342,9 @@ readtypelong5 1 #
 		readtypelong3 $1
 		read {Qgg2pairs 215 Qge2pairs 216 Qee2pairs 217 taupairssca 218 taupairsabs 219 damptaupairs 220 damptaupairs2 221 Qpairs 222 Rgg2pairs 223 Rge2pairs 224 Ree2pairs 225 taunumpairsabs 226 damptaunumpairs 227 damptaunumpairs2 228 Rpairs 229}
 		#
+readtypelong6 1 #
+		readtypelong5 $1
+		read {powermajet 230 dpowerjetdtheta 231 dpowermajetdtheta 232 bsqplasmavalue 233 Bphiplasmavalue 234  bsqTvalue 235 BphiTvalue 236}
 		#
 readnewplotfile 0 # 1D
 		#
@@ -377,8 +409,11 @@ doallnewplots   0
 		#
 readnormal 0    #		
 		#
-		readtypelong5 grb_40._1._1._1._1._1._1._1.1._1._1._1._1._1._1._1.40._1._1._1._1._1._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_3.2e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_1._1.e4_1._0.1_1.e4_0.1_mmode0.1
+		#readtypelong5 grb_40._1._1._1._1._1._1._1.1._1._1._1._1._1._1._1.40._1._1._1._1._1._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_3.2e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_1._1.e4_1._0.1_1.e4_0.1_mmode0.1
 		#
+		#readtypelong6 finalnondiss.dat
+		#readtypelong6 grbaddedcoul.dat
+                readtypelong6 grbrjetfixnodiss.dat
 		#
 		set bsqnodiss=bsq
 		set bgaussnodiss=bgauss
@@ -389,20 +424,36 @@ readnormal 0    #
 		set taualongjetnodiss=taualongjet
 		set deltasptnodiss=deltaspt
 		set npairsradnodiss=npairsrad
+                set taupairsscanodiss=taupairssca
+                set lundquisttnodiss=lundquistt
 		#
+ 		getminV
+                set minvnodiss=minv
 		#
 		#readtypelong5 grb_40._1._1._1._1._1._1._1.1._1._1._1._1._1._1._1.40._1._1._1._1._1._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_3.2e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_1._1.e4_1._0.1_1.e4_0.1_finaldiss
-		readtypelong5 grb_40._1._1._1._1._1._1._1.1._1._1._1._1._1._1._1.40._1._1._1._1._1._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_3.2e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_1._1.e4_1._0.1_1.e4_0.1_evenmorefinal
+		#readtypelong5 grb_40._1._1._1._1._1._1._1.1._1._1._1._1._1._1._1.40._1._1._1._1._1._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_3.2e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_1._1.e4_1._0.1_1.e4_0.1_evenmorefinal
 		#
+		#readtypelong6 grb_40._1._1._1._1._1._1._1.1._1._1._1._1._1._1._1.40._1._1._1._1._1._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_3.2e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_1._1.e4_1._0.1_1.e4_0.1_finaldissnew
 		#
+		# diss version:
+		#readtypelong6 grbaddedcouldiss.dat
+                #
+		#readtypelong6 grbaddedcouldiss.bsqfix.dat
+                #
+                readtypelong6 grbrjetfixdiss.dat
+                #
+                #
+                #
+ 		getminV
 		#
 dissmods 0      #		
 		#
 		set vrocfast=0.018
 		#
 		#
-		set bsq0=5.3E10
-		set r0=5E13
+		set bsq0=4.5E10
+		set r0=4.8E13
+		set rother=1E14
 		#
 		#
 		set bsqdiss1=bsq0*(ljet/r0)**(-2)*exp(-4*vrocfast/lp/gammalorentz*(ljet-r0))
@@ -421,8 +472,8 @@ dissmods 0      #
 		#set bgaussnodiss=(ljet<r0 ? bgauss : bgauss[25]*(ljet/r0)**(-1))
 		#set Bgaussphinodiss=(ljet<r0 ? Bgaussphi : Bgaussphi[25]*(ljet/r0)**(-1))
 		#
-		set fakemu=(1+npairsrad/necenter)**2/(8*tauradsca*conditionpt**2)
-		set fakebsq=2*fakemu*rhob*c**2
+		set sfakemu=(1+npairsrad/necenter)**2/(8*tauradsca*conditionpt**2)
+		set fakebsq=2*sfakemu*rhob*c**2
 		set fakebgauss=sqrt(fakebsq*4*pi)
 		#
 		set Bgaussphidiss=-bgaussdiss*gammalorentz
@@ -438,8 +489,6 @@ dissmods 0      #
 		set sigmafake=bsqdiss/(rhob*c**2)
 		set munotconst = gammalorentz*(1+sigmafake)
 		set munotconst = (ljet<r0 ? muconst : munotconst)
-		#
-		#
 		#
 		#
 donewplot1 2    # jetfull.eps 4-panel
@@ -514,15 +563,15 @@ donewplot1 2    # jetfull.eps 4-panel
 		relocate 16.6515 3.6
 		angle 0
 		expand 0.6
-		putlabel 5 "Ideal"
+		putlabel 5 "Id"
 		angle 0
 		# fdraft expand
 		expand 1.5
 		#
-		relocate 16.6515 3.05
+		relocate 16.6515 3.15
 		angle 5
 		expand 0.6
-		putlabel 5 "Ideal"
+		putlabel 5 "Id"
 		angle 0
 		# fdraft expand
 		expand 1.5
@@ -547,16 +596,16 @@ donewplot1 2    # jetfull.eps 4-panel
 		ctype default ltype 0 pl 0 ljet (abs(Bgaussr)) 1110
 		ctype default ltype 2 pl 0 ljet (abs(bgaussnodiss)) 1110
 	        #ctype default ltype 2 pl 0 ljet (abs(bgaussdiss)) 1110
-		#ctype red ltype 2 pl 0 ljet (abs(bgauss)) 1110
-		ctype default ltype 2 pl 0 ljet (abs(bgauss)) 1110  
+		#ctype red ltype 2 pl 0 ljet (abs(sqrt(bsqplasmavalue*4*pi))) 1110
+		ctype default ltype 2 pl 0 ljet (abs(sqrt(bsqplasmavalue*4*pi))) 1110  
 		ctype default ltype 1 pl 0 ljet (abs(Bgaussphinodiss)) 1110
 		#ctype default ltype 1 pl 0 ljet (abs(Bgaussphidiss)) 1110
-		ctype default ltype 1 pl 0 ljet (abs(Bgaussphi)) 1110
+		ctype default ltype 1 pl 0 ljet (abs(Bphiplasmavalue*sqrt(4*pi))) 1110
 		#
 		relocate 16.95   6.3
 		angle -35
 		expand 0.6
-		putlabel 5 "Ideal"
+		putlabel 5 "Id"
 		angle 0
 		# fdraft expand
 		expand 1.5
@@ -564,10 +613,15 @@ donewplot1 2    # jetfull.eps 4-panel
 		relocate 16.95   3.4
 		angle -35
 		expand 0.6
-		putlabel 5 "Ideal"
+		putlabel 5 "Id"
 		angle 0
 		# fdraft expand
 		expand 1.5
+		#
+		relocate 13.5 14.3
+		angle 0 expand 0.8
+		putlabel 5 "b_{\rm QED}" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT expand 1.5
 		#
 		set fakebgausstoplot=fakebgauss if(ljet>=3.67e+13)
 		set ljettoplot=ljet if(ljet>=3.67e+13)
@@ -578,7 +632,6 @@ donewplot1 2    # jetfull.eps 4-panel
 		#ctype yellow ltype 0 pl 0 ljet (sqrt(bsqdiss2*4*pi)) 1110
 		#
 		#
-		set Bc=4.41E13
 		define PLOTLWEIGHT (3)
                 define NORMLWEIGHT (3)
 		lweight 3
@@ -596,13 +649,186 @@ donewplot1 2    # jetfull.eps 4-panel
 		myxaxis 3
 		myyaxis 4
 		define x1label "r [cm]"
-		#define x2label "\rho_0 \ \rho_{\rm f}"
-		define x2label "\rho_0"
+		#define x2label "\rho_b \ \rho_{\rm f}"
+		define x2label "\rho_b"
 		xla $x1label
 		yla $x2label
 		ctype default ltype 0 pl 0 ljet rhobingoing 1110
 		#ctype default ltype 1 pl 0 ljet rhobfreeingoing 1110
 		#ctype default ltype 0 vertline $lrmono
+		#
+		#
+		if($doprint) {\
+		 device X11
+		}
+		#
+donewplot1better 2    # jetfull.eps 4-panel
+		#
+		#
+		define doprint $1
+		#
+		if($2==1){\
+		       readnormal
+		    }
+		#
+		echo "before dissmods"
+		dissmods
+		echo "after dissmods"
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -2 2 -2 2
+		erase
+		#now setup	   
+		if($doprint) {\
+		       #define fname ('jet' + sprintf('%04g',hor)+ 'mag' + sprintf('%04g',$magpar) + '.eps')
+		       define fname ('jetfull.eps')
+		       device postencap $fname
+		}
+		#
+		#
+		#define rinner (LG(ljet[0]))
+		#define router (LG(ljet[dimen(ljet)-1]))
+		define rinner 5
+		define router 18
+		define lrmono (LG(rmono[0]))
+		#
+		#
+		limits $rinner $router -1.9 0.5
+		ticksize 0.5 2 -1 0
+		ctype default window 2 2 1 2
+		ltype 0
+		box 0 2 0 0
+		myxaxis 3
+		#myyaxis 4
+		xla "r [cm]"
+		yla "\theta_j"
+		ctype default ltype 0 pl 0 ljet thetajet 1110
+		ctype default ltype 0 vertline $lrmono
+		#
+		echo "before gammas"
+		limits $rinner $router -0.5 4.0
+		ticksize 0.5 2 -1 0
+		ctype default window 2 2 2 2
+		ltype 0
+		box 0 2 0 0
+		myxaxis 3
+		define x1label "r [cm]"
+		define x2label "\gamma\ \ \mu"
+		xla $x1label
+		yla $x2label
+		ctype default ltype 0 pl 0 ljet gammalorentz 1110
+		ctype default ltype 0 pl 0 ljet gammalorentznodiss 1110
+		#
+		#set gammau4phi = sqrt(1+u4phi**2/c**2)
+		#set gammau4h = sqrt(1+u4h**2/c**2)
+		#set gammau4r = sqrt(1+u4r**2/c**2)
+		#ctype default ltype 2 pl 0 ljet gammau4phi 1110
+		#ctype default ltype 1 pl 0 ljet gammau4h 1110
+		#ctype default ltype 3 pl 0 ljet gammau4r 1110
+		# u4r u4h u4p u4phi
+		define PLOTLWEIGHT (3)
+                define NORMLWEIGHT (3)
+		lweight 3
+		#
+		relocate 16.6515 3.6
+		angle 0
+		expand 0.8
+		putlabel 5 "Id"
+		angle 0
+		# fdraft expand
+		expand 1.5
+		#
+		relocate 16.6515 3.15
+		angle 5
+		expand 0.8
+		putlabel 5 "Id"
+		angle 0
+		# fdraft expand
+		expand 1.5
+		#
+		ctype default ltype 1 pl 0 ljet muconst 1110
+		ctype default ltype 1 pl 0 ljet munotconst 1110
+		define PLOTLWEIGHT (5)
+                define NORMLWEIGHT (3)
+		lweight $NORMLWEIGHT
+		#
+		echo "before fields"
+		ctype default window 2 2 1 1
+		notation -2 2 -2 2
+		ticksize 0.5 2 1 4
+		limits $rinner $router -8 16
+		ltype 0
+		box 0 0 0 0
+		myxaxis 3
+		myyaxis 4
+		xla "r [cm]"
+		yla "B_r\ \ \ -B_\phi"
+		ctype default ltype 0 pl 0 ljet (abs(Bgaussr)) 1110
+		ctype default ltype 1 pl 0 ljet (abs(Bgaussphinodiss)) 1110
+		#ctype default ltype 1 pl 0 ljet (abs(Bgaussphidiss)) 1110
+		ctype default ltype 1 pl 0 ljet (abs(Bphiplasmavalue*sqrt(4*pi))) 1110
+		#
+		relocate 16.9   6.4
+		angle -30
+		expand 0.8
+		putlabel 5 "Id"
+		angle 0
+		# fdraft expand
+		expand 1.5
+		#
+		#
+		set fakebgausstoplot=fakebgauss if(ljet>=3.67e+13)
+		set ljettoplot=ljet if(ljet>=3.67e+13)
+		#
+		#ctype default ltype 3 pl 0 ljet bgaussdiss 1110
+		#ctype red ltype 0 pl 0 ljettoplot fakebgausstoplot 1110
+		#ctype blue ltype 0 pl 0 ljet (sqrt(bsqdiss1*4*pi)) 1110
+		#ctype yellow ltype 0 pl 0 ljet (sqrt(bsqdiss2*4*pi)) 1110
+		#
+		echo "before rho"
+		limits $rinner $router -12 36
+		ticksize 0.5 2 1 4
+		ctype default window 2 2 2 1
+		ltype 0
+		box 0 0 0 0
+		myxaxis 3
+		myyaxis 4
+		define x1label "r [cm]"
+		#define x2label "\rho_b \ \rho_{\rm f}"
+		define x2label "\rho_b c^2 \ \ \ b^2/(8\pi)"
+		xla $x1label
+		yla $x2label
+		ctype default ltype 0 pl 0 ljet (rhobingoing*c**2) 1110
+                #
+		ctype default ltype 2 pl 0 ljet (abs(bgaussnodiss**2/(8*pi))) 1110
+	        #ctype default ltype 2 pl 0 ljet (abs(bgaussdiss**2/(8*pi))) 1110
+		#ctype red ltype 2 pl 0 ljet (abs(sqrt(bsqplasmavalue*4*pi)**2/(8*pi))) 1110
+		ctype default ltype 2 pl 0 ljet (abs(sqrt(bsqplasmavalue*4*pi)**2/(8*pi))) 1110  
+                #
+		#ctype default ltype 1 pl 0 ljet rhobfreeingoing 1110
+		#ctype default ltype 0 vertline $lrmono
+		#
+		relocate 16.6  6
+		angle -38
+		expand 0.8
+		putlabel 5 "Id"
+		angle 0
+		# fdraft expand
+		expand 1.5
+		#
+		define PLOTLWEIGHT (3)
+                define NORMLWEIGHT (3)
+		lweight 3
+		ctype default ltype 0 pl 0 ljet ((Bc+ljet*0)**2/(8*pi)) 1110
+		define PLOTLWEIGHT (5)
+                define NORMLWEIGHT (3)
+		lweight $NORMLWEIGHT
+		#
+		relocate 13.5 27.8
+		angle 0 expand 1.0
+		putlabel 5 "b^2_{\rm QED}/(8\pi)" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT expand 1.5
 		#
 		#
 		if($doprint) {\
@@ -925,8 +1151,8 @@ donewplot2 2    # jetfullrec1.eps 4-panel
 		#
 		#relocate 16.3 9.3
 		#angle -70
-		#expand 0.6
-		#putlabel 5 "Ideal"
+		#expand 0.8
+		#putlabel 5 "Id"
 		#angle 0
 		## fdraft expand
 		#expand 1.5
@@ -953,8 +1179,8 @@ donewplot2 2    # jetfullrec1.eps 4-panel
 		#
 		relocate 16.3 9.3
 		angle -70
-		expand 0.6
-		putlabel 5 "Ideal"
+		expand 0.8
+		putlabel 5 "Id"
 		angle 0
 		# fdraft expand
 		expand 1.5
@@ -1002,7 +1228,6 @@ donewplot2 2    # jetfullrec1.eps 4-panel
 		if($doprint) {\
 		 device X11
 		}
-		#
 		#
 donewplot3 2    # jetfullrec2.eps 4-panel
 		#
@@ -1058,8 +1283,8 @@ donewplot3 2    # jetfullrec2.eps 4-panel
 		#
 		relocate 16.95   1
 		angle 0
-		expand 0.6
-		putlabel 5 "Ideal"
+		expand 0.8
+		putlabel 5 "Id"
 		angle 0
 		# fdraft expand
 		expand 1.5
@@ -1093,17 +1318,14 @@ donewplot3 2    # jetfullrec2.eps 4-panel
 		myxaxis 3
 		myyaxis 4
 		xla "r [cm]"
-		#yla "dt_{\rm obs, tra}\  dt_{\rm obs,m}\  dt_{\rm obs,\gamma}"
-		yla "dt_{\rm obs, \{tra\ m\ ad\ sd\ \gamma\}}"
-		ctype default ltype 0 pl 0 ljet dttransitobs 1110
-		set fakem=0.1
-		set TF=2*pi/((fakem*omegaf))
-		set vrecm=0.02*c
-		set dtminobsm=(c/vrecm)*TF
-		ctype default ltype 2 pl 0 ljet dtminobsm 1110
-		ctype default ltype 1 pl 0 ljet Tdiffabs1obs 1110
-		ctype default ltype 3 pl 0 ljet Tdiffsca1obs 1110
-		ctype default ltype 4 pl 0 ljet dtradobs 1110
+		yla "dt_{\rm obs, \{tra\ diss\ m\ ad\ sd\ \gamma\}}"
+ 		ctype default ltype 0 pl 0 ljet dttransitobs 1110
+                #
+		ctype default ltype 2 pl 0 ljet dtdissfastobs 1110
+		ctype default ltype 1 pl 0 ljet dtminobsm 1110
+		ctype default ltype 3 pl 0 ljet (Tdiffabs1obs) 1110
+		ctype default ltype 4 pl 0 ljet (Tdiffsca1obs) 1110
+		ctype default ltype 5 pl 0 ljet (dtradobs) 1110
 		#
 		#limits $rinner $router -28 20
 		limits $rinner $router -18 20
@@ -1114,7 +1336,7 @@ donewplot3 2    # jetfullrec2.eps 4-panel
 		myxaxis 3
 		myyaxis 4
 		define x1label "r [cm]"
-		define x2label " \tau_{\\nu,\rm sca}\  \tau_{\gamma,\rm sca}\  \tau_{||}"
+		define x2label " \tau_{\\nu,\rm sca}\  \tau_{\gamma,\rm sca}\  \tau_{||} \ \tau_{\rm pairs, sca}"
 		xla $x1label
 		yla $x2label
 		ctype default ltype 0 pl 0 ljet taunusca 1110
@@ -1122,16 +1344,18 @@ donewplot3 2    # jetfullrec2.eps 4-panel
 		ctype default ltype 2 pl 0 ljet tauradscanodiss 1110
 		ctype default ltype 1 pl 0 ljet taualongjet 1110
 		ctype default ltype 1 pl 0 ljet taualongjetnodiss 1110
+                #ctype default ltype 3 pl 0 ljet taupairsscanodiss 1110
+                ctype default ltype 3 pl 0 ljet taupairssca 1110
 		define PLOTLWEIGHT (3)
                 define NORMLWEIGHT (3)
 		ctype default ltype 0 pl 0 ljet (ljet*0+1) 1110
 		define PLOTLWEIGHT (5)
                 define NORMLWEIGHT (3)
 		#
-		relocate 16.3   -4.5
+		relocate 16.5   -4.5
 		angle -25
-		expand 0.6
-		putlabel 5 "Ideal"
+		expand 0.8
+		putlabel 5 "Id"
 		angle 0
 		# fdraft expand
 		expand 1.5
@@ -1141,6 +1365,561 @@ donewplot3 2    # jetfullrec2.eps 4-panel
 		 device X11
 		}
 		#
+		#
+		#
+donewplot2better 2    # jetfullrec1.eps 4-panel
+		#
+		#
+		define doprint $1
+		#
+		#
+		if($2==1){\
+		       readnormal
+		    }
+		#
+		dissmods
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -2 2 -2 2
+		erase
+		#now setup	   
+		if($doprint) {\
+		       define fname ('jetfullrec1.eps')
+		       device postencap $fname
+		}
+		#
+		#
+		#define rinner (LG(ljet[0]))
+		#define router (LG(ljet[dimen(ljet)-1]))
+		define rinner 5
+		define router 18
+		define lrmono (LG(rmono[0]))
+		#
+		# print {ljet conditionpt tauradsca T npairsrad necenter}
+		#
+		limits $rinner $router 6.5 12
+		ticksize 0.5 2 -1 0
+		ctype default window 2 2 1 2
+		ltype 0
+		box 0 2 0 0
+		myxaxis 3
+		#myyaxis 4
+		xla "r [cm]"
+		yla "T [K]"
+		ctype default ltype 0 pl 0 ljet T 1110
+		#ctype default ltype 0 pl 0 ljet Tnodiss 1110
+		define PLOTLWEIGHT (3)
+                define NORMLWEIGHT (3)
+		lweight 3
+		ctype default ltype 0 vertline $lrmono
+		define PLOTLWEIGHT (5)
+                define NORMLWEIGHT (3)
+		lweight $NORMLWEIGHT
+		#
+		#relocate 16.3 9.3
+		#angle -70
+		#expand 0.8
+		#putlabel 5 "Id"
+		#angle 0
+		## fdraft expand
+		#expand 1.5
+		#
+		#
+		limits $rinner $router -8 8
+		ticksize .5 2 1 4
+		ctype default window 2 2 2 2
+		ltype 0
+		box 0 0 0 0
+		myxaxis 3
+		myyaxis 4
+		xla "r [cm]"
+		yla "\delta_{\rm Pet}\ \ \ \ \delta_{\rm SP'}"
+		ctype default ltype 0 pl 0 ljet deltapetp 1110
+		ctype default ltype 2 pl 0 ljet deltaspt  1110
+		ctype default ltype 2 pl 0 ljet deltasptnodiss  1110
+		#ctype default ltype 3 pl 0 ljet deltapete 1110
+		define PLOTLWEIGHT (3)
+                define NORMLWEIGHT (3)
+		lweight 3
+		ctype default ltype 0 vertline $lrmono
+		define PLOTLWEIGHT (5)
+                define NORMLWEIGHT (3)
+		lweight $NORMLWEIGHT
+		#
+		relocate 16.95   0.8
+		angle 0
+		expand 0.8
+		putlabel 5 "Id"
+		angle 0
+		# fdraft expand
+		expand 1.5
+		#
+		#
+		limits $rinner $router 0.5 40
+		ticksize .5 2 2 8
+		ctype default window 2 2 1 1
+		ltype 0
+		box 0 0 0 0
+		myxaxis 3
+		myyaxis 8
+		define x1label "r [cm]"
+		#define x2label "n_e\  n_{\rm pairs}\  n_{e'}\  n_{\\nu}"
+		define x2label "n_e\  n_{\rm pairs}\  n_{\\nu}"
+		xla $x1label
+		yla $x2label
+		ctype default ltype 0 pl 0 ljet necenter 1110
+		ctype default ltype 2 pl 0 ljet npairsrad 1110
+		#ctype default ltype 2 pl 0 ljet npairsradnodiss 1110
+		#ctype default ltype 1 pl 0 ljet netotforomegape 1110
+		ctype default ltype 3 pl 0 ljet nnutrue 1110
+		#
+		#
+		#relocate 16.3 9.3
+		#angle -70
+		#expand 0.8
+		#putlabel 5 "Id"
+		#angle 0
+		# fdraft expand
+		#expand 1.5
+		#
+		#
+		#limits $rinner $router -28 20
+		limits $rinner $router -20 20
+		ticksize .5 2 2 4
+		ctype default window 2 2 2 1
+		ltype 0
+		box 0 0 0 0
+		myxaxis 3
+		myyaxis 8
+		define x1label "r [cm]"
+		define x2label " \tau_{\\nu,\rm sca}\  \tau_{\gamma,\rm sca}\  \tau_{\rm pairs, sca}"
+		xla $x1label
+		yla $x2label
+		ctype default ltype 0 pl 0 ljet taunusca 1110
+		ctype default ltype 2 pl 0 ljet tauradsca 1110
+		#ctype default ltype 2 pl 0 ljet tauradscanodiss 1110
+		#ctype default ltype 1 pl 0 ljet taualongjet 1110
+		#ctype default ltype 1 pl 0 ljet taualongjetnodiss 1110
+                #ctype default ltype 3 pl 0 ljet taupairsscanodiss 1110
+                ctype default ltype 3 pl 0 ljet taupairssca 1110
+		define PLOTLWEIGHT (3)
+                define NORMLWEIGHT (3)
+		ctype default ltype 0 pl 0 ljet (ljet*0+1) 1110
+		define PLOTLWEIGHT (5)
+                define NORMLWEIGHT (3)
+		#
+		#relocate 16.5   -4.5
+		#angle -25
+		#expand 0.8
+		#putlabel 5 "Id"
+		#angle 0
+		# fdraft expand
+		#expand 1.5
+		#
+		#
+		#
+		if($doprint) {\
+		 device X11
+		}
+		#
+		#
+donewplot3better 2    # jetfullrec2.eps 4-panel
+		#
+		#
+		#
+		define doprint $1
+		#
+		#
+		if($2==1){\
+		       readnormal
+		    }
+		#
+		dissmods
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -2 2 -2 2
+		erase
+		#now setup	   
+		if($doprint) {\
+		       define fname ('jetfullrec2.eps')
+		       device postencap $fname
+		}
+		#
+		#
+		#define rinner (LG(ljet[0]))
+		#define router (LG(ljet[dimen(ljet)-1]))
+		define rinner 5
+		define router 18
+		define lrmono (LG(rmono[0]))
+		#
+		#
+		limits $rinner $router -4 28
+		ticksize 0.5 2 1 4
+		ctype default window 2 2 1 2
+		ltype 0
+		box 0 0 0 0
+		myyaxis 4
+		myxaxis 3
+		#define x1label "r [cm]"
+		#define x2label "V\ v_{r,\rm SP'}\  S"
+		#define x2label "v_{r,\rm SP'}\  S"
+                define x2label "V\  S"
+		xla $x1label
+		yla $x2label
+		# print {ljet necenter npairsrad netotforomegape nnutrue} 
+		ctype default ltype 0 pl 0 ljet (minv) 1110
+		#ctype default ltype 0 pl 0 ljet (minvnodiss) 1110
+		#ctype default ltype 2 pl 0 ljet (vrect) 1110
+		ctype default ltype 2 pl 0 ljet lundquistt 1110
+		ctype default ltype 2 pl 0 ljet lundquisttnodiss 1110
+		#
+		#relocate 16.5   1
+		#angle 0
+		#expand 0.8
+		#putlabel 5 "Id"
+		#angle 0
+		# fdraft expand
+		#expand 1.5
+                #
+		relocate 16.7   21
+		angle 0
+		expand 0.8
+		putlabel 5 "Id"
+		angle 0
+		# fdraft expand
+		expand 1.5
+                #
+		#limits $rinner $router -8 25
+		limits $rinner $router -8 8
+		notation -2 2 -2 2
+		ticksize 0.5 2 1 4
+		ctype default window 2 2 2 2
+		ltype 0
+		box 0 0 0 0
+		myxaxis 3
+		myyaxis 4
+		xla "r [cm]"
+		#yla "dt_{\rm obs, \{tra\ diss\ m\ ad\ sd\ \gamma\}}"
+                yla "dt_{\rm obs, \{tra\ diss\ m\ \gamma\}}"
+ 		ctype default ltype 0 pl 0 ljet dttransitobs 1110
+                #
+		ctype default ltype 2 pl 0 ljet dtdissfastobs 1110
+		ctype default ltype 1 pl 0 ljet dtminobsm 1110
+		#ctype default ltype 3 pl 0 ljet (Tdiffabs1obs) 1110
+		#ctype default ltype 4 pl 0 ljet (Tdiffsca1obs) 1110
+		ctype default ltype 3 pl 0 ljet (dtradobs) 1110
+		#
+		#
+		#
+		# -4.0 to avoid showing neutrino Q_\nu that just barely exists at Q_\nu = 10**(-4.472)
+		limits $rinner $router -4 36
+		notation -2 2 -2 2
+		ticksize 0.5 2 1 4
+		ctype default window 2 2 1 1
+		ltype 0
+		box 0 0 0 0
+		myxaxis 4
+		myyaxis 4
+		xla "r [cm]"
+		#yla "Q_{\rm tot}\  Q_{\gamma}\  Q_{\nu}\ Q_{\rm EM}\  Q_{\rm SP}"
+		#yla "Q_{\gamma}\  Q_{\nu} \  \ Q_{\rm EM} \ Q_{\rm SP}"
+                yla "Q_{\gamma}\  Q_{\nu} \ Q_{\rm SP}"
+		#ctype default ltype 0 pl 0 ljet Qtot 1110
+		ctype default ltype 0 pl 0 ljet Qrad 1110
+		ctype default ltype 3 pl 0 ljet Qnu 1110
+		ctype default ltype 1 pl 0 ljet Qum0 1110
+		#ctype default ltype 2 pl 0 ljet QEM 1110
+		#
+		limits $rinner $router -4 32
+		ticksize 0.5 2 1 4
+		ctype default window 2 2 2 1
+		ltype 0
+		box 0 0 0 0
+		myxaxis 4
+		myyaxis 4
+		define x1label "r [cm]"
+		#define x2label "p_g  p_b  p_e  p_\gamma  p_{\rm pairs}  p_{\\nu}"
+		#define x2label "p_b  p_e  p_{\\nu} p_{\rm pairs} p_\gamma"
+                define x2label "p_{\\nu} \ p_{\rm pairs} \ p_\gamma"
+		xla $x1label
+		yla $x2label
+		#ctype default ltype 0 pl 0 ljet Pg 1110
+		ctype default ltype 0 pl 0 ljet Prad 1110
+		ctype default ltype 2 pl 0 ljet Ppairs 1110
+		ctype default ltype 3 pl 0 ljet Pnu 1110
+		#ctype default ltype 1 pl 0 ljet Pbaryon 1110
+		#ctype default ltype 4 pl 0 ljet Pe 1110
+                #
+                #
+		if($doprint) {\
+		 device X11
+		}
+		#
+		#
+		#
+		#
+donewplot4 2    # jetfullangle.eps
+		#
+		#
+		define doprint $1
+		#
+		if($2==1){\
+		       #readtypelong5 grbinangle.dat
+		       readtypelong5 grbinangle.new.dat
+		       #readtypelong6 grbinangle.newest.dat
+		    }
+		#
+		if($2==2){\
+		       #readtypelong5 grbinangle.dat
+		       #readtypelong5 grbinangle.new.dat
+		       readtypelong6 grbinangle.newest.dat
+		    }
+		#
+		echo "before dissmods"
+		dissmods
+		echo "after dissmods"
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -2 2 -2 2
+		erase
+		#now setup	   
+		if($doprint) {\
+		       #define fname ('jet' + sprintf('%04g',hor)+ 'mag' + sprintf('%04g',$magpar) + '.eps')
+		       define fname ('jetfullangle.eps')
+		       device postencap $fname
+		}
+		#
+		#
+		#define rinner (LG(thetajet[0]))
+		#define router (LG(thetajet[dimen(thetajet)-1]))
+		#define rinner -5.5
+		define rinner -3.6
+		define router (LG(0.03))
+		define lrmono (LG(rmono[0]))
+		#
+		#
+		limits $rinner $router 50.5 56
+		#limits 0 0.023 1 1E4
+		#ticksize -1 0 -1 0
+		ticksize -1 0 -1 0
+		ctype default window 2 -2 1 2
+		ltype 0
+		box 0 0 0 0
+		#myxaxis 3
+		myyaxis 1
+		#xla "\theta"
+		yla "dP/d\Omega"
+		set Pjet=2E51*(sin(thfp/2)/sin(pi/4))**2*(0.00026+(sin(thfp/2)/sin(pi/4))**2)
+		set PMAjet=2E51*(sin(thfp/2)/sin(pi/4))**2*(0.00026)
+		set PEMjet=2E51*(sin(thfp/2)/sin(pi/4))**2*((sin(thfp/2)/sin(pi/4))**2)
+		set Omega=-cos(thetajet)
+		der Omega Pjet Omegad dPjetdOmega
+		der Omega PEMjet Omegad dPEMjetdOmega
+		der Omega PMAjet Omegad dPMAjetdOmega
+		der thetajet Pjet thetajetd dPjetdthetajet
+		der Omega powerjet Omegad dpowerjetdOmega
+		#ctype default ltype 0 pl 0 thetajet Pjet 1110
+		#ctype default ltype 0 pl 0 thetajet dPjetdOmega 0110
+		#ctype default ltype 0 pl 0 thetajet (dPjetdOmega/1E51) 1110
+		#ctype default ltype 2 pl 0 thetajet dPEMjetdOmega 1110
+		#ctype default ltype 1 pl 0 thetajet dPMAjetdOmega 1110
+		#ctype default ltype 3 pl 0 thetajet dPjetdOmega 1110
+		#ctype default ltype 0 pl 0 thetajet dpowerjetdOmega 1110
+		ctype default ltype 0 pl 0 thetajet (dpowerjetdtheta/sin(thetajet)) 1110
+		ctype default ltype 2 pl 0 thetajet (dpowermajetdtheta/sin(thetajet)) 1110
+		ctype default ltype 1 pl 0 thetajet ((dpowerjetdtheta-dpowermajetdtheta)/sin(thetajet)) 1110
+		#ctype default ltype 0 pl 0 thetajet (dPjetdthetajet/5E49) 0010
+		#
+		#ctype default ltype 0 vertline $lrmono
+		#
+		echo "before gammas"
+		limits $rinner $router -0.5 4.0
+		ticksize -1 0 -1 0
+		ctype default window 2 -2 2 2
+		ltype 0
+		box 0 2 0 0
+		#myxaxis 1
+		#define x1label "r [cm]"
+		#define x2label "\gamma_\phi\ \ \gamma_\theta\ \ \gamma\ \ \mu"
+		define x2label "\gamma\ \ \mu"
+		#xla $x1label
+		yla $x2label
+		ctype default ltype 0 pl 0 thetajet gammalorentz 1110
+		#ctype default ltype 0 pl 0 thetajet gammalorentznodiss 1110
+		#
+		set gammau4phi = sqrt(1+u4phi**2/c**2)
+		set gammau4h = sqrt(1+u4h**2/c**2)
+		set gammau4r = sqrt(1+u4r**2/c**2)
+		#ctype default ltype 2 pl 0 thetajet gammau4phi 1110
+		#ctype default ltype 1 pl 0 thetajet gammau4h 1110
+		#ctype default ltype 3 pl 0 thetajet gammau4r 1110
+		# u4r u4h u4p u4phi
+		define PLOTLWEIGHT (3)
+                define NORMLWEIGHT (3)
+		lweight 3
+		#
+		#relocate 16.6515 3.6
+		#angle 0
+		#expand 0.8
+		#putlabel 5 "Id"
+		#angle 0
+		## fdraft expand
+		#expand 1.5
+		#
+		#relocate 16.6515 3.05
+		#angle 5
+		#expand 0.8
+		#putlabel 5 "Id"
+		#angle 0
+		# fdraft expand
+		#expand 1.5
+		#
+		ctype default ltype 0 pl 0 thetajet muconst 1110
+		#ctype default ltype 0 pl 0 thetajet munotconst 1110
+		define PLOTLWEIGHT (5)
+                define NORMLWEIGHT (3)
+		lweight $NORMLWEIGHT
+		#
+		echo "before fields"
+		ctype default window 2 -2 1 1
+		notation -2 2 -2 2
+		ticksize -1 0 -1 0
+		limits $rinner $router -3 10
+		ltype 0
+		box 0 0 0 0
+		myxaxis 1
+		myyaxis 4
+		xla "\theta"
+		yla "B_r\ \ \ \ |b| \ \ -B_\phi"
+		ctype default ltype 0 pl 0 thetajet (abs(Bgaussr)) 1110
+		#ctype default ltype 2 pl 0 thetajet (abs(bgaussnodiss)) 1110
+	        #ctype default ltype 2 pl 0 thetajet (abs(bgaussdiss)) 1110
+		#ctype red ltype 2 pl 0 thetajet (abs(bgauss)) 1110
+		ctype default ltype 2 pl 0 thetajet (abs(bgauss)) 1110  
+		#ctype default ltype 1 pl 0 thetajet (abs(Bgaussphinodiss)) 1110
+		#ctype default ltype 1 pl 0 thetajet (abs(Bgaussphidiss)) 1110
+		ctype default ltype 1 pl 0 thetajet (abs(Bgaussphi)) 1110
+		#
+		#relocate 16.95   6.3
+		#angle -35
+		#expand 0.8
+		#putlabel 5 "Id"
+		#angle 0
+		# fdraft expand
+		#expand 1.5
+		#
+		#relocate 16.95   3.4
+		#angle -35
+		#expand 0.8
+		#putlabel 5 "Id"
+		#angle 0
+		# fdraft expand
+		#expand 1.5
+		#
+		set fakebgausstoplot=fakebgauss if(thetajet>=3.67e+13)
+		set thetajettoplot=thetajet if(thetajet>=3.67e+13)
+		#
+		#ctype default ltype 3 pl 0 thetajet bgaussdiss 1110
+		#ctype red ltype 0 pl 0 thetajettoplot fakebgausstoplot 1110
+		#ctype blue ltype 0 pl 0 thetajet (sqrt(bsqdiss1*4*pi)) 1110
+		#ctype yellow ltype 0 pl 0 thetajet (sqrt(bsqdiss2*4*pi)) 1110
+		#
+		#
+		define PLOTLWEIGHT (3)
+                define NORMLWEIGHT (3)
+		lweight 3
+		#ctype default ltype 0 pl 0 thetajet (Bc+thetajet*0) 1110
+		define PLOTLWEIGHT (5)
+                define NORMLWEIGHT (3)
+		lweight $NORMLWEIGHT
+		#
+		echo "before rho"
+		limits $rinner $router -11 -7
+		ticksize -1 0 -1 0
+		ctype default window 2 -2 2 1
+		ltype 0
+		box 0 0 0 0
+		myxaxis 1
+		myyaxis 2
+		define x1label "\theta"
+		#define x2label "\rho_b \ \rho_{\rm f}"
+		define x2label "\rho_b"
+		xla $x1label
+		yla $x2label
+		ctype default ltype 0 pl 0 thetajet rhob 1110
+		#ctype default ltype 1 pl 0 thetajet rhobfreeingoing 1110
+		#ctype default ltype 0 vertline $lrmono
+		#
+		#
+		if($doprint) {\
+		 device X11
+		}
+		#
+		#
+checkgammod 0   #
+		# donewplot4 0 1
+		# donewplot4 0 2
+		#
+		defaults
+		#
+		#
+		#
+		set b0=sqrt(bsq[39])
+		set R=ljet*sin(thetajet)
+		#
+		set trialBr=(gammalorentz-muconst)*rhob*u4r/(-b0*gammalorentz*R*omegaf/c**2)
+		#
+		#set Phi=trialBr/(rhob*u4r)
+		set Phi=Br/(rhob*u4r)
+		#
+		set sigma=-Phi*R*omegaf*Bphi/(c**2*gammalorentz)
+		#
+		set mygamwtf=-c**2/(b0*R*omegaf*Phi)+muconst
+		set mygam=muconst/(1+b0*Phi*R*omegaf/c**2)
+		#
+		#set c1=2
+		set c1=1.5
+		set c2=0.4
+		#set c2=1
+		set c0=1
+		#set c0=0
+		set gammac=(muconst/sin(thetajet)**2)**(1/3)
+		set g2m=c1*( ((muconst-gammalorentz)/sin(thetajet)**2)*ln(c0+c2*R*omegaf/(c*gammac)))**(1/3)
+		#
+		set absb=sqrt(bsq)
+		set otherb=-Bphi/gammalorentz
+		set myBphi=(gammalorentz-muconst)/(Phi*R*omegaf/c**2)
+		#
+		#
+		ctype default pl 0 thetajet gammalorentz 1100
+		ctype red pl 0 thetajet mygam 1110
+		ctype blue pl 0 thetajet muconst 1110
+		ctype yellow pl 0 thetajet g2m 1110
+		#
+		#ctype default pl 0 ljet gammalorentz 1100
+		#ctype red pl 0 ljet mygam 1110
+		#
+		#
+		#
+		#ctype default pl 0 thetajet absb 1100
+		#ctype red pl 0 thetajet otherb 1110
+		#
+		#ctype default pl 0 ljet absb 1100
+		#ctype red pl 0 ljet otherb 1110
+		#
+		#
+		#
+		#ctype default pl 0 thetajet Bphi 1100
+		#ctype red pl 0 thetajet myBphi 1110
+		#
+		# ctype default pl 0 thetajet trialBr 1100
+		# ctype red pl 0 thetajet Br 1110
+		#
+		#
+		#
 		# v8a barely below 1 at first cell
 		# v8c quite below until few cells
 		#
@@ -1149,6 +1928,117 @@ donewplot3 2    # jetfullrec2.eps 4-panel
 		# dttransitobs dtradobs dtminobs Tdiff(sca,abs)(1,2,3)obs
 		# tauradsca taunusca taualongjet
 		#
+cutgammareal 0      # cutgamma used bad data for Lorentz fator vs. theta.  Use directly from 1D cut from new data from donewplot4
+		#
+		#
+		donewplot4 0 1
+		defaults
+		#
+		#
+		set gammacut=gammalorentz
+		set thfpcut=thfp
+		set thetajetcut=thetajet
+		#
+		define x1label "\theta"
+		define x2label "\gamma"
+		#
+		ctype default pl 0 (thfpcut/65) (gammacut-1) 1101 1E-6 0.03 1E-1 1E3
+		ctype default pl 0 thetajetcut (gammacut-1) 1111 1E-6 0.03 1E-1 1E3
+		#set width=0.01
+		#set myfit=800*exp(-(thetajetcut-thetajetcut[39])**2/(2*width**2))-85
+		#set myfit=(myfit<1 ? 1 : myfit)
+		#ctype red pl 0 thetajetcut myfit 1111 1E-6 0.03 1E-10 1E3
+		set myfit1=(gammacut[39]-1)*(thetajetcut/thetajetcut[39])**(0.4)
+		set myfit2=(gammacut[32]-1)*(thetajetcut/thetajetcut[32])**(2)
+		#set myfit3=(gammacut[12]-1)*(thetajetcut/thetajetcut[12])**(0)
+		ctype red pl 0 thetajetcut myfit1 1111 1E-6 0.03 1E-1 1E3
+		ctype blue pl 0 thetajetcut myfit2 1111 1E-6 0.03 1E-1 1E3
+		#ctype green pl 0 thetajetcut myfit3 1111 1E-6 0.03 1E-1 1E3
+		set thetamax=thetajetcut[39]
+		set theta1=thetajetcut[33]
+		set theta2=thetajetcut[22]
+		print {thetamax theta1 theta2}
+		#
+		set npow=4
+		set overallfit=1/(1/myfit1**(npow)+1/myfit2**(npow))**(1/(npow))
+		ctype yellow pl 0 thetajetcut (overallfit) 1111 1E-6 0.03 1E-1 1E3
+		#
+cutpowermadenreal 0      # cutgamma used bad data for Lorentz fator vs. theta.  Use directly from 1D cut from new data from donewplot4
+		#
+		#
+		donewplot4 0 1
+		defaults
+		#
+		#
+		set poweremcut=dpowerjetdtheta-dpowermajetdtheta
+		set powermacut=dpowermajetdtheta
+		set thfpcut=thfp
+		set thetajetcut=thetajet
+		#
+		define x1label "\theta"
+		define x2label "dP/d\Omega"
+		#
+		#ctype default ltype 0 pl 0 (thfpcut/65) (poweremcut) 1101 1E-6 0.03 1E40 1E54
+		ctype default ltype 2 pl 0 (thfpcut/65) (powermacut) 1101 1E-6 0.03 1E40 1E54
+		#ctype default ltype 1 pl 0 thetajetcut (poweremcut) 1111 1E-6 0.03 1E40 1E54
+		ctype default ltype 3 pl 0 thetajetcut (powermacut) 1111 1E-6 0.03 1E40 1E54
+		#set width=0.01
+		#set myfit=800*exp(-(thetajetcut-thetajetcut[39])**2/(2*width**2))-85
+		#set myfit=(myfit<1 ? 1 : myfit)
+		#ctype red pl 0 thetajetcut myfit 1111 1E-6 0.03 1E40 1E54
+		set myfit1=(powermacut[39])*(thetajetcut/thetajetcut[39])**(1.0)
+		set myfit2=(powermacut[32])*(thetajetcut/thetajetcut[32])**(3)
+		#set myfit3=(powermacut[12])*(thetajetcut/thetajetcut[12])**(0)
+		ctype red pl 0 thetajetcut myfit1 1111 1E-6 0.03 1E40 1E54
+		ctype blue pl 0 thetajetcut myfit2 1111 1E-6 0.03 1E40 1E54
+		#ctype green pl 0 thetajetcut myfit3 1111 1E-6 0.03 1E40 1E54
+		set thetamax=thetajetcut[39]
+		set theta1=thetajetcut[33]
+		set theta2=thetajetcut[22]
+		print {thetamax theta1 theta2}
+		#
+		set npow=4
+		set overallfit=1/(1/myfit1**(npow)+1/myfit2**(npow))**(1/(npow))
+		ctype yellow pl 0 thetajetcut (overallfit) 1111 1E-6 0.03 1E40 1E54
+                #
+cutpoweremdenreal 0      # cutgamma used bad data for Lorentz fator vs. theta.  Use directly from 1D cut from new data from donewplot4
+		#
+		#
+		donewplot4 0 1
+		defaults
+		#
+		#
+		set poweremcut=dpowerjetdtheta-dpowermajetdtheta
+		set powermacut=dpowermajetdtheta
+		set thfpcut=thfp
+		set thetajetcut=thetajet
+		#
+		define x1label "\theta"
+		define x2label "dP/d\Omega"
+		#
+		#ctype default ltype 0 pl 0 (thfpcut/65) (poweremcut) 1101 1E-6 0.03 1E40 1E54
+		#ctype default ltype 2 pl 0 (thfpcut/65) (powermacut) 1101 1E-6 0.03 1E40 1E54
+		ctype default ltype 0 pl 0 thetajetcut (poweremcut) 1101 1E-6 0.03 1E40 1E54
+		#ctype default ltype 3 pl 0 thetajetcut (powermacut) 1111 1E-6 0.03 1E40 1E54
+		#set width=0.01
+		#set myfit=800*exp(-(thetajetcut-thetajetcut[39])**2/(2*width**2))-85
+		#set myfit=(myfit<1 ? 1 : myfit)
+		#ctype red pl 0 thetajetcut myfit 1111 1E-6 0.03 1E40 1E54
+		set myfit1=(poweremcut[39])*(thetajetcut/thetajetcut[39])**(4.0)
+		set myfit2=(poweremcut[32])*(thetajetcut/thetajetcut[32])**(9)
+		#set myfit3=(poweremcut[12])*(thetajetcut/thetajetcut[12])**(0)
+		ctype red pl 0 thetajetcut myfit1 1111 1E-6 0.03 1E40 1E54
+		ctype blue pl 0 thetajetcut myfit2 1111 1E-6 0.03 1E40 1E54
+		#ctype green pl 0 thetajetcut myfit3 1111 1E-6 0.03 1E40 1E54
+		set thetamax=thetajetcut[39]
+		set theta1=thetajetcut[33]
+		set theta2=thetajetcut[22]
+		print {thetamax theta1 theta2}
+		#
+		set npow=2
+		set overallfit=1/(1/myfit1**(npow)+1/myfit2**(npow))**(1/(npow))
+		ctype yellow pl 0 thetajetcut (overallfit) 1111 1E-6 0.03 1E40 1E54
+                #
 getminV 0       #
 		#
 		define num (dimen(v1g))
@@ -2036,6 +2926,9 @@ plottype2doit 0     #
 		#
 grabdtlabatrtrans 0 #
 		#
+		# defaault is to compute, but not show rdiss for lmode
+		set showrdissalt=0
+		#
 		# Get dtlab at rtrans
 		#
 		define mynx 40
@@ -2044,6 +2937,8 @@ grabdtlabatrtrans 0 #
 		set mydtlab=conditionpt*0
 		set rtrans=conditionpt*0
 		set rdiss=conditionpt*0
+		set rdiss2=conditionpt*0
+		set rdisslmode=conditionpt*0
 		set mypowerjet=conditionpt*0
 		set myEpeakobskev=conditionpt*0
 		set mygammalorentz=conditionpt*0
@@ -2054,20 +2949,26 @@ grabdtlabatrtrans 0 #
 		 #
 		 set mypos=-1
 		 #
-		 define iii ($nx-1)
+		 define iii ($mynx-1)
 		 #
 		 while { $iii>=0 } {\
 		   #     
 		   #
 		   set pos=$iii+$jjj*$mynx
 		   #
-		   #echo $iii $jjj
+		   #define posdef (pos)
+		   #echo $iii $jjj $posdef
 		   #
 		   if(conditionpt[pos]<1){\
 		          # dttransitobs = dttransit/gamma and dtlab = gamma dttransit
-		          set mydtlab[pos]=dttransitobs[pos]*gammalorentz[pos]**2
+		          #set mydtlab[pos]=dttransitobs[pos]*2*gammalorentz[pos]**2
+		          # no, need to use dissipation timescale
+		          set mydtlab[pos]=dtdissfastobs[pos]*2*gammalorentz[pos]**2
 		          set rtrans[pos]=ljet[pos]
 		          set rdiss[pos]=rtrans[pos]+c*mydtlab[pos]
+		          set rdiss2[pos]=rtrans[pos]+c*mydtlab[pos]*2
+		          # for 1/2 of energy dissipated
+		          set rdisslmode[pos]=rtrans[pos]*(1+ 0.5**(-pi*c*gammalorentz[pos]*thetajet[pos]/(2*lmode[pos]*vrecl)) )
 		          set mypowerjet[pos]=powerjet[pos]
 		          set myEpeakobskev[pos]=Epeakobskev[pos]
 		          set mygammalorentz[pos]=gammalorentz[pos]
@@ -2078,17 +2979,28 @@ grabdtlabatrtrans 0 #
 		           set conditionptm1low=conditionpt[pos]-1
 		           set conditionptm1high=conditionpt[pos+1]-1
 		           #
-		           set mydtlablow=(dttransitobs[pos]*gammalorentz[pos]**2)
-		           set mydtlabhigh=(dttransitobs[pos+1]*gammalorentz[pos+1]**2)
+		           #set mydtlablow=(dttransitobs[pos]*2*gammalorentz[pos]**2)
+		           #set mydtlabhigh=(dttransitobs[pos+1]*2*gammalorentz[pos+1]**2)
+		           #set mydtlab[pos]= mydtlablow + (mydtlabhigh-mydtlablow)/(conditionptm1high-conditionptm1low)*(0-conditionptm1low)
+		           set mydtlablow=(dtdissfastobs[pos]*2*gammalorentz[pos]**2)
+		           set mydtlabhigh=(dtdissfastobs[pos+1]*2*gammalorentz[pos+1]**2)
 		           set mydtlab[pos]= mydtlablow + (mydtlabhigh-mydtlablow)/(conditionptm1high-conditionptm1low)*(0-conditionptm1low)
 		           #
 		           set rtranslow=ljet[pos]
 		           set rtranshigh=ljet[pos+1]
 		           set rtrans[pos]= rtranslow + (rtranshigh - rtranslow)/(conditionptm1high-conditionptm1low)*(0-conditionptm1low)
 		           #
-		           set rdisslow=ljet[pos]+c*(dttransitobs[pos]*gammalorentz[pos]**2)
-		           set rdisshigh=ljet[pos+1]+c*(dttransitobs[pos+1]*gammalorentz[pos+1]**2)
+		           set rdisslow=ljet[pos]+c*(dtdissfastobs[pos]*2*gammalorentz[pos]**2)
+		           set rdisshigh=ljet[pos+1]+c*(dtdissfastobs[pos+1]*2*gammalorentz[pos+1]**2)
 		           set rdiss[pos]= rdisslow + (rdisshigh - rdisslow)/(conditionptm1high-conditionptm1low)*(0-conditionptm1low)
+		           #
+		           set rdiss2low=ljet[pos]+c*(dtdissfastobs[pos]*2*gammalorentz[pos]**2)*2
+		           set rdiss2high=ljet[pos+1]+c*(dtdissfastobs[pos+1]*2*gammalorentz[pos+1]**2)*2
+		           set rdiss2[pos]= rdiss2low + (rdiss2high - rdiss2low)/(conditionptm1high-conditionptm1low)*(0-conditionptm1low)
+		           #
+		           set rdisslmodelow=rtrans[pos]*(1+ 0.5**(-pi*c*gammalorentz[pos]*thetajet[pos]/(2*lmode[pos]*vrecl)) )
+		           set rdisslmodehigh=rtrans[pos+1]*(1+ 0.5**(-pi*c*gammalorentz[pos+1]*thetajet[pos+1]/(2*lmode[pos+1]*vrecl)) )
+		           set rdisslmode[pos]= rdisslmodelow + (rdisslmodehigh - rdisslmodelow)/(conditionptm1high-conditionptm1low)*(0-conditionptm1low)
 		           #
 		           set mypowerjetlow=powerjet[pos]
 		           set mypowerjethigh=powerjet[pos+1]
@@ -2130,6 +3042,8 @@ grabdtlabatrtrans 0 #
 		        set mydtlab[$iii+$jjj*$mynx]=mydtlab[mypos]
 		        set rtrans[$iii+$jjj*$mynx]=rtrans[mypos]
 		        set rdiss[$iii+$jjj*$mynx]=rdiss[mypos]
+		        set rdiss2[$iii+$jjj*$mynx]=rdiss2[mypos]
+		        set rdisslmode[$iii+$jjj*$mynx]=rdisslmode[mypos]
 		        set mypowerjet[$iii+$jjj*$mynx]=mypowerjet[mypos]
 		        set myEpeakobskev[$iii+$jjj*$mynx]=myEpeakobskev[mypos]
 		        set mygammalorentz[$iii+$jjj*$mynx]=mygammalorentz[mypos]
@@ -2202,21 +3116,31 @@ doalllatest 1   #
 		#
 readbrzeta1e4 0 # 2D	
 		#
-		readtypelong1 grb_40._1._40._1._1._1._1._1.1._1._1._1._1._1._1._1.40._1._40._1._1._1._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e8_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
+		#readtypelong1 grb_40._1._40._1._1._1._1._1.1._1._1._1._1._1._1._1.40._1._40._1._1._1._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e8_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
+		#
+		readtypelong5 model2.sorted.dat
+		#
 		grabdtlabatrtrans
                 #
 readbrzeta1e2 0 # 2D	
 		#
 		# below file has been processed as described in runscript8.sh
 		# well, that caused problems.  And found even though updated gamma_jet, the lorentz factor was wrong -- so updates were stupid -- could redo, but just describe plot results
-		readtypelong1 grb_40._1._40._1._1._1._1._1.1._1._1._1._1._1._1._1.40._1._40._1._1._1._1._1._1._1.e12_5.e14_100._1.e6_100._1.e8_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
+		#readtypelong1 grb_40._1._40._1._1._1._1._1.1._1._1._1._1._1._1._1.40._1._40._1._1._1._1._1._1._1.e12_5.e14_100._1.e6_100._1.e8_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
+		#
+		readtypelong5 model3.sorted.dat
+		#
 		grabdtlabatrtrans
                 #
 readmu	0	# 2D
 		#
 		#readtypelong1 grb_40._40._1._1._1._1._1._1.1._1._1._1._1._1._1._1.40._40._1._1._1._1._1._1._1._1.e12_5.e14_50._1.e6_1.e4_1.e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
 		#
-		readtypelong3 grb_40._40._1._1._1._1._1._1.1._1._1._1._1._1._1._1.40._40._1._1._1._1._1._1._1._1.e12_5.e14_50._1.e6_1.e4_1.e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0_redo
+		#readtypelong3 grb_40._40._1._1._1._1._1._1.1._1._1._1._1._1._1._1.40._40._1._1._1._1._1._1._1._1.e12_5.e14_50._1.e6_1.e4_1.e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0_redo
+		#
+		#
+		readtypelong5 model1.sorted.dat
+		#
 		#
 		grabdtlabatrtrans
 		#
@@ -2227,7 +3151,11 @@ readnu  0       #
 		#readtypelong1 grb_40._1._1._40._1._1._1._1.1._1._1._1._1._1._1._1.40._1._1._40._1._1._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e15_1.e17_0.0001_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
 		#
 		# fixed jet but messed-up new variables --- ok since not used
-		readtypelong1 grb_40._1._1._40._1._1._1._1.1._1._1._1._1._1._1._1.40._1._1._40._1._1._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e15_1.e17_0.0001_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
+		#readtypelong1 grb_40._1._1._40._1._1._1._1.1._1._1._1._1._1._1._1.40._1._1._40._1._1._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e15_1.e17_0.0001_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
+		#
+		#
+		readtypelong5 model4.sorted.dat
+		#
 		#
 		grabdtlabatrtrans
 		#
@@ -2235,7 +3163,11 @@ readnu  0       #
 		#
 readrmono 0     #
 		#
-		readtypelong1 grb_40._1._1._1._40._1._1._1.1._1._1._1._1._1._1._1.40._1._1._1._40._1._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e15_1.e17_0.75_1._0.75_1._1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
+		#readtypelong1 grb_40._1._1._1._40._1._1._1.1._1._1._1._1._1._1._1.40._1._1._1._40._1._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e15_1.e17_0.75_1._0.75_1._1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
+		#
+		readtypelong5 model5.sorted.dat
+		#
+		#
 		grabdtlabatrtrans
 		#
 readthfp 0      #		
@@ -2244,25 +3176,44 @@ readthfp 0      #
 		#readtypelong1 grb_40._1._1._1._1._40._1._1.1._1._1._1._1._1._1._1.40._1._1._1._1._40._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_0.0001_1.571_1.571_2._1.e4_2._0_1.e4_0
 		#
 		# corrupt for new stuff past mu
-		readtypelong1 grb_40._1._1._1._1._40._1._1.1._1._1._1._1._1._1._1.40._1._1._1._1._40._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_0.0001_1.571_1.571_2._1.e4_2._0_1.e4_0
-		read {muconst 202}
+		#readtypelong1 grb_40._1._1._1._1._40._1._1.1._1._1._1._1._1._1._1.40._1._1._1._1._40._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_0.0001_1.571_1.571_2._1.e4_2._0_1.e4_0
+		#read {muconst 202}
+		#
+		readtypelong5 model6.sorted.dat
+		#
 		#
 		grabdtlabatrtrans
 		#
 readlmode 0     #		
-		readtypelong1 grb_40._1._1._1._1._1._40._1.1._1._1._1._1._1._1._1.40._1._1._1._1._1._40._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
+		#readtypelong1 grb_40._1._1._1._1._1._40._1.1._1._1._1._1._1._1._1.40._1._1._1._1._1._40._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
+		#
+		#
+		readtypelong5 model7.sorted.dat
+		#
+		#
 		grabdtlabatrtrans
 		#
 readmmode 0     #		
-		readtypelong1 grb_40._1._1._1._1._1._1._40.1._1._1._1._1._1._1._1.40._1._1._1._1._1._1._40._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0.01_1.e4_0
+		#readtypelong1 grb_40._1._1._1._1._1._1._40.1._1._1._1._1._1._1._1.40._1._1._1._1._1._1._40._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0.01_1.e4_0
+		#
+		readtypelong5 model8.sorted.dat
+		#
+		#
 		grabdtlabatrtrans
 		#
 readm87   0     #
-		readtypelong1 m87_40._40._1._1._1._1._1._1.1._1._1._1._1._1._1._1.40._40._1._1._1._1._1._1._1._1.e12_1.e8_50._1.e6_50._1000._1.e6_0.75_1._0.75_100._1.e12_100._1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
+		#readtypelong1 m87_40._40._1._1._1._1._1._1.1._1._1._1._1._1._1._1.40._40._1._1._1._1._1._1._1._1.e12_1.e8_50._1.e6_50._1000._1.e6_0.75_1._0.75_100._1.e12_100._1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
+		#
+		readtypelong5 model9.sorted.dat
+		#
+		#
 		grabdtlabatrtrans
 		#
 readgrs   0     #		
-		readtypelong1 grs_40._40._1._1._1._1._1._1.1._1._1._1._1._1._1._1.40._40._1._1._1._1._1._1._1._1.e12_1.e8_50._1.e6_50._1.e9_1.e11_0.75_1._0.75_100._1.e12_100._1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
+		#readtypelong1 grs_40._40._1._1._1._1._1._1.1._1._1._1._1._1._1._1.40._40._1._1._1._1._1._1._1._1.e12_1.e8_50._1.e6_50._1.e9_1.e11_0.75_1._0.75_100._1.e12_100._1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
+		#
+		readtypelong5 model10.sorted.dat
+		#
 		grabdtlabatrtrans
 		#
 		#
@@ -2293,8 +3244,13 @@ plotlatesttype1      2
 		if($doprint==1){\
  		 device postencap br_zeta1e4.eps
 		}
+		#
 		plottype2doitlatest
-		doshadething1
+		#
+		if($2<=1){\
+		 #doshadething1lmode
+		 doshadething1mmode
+		}
 		#
 		#
 		#
@@ -2363,7 +3319,10 @@ plotlatesttype3      2
  		 device postencap zeta.eps
 		}
 		plottype2doitlatest
-		doshadething2
+		if($2<=1){\
+		 #doshadething2lmode
+		 doshadething2mmode
+		}
 		#
 		#
 		#
@@ -2473,6 +3432,64 @@ plotlatesttype6      2
 		 device X11
 		}
 		#
+                # take cut to see how gamma depend upon thetafp or thetajet
+cutgamma 0      #
+		set myuse=(rii==30)
+		set rnncut=rnn if(myuse)
+		set gammacut=gammalorentz if(myuse)
+		set thfpcut=thfp if(myuse)
+		set thetajetcut=thetajet if(myuse)
+		#
+		ctype default pl 0 (thfpcut/70) (gammacut-1) 1101 1E-6 0.03 1E-1 1E3
+		ctype default pl 0 thetajetcut (gammacut-1) 1111 1E-6 0.03 1E-1 1E3
+		#set width=0.01
+		#set myfit=800*exp(-(thetajetcut-thetajetcut[39])**2/(2*width**2))-85
+		#set myfit=(myfit<1 ? 1 : myfit)
+		#ctype red pl 0 thetajetcut myfit 1111 1E-6 0.03 1E-10 1E3
+		set myfit1=(gammacut[39]-1)*(thetajetcut/thetajetcut[39])**(0.8)
+		set myfit2=(gammacut[33]-1)*(thetajetcut/thetajetcut[33])**(2)
+		set myfit3=(gammacut[22]-1)*(thetajetcut/thetajetcut[22])**(4.5)
+		ctype red pl 0 thetajetcut myfit1 1111 1E-6 0.03 1E-1 1E3
+		ctype blue pl 0 thetajetcut myfit2 1111 1E-6 0.03 1E-1 1E3
+		ctype green pl 0 thetajetcut myfit3 1111 1E-6 0.03 1E-1 1E3
+		set thetamax=thetajetcut[39]
+		set theta1=thetajetcut[33]
+		set theta2=thetajetcut[22]
+		print {thetamax theta1 theta2}
+		#
+		set npow=4
+		set overallfit=1/(1/myfit1**(npow)+1/myfit2**(npow)+1/myfit3**(npow))**(1/(npow))
+		ctype yellow pl 0 thetajetcut overallfit 1111 1E-6 0.03 1E-1 1E3
+                #
+cutpowerjet 0      #
+		set myuse=(rii==30)
+		set rnncut=rnn if(myuse)
+		set powerjetcut=powerfoot if(myuse)
+		set thfpcut=thfp if(myuse)
+		set thetajetcut=thetajet if(myuse)
+		#
+		ctype default pl 0 (thfpcut/70) (powerjetcut-1) 1101 1E-6 0.03 1E40 1E52
+		ctype default pl 0 thetajetcut (powerjetcut-1) 1111 1E-6 0.03 1E40 1E52
+		#set width=0.01
+		#set myfit=800*exp(-(thetajetcut-thetajetcut[39])**2/(2*width**2))-85
+		#set myfit=(myfit<1 ? 1 : myfit)
+		#ctype red pl 0 thetajetcut myfit 1111 1E-6 0.03 1E-10 1E3
+		set myfit1=(powerjetcut[39]-1)*(thetajetcut/thetajetcut[39])**(0.8)
+		set myfit2=(powerjetcut[33]-1)*(thetajetcut/thetajetcut[33])**(2)
+		set myfit3=(powerjetcut[22]-1)*(thetajetcut/thetajetcut[22])**(4.5)
+		ctype red pl 0 thetajetcut myfit1 1111 1E-6 0.03 1E-1 1E3
+		ctype blue pl 0 thetajetcut myfit2 1111 1E-6 0.03 1E-1 1E3
+		ctype green pl 0 thetajetcut myfit3 1111 1E-6 0.03 1E-1 1E3
+		set thetamax=thetajetcut[39]
+		set theta1=thetajetcut[33]
+		set theta2=thetajetcut[22]
+		print {thetamax theta1 theta2}
+		#
+		set npow=4
+		set overallfit=1/(1/myfit1**(npow)+1/myfit2**(npow)+1/myfit3**(npow))**(1/(npow))
+		ctype yellow pl 0 thetajetcut overallfit 1111 1E-6 0.03 1E-1 1E3
+                #
+                #
 plotlatesttype7      2
 		#
 		define doprint $1
@@ -2494,6 +3511,8 @@ plotlatesttype7      2
 		#
 		setgrbconsts
 		#
+		set showrdissalt=1
+		#
 		#plottype2setuplatest
 		plottype2setuplatestforlmode
 		plottype2setup2latest
@@ -2502,7 +3521,11 @@ plotlatesttype7      2
 		}
 		plottype2doitlatest
 		#
-		doshadething3
+		if($2<=1){\
+		 #doshadething3lmode
+		 doshadething3mmode
+		}
+		#
 		#
 		#
 		if($doprint==1){\
@@ -2538,7 +3561,10 @@ plotlatesttype8      2
 		}
 		plottype2doitlatest
 		#
-		doshadething4
+		if($2<=1){\
+		 #doshadething4lmode
+		 doshadething4mmode
+		}
 		#
 		#
 		if($doprint==1){\
@@ -2631,7 +3657,7 @@ shadehottodo    0 #
 		# print '%g ' {myy}
 		# and then add braces
 		#
-doshadething1 0  #
+doshadething1lmode 0  #
 		#
 		define shadenum 500
 		#define shadenum 2000
@@ -2701,7 +3727,73 @@ doshadething1 0  #
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
 		#
-doshadething2 0  #
+doshadething1mmode 0  #  plotlatesttype1 0 2
+		#
+		define shadenum 500
+		#define shadenum 2000
+		#
+		relocate 7.38348   15.1669
+		angle 61
+		putlabel 5 "|b|=b_{\rm QED}" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		#
+		# taupar==1
+		#
+		set myx={16.9542 15.4661 14.0307 13.3042 11.6778 10.173 8.16604 6.28068 5.60598}
+		set myy={16.9951 16.1124 15.2749 14.7965 13.7495 12.5828 11.2668 9.9656 9.51691}
+		ltype 1 connect myx myy
+		ltype 0
+		#
+		relocate 16.1  16.1
+		angle 30
+		putlabel 5 "\tau_{||}=1" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		#
+		set myx={6.86035 6.44413 6.10678 5.84878 5.63069 5.61074 6.781}
+		set myy={17.0393 16.6443 16.3209 15.9976 15.8539 17.0393 17.0216}
+		#
+		lweight 3 ltype 0 angle (39+90)
+		shade $shadenum myx myy
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		connect myx myy
+		relocate 6.5 16.3
+		angle 50
+		putlabel 5 \tau_{\\nu}=1
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		#
+		#
+		set myx={11.0254 10.728 10.728 9.41898 8.12993 7.05896 6.76105 6.64226 6.76105 7.23714 8.09001 8.80415 10.5693 11.8384 13.6434 15.4281 16.6383 11.0848}
+		set myy={17.0216 16.7879 16.2132 14.7402 13.1235 11.7764 11.3454 11.1297 11.004 11.0397 11.5787 12.0997 13.0698 14.0575 15.3869 16.4286 17.0216 17.0216}
+		lweight 3 ltype 0 angle 39
+		shade $shadenum myx myy
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		connect myx myy
+		relocate 8.5661  14.3628
+		angle 60
+		putlabel 5 "n_e=n_{\rm pairs}" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		#
+		#
+		set myx={15.6219 13.6325 12.8713 12.1102 11.3837 10.3807 8.99658 7.2666 5.70956 5.62309 5.60598 8.18362 10.2419 12.5254 14.2725 14.9648 15.2242 15.7431}
+		set myy={17.0249 15.3348 14.7814 14.1681 13.6599 12.7173 11.7901 10.4591 9.36735 9.26262 8.14073 9.89065 11.2668 12.7625 13.8991 15.4546 16.3968 17.024}
+		lweight 3 ltype 0 angle 0
+		shade $shadenum myx myy
+		lweight 3 ltype 0 angle 90
+		shade $shadenum myx myy
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		connect myx myy
+		relocate 9.22132   10.2795
+		angle 45
+		putlabel 5 "r_{\rm diss}" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		relocate 6.95  10.5544
+		angle 42
+		putlabel 5 "r_{\rm trans}" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		#
+		#
+		#
+doshadething2lmode 0  #
 		#
 		relocate 7.2072   3.91736
 		angle 90
@@ -2751,7 +3843,69 @@ doshadething2 0  #
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
 		#
-doshadething3 0  #
+doshadething2mmode 0  # plotlatesttype3 0 2
+		#
+		relocate 7.64718  3.63177
+		angle 90
+		putlabel 5 "|b|=b_{\rm QED}" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		#
+		#
+		set myx={9.75775 9.75775 10.0001 10.0866 10.0866 10.2077 10.3284 10.346 10.3631 11.9025 12.1277 12.4908 12.7849 13.0966 13.3907 13.823 14.3072 14.8608 15.5183 15.9678 16.5736 17.9919 18.009 9.79244}
+		set myy={1.69475 2.6954 2.84555 4.26082 5.39723 5.49733 5.71879 5.89036 6.01908 6.01189 5.71879 5.29713 4.96838 4.65386 4.33933 3.9391 3.63897 3.30302 3.01712 2.80973 2.60969 2.58827 1.69475 1.68051}
+		#
+		lweight 3 ltype 0 angle (39+90)
+		shade 500 myx myy
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		connect myx myy
+		relocate 9.7   4.59521
+		angle 90
+		putlabel 5 "n_e=n_{\rm pairs}" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		#
+		#
+		set myx={15.4827 15.4827 15.3283 14.9895 14.6355 14.1889 13.9423 13.4805 13.2035 13.0338 12.8338 12.7568 15.8367 15.8367 15.7288 15.4979 15.267 15.0052 14.8047 14.6507 14.5894 14.5125 14.4355 14.4816 14.5738 14.7434 15.0052 15.3901 15.5131 15.544}
+		set myy={1.69209 1.88868 2.14143 2.42217 2.75921 3.24359 3.85433 4.46508 4.99872 5.49717 5.90428 6.01658 6.00954 5.67969 5.47606 4.94945 4.60553 4.18434 3.84026 3.66478 3.48929 3.33493 3.20152 3.03307 2.89966 2.7101 2.50647 2.14847 1.89572 1.68505}
+		lweight 3 ltype 0 angle 0
+		shade 500 myx myy
+		lweight 3 ltype 0 angle 90
+		shade 500 myx myy
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		connect myx myy
+		#
+		relocate 16.2137   5.58835
+		angle -90
+		putlabel 5 "r_{\rm diss}" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		relocate 12.649   5.63042
+		angle -70
+		putlabel 5 "r_{\rm trans}" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		#
+		#
+		# taupar==1
+		#
+		set myx={18.0081 17.4384 16.6682 15.8828 14.9282 14.235 13.8192 13.6035 13.3417}
+		set myy={1.89572 2.11328 2.47144 2.85039 3.45426 4.05797 4.47212 5.30057 5.99562}
+		ltype 1 connect myx myy
+		ltype 0
+		#
+		relocate 15.5   3.38404
+		angle -55
+		putlabel 5 \tau_{||}=1
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		#
+		relocate 13.95   2.05
+		angle 0
+		putlabel 5 "\gamma\theta_j=1"
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		set myx={9.38429 10.4624 10.7855 17.9772 18.0233 9.50735}
+		set myy={1.70616 1.98002 2.24669 2.23261 1.70616 1.69913}
+		ltype 3 connect myx myy
+		ltype 0
+		#
+		#
+doshadething3lmode 0  #
 		#
 		relocate 7.2072   2.1
 		angle 90
@@ -2765,10 +3919,6 @@ doshadething3 0  #
 		#
 		set myx={9.64277 9.66083 13.2795 13.385 13.4206 13.5969 13.5793 13.6145 9.66083}
 		set myy={4.01036 0.290807 0.290807 0.547314 0.722175 1.05454 1.53259 4.01036 4.01036}
-		#
-		lweight 3 ltype 0 angle (39+90)
-		shade 500 myx myy
-		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		connect myx myy
 		#
 		relocate 9.27216   2.5
@@ -2795,8 +3945,72 @@ doshadething3 0  #
 		putlabel 5 "r_{\rm trans}" 
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
+doshadething3mmode 0  # plotlatesttype7 0 2
 		#
-doshadething4 0  #
+		relocate 7.64718  2.1
+		angle 90
+		putlabel 5 "|b|=b_{\rm QED}" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		#
+		relocate 13.881  3.49506
+		angle -90
+		putlabel 5 \tau_{||}=1
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		#
+		# taupar==1
+		#
+		set myx={14.3585 14.2811 14.3737 14.3429 14.2507 14.0967}
+		set myy={0.301165 0.965365 1.99771 2.76454 3.53124 4.00215}
+		ltype 1 connect myx myy
+		ltype 0
+		#
+		#
+		set myx={10.077 10.0618 14.6203 14.5894 14.3889 14.235 14.1271 13.9119 13.8192 13.804 10.1388}
+		set myy={0.289059 4.0082 4.0082 3.27164 2.7102 2.07627 1.54496 0.995495 0.434058 0.289059 0.289059}
+		lweight 3 ltype 0 angle (39+90)
+		shade 500 myx myy
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		connect myx myy
+		#
+		relocate 9.61521   2.15468
+		angle 90
+		putlabel 5 "n_e=n_{\rm pairs}" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		#
+		#
+		# diss
+		set myx={13.804 13.881 13.8349 13.6805 13.2956 13.003 12.6642 12.295 12.1254 12.1715 12.3872 12.649 12.9417 13.1726 13.4653 13.8653 14.2968 14.5429 14.7125 14.8356 14.8973 14.8973 13.8653}
+		set myy={0.295112 1.33365 1.70193 2.09429 2.64981 3.06033 3.44677 3.82716 4.00215 4.00215 3.77887 3.53124 3.28374 3.06638 2.80678 2.511 2.191 1.87101 1.58114 1.32759 0.578924 0.295112 0.289059}
+		lweight 3 ltype 0 angle 0
+		shade 500 myx myy
+		lweight 3 ltype 0 angle 90
+		shade 500 myx myy
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		connect myx myy
+		#
+		# alt diss
+		set myx={17.962 16.8069 15.8519 14.9591 13.958 13.3883 12.9108 12.3563 12.1715}
+		set myy={2 2.1 2.2 2.3 2.47468 2.86717 3.31387 3.809 4.0082}
+		connect myx myy
+		#
+		#
+		relocate 15.1743   1.18865
+		angle -85
+		putlabel 5 "r_{\rm diss}" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		#
+		relocate 16.6839    1.9193
+		angle -25
+		putlabel 5 "r_{\rm dissalt}" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		#
+		relocate  13.5266   1.69588
+		angle -75
+		putlabel 5 "r_{\rm trans}" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		#
+		#
+doshadething4lmode 0  #
 		#
 		#
 		relocate 7.2072  1.1
@@ -2842,7 +4056,63 @@ doshadething4 0  #
 		putlabel 5 "r_{\rm trans}" 
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
-plottype2setuplatest 0     #
+doshadething4mmode 0  # plotlatesttype8 0 2
+		#
+		#
+		relocate 7.64718  1.1
+		angle 90
+		putlabel 5 "|b|=b_{\rm QED}" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		#
+		relocate 14.4507  0.517164
+		angle 90
+		putlabel 5 \tau_{||}=1
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		#
+		#
+		# taupar==1
+		#
+		set myx={14.0502 14.0502 14.0658 14.0658 14.0967 14.1119 14.1889 14.3276 14.5277 14.6816}
+		set myy={4.01331 3.13207 1.94691 1.13418 0.507345 -0.0605819 -0.5504 -0.961673 -1.58851 -1.99978}
+		ltype 1 connect myx myy
+		ltype 0
+		#
+		#
+		#
+		set myx={10.0466 10.031 14.5429 14.2198 14.0502 13.9889 13.8962 13.881 13.881 13.9119 13.7423 13.6653 13.7732 13.758 13.758 10.0618}
+		set myy={-2.01942 4.02313 4.00349 3.66073 3.25927 2.93615 2.46596 1.7512 1.05585 0.321236 -0.148727 -0.589455 -1.21629 -1.67665 -1.99978 -1.99978}
+		#
+		lweight 3 ltype 0 angle (39+90)
+		shade 500 myx myy
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		connect myx myy
+		#
+		relocate 9.7   1.5
+		angle 90
+		putlabel 5 "n_e=n_{\rm pairs}" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		#
+		#
+		#
+		set myx={14.1428 13.7271 13.5422 12.926 12.372 11.9097 11.5248 11.6018 11.7866 12.1102 12.4641 13.0799 13.6344 14.1737 14.7125 15.2361 15.7288 15.9137 14.2198}
+		set myy={-2.0096 -0.785382 -0.119491 1.23215 2.32895 3.31796 4.01331 4.00349 3.5824 2.94596 2.31913 1.26138 0.458473 -0.197818 -0.824655 -1.31425 -1.83331 -2.0096 -1.99978}
+		lweight 3 ltype 0 angle 0
+		shade 500 myx myy
+		lweight 3 ltype 0 angle 90
+		shade 500 myx myy
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		connect myx myy
+		#
+		relocate 15.0204 -0.697236
+		angle -55
+		putlabel 5 "r_{\rm diss}" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		relocate 12.9569   0.4192
+		angle -70
+		putlabel 5 "r_{\rm trans}" 
+		angle 0 ltype 0 lweight $PLOTLWEIGHT
+		#
+plottype2setuplatest 0  #
 		#
 		#
 		set mycondition=conditionpt
@@ -2852,6 +4122,10 @@ plottype2setuplatest 0     #
 		set mydiss=(ljet-rdiss)
 		plc0 0 mydiss
 		set fun0diss=newfun
+		#
+		set mydiss2=(ljet-rdiss2)
+		plc0 0 mydiss2
+		set fun0diss2=newfun
 		#
 		define missing_data (1E30)
 		#
@@ -2873,6 +4147,9 @@ plottype2setuplatest 0     #
 		plc0 0 toplot
 		set fun4=newfun
 		#
+		plc0 0 (taualongjetalt-1)
+		set fun4alt=newfun
+                #
 		# below only applies for near axis plots
 		plc0 0 (gammalorentz*thetajet-1)
 		set fun5=newfun
@@ -2892,6 +4169,14 @@ plottype2setuplatestforlmode 0     #
 		plc0 0 mydiss
 		set fun0diss=newfun
 		#
+		set mydiss2=(ljet-rdiss2)
+		plc0 0 mydiss2
+		set fun0diss2=newfun
+		#
+		set mydissalt=(ljet-rdisslmode)
+		plc0 0 mydissalt
+		set fun0dissalt=newfun
+		#
 		#
 		define missing_data (1E30)
 		#
@@ -2908,11 +4193,15 @@ plottype2setuplatestforlmode 0     #
 		set fun3=newfun
 		#
 		smooth2d taualongjet taualongjetnew 40 40 5
-		set toplot=(ljet>10**14.2678 ? 1E30 : taualongjetnew-1)
+		#set toplot=(ljet>10**14.2678 ? 1E30 : taualongjetnew-1)
 		#set toplot=(taualongjetnew-1)
-		plc0 0 toplot
+		#plc0 0 toplot
+		plc0 0 (taualongjet-1)
 		set fun4=newfun
 		#
+		plc0 0 (taualongjetalt-1)
+		set fun4alt=newfun
+                #
 		# below only applies for near axis plots
 		plc0 0 (gammalorentz*thetajet-1)
 		set fun5=newfun
@@ -2926,6 +4215,7 @@ plottype2setup2latest 0
 		erase
 		#
 plottype2doitlatest 0     #
+		#
 		fdraft
 		lweight 5
 		#rdraft
@@ -2938,7 +4228,7 @@ plottype2doitlatest 0     #
                 limits $txl $txh $tyl $tyh
                 image ($rnx,$rny) $txl $txh $tyl $tyh
 		#
-		if($shadeonly==0){
+		if($shadeonly!=1){
                 set image[ix,iy] = fun0
 		set lev={0}
                 levels lev
@@ -2950,9 +4240,21 @@ plottype2doitlatest 0     #
                 levels lev
 		#ctype blue contour
 		ltype 0 ctype default contour
+		#
+                set image[ix,iy] = fun0diss2
+		set lev={0}
+                levels lev
+		#ctype blue contour
+		ltype 0 ctype default contour
+		#
+                set image[ix,iy] = fun0dissalt
+		set lev={0}
+                levels lev
+		#ctype blue contour
+		ltype 0 ctype default contour
 		}
                 #
-		if($shadeonly==0){
+		if($shadeonly!=1){
                 set image[ix,iy] = fun1
                 set lev={0}
 		levels lev
@@ -2960,7 +4262,7 @@ plottype2doitlatest 0     #
 		ltype 2 ctype default contour
 		}
                 #
-		if($shadeonly==0){
+		if($shadeonly!=1){
 		#set image[ix,iy] = fun2
                 #set lev={0}
                 #levels lev
@@ -2970,7 +4272,7 @@ plottype2doitlatest 0     #
 		#lweight 3
 		}
                 #
-		if($shadeonly==0){
+		if($shadeonly!=1){
                 set image[ix,iy] = fun3
                 set lev={0}
                 levels lev
@@ -2978,18 +4280,28 @@ plottype2doitlatest 0     #
 		ltype 4 ctype default contour
 		}
                 #
+		if($shadeonly!=1){
                 set image[ix,iy] = fun4
+                set lev={0}
+                levels lev
+		#ctype green contour
+		ltype 1 ctype default contour
+                    #
+		}
+                set image[ix,iy] = fun4alt
                 set lev={0}
                 levels lev
 		#ctype green contour
 		ltype 1 ctype default contour
                 #
 		#
+		if($shadeonly!=1){
                 set image[ix,iy] = fun5
                 set lev={0}
                 levels lev
 		#ctype red contour
 		ltype 3 ctype default contour
+		}
                 #
                 set image[ix,iy] = fun6
                 set lev={0}

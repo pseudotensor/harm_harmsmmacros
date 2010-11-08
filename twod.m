@@ -42,6 +42,8 @@ plc    17	# plc <file> <function> <type of plot=100,000,overlay=010,000,limits=0
                 if($IMAGEORDER==1){ set fix=iy set fiy=ix }
                 #
 		image ($rnx,$rny) $txl $txh $tyl $tyh
+                #
+                echo "plc 1"
 		#
                 set image[fix,fiy] = newfun
                 #limits $rxl $rxh $ryl $ryh
@@ -50,6 +52,8 @@ plc    17	# plc <file> <function> <type of plot=100,000,overlay=010,000,limits=0
                 if(thebits & 0x010) {
                    define temptemptemp (1)
                 }
+                echo "plc 2"
+                #
 		if(!(thebits & 0x010)) {
 		 if($PLOTERASE) {
                   erase
