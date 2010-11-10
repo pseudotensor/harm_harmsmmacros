@@ -44,6 +44,7 @@ plc    17	# plc <file> <function> <type of plot=100,000,overlay=010,000,limits=0
 		image ($rnx,$rny) $txl $txh $tyl $tyh
                 #
                 echo "plc 1"
+                echo $txl $txh $tyl $tyh
 		#
                 set image[fix,fiy] = newfun
                 #limits $rxl $rxh $ryl $ryh
