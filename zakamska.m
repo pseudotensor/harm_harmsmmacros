@@ -111,7 +111,7 @@ doall  3        # doall 20 0 1660
 		define print_noheader (1)
 		#
 		# 20 0 1660
-		define ANIMSKIP $1
+		define ANIMSKIP ($1)
 		set startanim=$2
 		set endanim=$3
 		#
@@ -128,8 +128,9 @@ doall  3        # doall 20 0 1660
 		print {startanim endanim}
 		echo $ANIMSKIP
 		#
+		echo "very before do"
+		#
 		do ii=startanim,endanim,$ANIMSKIP{\
-		   #
 		   echo "just inside do"
 		   #
                    set h1='dumps/fieldline'
