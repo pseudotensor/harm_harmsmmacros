@@ -27,7 +27,7 @@ writeheader 2   # writeheader <numcolumns> <filename with path>
 		#
 		#
 		#
-doall  0        # doall 20 0 1660
+doall  3        # doall 20 0 1660
 		#
 		# doall 20 1200 1660
 		# doall 20 800 1200
