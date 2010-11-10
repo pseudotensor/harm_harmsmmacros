@@ -27,11 +27,13 @@ writeheader 2   # writeheader <numcolumns> <filename with path>
 		#
 		#
 		#
-doall  3        # doall 20 0 1660
 		#
-		# doall 20 1200 1660
-		# doall 20 800 1200
-		# doall 20 400 800
+doall  4        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42 1=orange 2 =ki-rh39>
+		#doall 20 0 1660 0
+		#
+		# doall 20 1200 1660 1
+		# doall 20 800 1200 1
+		# doall 20 400 800 1
 		#
 		define DOREADS 1
 		define DOINTERPS 1
@@ -82,8 +84,17 @@ doall  3        # doall 20 0 1660
                 define iizmax ($iymax)
                 #
 		#
+		if($4==0){\
+		 define program "./iinterp"
+		}
+		if($4==1){\
+		 define program "/u/ki/jmckinne/bin/iinterp.orange"
+		}
+		if($4==2){\
+		 define program "/u/ki/jmckinne/bin/iinterp.rh39"
+		}
+		#
 		define DATATYPE 1
-		define program "./iinterp"
 		define EXTRAPOLATE 0
 		define interptype 1
 		define READHEADERDATA 1
