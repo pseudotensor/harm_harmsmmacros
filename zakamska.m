@@ -27,7 +27,12 @@ writeheader 2   # writeheader <numcolumns> <filename with path>
 		#
 		#
 		#
-doall  0        #
+doall  0        # doall 20 0 1660
+		#
+		# doall 20 1200 1660
+		# doall 20 800 1200
+		# doall 20 400 800
+		#
 		define DOREADS 1
 		define DOINTERPS 1
 		#
@@ -105,11 +110,15 @@ doall  0        #
 		#
 		define print_noheader (1)
 		#
-		define ANIMSKIP 20
+		# 20 0 1660
+		define ANIMSKIP $1
+		set startanim=$2
+		set endanim=$3
 		#
 		# normal run:
-		set startanim=0
-		set endanim=1660
+		#define ANIMSKIP 20
+		#set startanim=0
+		#set endanim=1660
 		#
 		# test:
 		#set startanim=1500
