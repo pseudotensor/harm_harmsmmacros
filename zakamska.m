@@ -130,7 +130,7 @@ doall  3        # doall 20 0 1660
 		#
 		echo "very before do"
 		#
-		do ii=startanim,endanim,$ANIMSKIP{\
+		do ii=startanim,endanim,$ANIMSKIP {
 		   echo "just inside do"
 		   #
                    set h1='dumps/fieldline'
@@ -176,7 +176,12 @@ doall  3        # doall 20 0 1660
 		    set bd3=gv303*bu0+gv313*bu1+gv323*bu2+gv333*bu3
 		   }
 		   #
+		   writeinterp
 		   #
+		}
+		#
+writeinterp 0   #
+		#
 		   #########
 		   # write files and interpolate each file
 		   #
@@ -407,7 +412,6 @@ doall  3        # doall 20 0 1660
 		   #
 		   #
 		   #
-                }
 		#
 doscalar 2	# doscalar $foutrho0 $ifoutrho0
 		#
