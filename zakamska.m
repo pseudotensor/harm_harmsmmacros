@@ -26,14 +26,7 @@ writeheader 2   # writeheader <numcolumns> <filename with path>
 		#
 		#
 		#
-		#
-		#
-doall  4        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42 1=orange 2 =ki-rh39>
-		#doall 20 0 1660 0
-		#
-		# doall 20 1200 1660 1
-		# doall 20 800 1200 1
-		# doall 20 400 800 1
+setupreads 0    #		
 		#
 		define DOREADS 1
 		define DOINTERPS 1
@@ -43,6 +36,22 @@ doall  4        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
 		 grid3d gdump
 		 jrdpcf3dudipole dump0000
 		}
+		#
+		#
+doall  4        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42 1=orange 2 =ki-rh39>
+		#doall 20 0 1660 0
+		#
+		#
+		# production:
+		#
+		# doall 20 0 380 0
+		#
+		# doall 20 400 780 1
+		# doall 20 800 1180 1
+		# doall 20 1200 1660 1
+		#
+		#
+		setupreads
 		#
 		# normal x,y,z
 		define inx 32
@@ -57,7 +66,9 @@ doall  4        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
 		#need to capture full jet in Cartesian space
 		set zin=-40
 		set zout=Rout*0.9
-		set myangledeg=40
+		#set myangledeg=40
+		# opening half-angle to show (twice nominal to capture sheath)
+		set myangledeg=10
 		set myRout=zout*tan(myangledeg*pi/180)
 		#
 		# normal x,y,z
@@ -82,7 +93,8 @@ doall  4        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 define iiymax ($izmax)
                 define iizmin ($iymin)
                 define iizmax ($iymax)
-                #
+		#
+                echo $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax
 		#
 		if($4==0){\
 		 define program "./iinterp"
@@ -141,17 +153,30 @@ doall  4        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
 		#
 		echo "very before do"
 		#
+		
 		do ii=startanim,endanim,$ANIMSKIP {
+		   #
 		   echo "just inside do"
+		   #
+		   readonefieldline $ii $DOREADS
+		   #
+		   writeinterp $ii
+		   #
+		}
+		#
+		#
+readonefieldline 2 #
+		   #
 		   #
                    set h1='dumps/fieldline'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define filename (_fname)
 		   #
+		   echo $filename
                    #
 		   #
-		   if ($DOREADS){\
+		   if($2==1){\
 		    echo "before da"
 		    da $filename
 		    jrdpheader3dold $filename
@@ -185,13 +210,28 @@ doall  4        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
 		    set bd1=gv301*bu0+gv311*bu1+gv321*bu2+gv331*bu3
 		    set bd2=gv302*bu0+gv312*bu1+gv322*bu2+gv332*bu3
 		    set bd3=gv303*bu0+gv313*bu1+gv323*bu2+gv333*bu3
+		    #
+		    #
 		   }
 		   #
-		   writeinterp
-		   #
-		}
+otherdiags 0    # can run after doing readonefieldline if checking on things
 		#
-writeinterp 0   #
+		# other diagnostic things
+		#
+		jrdpheader3dold dumps/dump0000.head
+		#
+		setupplc $nx $ny $nz r h ph
+		define LOGTYPE 0
+		define x1label "r c^2/GM"
+		define x2label "h c^2/GM"
+		define PLANE 3
+		define WHICHLEV 0
+		#
+		set bsq=bd0*bu0+bd1*bu1+bd2*bu2+bd3*bu3
+		set bsqorho0=bsq/(rho0)
+		set lbsqorho0=lg(bsqorho0)
+		#
+writeinterp 1   #
 		#
 		   #########
 		   # write files and interpolate each file
@@ -199,7 +239,7 @@ writeinterp 0   #
 		   #
                    set h1='pdumps/rho0'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define foutrho0 (_fname)
 		   define fileout "$!foutrho0"
 		   writeheader 1 "$!fileout"
@@ -208,7 +248,7 @@ writeinterp 0   #
 		   # now interpolate scalar
                    set h1='idumps/irho0'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define ifoutrho0 (_fname)
 		   #
 		   define filein "$!foutrho0"
@@ -219,7 +259,7 @@ writeinterp 0   #
 		   #
                    set h1='pdumps/u'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define foutu (_fname)
 		   define fileout "$!foutu"
 		   writeheader 1 "$!fileout"
@@ -228,7 +268,7 @@ writeinterp 0   #
 		   # now interpolate scalar
                    set h1='idumps/iu'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define ifoutu (_fname)
 		   #
 		   define filein "$!foutu"
@@ -238,7 +278,7 @@ writeinterp 0   #
 		   #
                    set h1='pdumps/uu'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define foutuu (_fname)
 		   define fileout "$!foutuu"
 		   writeheader 4 "$!fileout"
@@ -247,7 +287,7 @@ writeinterp 0   #
 		   # now interpolate vector
                    set h1='idumps/iuu0'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define ifoutuu0 (_fname)
 		   #
 		   define filein "$!foutuu"
@@ -257,7 +297,7 @@ writeinterp 0   #
 		   # now interpolate vector
                    set h1='idumps/iuu1'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define ifoutuu1 (_fname)
 		   #
 		   define filein "$!foutuu"
@@ -267,7 +307,7 @@ writeinterp 0   #
 		   # now interpolate vector
                    set h1='idumps/iuu2'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define ifoutuu2 (_fname)
 		   #
 		   define filein "$!foutuu"
@@ -277,7 +317,7 @@ writeinterp 0   #
 		   # now interpolate vector
                    set h1='idumps/iuu3'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define ifoutuu3 (_fname)
 		   #
 		   define filein "$!foutuu"
@@ -287,7 +327,7 @@ writeinterp 0   #
 		   #
                    set h1='pdumps/bu'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define foutbu (_fname)
 		   define fileout "$!foutbu"
 		   writeheader 4 "$!fileout"
@@ -296,7 +336,7 @@ writeinterp 0   #
 		   # now interpolate vector
                    set h1='idumps/ibu0'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define ifoutbu0 (_fname)
 		   #
 		   define filein "$!foutbu"
@@ -306,7 +346,7 @@ writeinterp 0   #
 		   # now interpolate vector
                    set h1='idumps/ibu1'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define ifoutbu1 (_fname)
 		   #
 		   define filein "$!foutbu"
@@ -316,7 +356,7 @@ writeinterp 0   #
 		   # now interpolate vector
                    set h1='idumps/ibu2'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define ifoutbu2 (_fname)
 		   #
 		   define filein "$!foutbu"
@@ -326,7 +366,7 @@ writeinterp 0   #
 		   # now interpolate vector
                    set h1='idumps/ibu3'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define ifoutbu3 (_fname)
 		   #
 		   define filein "$!foutbu"
@@ -337,7 +377,7 @@ writeinterp 0   #
 		   #
                    set h1='pdumps/rpos'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define foutr (_fname)
 		   define fileout "$!foutr"
 		   writeheader 1 "$!fileout"
@@ -346,7 +386,7 @@ writeinterp 0   #
 		   # now interpolate scalar
                    set h1='idumps/ir'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define ifoutr (_fname)
 		   #
 		   define filein "$!foutr"
@@ -356,7 +396,7 @@ writeinterp 0   #
 		   #
                    set h1='pdumps/hpos'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define fouth (_fname)
 		   define fileout "$!fouth"
 		   writeheader 1 "$!fileout"
@@ -365,7 +405,7 @@ writeinterp 0   #
 		   # now interpolate scalar
                    set h1='idumps/ih'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define ifouth (_fname)
 		   #
 		   define filein "$!fouth"
@@ -375,7 +415,7 @@ writeinterp 0   #
 		   #
                    set h1='pdumps/phpos'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define foutph (_fname)
 		   define fileout "$!foutph"
 		   writeheader 1 "$!fileout"
@@ -384,7 +424,7 @@ writeinterp 0   #
 		   # now interpolate scalar
                    set h1='idumps/iph'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define ifoutph (_fname)
 		   #
 		   define filein "$!foutph"
@@ -396,30 +436,30 @@ writeinterp 0   #
 		   #
                    set h1='idumps/iall'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
                    define ifoutall (_fname)
 		   #
-		   ! head -1 "$!ifoutrho0" > headtemp.$ii.txt
-		   ! tail -n +2 "$!ifoutrho0" > temp1.$ii.txt
-		   ! tail -n +2 "$!ifoutu" > temp2.$ii.txt
-		   ! tail -n +2 "$!ifoutuu0" > temp3.$ii.txt
-		   ! tail -n +2 "$!ifoutuu1" > temp4.$ii.txt
-		   ! tail -n +2 "$!ifoutuu2" > temp5.$ii.txt
-		   ! tail -n +2 "$!ifoutuu3" > temp6.$ii.txt
-		   ! tail -n +2 "$!ifoutbu0" > temp7.$ii.txt
-		   ! tail -n +2 "$!ifoutbu1" > temp8.$ii.txt
-		   ! tail -n +2 "$!ifoutbu2" > temp9.$ii.txt
-		   ! tail -n +2 "$!ifoutbu3" > temp10.$ii.txt
-		   ! tail -n +2 "$!ifoutr" > temp11.$ii.txt
-		   ! tail -n +2 "$!ifouth" > temp12.$ii.txt
-		   ! tail -n +2 "$!ifoutph" > temp13.$ii.txt
+		   ! head -1 "$!ifoutrho0" > headtemp.$1.txt
+		   ! tail -n +2 "$!ifoutrho0" > temp1.$1.txt
+		   ! tail -n +2 "$!ifoutu" > temp2.$1.txt
+		   ! tail -n +2 "$!ifoutuu0" > temp3.$1.txt
+		   ! tail -n +2 "$!ifoutuu1" > temp4.$1.txt
+		   ! tail -n +2 "$!ifoutuu2" > temp5.$1.txt
+		   ! tail -n +2 "$!ifoutuu3" > temp6.$1.txt
+		   ! tail -n +2 "$!ifoutbu0" > temp7.$1.txt
+		   ! tail -n +2 "$!ifoutbu1" > temp8.$1.txt
+		   ! tail -n +2 "$!ifoutbu2" > temp9.$1.txt
+		   ! tail -n +2 "$!ifoutbu3" > temp10.$1.txt
+		   ! tail -n +2 "$!ifoutr" > temp11.$1.txt
+		   ! tail -n +2 "$!ifouth" > temp12.$1.txt
+		   ! tail -n +2 "$!ifoutph" > temp13.$1.txt
 		   #
-		   ! cat headtemp.$ii.txt > "$!ifoutall"
-		   ! paste temp1.$ii.txt temp2.$ii.txt temp3.$ii.txt temp4.$ii.txt temp5.$ii.txt temp6.$ii.txt temp7.$ii.txt temp8.$ii.txt temp9.$ii.txt temp10.$ii.txt temp11.$ii.txt temp12.$ii.txt temp13.$ii.txt > tempall.$ii.txt
-		   ! cat tempall.$ii.txt >> "$!ifoutall"
+		   ! cat headtemp.$1.txt > "$!ifoutall"
+		   ! paste temp1.$1.txt temp2.$1.txt temp3.$1.txt temp4.$1.txt temp5.$1.txt temp6.$1.txt temp7.$1.txt temp8.$1.txt temp9.$1.txt temp10.$1.txt temp11.$1.txt temp12.$1.txt temp13.$1.txt > tempall.$1.txt
+		   ! cat tempall.$1.txt >> "$!ifoutall"
 		   #
 		   # remove temp files
-		   ##! rm -rf headtemp.$ii.txt temp1.$ii.txt temp2.$ii.txt temp3.$ii.txt temp4.$ii.txt temp5.$ii.txt temp6.$ii.txt temp7.$ii.txt temp8.$ii.txt temp9.$ii.txt temp10.$ii.txt temp11.$ii.txt temp12.$ii.txt temp13.$ii.txt
+		   ##! rm -rf headtemp.$1.txt temp1.$1.txt temp2.$1.txt temp3.$1.txt temp4.$1.txt temp5.$1.txt temp6.$1.txt temp7.$1.txt temp8.$1.txt temp9.$1.txt temp10.$1.txt temp11.$1.txt temp12.$1.txt temp13.$1.txt
 		   #
 		   #
 		   #
@@ -439,11 +479,11 @@ doscalar 2	# doscalar $foutrho0 $ifoutrho0
 dovector 3      # dovector <2,3,4,5> $foutbu $ifoutbu3
 		#
 		#define DEFAULTVALUETYPE 4
-		if($1==0){\
+		if($1==2){\
 	         define DEFAULTVALUETYPE 1
 		}
 		#
-		if($1>0){\
+		if($1>2){\
 		 define DEFAULTVALUETYPE 0
 		}
 		#
@@ -453,6 +493,10 @@ dovector 3      # dovector <2,3,4,5> $foutbu $ifoutbu3
                     1 $iinx $iiny $iinz 0 0 $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
 		    $iRin $iRout $iR0 $ihslope $idefcoord $dofull2pi $EXTRAPOLATE $DEFAULTVALUETYPE dumps/gdump < $2 > $3
 		 }
+		#
+		#
+		#
+		#
 		#
 		#
 checkresult 1   # checkresult <dump number>
@@ -499,6 +543,26 @@ checkresult 1   # checkresult <dump number>
                 define PLANE 2
                 define WHICHLEV 0
                 #
+		# ihat = sin(h)*cos(ph)*rhat + cos(h)*cos(ph)*hhat - sin(ph)*phhat
+		# jhat = sin(h)*sin(ph)*rhat + cos(h)*sin(ph)*hhat + cos(ph)*phhat
+		# khat = cos(h)        *rhat - sin(h)        *hhat
+		#
+		# rhat = sin(h)*cos(ph)*ihat + sin(h)*sin(ph)*jhat + cos(h)*khat
+		# hhat = cos(h)*cos(ph)*ihat + cos(h)*sin(ph)*jhat - sin(h)*khat
+		# phhat= -sin(h)*ihat + cos(ph)*jhat
+		#
+		set ibrhat =ibu1*(sin(hpos)*cos(phpos))+ibu2*(sin(hpos)*sin(phpos))+ibu3*(cos(hpos))
+		set ibhhat =ibu1*(cos(hpos)*cos(phpos))+ibu2*(cos(hpos)*sin(phpos))-ibu3*(sin(hpos))
+		set ibphhat=ibu1*(-sin(phpos))         +ibu2*(cos(phpos))
+		#
+		set ibsq=-ibu0**2+ibu1**2+ibu2**2+ibu3**2
+		set ibsqorho0=ibsq/irho0
+		set ilbsqorho0=lg(ibsqorho0)
+		#
+		set iurhat =iuu1*(sin(hpos)*cos(phpos))+iuu2*(sin(hpos)*sin(phpos))+iuu3*(cos(hpos))
+		set iuhhat =iuu1*(cos(hpos)*cos(phpos))+iuu2*(cos(hpos)*sin(phpos))-iuu3*(sin(hpos))
+		set iuphhat=iuu1*(-sin(phpos))         +iuu2*(cos(phpos))
+		#
 		#
 plotscheck 0    #
 		plc 0 irho0
