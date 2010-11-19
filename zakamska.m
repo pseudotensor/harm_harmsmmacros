@@ -50,7 +50,14 @@ doall  8        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
 		# doall 20 800 1180 1 14 7.5 pdumps idumps
 		# doall 20 1200 1660 1 14 7.5 pdumps idumps
 		#
-		#
+                # production new:
+                #
+                # doall 20 0 1660 0 14 7.5 pdumps idumps
+                #
+                # doall 20 0 1660 1 14 2.5 /u/ki/jmckinne/superdrive/nobackup/zakamska/theta2.5/pdumps /u/ki/jmckinne/superdrive/nobackup/zakamska/theta2.5/idumps
+		# doall 20 0 1660 1 14 5.0 /u/ki/jmckinne/superdrive/nobackup/zakamska/theta5.0/pdumps /u/ki/jmckinne/superdrive/nobackup/zakamska/theta5.0/idumps
+                # doall 20 0 1660 1 14 10.0 /u/ki/jmckinne/superdrive/nobackup/zakamska/theta10.0/pdumps /u/ki/jmckinne/superdrive/nobackup/zakamska/theta10.0/idumps
+                #
 		setupreads
 		#
 		# normal x,y,z
