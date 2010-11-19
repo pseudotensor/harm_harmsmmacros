@@ -38,17 +38,17 @@ setupreads 0    #
 		}
 		#
 		#
-doall  6        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42 1=orange 2 =ki-rh39> <myangledeg> <tnrdegrees>
-		#doall 20 0 1660 0 14 7.5
+doall  8        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42 1=orange 2 =ki-rh39> <myangledeg> <tnrdegrees> <pdumpsdir> <idumpsdir>
+		#doall 20 0 1660 0 14 7.5 pdumps idumps
 		#
 		#
 		# production:
 		#
-		# doall 20 0 380 0  14 7.5
+		# doall 20 0 380 0  14 7.5 pdumps idumps
 		#
-		# doall 20 400 780 1 14 7.5
-		# doall 20 800 1180 1 14 7.5
-		# doall 20 1200 1660 1 14 7.5
+		# doall 20 400 780 1 14 7.5 pdumps idumps
+		# doall 20 800 1180 1 14 7.5 pdumps idumps
+		# doall 20 1200 1660 1 14 7.5 pdumps idumps
 		#
 		#
 		setupreads
@@ -136,9 +136,12 @@ doall  6        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 #
 		#
 		# 31 args to iinterp
+                #
+                define pdumpsdir "$!7/"
+                define idumpsdir "$!8/"
 		#
-		!mkdir -p pdumps/
-		!mkdir -p idumps/
+		!mkdir -p $pdumpsdir
+		!mkdir -p $idumpsdir
 		#
 		define print_noheader (1)
 		#
@@ -246,18 +249,22 @@ writeinterp 1   #
 		   # write files and interpolate each file
 		   #
 		   #
-                   set h1='pdumps/rho0'
+                   set h0p='$pdumpsdir'
+                   set h0i='$idumpsdir'
+                   #
+                   #
+                   set h1='rho0'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0p+h1+h2+h3
                    define foutrho0 (_fname)
 		   define fileout "$!foutrho0"
 		   writeheader 1 "$!fileout"
 		   print + "$!fileout" '%g\n' {rho0}
 		   #
 		   # now interpolate scalar
-                   set h1='idumps/irho0'
+                   set h1='irho0'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0i+h1+h2+h3
                    define ifoutrho0 (_fname)
 		   #
 		   define filein "$!foutrho0"
@@ -266,18 +273,18 @@ writeinterp 1   #
 		   #
 		   echo "after rho0"
 		   #
-                   set h1='pdumps/u'
+                   set h1='u'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0p+h1+h2+h3
                    define foutu (_fname)
 		   define fileout "$!foutu"
 		   writeheader 1 "$!fileout"
 		   print + "$!fileout" '%g\n' {u}
 		   #
 		   # now interpolate scalar
-                   set h1='idumps/iu'
+                   set h1='iu'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0i+h1+h2+h3
                    define ifoutu (_fname)
 		   #
 		   define filein "$!foutu"
@@ -285,18 +292,18 @@ writeinterp 1   #
 		   doscalar $filein $fileout
 		   #
 		   #
-                   set h1='pdumps/uu'
+                   set h1='uu'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0p+h1+h2+h3
                    define foutuu (_fname)
 		   define fileout "$!foutuu"
 		   writeheader 4 "$!fileout"
 		   print + "$!fileout" '%g %g %g %g\n' {uu0 uu1 uu2 uu3}
 		   #
 		   # now interpolate vector
-                   set h1='idumps/iuu0'
+                   set h1='iuu0'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0i+h1+h2+h3
                    define ifoutuu0 (_fname)
 		   #
 		   define filein "$!foutuu"
@@ -304,9 +311,9 @@ writeinterp 1   #
 		   dovector 2 $filein $fileout
 		   #
 		   # now interpolate vector
-                   set h1='idumps/iuu1'
+                   set h1='iuu1'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0i+h1+h2+h3
                    define ifoutuu1 (_fname)
 		   #
 		   define filein "$!foutuu"
@@ -314,9 +321,9 @@ writeinterp 1   #
 		   dovector 3 $filein $fileout
 		   #
 		   # now interpolate vector
-                   set h1='idumps/iuu2'
+                   set h1='iuu2'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0i+h1+h2+h3
                    define ifoutuu2 (_fname)
 		   #
 		   define filein "$!foutuu"
@@ -324,9 +331,9 @@ writeinterp 1   #
 		   dovector 4 $filein $fileout
 		   #
 		   # now interpolate vector
-                   set h1='idumps/iuu3'
+                   set h1='iuu3'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0i+h1+h2+h3
                    define ifoutuu3 (_fname)
 		   #
 		   define filein "$!foutuu"
@@ -334,18 +341,18 @@ writeinterp 1   #
 		   dovector 5 $filein $fileout
 		   #
 		   #
-                   set h1='pdumps/bu'
+                   set h1='bu'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0p+h1+h2+h3
                    define foutbu (_fname)
 		   define fileout "$!foutbu"
 		   writeheader 4 "$!fileout"
 		   print + "$!fileout" '%g %g %g %g\n' {bu0 bu1 bu2 bu3}
 		   #
 		   # now interpolate vector
-                   set h1='idumps/ibu0'
+                   set h1='ibu0'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0i+h1+h2+h3
                    define ifoutbu0 (_fname)
 		   #
 		   define filein "$!foutbu"
@@ -353,9 +360,9 @@ writeinterp 1   #
 		   dovector 2 $filein $fileout
 		   #
 		   # now interpolate vector
-                   set h1='idumps/ibu1'
+                   set h1='ibu1'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0i+h1+h2+h3
                    define ifoutbu1 (_fname)
 		   #
 		   define filein "$!foutbu"
@@ -363,9 +370,9 @@ writeinterp 1   #
 		   dovector 3 $filein $fileout
 		   #
 		   # now interpolate vector
-                   set h1='idumps/ibu2'
+                   set h1='ibu2'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0i+h1+h2+h3
                    define ifoutbu2 (_fname)
 		   #
 		   define filein "$!foutbu"
@@ -373,9 +380,9 @@ writeinterp 1   #
 		   dovector 4 $filein $fileout
 		   #
 		   # now interpolate vector
-                   set h1='idumps/ibu3'
+                   set h1='ibu3'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0i+h1+h2+h3
                    define ifoutbu3 (_fname)
 		   #
 		   define filein "$!foutbu"
@@ -384,18 +391,18 @@ writeinterp 1   #
 		   #
 		   #
 		   #
-                   set h1='pdumps/rpos'
+                   set h1='rpos'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0p+h1+h2+h3
                    define foutr (_fname)
 		   define fileout "$!foutr"
 		   writeheader 1 "$!fileout"
 		   print + "$!fileout" '%g\n' {r}
 		   #
 		   # now interpolate scalar
-                   set h1='idumps/ir'
+                   set h1='ir'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0i+h1+h2+h3
                    define ifoutr (_fname)
 		   #
 		   define filein "$!foutr"
@@ -403,18 +410,18 @@ writeinterp 1   #
 		   doscalar $filein $fileout
 		   #
 		   #
-                   set h1='pdumps/hpos'
+                   set h1='hpos'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0p+h1+h2+h3
                    define fouth (_fname)
 		   define fileout "$!fouth"
 		   writeheader 1 "$!fileout"
 		   print + "$!fileout" '%g\n' {h}
 		   #
 		   # now interpolate scalar
-                   set h1='idumps/ih'
+                   set h1='ih'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0i+h1+h2+h3
                    define ifouth (_fname)
 		   #
 		   define filein "$!fouth"
@@ -422,18 +429,18 @@ writeinterp 1   #
 		   doscalar $filein $fileout
 		   #
 		   #
-                   set h1='pdumps/phpos'
+                   set h1='phpos'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0p+h1+h2+h3
                    define foutph (_fname)
 		   define fileout "$!foutph"
 		   writeheader 1 "$!fileout"
 		   print + "$!fileout" '%g\n' {ph}
 		   #
 		   # now interpolate scalar
-                   set h1='idumps/iph'
+                   set h1='iph'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0i+h1+h2+h3
                    define ifoutph (_fname)
 		   #
 		   define filein "$!foutph"
@@ -443,9 +450,9 @@ writeinterp 1   #
 		   #
 		   # now collect all interpolated results into a single file
 		   #
-                   set h1='idumps/iall'
+                   set h1='iall'
 		   set h3='.txt'
-                   set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
+                   set h2=sprintf('%04d',$1) set _fname=h0i+h1+h2+h3
                    define ifoutall (_fname)
 		   #
 		   ! head -1 "$!ifoutrho0" > headtemp.$1.txt
@@ -511,13 +518,16 @@ dovector 3      # dovector <2,3,4,5> $foutbu $ifoutbu3
 		#
 		#
 		#
-checkresult 1   # checkresult <dump number>
+checkresult 2   # checkresult <dump number> <idumpsdir>
 		#
 		define ii ($1)
 		#
-		set h1='idumps/iall'
+                define idumpsdir "$!2/"
+                set h0i='$idumpsdir'
+                #
+		set h1='iall'
 		set h3='.txt'
-		set h2=sprintf('%04d',$ii) set _fname=h1+h2+h3
+		set h2=sprintf('%04d',$ii) set _fname=h0i+h1+h2+h3
 		define filename (_fname)
 		#
 		jrdpheader3dold $filename
