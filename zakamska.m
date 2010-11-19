@@ -38,17 +38,17 @@ setupreads 0    #
 		}
 		#
 		#
-doall  4        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42 1=orange 2 =ki-rh39>
-		#doall 20 0 1660 0
+doall  6        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42 1=orange 2 =ki-rh39> <myangledeg> <tnrdegrees>
+		#doall 20 0 1660 0 14 7.5
 		#
 		#
 		# production:
 		#
-		# doall 20 0 380 0
+		# doall 20 0 380 0  14 7.5
 		#
-		# doall 20 400 780 1
-		# doall 20 800 1180 1
-		# doall 20 1200 1660 1
+		# doall 20 400 780 1 14 7.5
+		# doall 20 800 1180 1 14 7.5
+		# doall 20 1200 1660 1 14 7.5
 		#
 		#
 		setupreads
@@ -70,12 +70,15 @@ doall  4        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
 		# opening half-angle to show (twice nominal to capture sheath)
 		#set myangledeg=10
                 #set myangledeg=20
-                set myangledeg=14
+                #set myangledeg=14
+                set myangledeg=$5
+                #
                 # 10 degrees ok for non-rotated case, but need 20 degrees if rotate 7.5-10 if don't change ixmin and ixmax, but now do change it so about 12 degrees is good
 		set myRout=zout*tan(myangledeg*pi/180)
 		#
-                define tnrdegrees (2.5)
-                define tnrdegrees (7.5)
+                #define tnrdegrees (2.5)
+                #define tnrdegrees (7.5)
+                define tnrdegrees ($6)
                 #
 		# normal x,y,z
 		define ixmin (-myRout*cos($tnrdegrees/myangledeg*pi/2))
