@@ -68,12 +68,18 @@ doall  4        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
 		set zout=Rout*0.9
 		#set myangledeg=40
 		# opening half-angle to show (twice nominal to capture sheath)
-		set myangledeg=10
+		#set myangledeg=10
+                #set myangledeg=20
+                set myangledeg=12
+                # 10 degrees ok for non-rotated case, but need 20 degrees if rotate 7.5-10 if don't change ixmin and ixmax, but now do change it so about 12 degrees is good
 		set myRout=zout*tan(myangledeg*pi/180)
 		#
+                define tnrdegrees (2.5)
+                define tnrdegrees (7.5)
+                #
 		# normal x,y,z
-		define ixmin (-myRout)
-		define ixmax (myRout)
+		define ixmin (-myRout*cos($tnrdegrees/myangledeg*pi/2))
+		define ixmax (2*myRout+$ixmin)
 		define iymin (-myRout)
 		define iymax (myRout)
 		define izmin (zin)
@@ -97,7 +103,7 @@ doall  4        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 echo $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax
 		#
 		if($4==0){\
-		 define program "./iinterp"
+		 define program "iinterp"
 		}
 		if($4==1){\
 		 define program "/u/ki/jmckinne/bin/iinterp.orange"
@@ -165,7 +171,7 @@ doall  4        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
 		}
 		#
 		#
-readonefieldline 2 #
+readonefieldline 2 # readonefieldline <dump#> <DOREADSornot>
 		   #
 		   #
                    set h1='dumps/fieldline'
@@ -468,11 +474,13 @@ doscalar 2	# doscalar $foutrho0 $ifoutrho0
 		#
 		#define DEFAULTVALUETYPE 4
 		define DEFAULTVALUETYPE 0
+                #
 		if($DOINTERPS){\
 		 ! $program $DATATYPE $interptype $READHEADERDATA $WRITEHEADERDATA \
 		    1 $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
                     1 $iinx $iiny $iinz 0 0 $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
-		    $iRin $iRout $iR0 $ihslope $idefcoord $dofull2pi $EXTRAPOLATE $DEFAULTVALUETYPE < $1 > $2
+		    $iRin $iRout $iR0 $ihslope $idefcoord $dofull2pi \
+                               $tnrdegrees $EXTRAPOLATE $DEFAULTVALUETYPE < $1 > $2
 		}    
 		#    
 		#
@@ -491,7 +499,8 @@ dovector 3      # dovector <2,3,4,5> $foutbu $ifoutbu3
 		 ! $program $1 $interptype $READHEADERDATA $WRITEHEADERDATA \
                     1 $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
                     1 $iinx $iiny $iinz 0 0 $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
-		    $iRin $iRout $iR0 $ihslope $idefcoord $dofull2pi $EXTRAPOLATE $DEFAULTVALUETYPE dumps/gdump < $2 > $3
+		    $iRin $iRout $iR0 $ihslope $idefcoord $dofull2pi $tnrdegrees \
+                               $EXTRAPOLATE $DEFAULTVALUETYPE dumps/gdump < $2 > $3
 		 }
 		#
 		#
@@ -536,6 +545,7 @@ checkresult 1   # checkresult <dump number>
 		set zpos[0]=truemin
 		set zpos[dimen(zpos)-1]=truemax
 		#
+                # Notice the order is Cartesian x z y (inx/y/z just SM labels for grid cell numbers in x/z/y directions -- respectively in order)
 		setupplc $inx $iny $inz xpos zpos ypos
 		define LOGTYPE 0
 		define x1label "x c^2/GM"
@@ -563,6 +573,8 @@ checkresult 1   # checkresult <dump number>
 		set iuhhat =iuu1*(cos(hpos)*cos(phpos))+iuu2*(cos(hpos)*sin(phpos))-iuu3*(sin(hpos))
 		set iuphhat=iuu1*(-sin(phpos))         +iuu2*(cos(phpos))
 		#
+		set udotb=-iuu0*ibu0 + iuu1*ibu1 + iuu2*ibu2 + iuu3*ibu3
+		set udotu=-iuu0*iuu0 + iuu1*iuu1 + iuu2*iuu2 + iuu3*iuu3
 		#
 plotscheck 0    #
 		plc 0 irho0
@@ -570,3 +582,6 @@ plotscheck 0    #
 		agzplc 0 irho0
 		#
 		#
+                agzplc 0 ibsqorho0
+                #
+                #
