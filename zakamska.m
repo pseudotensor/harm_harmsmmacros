@@ -70,7 +70,7 @@ doall  4        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
 		# opening half-angle to show (twice nominal to capture sheath)
 		#set myangledeg=10
                 #set myangledeg=20
-                set myangledeg=12
+                set myangledeg=14
                 # 10 degrees ok for non-rotated case, but need 20 degrees if rotate 7.5-10 if don't change ixmin and ixmax, but now do change it so about 12 degrees is good
 		set myRout=zout*tan(myangledeg*pi/180)
 		#
