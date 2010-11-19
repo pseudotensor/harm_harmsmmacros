@@ -52,11 +52,17 @@ doall  8        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
 		#
                 # production new:
                 #
+                # one-time in rundipole??? dir:
+                # !ln -s /u/ki/jmckinne/superdrive/nobackup/zakamska/theta2.5 theta2.5
+                # !ln -s /u/ki/jmckinne/superdrive/nobackup/zakamska/theta5.0 theta5.0
+                # !ln -s /u/ki/jmckinne/superdrive/nobackup/zakamska/theta10.0 theta10.0
+                # !ln -s /u/ki/jmckinne/superdrive/nobackup/zakamska/theta7.5 theta7.5
+                #
                 # doall 20 0 1660 0 14 7.5 pdumps idumps
                 #
-                # doall 20 0 1660 1 14 2.5 /u/ki/jmckinne/superdrive/nobackup/zakamska/theta2.5/pdumps /u/ki/jmckinne/superdrive/nobackup/zakamska/theta2.5/idumps
-		# doall 20 0 1660 1 14 5.0 /u/ki/jmckinne/superdrive/nobackup/zakamska/theta5.0/pdumps /u/ki/jmckinne/superdrive/nobackup/zakamska/theta5.0/idumps
-                # doall 20 0 1660 1 14 10.0 /u/ki/jmckinne/superdrive/nobackup/zakamska/theta10.0/pdumps /u/ki/jmckinne/superdrive/nobackup/zakamska/theta10.0/idumps
+                # doall 20 0 1660 1 14 2.5 theta2.5/pdumps theta2.5/idumps
+		# doall 20 0 1660 1 14 5.0 theta5.0/pdumps theta5.0/idumps
+                # doall 20 0 1660 1 14 10.0 theta10.0/pdumps theta10.0/idumps
                 #
 		setupreads
 		#
