@@ -63,7 +63,11 @@ doall  8        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 # doall 20 0 1660 1 14 2.5 theta2.5/pdumps theta2.5/idumps
 		# doall 20 0 1660 1 14 5.0 theta5.0/pdumps theta5.0/idumps
                 # doall 20 0 1660 1 14 10.0 theta10.0/pdumps theta10.0/idumps
-                #
+		#
+		# useful for testing (can set createtest below)
+                # doall 20 1660 1660 0 14 0 pdumpstest idumpstest
+		# doall 20 1660 1660 0 45 45 pdumpstest idumpstest
+		#
 		setupreads
 		#
 		# normal x,y,z
@@ -87,6 +91,9 @@ doall  8        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 set myangledeg=$5
                 #
                 # 10 degrees ok for non-rotated case, but need 20 degrees if rotate 7.5-10 if don't change ixmin and ixmax, but now do change it so about 12 degrees is good
+		#
+                # myangledeg=\pi/4*180/pi=45deg gives myRout=zout
+		#
 		set myRout=zout*tan(myangledeg*pi/180)
 		#
                 #define tnrdegrees (2.5)
@@ -94,7 +101,7 @@ doall  8        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 define tnrdegrees ($6)
                 #
 		# normal x,y,z
-		define ixmin (-myRout*cos($tnrdegrees/myangledeg*pi/2))
+		define ixmin (-40*sin($tnrdegrees/myangledeg*pi/2) - (myRout)*cos($tnrdegrees/myangledeg*pi/2))
 		define ixmax (2*myRout+$ixmin)
 		define iymin (-myRout)
 		define iymax (myRout)
@@ -193,6 +200,14 @@ doall  8        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
 readonefieldline 2 # readonefieldline <dump#> <DOREADSornot>
 		   #
 		   #
+		   # whether to create test data
+		   # 0 = no test
+		   # 1 = Br only
+		   # 2 = Bphi only
+		   define createtest 2
+		   #
+		   #
+		   #
                    set h1='dumps/fieldline'
 		   set h3='.txt'
                    set h2=sprintf('%04d',$1) set _fname=h1+h2+h3
@@ -208,6 +223,13 @@ readonefieldline 2 # readonefieldline <dump#> <DOREADSornot>
 		    lines 2 10000000
 		    read {rho0 1 u 2 negud0 3 mu 4 uu0 5 vu1 6 vu2 7 vu3 8 Bu1 9 Bu2 10 Bu3 11}
 		    #
+		    if($createtest==2){\
+		           set Bu1=0*Bu1
+		           set Bu2=0*Bu1
+		           set Bu3=(1/(r*sin(h)))/sqrt(gv333)*sin(h)**2
+		           #
+		           #
+		    }
 		    #
 		    set Bu0=0*Bu1
 		    #
@@ -238,6 +260,9 @@ readonefieldline 2 # readonefieldline <dump#> <DOREADSornot>
 		    #
 		    #
 		   }
+		   #
+		   #
+		   #
 		   #
 otherdiags 0    # can run after doing readonefieldline if checking on things
 		#
@@ -360,7 +385,13 @@ writeinterp 1   #
                    define foutbu (_fname)
 		   define fileout "$!foutbu"
 		   writeheader 4 "$!fileout"
-		   print + "$!fileout" '%g %g %g %g\n' {bu0 bu1 bu2 bu3}
+		   #
+		   if($createtest==0){\
+		          print + "$!fileout" '%g %g %g %g\n' {bu0 bu1 bu2 bu3}
+		       }
+		   if($createtest==2){\
+		          print + "$!fileout" '%g %g %g %g\n' {Bu0 Bu1 Bu2 Bu3}
+		       }
 		   #
 		   # now interpolate vector
                    set h1='ibu0'
@@ -575,7 +606,7 @@ checkresult 2   # checkresult <dump number> <idumpsdir>
 		setupplc $inx $iny $inz xpos zpos ypos
 		define LOGTYPE 0
 		define x1label "x c^2/GM"
-                define x2label "z c^2/GM"
+                define x2label "y c^2/GM"
                 define PLANE 2
                 define WHICHLEV 0
                 #
@@ -610,4 +641,15 @@ plotscheck 0    #
 		#
                 agzplc 0 ibsqorho0
                 #
+                agzplc 0 ilbsqorho0
                 #
+                #
+		set vecx=ibu1
+		set vecy=ibu2
+		set vecz=ibu3
+		#
+		#define UNITVECTOR 1
+		#define SKIPFACTOR 1
+		vpl 0 vec 1 12 100
+		#
+		#
