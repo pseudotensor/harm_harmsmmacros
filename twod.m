@@ -276,6 +276,9 @@ setupplc1 0     #
                    set newfun=inputfun  if(k==$WHICHLEV) # for example
 		   set reallyx=x12 if(k==$WHICHLEV)
                    set reallyy=x22 if(k==$WHICHLEV)
+                   #
+		   #set newfunx=$2x if(k==$WHICHLEV)   
+                   #set newfuny=$2y if(k==$WHICHLEV)   
 		}
 		   #
 		 }
@@ -307,6 +310,9 @@ setupplc1 0     #
                    define rny ($nz)
 		   set reallyx=x12 if(j==$WHICHLEV)
                    set reallyy=x32 if(j==$WHICHLEV)
+                   #
+                   #set newfunx=$2x if(j==$WHICHLEV)   
+                   #set newfuny=$2z if(j==$WHICHLEV)   
 		}
 		 }
 		 if($PLANE==1) {
@@ -336,6 +342,9 @@ setupplc1 0     #
                    set newfun=inputfun if(i==$WHICHLEV)   
 		   set reallyx=x22 if(i==$WHICHLEV)   
                    set reallyy=x32 if(i==$WHICHLEV)
+                   #
+                   #set newfunx=$2y if(i==$WHICHLEV)   
+                   #set newfuny=$2z if(i==$WHICHLEV)   
 		}
 	   	   #
 		 }
@@ -1006,7 +1015,7 @@ pls    17	# pls <file> <function> <type of plot=100,000,overlay=010,000,limits=0
 		#
 		#
 		#
-vpl	19	# eg. vpl dump0001.dat v  1 12 010  <0 0 0 0>
+vplold	19	# eg. vpl dump0001.dat v  1 12 010  <0 0 0 0>
 		# vpl <file/0> <vec>   <v_leng> <12=xy,13=xz> <log&&overlay&&limits> <limits>
 		# log=1 0=normal
 		# overlay=0, no overlay, 1=overlay
@@ -1210,6 +1219,162 @@ vpl	19	# eg. vpl dump0001.dat v  1 12 010  <0 0 0 0>
 		else{\
 		        set use=ii/ii*1
 		}
+		set realx=reallyx if(use)
+		set realy=reallyy if(use)
+		#
+		# for non-interpolated plots
+		set unix=x if(use)
+		set uniy=y if(use)
+		#
+		set VVx = newfunx if(use)
+		set VVy = newfuny if(use)
+		#
+		set ang=180.*atan2(VVy,VVx)/pi
+                # for cart coords only
+                # spherical coord mapping not done here but in code using interpolation
+		if(!($UNITVECTOR)){\
+		 set leng=$3*sqrt(VVx**2 + VVy**2)
+		}\
+		else{\
+		 #set leng=$3
+		 #if( sqrt(VVx**2 + VVy**2)  < 1e-30 )     { set leng = 0 }
+		 set len=sqrt(VVx**2 + VVy**2)
+		 set leng=(len<1e-30) ? 0 : $3
+		}
+                if(thebits & 0x100){\
+                 ticksize 0 0 0 0
+		 #limits (LG(realx)) realy
+		 #limits (LG(realx)) realy
+		   if(!(thebits & 0x010)){\
+		        #limits x1 x2
+		        limits unix uniy
+		     }
+                 if(thebits & 0x010){\
+		  define temptemp (0)
+		 }\
+		 else{\
+		  box
+		 }
+		 #vfield (LG(realx)) realy leng ang
+		 vfield unix uniy leng ang
+		 #vfield (LG(realx)) realy leng ang
+		 #vfield x1 x2 leng ang
+		 #vfield x y leng ang
+		 #set myx1=x1*1E3
+		 #set myx2=x2*pi
+		 #vfield myx1 myx2 leng ang
+                }\
+                else{\
+                 ticksize 0 0 0 0
+                 #vfield x1 x2 leng ang
+                 vfield realx realy leng ang
+                 if(thebits & 0x010){\
+		  define temptemp (0)
+		 }\
+                 else{\
+                  #mybox2d
+                  box
+		  angle 0
+ 		  labelaxes 0
+                  prepaxes reallyx reallyy $2
+		 }
+                }
+                #
+setupvpl 0      # 		
+		#
+		#
+                if(thebits & 0x001){\
+		  shrink3 newfunx reallyx reallyy $6 $7 $8 $9
+		  shrink3 newfuny reallyx reallyy $6 $7 $8 $9
+		  #
+		  set reallyx=x12new
+		  set reallyy=x22new
+		  set newfunx=newfunxnew
+		  set newfuny=newfunynew
+		  #
+                  # do not change limits if overlay
+		  if(!(thebits & 0x010)){\
+                   limits $txl $txh $tyl $tyh
+		  }
+                  #image ($nx,$ny) $xl $xh $yl $yh
+                  #image ($rnx,$rny)
+                }\
+                else{\
+                   define xl ($Sx)
+	   	   define xh ($Sx+$Lx)
+		   define yl ($Sy)
+		   define yh ($Sy+$Ly)
+                   # do not change limits if overlay
+		   if(!(thebits & 0x010)){\
+                    limits $xl $xh $yl $yh
+		   }
+                   define txl ($xl)
+                   define txh ($xh)
+                   define tyl ($yl)
+                   define tyh ($yh)
+                   define rxl (0)
+                   define rxh ($nx)
+                   define ryl (0)
+                   define ryh ($ny)
+                   define rnx ($nx)
+                   define rny ($ny)
+                   #image ($nx,$ny) $xl $xh $yl $yh
+                   #image ($nx,$ny) $rxl $rxh $ryl $ryh
+                   #image ($nx,$ny)
+		   define dx (($txh-$txl)/$nx)
+		   define dy (($tyh-$tyl)/$ny)
+		   set ii=1,$nx*$ny
+                   set x=(ii - $nx*int((ii-0.5)/$nx) - 0.5)*$dx+$xl
+		   set y=((int((ii-0.5)/$nx) + 0.5)*$dy)+$yl
+		   set ix = int((x -$xl)/$dx)
+		   set iy = int((y -$yl)/$dy)
+                   #set reallyx=x1
+                   #set reallyy=x2
+		   #set reallyx=reallyx
+                   #set reallyy=reallyy
+                }
+                #limits $rxl $rxh $ryl $ryh
+                #device ppm file1.ppm
+                # default(0) to not overlay
+                if(thebits & 0x010){\
+                   define temptemptemp (1)
+                }\
+                else{
+                 erase
+		 ctype default
+                 labeltime
+                }
+		#
+                #
+                #
+vpl	19	# eg. vpl dump0001.dat v  1 12 010  <0 0 0 0>
+		# vpl <file/0> <vec>   <v_leng> <12=xy,13=xz> <log&&overlay&&limits> <limits>
+		# log=1 0=normal
+		# overlay=0, no overlay, 1=overlay
+		# limits=0 normal limits, 1=specified at line <limits>
+                # this is a generic setup below(modified for 2 extra head entries
+		# can control how many vectors reduced by defining SKIPFACTOR
+		# can control length of vector as uniform or not with UNITVECTOR=1/0
+                if($?5 == 1) { define tobebits ($5) } else { define tobebits (0x0) }
+                #defaults
+                #expand 1.3
+                #location 3500 17250 3500 31000
+                #location 3500 31000 3500 31000
+                #window 2 1 1 1
+                myrd $1
+                if('$tobebits'=='000'){\
+                 set thebits=0x0
+		}\
+                else{\
+                 set thebits=0x$tobebits
+		}
+		#
+                setupplc1
+                #
+                setupplc2
+                #
+		setupvpl
+		#
 		set realx=reallyx if(use)
 		set realy=reallyy if(use)
 		#
