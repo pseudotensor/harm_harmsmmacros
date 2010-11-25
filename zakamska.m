@@ -58,11 +58,14 @@ doall  8        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 # !ln -s /u/ki/jmckinne/superdrive/nobackup/zakamska/theta10.0 theta10.0
                 # !ln -s /u/ki/jmckinne/superdrive/nobackup/zakamska/theta7.5 theta7.5
                 #
+                #
                 # doall 20 0 1660 0 14 7.5 pdumps idumps
                 #
                 # doall 20 0 1660 1 14 2.5 theta2.5/pdumps theta2.5/idumps
 		# doall 20 0 1660 1 14 5.0 theta5.0/pdumps theta5.0/idumps
                 # doall 20 0 1660 1 14 10.0 theta10.0/pdumps theta10.0/idumps
+                # doall 20 0 1660 1 14 0.0 theta0.0/pdumps theta0.0/idumps
+                #
 		#
 		# useful for testing (can set createtest below)
                 # doall 20 1660 1660 0 14 0 pdumpstest idumpstest
@@ -204,7 +207,7 @@ readonefieldline 2 # readonefieldline <dump#> <DOREADSornot>
 		   # 0 = no test
 		   # 1 = Br only
 		   # 2 = Bphi only
-		   define createtest 2
+		   define createtest 0
 		   #
 		   #
 		   #
