@@ -38,17 +38,17 @@ setupreads 0    #
 		}
 		#
 		#
-doall  8        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42 1=orange 2 =ki-rh39> <myangledeg> <tnrdegrees> <pdumpsdir> <idumpsdir>
-		#doall 20 0 1660 0 14 7.5 pdumps idumps
+doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42 1=orange 2 =ki-rh39> <myangledeg> <tnrdegrees> <pdumpsdir> <idumpsdir> <res mult>
+		#doall 20 0 1660 0 14 7.5 pdumps idumps 1
 		#
 		#
 		# production:
 		#
-		# doall 20 0 380 0  14 7.5 pdumps idumps
+		# doall 20 0 380 0  14 7.5 pdumps idumps 1
 		#
-		# doall 20 400 780 1 14 7.5 pdumps idumps
-		# doall 20 800 1180 1 14 7.5 pdumps idumps
-		# doall 20 1200 1660 1 14 7.5 pdumps idumps
+		# doall 20 400 780 1 14 7.5 pdumps idumps 1
+		# doall 20 800 1180 1 14 7.5 pdumps idumps 1
+		# doall 20 1200 1660 1 14 7.5 pdumps idumps 1
 		#
                 # production new:
                 #
@@ -59,24 +59,24 @@ doall  8        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 # !ln -s /u/ki/jmckinne/superdrive/nobackup/zakamska/theta7.5 theta7.5
                 #
                 #
-                # doall 20 0 1660 0 14 7.5 pdumps idumps
+                # doall 20 0 1660 0 14 7.5 pdumps idumps 1
                 #
-                # doall 20 0 1660 1 14 2.5 theta2.5/pdumps theta2.5/idumps
-		# doall 20 0 1660 1 14 5.0 theta5.0/pdumps theta5.0/idumps
-                # doall 20 0 1660 1 14 10.0 theta10.0/pdumps theta10.0/idumps
-                # doall 20 0 1660 1 14 0.0 theta0.0/pdumps theta0.0/idumps
+                # doall 20 0 1660 1 14 2.5 theta2.5/pdumps theta2.5/idumps 1
+		# doall 20 0 1660 1 14 5.0 theta5.0/pdumps theta5.0/idumps 1
+                # doall 20 0 1660 1 14 10.0 theta10.0/pdumps theta10.0/idumps 1
+                # doall 20 0 1660 1 14 0.0 theta0.0/pdumps theta0.0/idumps 1
                 #
 		#
 		# useful for testing (can set createtest below)
-                # doall 20 1660 1660 0 14 0 pdumpstest idumpstest
-		# doall 20 1660 1660 0 45 45 pdumpstest idumpstest
+                # doall 20 1660 1660 0 14 0 pdumpstest idumpstest 1
+		# doall 20 1660 1660 0 45 45 pdumpstest idumpstest 1
 		#
 		setupreads
 		#
 		# normal x,y,z
-		define inx 32
-		define iny 32
-		define inz 128
+		define inx (32*$9)
+		define iny (32*$9)
+		define inz (128*$9)
 		#
 		##############
                 # choose final box size
@@ -392,6 +392,7 @@ writeinterp 1   #
 		   if($createtest==0){\
 		          print + "$!fileout" '%g %g %g %g\n' {bu0 bu1 bu2 bu3}
 		       }
+                   #
 		   if($createtest==2){\
 		          print + "$!fileout" '%g %g %g %g\n' {Bu0 Bu1 Bu2 Bu3}
 		       }
