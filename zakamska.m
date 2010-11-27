@@ -71,6 +71,12 @@ doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 # doall 20 1660 1660 0 14 0 pdumpstest idumpstest 1
 		# doall 20 1660 1660 0 45 45 pdumpstest idumpstest 1
 		#
+                # higher resolution
+                # doall 20 0 400 1 14 5.0 theta5.0f2/pdumps theta5.0f2/idumps 2
+                # doall 20 420 800 1 14 5.0 theta5.0f2/pdumps theta5.0f2/idumps 2
+                # doall 20 820 1200 1 14 5.0 theta5.0f2/pdumps theta5.0f2/idumps 2
+                # doall 20 1220 1660 1 14 5.0 theta5.0f2/pdumps theta5.0f2/idumps 2
+                #
 		setupreads
 		#
 		# normal x,y,z
@@ -503,27 +509,33 @@ writeinterp 1   #
                    set h2=sprintf('%04d',$1) set _fname=h0i+h1+h2+h3
                    define ifoutall (_fname)
 		   #
-		   ! head -1 "$!ifoutrho0" > headtemp.$1.txt
-		   ! tail -n +2 "$!ifoutrho0" > temp1.$1.txt
-		   ! tail -n +2 "$!ifoutu" > temp2.$1.txt
-		   ! tail -n +2 "$!ifoutuu0" > temp3.$1.txt
-		   ! tail -n +2 "$!ifoutuu1" > temp4.$1.txt
-		   ! tail -n +2 "$!ifoutuu2" > temp5.$1.txt
-		   ! tail -n +2 "$!ifoutuu3" > temp6.$1.txt
-		   ! tail -n +2 "$!ifoutbu0" > temp7.$1.txt
-		   ! tail -n +2 "$!ifoutbu1" > temp8.$1.txt
-		   ! tail -n +2 "$!ifoutbu2" > temp9.$1.txt
-		   ! tail -n +2 "$!ifoutbu3" > temp10.$1.txt
-		   ! tail -n +2 "$!ifoutr" > temp11.$1.txt
-		   ! tail -n +2 "$!ifouth" > temp12.$1.txt
-		   ! tail -n +2 "$!ifoutph" > temp13.$1.txt
+                   define tempdir "temp.$!1/"
+                   #
+                   mkdir $tempdir
+                   #
+		   ! head -1 "$!ifoutrho0" > $tempdir/headtemp.$1.txt
+		   ! tail -n +2 "$!ifoutrho0" > $tempdir/temp1.$1.txt
+		   ! tail -n +2 "$!ifoutu" > $tempdir/temp2.$1.txt
+		   ! tail -n +2 "$!ifoutuu0" > $tempdir/temp3.$1.txt
+		   ! tail -n +2 "$!ifoutuu1" > $tempdir/temp4.$1.txt
+		   ! tail -n +2 "$!ifoutuu2" > $tempdir/temp5.$1.txt
+		   ! tail -n +2 "$!ifoutuu3" > $tempdir/temp6.$1.txt
+		   ! tail -n +2 "$!ifoutbu0" > $tempdir/temp7.$1.txt
+		   ! tail -n +2 "$!ifoutbu1" > $tempdir/temp8.$1.txt
+		   ! tail -n +2 "$!ifoutbu2" > $tempdir/temp9.$1.txt
+		   ! tail -n +2 "$!ifoutbu3" > $tempdir/temp10.$1.txt
+		   ! tail -n +2 "$!ifoutr" > $tempdir/temp11.$1.txt
+		   ! tail -n +2 "$!ifouth" > $tempdir/temp12.$1.txt
+		   ! tail -n +2 "$!ifoutph" > $tempdir/temp13.$1.txt
 		   #
-		   ! cat headtemp.$1.txt > "$!ifoutall"
-		   ! paste temp1.$1.txt temp2.$1.txt temp3.$1.txt temp4.$1.txt temp5.$1.txt temp6.$1.txt temp7.$1.txt temp8.$1.txt temp9.$1.txt temp10.$1.txt temp11.$1.txt temp12.$1.txt temp13.$1.txt > tempall.$1.txt
-		   ! cat tempall.$1.txt >> "$!ifoutall"
+		   ! cat $tempdir/headtemp.$1.txt > "$!ifoutall"
+		   ! paste $tempdir/temp1.$1.txt $tempdir/temp2.$1.txt $tempdir/temp3.$1.txt $tempdir/temp4.$1.txt $tempdir/temp5.$1.txt $tempdir/temp6.$1.txt $tempdir/temp7.$1.txt $tempdir/temp8.$1.txt $tempdir/temp9.$1.txt $tempdir/temp10.$1.txt $tempdir/temp11.$1.txt $tempdir/temp12.$1.txt $tempdir/temp13.$1.txt > $tempdir/tempall.$1.txt
+		   ! cat $tempdir/tempall.$1.txt >> "$!ifoutall"
 		   #
 		   # remove temp files
 		   ##! rm -rf headtemp.$1.txt temp1.$1.txt temp2.$1.txt temp3.$1.txt temp4.$1.txt temp5.$1.txt temp6.$1.txt temp7.$1.txt temp8.$1.txt temp9.$1.txt temp10.$1.txt temp11.$1.txt temp12.$1.txt temp13.$1.txt
+                   #
+                   rm -rf $tempdir
 		   #
 		   #
 		   #
