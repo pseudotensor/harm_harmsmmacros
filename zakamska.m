@@ -511,7 +511,7 @@ writeinterp 1   #
 		   #
                    define tempdir "temp.$!1/"
                    #
-                   mkdir $tempdir
+                   ! mkdir $tempdir
                    #
 		   ! head -1 "$!ifoutrho0" > $tempdir/headtemp.$1.txt
 		   ! tail -n +2 "$!ifoutrho0" > $tempdir/temp1.$1.txt
@@ -535,7 +535,7 @@ writeinterp 1   #
 		   # remove temp files
 		   ##! rm -rf headtemp.$1.txt temp1.$1.txt temp2.$1.txt temp3.$1.txt temp4.$1.txt temp5.$1.txt temp6.$1.txt temp7.$1.txt temp8.$1.txt temp9.$1.txt temp10.$1.txt temp11.$1.txt temp12.$1.txt temp13.$1.txt
                    #
-                   rm -rf $tempdir
+                   ! rm -rf $tempdir
 		   #
 		   #
 		   #
