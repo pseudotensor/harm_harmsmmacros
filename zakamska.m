@@ -25,11 +25,27 @@ writeheader 2   # writeheader <numcolumns> <filename with path>
 		print $2 {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord MBH QBH is ie js je ks ke whichdump whichdumpversion numcolumns}
 		#
 		#
+setupdoall 4    # setupdoall 0 0 0 1
+		#		
+		define DOREADS $1
+		define DOINTERPS $2
+                define DOWRITEPFILES $3
+                define DOWRITEALL $4
+		#		
 		#
-setupreads 0    #		
-		#
-		define DOREADS 1
-		define DOINTERPS 1
+setupreads 0    #
+		if($?DOREADS==0){\
+		 define DOREADS 1
+		}
+		if($?DOINTERPS==0){\
+		 define DOINTERPS 1
+		}
+		if($?DOWRITEPFILES==0){\
+		 define DOWRITEPFILES 1
+		}
+		if($?DOWRITEALL){\
+		 define DOWRITEALL 1
+		}
 		#
 		if($DOREADS){\
 		 jrdpheader3dold dumps/dump0000.head
@@ -210,6 +226,10 @@ doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
 		   #
 		   writeinterp $ii
 		   #
+		   if($DOWRITEALL){\
+		    collectinterps $ii
+		   }
+		   #
 		}
 		#
 		#
@@ -312,8 +332,10 @@ writeinterp 1   #
                    set h2=sprintf('%04d',$1) set _fname=h0p+h1+h2+h3
                    define foutrho0 (_fname)
 		   define fileout "$!foutrho0"
-		   writeheader 1 "$!fileout"
-		   print + "$!fileout" '%g\n' {rho0}
+                   if($DOWRITEPFILES==1){\
+                    writeheader 1 "$!fileout"
+		    print + "$!fileout" '%g\n' {rho0}
+		   }
 		   #
 		   # now interpolate scalar
                    set h1='irho0'
@@ -332,8 +354,10 @@ writeinterp 1   #
                    set h2=sprintf('%04d',$1) set _fname=h0p+h1+h2+h3
                    define foutu (_fname)
 		   define fileout "$!foutu"
-		   writeheader 1 "$!fileout"
-		   print + "$!fileout" '%g\n' {u}
+                   if($DOWRITEPFILES==1){\
+		    writeheader 1 "$!fileout"
+		    print + "$!fileout" '%g\n' {u}
+		   }
 		   #
 		   # now interpolate scalar
                    set h1='iu'
@@ -351,8 +375,10 @@ writeinterp 1   #
                    set h2=sprintf('%04d',$1) set _fname=h0p+h1+h2+h3
                    define foutuu (_fname)
 		   define fileout "$!foutuu"
-		   writeheader 4 "$!fileout"
-		   print + "$!fileout" '%g %g %g %g\n' {uu0 uu1 uu2 uu3}
+                   if($DOWRITEPFILES==1){\
+		    writeheader 4 "$!fileout"
+		    print + "$!fileout" '%g %g %g %g\n' {uu0 uu1 uu2 uu3}
+		   }
 		   #
 		   # now interpolate vector
                    set h1='iuu0'
@@ -400,16 +426,18 @@ writeinterp 1   #
                    set h2=sprintf('%04d',$1) set _fname=h0p+h1+h2+h3
                    define foutbu (_fname)
 		   define fileout "$!foutbu"
-		   writeheader 4 "$!fileout"
-		   #
-		   if($createtest==0){\
-		          print + "$!fileout" '%g %g %g %g\n' {bu0 bu1 bu2 bu3}
-		       }
-                   #
-		   if($createtest==2){\
-		          print + "$!fileout" '%g %g %g %g\n' {Bu0 Bu1 Bu2 Bu3}
-		       }
-		   #
+		   if($DOWRITEPFILES==1){\
+		    writeheader 4 "$!fileout"
+		    #
+		    if($createtest==0){\
+		           print + "$!fileout" '%g %g %g %g\n' {bu0 bu1 bu2 bu3}
+		        }
+                    #
+		    if($createtest==2){\
+		           print + "$!fileout" '%g %g %g %g\n' {Bu0 Bu1 Bu2 Bu3}
+		        }
+		    #
+		   }
 		   # now interpolate vector
                    set h1='ibu0'
 		   set h3='.txt'
@@ -457,8 +485,10 @@ writeinterp 1   #
                    set h2=sprintf('%04d',$1) set _fname=h0p+h1+h2+h3
                    define foutr (_fname)
 		   define fileout "$!foutr"
-		   writeheader 1 "$!fileout"
-		   print + "$!fileout" '%g\n' {r}
+		   if($DOWRITEPFILES==1){\
+		    writeheader 1 "$!fileout"
+		    print + "$!fileout" '%g\n' {r}
+		   }
 		   #
 		   # now interpolate scalar
                    set h1='ir'
@@ -476,8 +506,10 @@ writeinterp 1   #
                    set h2=sprintf('%04d',$1) set _fname=h0p+h1+h2+h3
                    define fouth (_fname)
 		   define fileout "$!fouth"
-		   writeheader 1 "$!fileout"
-		   print + "$!fileout" '%g\n' {h}
+		   if($DOWRITEPFILES==1){\
+		    writeheader 1 "$!fileout"
+		    print + "$!fileout" '%g\n' {h}
+		   }
 		   #
 		   # now interpolate scalar
                    set h1='ih'
@@ -495,8 +527,10 @@ writeinterp 1   #
                    set h2=sprintf('%04d',$1) set _fname=h0p+h1+h2+h3
                    define foutph (_fname)
 		   define fileout "$!foutph"
-		   writeheader 1 "$!fileout"
-		   print + "$!fileout" '%g\n' {ph}
+                   if($DOWRITEPFILES==1){\
+		    writeheader 1 "$!fileout"
+		    print + "$!fileout" '%g\n' {ph}
+		   }
 		   #
 		   # now interpolate scalar
                    set h1='iph'
@@ -508,6 +542,8 @@ writeinterp 1   #
 		   define fileout "$!ifoutph"
 		   doscalar $filein $fileout
 		   #
+		   #
+collectinterps 1   # collectinterps $1
 		   #
 		   # now collect all interpolated results into a single file
 		   #
