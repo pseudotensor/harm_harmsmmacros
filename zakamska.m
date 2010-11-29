@@ -47,8 +47,10 @@ setupreads 0    #
 		 define DOWRITEALL 1
 		}
 		#
+		# always read header for basic info
+		jrdpheader3dold dumps/dump0000.head
+		#
 		if($DOREADS){\
-		 jrdpheader3dold dumps/dump0000.head
 		 grid3d gdump
 		 jrdpcf3dudipole dump0000
 		}
@@ -93,9 +95,18 @@ doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 # doall 20 820 1200 1 14 5.0 theta5.0f2/pdumps theta5.0f2/idumps 2
                 # doall 20 1220 1660 1 14 5.0 theta5.0f2/pdumps theta5.0f2/idumps 2
                 #
+		#################
+                # ALL
+		#
+                # doall 20 0 1660 1 14 0.0 theta0.0/pdumps theta0.0/idumps 1
+                # doall 20 0 1660 1 14 2.5 theta2.5/pdumps theta2.5/idumps 1
+                # doall 20 0 1660 1 14 5.0 theta5.0/pdumps theta5.0/idumps 1
+                # doall 20 0 1660 1 14 7.5 theta7.5/pdumps theta7.5/idumps 1
+                # doall 20 0 1660 1 14 10.0 theta10.0/pdumps theta10.0/idumps 1
                 #
                 # doall 20 0 1660 1 14 0.0 theta0.0f2/pdumps theta0.0f2/idumps 2
                 # doall 20 0 1660 1 14 2.5 theta2.5f2/pdumps theta2.5f2/idumps 2
+                # doall 20 0 1660 1 14 5.0 theta5.0f2/pdumps theta5.0f2/idumps 2
                 # doall 20 0 1660 1 14 7.5 theta7.5f2/pdumps theta7.5f2/idumps 2
                 # doall 20 0 1660 1 14 10.0 theta10.0f2/pdumps theta10.0f2/idumps 2
                 #
