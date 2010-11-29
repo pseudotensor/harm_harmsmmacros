@@ -49,6 +49,7 @@ setupreads 0    #
 		#
 		# always read header for basic info
 		jrdpheader3dold dumps/dump0000.head
+		gsetupfromheader
 		#
 		if($DOREADS){\
 		 grid3d gdump
