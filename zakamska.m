@@ -77,6 +77,13 @@ doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 # doall 20 820 1200 1 14 5.0 theta5.0f2/pdumps theta5.0f2/idumps 2
                 # doall 20 1220 1660 1 14 5.0 theta5.0f2/pdumps theta5.0f2/idumps 2
                 #
+                #
+                # doall 20 0 1660 1 14 0.0 theta0.0f2/pdumps theta0.0f2/idumps 2
+                # doall 20 0 1660 1 14 2.5 theta2.5f2/pdumps theta2.5f2/idumps 2
+                # doall 20 0 1660 1 14 7.5 theta7.5f2/pdumps theta7.5f2/idumps 2
+                # doall 20 0 1660 1 14 10.0 theta10.0f2/pdumps theta10.0f2/idumps 2
+                #
+                #
 		setupreads
 		#
 		# normal x,y,z
@@ -509,7 +516,7 @@ writeinterp 1   #
                    set h2=sprintf('%04d',$1) set _fname=h0i+h1+h2+h3
                    define ifoutall (_fname)
 		   #
-                   define tempdir "temp.$!1/"
+                   define tempdir "$!pdumpsdir/temp.$!1/"
                    #
                    ! mkdir $tempdir
                    #
