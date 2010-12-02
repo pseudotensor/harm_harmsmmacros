@@ -123,6 +123,7 @@ doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 #
 		# other jet:
 		#
+		#
                 # doall 20 0 1660 1 14 0.0 theta0.0/pdumps theta0.0/idumps 1
                 # doall 20 0 1660 1 14 2.5 theta2.5/pdumps theta2.5/idumps 1
                 # doall 20 0 1660 1 14 5.0 theta5.0/pdumps theta5.0/idumps 1
@@ -597,7 +598,9 @@ collectinterps 1   # collectinterps $1
                    #
                    ! mkdir $tempdir
                    #
-		   ! head -1 "$!ifoutrho0" > $tempdir/headtemp.$1.txt
+		   #! head -1 "$!ifoutrho0" > $tempdir/headtemp.$1.txt
+		   writeheader 1 "$!tempdir/headtemp.$!1.txt"
+		   #
 		   ! tail -n +2 "$!ifoutrho0" > $tempdir/temp1.$1.txt
 		   ! tail -n +2 "$!ifoutu" > $tempdir/temp2.$1.txt
 		   ! tail -n +2 "$!ifoutuu0" > $tempdir/temp3.$1.txt
