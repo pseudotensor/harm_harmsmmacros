@@ -22,7 +22,9 @@ writeheader 2   # writeheader <numcolumns> <filename with path>
 		set whichdumpversion=1
 		set numcolumns=$1
 		#
-		print $2 {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord MBH QBH is ie js je ks ke whichdump whichdumpversion numcolumns}
+		# adds to normal dump file: myangledeg mytnrdegrees myiixmin myiixmax myiiymin myiiymax myiizmin myiizmax
+		#
+		print $2 {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord MBH QBH is ie js je ks ke whichdump whichdumpversion numcolumns myangledeg mytnrdegrees myiixmin myiixmax myiiymin myiiymax myiizmin myiizmax}
 		#
 		#
 setupdoall 4    # setupdoall 0 0 0 1
@@ -111,6 +113,22 @@ doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 # doall 20 0 1660 1 14 7.5 theta7.5f2/pdumps theta7.5f2/idumps 2
                 # doall 20 0 1660 1 14 10.0 theta10.0f2/pdumps theta10.0f2/idumps 2
                 #
+		# wider box at 2X resolution:
+		#
+                # doall 20 0 1660 1 20 0.0 theta0.0f2box20/pdumps theta0.0f2box20/idumps 2
+                # doall 20 0 1660 1 20 2.5 theta2.5f2box20/pdumps theta2.5f2box20/idumps 2
+                # doall 20 0 1660 1 20 5.0 theta5.0f2box20/pdumps theta5.0f2box20/idumps 2
+                # doall 20 0 1660 1 20 7.5 theta7.5f2box20/pdumps theta7.5f2box20/idumps 2
+                # doall 20 0 1660 1 20 10.0 theta10.0f2box20/pdumps theta10.0f2box20/idumps 2
+                #
+		# other jet:
+		#
+                # doall 20 0 1660 1 14 0.0 theta0.0/pdumps theta0.0/idumps 1
+                # doall 20 0 1660 1 14 2.5 theta2.5/pdumps theta2.5/idumps 1
+                # doall 20 0 1660 1 14 5.0 theta5.0/pdumps theta5.0/idumps 1
+                # doall 20 0 1660 1 14 7.5 theta7.5/pdumps theta7.5/idumps 1
+                # doall 20 0 1660 1 14 10.0 theta10.0/pdumps theta10.0/idumps 1
+                #
                 #
 		setupreads
 		#
@@ -143,6 +161,8 @@ doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 #define tnrdegrees (2.5)
                 #define tnrdegrees (7.5)
                 define tnrdegrees ($6)
+		#
+		set mytnrdegrees=$tnrdegrees
                 #
 		# normal x,y,z
 		define ixmin (-40*sin($tnrdegrees/myangledeg*pi/2) - (myRout)*cos($tnrdegrees/myangledeg*pi/2))
@@ -168,6 +188,15 @@ doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 define iizmax ($iymax)
 		#
                 echo $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax
+		#
+		set myiixmin=$iixmin
+		set myiixmax=$iixmax
+		set myiiymin=$iiymin
+		set myiiymax=$iiymax
+		set myiizmin=$iizmin
+		set myiizmax=$iizmax
+		#
+		# 
 		#
 		if($4==0){\
 		 define program "iinterp"
