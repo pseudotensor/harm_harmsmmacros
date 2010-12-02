@@ -123,12 +123,11 @@ doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 #
 		# other jet:
 		#
-		#
-                # doall 20 0 1660 1 14 0.0 theta0.0/pdumps theta0.0/idumps 1
-                # doall 20 0 1660 1 14 2.5 theta2.5/pdumps theta2.5/idumps 1
-                # doall 20 0 1660 1 14 5.0 theta5.0/pdumps theta5.0/idumps 1
-                # doall 20 0 1660 1 14 7.5 theta7.5/pdumps theta7.5/idumps 1
-                # doall 20 0 1660 1 14 10.0 theta10.0/pdumps theta10.0/idumps 1
+                # doall 20 0 1660 1 194 180.0 theta180.0/pdumps theta180.0/idumps 1
+                # doall 20 0 1660 1 194 182.5 theta182.5/pdumps theta182.5/idumps 1
+                # doall 20 0 1660 1 194 185.0 theta185.0/pdumps theta185.0/idumps 1
+                # doall 20 0 1660 1 194 187.5 theta187.5/pdumps theta187.5/idumps 1
+                # doall 20 0 1660 1 194 190.0 theta190.0/pdumps theta190.0/idumps 1
                 #
                 #
 		setupreads
@@ -144,8 +143,6 @@ doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 # don't choose 1.0 or else will show ragged edges at outer surface of sphere that was interpolated
                 #
 		#need to capture full jet in Cartesian space
-		set zin=-40
-		set zout=Rout*0.9
 		#set myangledeg=40
 		# opening half-angle to show (twice nominal to capture sheath)
 		#set myangledeg=10
@@ -157,7 +154,6 @@ doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
 		#
                 # myangledeg=\pi/4*180/pi=45deg gives myRout=zout
 		#
-		set myRout=zout*tan(myangledeg*pi/180)
 		#
                 #define tnrdegrees (2.5)
                 #define tnrdegrees (7.5)
@@ -165,14 +161,38 @@ doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
 		#
 		set mytnrdegrees=$tnrdegrees
                 #
-		# normal x,y,z
-		define ixmin (-40*sin($tnrdegrees/myangledeg*pi/2) - (myRout)*cos($tnrdegrees/myangledeg*pi/2))
-		define ixmax (2*myRout+$ixmin)
-		define iymin (-myRout)
-		define iymax (myRout)
-		define izmin (zin)
-		# avoid going out to boundary to avoid artifacts right at outer boundary
-		define izmax (zout)
+		#
+		#
+		if(myangledeg<=90 && myangledeg>=-90){\
+		       set zin=-40
+		       set zout=Rout*0.9
+		       set myRout=zout*abs(tan(myangledeg*pi/180))
+		       # normal x,y,z
+		       define ixmin (-40*sin($tnrdegrees/myangledeg*pi/2) - (myRout)*cos($tnrdegrees/myangledeg*pi/2))
+		       define ixmax (2*myRout+$ixmin)
+		       define iymin (-myRout)
+		       define iymax (myRout)
+		       define izmin (zin)
+		       # avoid going out to boundary to avoid artifacts right at outer boundary
+		       define izmax (zout)
+		}
+		#
+		if(myangledeg>90 && myangledeg<=270){\
+		       set zin=-Rout*0.9
+		       set zout=-40
+		       set myRout=abs(zin*tan((myangledeg-180)*pi/180))
+		       # normal x,y,z
+		       define ixmintemp (-40*sin($tnrdegrees/myangledeg*pi/2) - (myRout)*cos($tnrdegrees/myangledeg*pi/2))
+		       define ixmaxtemp (2*myRout+$ixmin)
+		       define ixmin (-$ixmaxtemp)
+		       define ixmax (-$ixmintemp)
+		       define iymin (-myRout)
+		       define iymax (myRout)
+		       define izmin (zin)
+		       # avoid going out to boundary to avoid artifacts right at outer boundary
+		       define izmax (zout)
+		}
+		#
 		#
 		######################################
                 # startxc,endxc, etc. for iinterp
