@@ -613,7 +613,7 @@ makeiallhead 1     #
 		! tr -d '\\n' < "$!tempdir/headtemp0.$!1.txt" > "$!tempdir/headtemp1.$!1.txt"
 		! echo "" > "$!tempdir/headtemp2.$!1.txt"
 		! cat "$!tempdir/headtemp1.$!1.txt" "$!tempdir/headtemp2.$!1.txt" > "$!tempdir/headtemp.$!1.txt"
-		! rm -rf "$!tempdir/headtemp1.$!1.txt" "$!tempdir/headtemp2.$!1.txt"
+		! rm -rf $tempdir/headtemp0.$1.txt "$!tempdir/headtemp1.$!1.txt" "$!tempdir/headtemp2.$!1.txt"
 		#
 		   #
 collectinterps 1   # collectinterps $1
