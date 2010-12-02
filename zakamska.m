@@ -45,7 +45,7 @@ setupreads 0    #
 		if($?DOWRITEPFILES==0){\
 		 define DOWRITEPFILES 1
 		}
-		if($?DOWRITEALL){\
+		if($?DOWRITEALL==0){\
 		 define DOWRITEALL 1
 		}
 		#
