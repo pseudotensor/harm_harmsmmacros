@@ -610,7 +610,7 @@ makeiallhead 1     #
 		! head -1 "$!ifoutrho0" > $tempdir/headtemp0.$1.txt
 		#writeheader 1 "$!tempdir/headtemp.$!1.txt"
 		print + "$!tempdir/headtemp0.$!1.txt" {myangledeg mytnrdegrees myiixmin myiixmax myiiymin myiiymax myiizmin myiizmax}
-		! tr -d '\n' < "$!tempdir/headtemp0.$!1.txt" > "$!tempdir/headtemp1.$!1.txt"
+		! tr -d '\\n' < "$!tempdir/headtemp0.$!1.txt" > "$!tempdir/headtemp1.$!1.txt"
 		! echo "" > "$!tempdir/headtemp2.$!1.txt"
 		! cat "$!tempdir/headtemp1.$!1.txt" "$!tempdir/headtemp2.$!1.txt" > "$!tempdir/headtemp.$!1.txt"
 		! rm -rf "$!tempdir/headtemp1.$!1.txt" "$!tempdir/headtemp2.$!1.txt"
