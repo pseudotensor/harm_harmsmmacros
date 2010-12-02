@@ -113,14 +113,6 @@ doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 # doall 20 0 1660 1 14 7.5 theta7.5f2/pdumps theta7.5f2/idumps 2
                 # doall 20 0 1660 1 14 10.0 theta10.0f2/pdumps theta10.0f2/idumps 2
                 #
-		# wider box at 2X resolution:
-		#
-                # doall 20 0 1660 1 20 0.0 theta0.0f2box20/pdumps theta0.0f2box20/idumps 2
-                # doall 20 0 1660 1 20 2.5 theta2.5f2box20/pdumps theta2.5f2box20/idumps 2
-                # doall 20 0 1660 1 20 5.0 theta5.0f2box20/pdumps theta5.0f2box20/idumps 2
-                # doall 20 0 1660 1 20 7.5 theta7.5f2box20/pdumps theta7.5f2box20/idumps 2
-                # doall 20 0 1660 1 20 10.0 theta10.0f2box20/pdumps theta10.0f2box20/idumps 2
-                #
 		# other jet:
 		#
                 # doall 20 0 1660 1 194 180.0 theta180.0/pdumps theta180.0/idumps 1
@@ -129,6 +121,15 @@ doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 # doall 20 0 1660 1 194 187.5 theta187.5/pdumps theta187.5/idumps 1
                 # doall 20 0 1660 1 194 190.0 theta190.0/pdumps theta190.0/idumps 1
                 #
+		# wider box at 2X resolution:
+		#
+                # doall 20 0 1660 1 20 0.0 theta0.0f2box20/pdumps theta0.0f2box20/idumps 2
+                # doall 20 0 1660 1 20 2.5 theta2.5f2box20/pdumps theta2.5f2box20/idumps 2
+                # doall 20 0 1660 1 20 5.0 theta5.0f2box20/pdumps theta5.0f2box20/idumps 2
+                # doall 20 0 1660 1 20 7.5 theta7.5f2box20/pdumps theta7.5f2box20/idumps 2
+                # doall 20 0 1660 1 20 10.0 theta10.0f2box20/pdumps theta10.0f2box20/idumps 2
+                #
+		#
                 #
 		setupreads
 		#
@@ -182,8 +183,8 @@ doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
 		       set zout=-40
 		       set myRout=abs(zin*tan((myangledeg-180)*pi/180))
 		       # normal x,y,z
-		       define ixmintemp (-40*sin($tnrdegrees/myangledeg*pi/2) - (myRout)*cos($tnrdegrees/myangledeg*pi/2))
-		       define ixmaxtemp (2*myRout+$ixmin)
+		       define ixmintemp (-40*sin(($tnrdegrees-180)/(myangledeg-180)*pi/2) - (myRout)*cos(($tnrdegrees-180)/(myangledeg-180)*pi/2))
+		       define ixmaxtemp (2*myRout+$ixmintemp)
 		       define ixmin (-$ixmaxtemp)
 		       define ixmax (-$ixmintemp)
 		       define iymin (-myRout)
