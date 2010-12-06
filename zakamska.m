@@ -115,11 +115,11 @@ doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
                 #
 		# other jet:
 		#
-                # doall 20 0 1660 1 194 180.0 theta180.0/pdumps theta180.0/idumps 1
-                # doall 20 0 1660 1 194 182.5 theta182.5/pdumps theta182.5/idumps 1
-                # doall 20 0 1660 1 194 185.0 theta185.0/pdumps theta185.0/idumps 1
-                # doall 20 0 1660 1 194 187.5 theta187.5/pdumps theta187.5/idumps 1
-                # doall 20 0 1660 1 194 190.0 theta190.0/pdumps theta190.0/idumps 1
+                # doall 20 0 1660 1 14 180.0 theta180.0/pdumps theta180.0/idumps 1
+                # doall 20 0 1660 1 14 182.5 theta182.5/pdumps theta182.5/idumps 1
+                # doall 20 0 1660 1 14 185.0 theta185.0/pdumps theta185.0/idumps 1
+                # doall 20 0 1660 1 14 187.5 theta187.5/pdumps theta187.5/idumps 1
+                # doall 20 0 1660 1 14 190.0 theta190.0/pdumps theta190.0/idumps 1
                 #
 		# wider box at 2X resolution:
 		#
@@ -169,8 +169,18 @@ doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
 		       set zout=Rout*0.9
 		       set myRout=zout*abs(tan(myangledeg*pi/180))
 		       # normal x,y,z
-		       define ixmin (-40*sin($tnrdegrees/myangledeg*pi/2) - (myRout)*cos($tnrdegrees/myangledeg*pi/2))
-		       define ixmax (2*myRout+$ixmin)
+		       if(abs($tnrdegrees-0.0)<90.0){\
+		        define ixmin (-40*sin($tnrdegrees/myangledeg*pi/2) - (myRout)*cos($tnrdegrees/myangledeg*pi/2))
+		        define ixmax (2*myRout+$ixmin)
+		       }
+		       #
+		       if(abs($tnrdegrees-0.0)>90.0){\
+		        define ixmintemp (-40*sin(($tnrdegrees-180)/(myangledeg)*pi/2) - (myRout)*cos(($tnrdegrees-180)/(myangledeg)*pi/2))
+		        define ixmaxtemp (2*myRout+$ixmintemp)
+		        define ixmin (-$ixmaxtemp)
+		        define ixmax (-$ixmintemp)
+		       }
+		       #
 		       define iymin (-myRout)
 		       define iymax (myRout)
 		       define izmin (zin)
@@ -180,7 +190,7 @@ doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
 		#
 		if(myangledeg>90 && myangledeg<=270){\
 		       set zin=-Rout*0.9
-		       set zout=-40
+		       set zout=40
 		       set myRout=abs(zin*tan((myangledeg-180)*pi/180))
 		       # normal x,y,z
 		       define ixmintemp (-40*sin(($tnrdegrees-180)/(myangledeg-180)*pi/2) - (myRout)*cos(($tnrdegrees-180)/(myangledeg-180)*pi/2))
