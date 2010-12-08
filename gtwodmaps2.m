@@ -1,3 +1,6 @@
+rdmacros 0           #
+		jre gtwodmaps2.m
+		#
 setupareamap   8
                      # original nx,ny given as size parameter, which means
 		     # total nx,ny is +1 that since includes fail point too
@@ -97,7 +100,7 @@ pickmap 3      #
      define time (timepre[0])
      set steppre=realnstep if(($1==realnstep))
      define nstep (steppre[0])
-     
+     #
      set $3=$2 if(realnstep==$1)
      #
 markfail 0
@@ -266,34 +269,52 @@ animfrpl	17	#
 rdprobe 1 #
 		da $1
 		lines 1 100000000
-		read {pii 1 pjj 2 pk 3 pstep 4 pt 5 pp 6}
-		set pilist=pii if((pjj==pjj[0])&&(pk==pk[0])&&(pstep==pstep[0]))
-		set pjlist=pjj if((pii==pii[0])&&(pk==pk[0])&&(pstep==pstep[0]))
-		set pklist=pk if((pii==pii[0])&&(pjj==pjj[0])&&(pstep==pstep[0]))
-		set numperlist=((pii==pii[0])&&(pjj==pjj[0])&&(pk==pk[0])) ? 1 : 0
+		read {pii 1 pjj 2 pkk 3 ppr 4 pstep 5 pt 6 pp 7}
+		set piilist=pii if((pjj==pjj[0])&&(pkk==pkk[0])&&(ppr==ppr[0])&&(pstep==pstep[0]))
+		set pjjlist=pjj if((pii==pii[0])&&(pkk==pkk[0])&&(ppr==ppr[0])&&(pstep==pstep[0]))
+		set pkklist=pkk if((pii==pii[0])&&(pjj==pjj[0])&&(ppr==ppr[0])&&(pstep==pstep[0]))
+		set pprlist=ppr if((pii==pii[0])&&(pjj==pjj[0])&&(pkk==pkk[0])&&(pstep==pstep[0]))
+		set numperlist=((pii==pii[0])&&(pjj==pjj[0])&&(ppr==ppr[0])) ? 1 : 0
 		set numper=SUM(numperlist)
 		printprobe
 printprobe 0 # 
-		print {pilist pjlist pklist}
-pickprobe 3     #
-		set use=((pii==$1)&&(pjj==$2)&&(pk==$3)) ? 1 : 0
+		print {piilist pjjlist pkklist pprlist}
+pickprobe 4     #
+		# pickprobe <i> <j> <k> <prim>
+		# 
+		set use=((pii==$1)&&(pjj==$2)&&(pkk==$3)&&(ppr==$4)) ? 1 : 0
 		set pri=pii if(use)
 		set prj=pjj if(use)
+		set prk=pkk if(use)
+		set prpr=ppr if(use)
 		set prstep=pstep if(use)
 		set prt=pt if(use)
 		set pr=pp if(use)
 		#
+		if(dimen(r)>1){\
+		       echo "Setting pickr"
+		       set pickindex=pri[0]+prj[0]*$nx+prk[0]*$nx*$ny
+		       set pickr=r[pickindex]
+		       set pickh=h[pickindex]
+		       set pickph=ph[pickindex]
+		}
+		#
 overlayprobe 0  #
 		plc 0 lrho
-		do iii=0,dimen(pilist)-1,1 {\
-		 do jjj=0,dimen(pjlist)-1,1 {\
-		       set xpos=$txl+($txh-$txl)/$nx*pilist[$iii]
-		       set ypos=$tyl+($tyh-$tyl)/$ny*pjlist[$jjj]
+		#
+		#
+		do iii=0,dimen(piilist)-1,1 {\
+		 do jjj=0,dimen(pjjlist)-1,1 {\
+		       set xpos=$txl+($txh-$txl)/$nx*piilist[$iii]
+		       set ypos=$tyl+($tyh-$tyl)/$ny*pjjlist[$jjj]
 		       define myxpos (xpos)
 		       define myypos (ypos)
 		       relocate $myxpos $myypos
-		       define mylabel (sprintf('%d',$iii)+'x'+sprintf('%d',$jjj))
-		       expand 0.75 ctype cyan putlabel 5 $mylabel
+		       #define mylabel (sprintf('%d',$iii)+'x'+sprintf('%d',$jjj))
+ 		       define mypii (piilist[$iii])
+ 		       define mypjj (pjjlist[$jjj])
+		       define mylabel (sprintf('%d',$mypii)+'x'+sprintf('%d',$mypjj))
+		       expand 0.4 ctype cyan putlabel 5 $mylabel
 		       expand 1.01
 		 }
 		}
@@ -343,61 +364,99 @@ calcfreqs1    0 #
 		set omegakrisco2=1/(risco2**(3/2)+a)
 		set frisco2=omegakrisco2/(2*pi)
 		#
+		set omegak6=1/(6**(3/2)+a)
+		set f6=omegak6/(2*pi)
+		#
+		set omegakr=1/(pickr**(3/2)+a)
+		set fradius=omegakr/(2*pi)
+		#
 		set Gconst=6.670E-8
 		set Cconst=2.99792458E10
 		set msun=1.989E33
 		set Mass=14*msun
-		set lowernu=113*Gconst*Mass/Cconst**3
-		set uppernu=168*Gconst*Mass/Cconst**3
+		set tlunit=Gconst*Mass/Cconst**3
+		# 113 and 168 Hz in GM=c=1 units:
+		set lllowernu=41*tlunit
+		set llowernu=67*tlunit
+		set lowernu=113*tlunit
+		set uppernu=168*tlunit
 		#
 		set fupper=uppernu
 		set flower=lowernu
+		set fllower=llowernu
+		set flllower=lllowernu
+		#
+		#
 		#
 showlinfreqs1 0 #
 		#
 		calcfreqs1
 		#
-		ctype red vertline frisco
-		ctype blue vertline frisco2
-		ctype yellow vertline fupper
-		ctype green vertline flower
+		ctype red vertline (frisco/fradius)
+		ctype blue vertline (frisco2/fradius)
+		ctype yellow vertline (fupper/fradius)
+		ctype green vertline (flower/fradius)
+		ctype yellow red (fllower/fradius)
+		ctype green red (flllower/fradius)
+		ctype cyan vertline (f6/fradius)
 		ctype default
 		#
 showlogfreqs1 0 #
 		#
-		calcfreqs1
-		#
-		set lfrisco=lg(frisco)
-		set lfrisco2=lg(frisco2)
-		set lfupper=lg(fupper)
-		set lflower=lg(flower)
+		set lfrisco=lg(frisco/fradius)
+		set lfrisco2=lg(frisco2/fradius)
+		set lfupper=lg(fupper/fradius)
+		set lflower=lg(flower/fradius)
+		set lfllower=lg(fllower/fradius)
+		set lflllower=lg(flllower/fradius)
+		set lf6=lg(f6/fradius)
+		set lfradius=lg(fradius/fradius)
 		#
 		ctype red vertline lfrisco
 		ctype blue vertline lfrisco2
 		ctype yellow vertline lfupper
 		ctype green vertline lflower
+		ctype red vertline lfllower
+		ctype red vertline lflllower
+		ctype cyan vertline lf6
 		ctype default
 		#
-showfftlim 2      #
-		fftreallim 1 prt pr freq pow $1 $2
-		set rfreq=freq if(freq>0)
+showfftlim 3      #
+		#
+		calcfreqs1
+		#
+		#
+		fftreallim 1 prt $1 freq pow $2 $3
+		set rfreq=freq/fradius if(freq>0)
 		set rpow=pow if(freq>0)
+		smooth rpow rpows50 50
+		smooth rpow rpows10 10
+		smooth rpow rpows5 5
+		#
+		define x1label "f/f_r"
+		define x2label "Power"
+		#
 		ctype default pl 0 rfreq rpow 1100
-		smooth rpow rpows 10
-		ctype red pl 0 rfreq rpows 1110
-		smooth rpow rpows 5
-		ctype blue pl 0 rfreq rpows 1110
+		#ctype red pl 0 rfreq rpows10 1100
+		ctype red pl 0 rfreq rpows10 1110
+		ctype blue pl 0 rfreq rpows5 1110
+		ctype cyan pl 0 rfreq rpows50 1110
 		showlogfreqs1
 		#
+		#set pickpoint=dimen(rpow)-1
+		set pickpoint=0
+		ctype yellow pl 0 rfreq (rpows10[pickpoint]*(rfreq/rfreq[pickpoint])**(-2)) 1110
 		#
-showfft 3       #
-		pickprobe $1 $2 $3
 		#
-		set reducef=100
+showfft 7       # showfft <pickprobe args> <reducfactor> <startfactor> <endfactor>
+		#
+		pickprobe $1 $2 $3 $4
+		#
+		set reducef=$5
 		define totalreduce (reducef-1)
 		set size=dimen(prt)
-		set start=size/4
-		set end=size
+		set start=size*$6
+		set end=size*$7
 		#
 		set newsize=(size-start)/reducef
 		#
@@ -421,9 +480,12 @@ showfft 3       #
 		   #
 		   set trueend=dimen(prt$iiii)-1
 		   fftreallim 1 prt$iiii pr$iiii freqtemp powtemp 0 trueend
-		   set rfreqtemp=freqtemp if(freqtemp>0)
+		   set rfreqtemp=freqtemp/fradius if(freqtemp>0)
 		   set rpowtemp=powtemp if(freqtemp>0)
 		   set rpowsum=rpowsum+rpowtemp
+		   set dimen1=dimen(rpowtemp)
+		   set dimen2=dimen(rpowsum)
+		   print {dimen1 dimen2}
 		   ctype default pl 0 rfreqtemp rpowtemp 1100
 		}
 		set rpow=rpowsum/reducef
@@ -432,6 +494,12 @@ showfft 3       #
 		plotshowfft
 		#
 plotshowfft     0 #
+		#
+		calcfreqs1
+		#
+		define x1label "f/f_r"
+		define x2label "Power"
+		#
 		ctype default pl 0 rfreq rpow 1100
 		smooth rpow rpows 10
 		ctype red pl 0 rfreq rpows 1110
@@ -453,7 +521,7 @@ sonogramc 1     # sonogramc 50
 		       set start=$iii
 		       set end=start+$1
 		       fftreallim 1 prt pr freq pow start end
-		       set rfreq=freq if(freq>0)
+		       set rfreq=freq/fradius if(freq>0)
 		       set rpow=pow if(freq>0)
 		       #
 		       do jjj=0,$1/2-1,1 {\
@@ -473,7 +541,7 @@ sonogram 1      # sonogram 50
 		       set start=$iii*$1
 		       set end=start+$1
 		       fftreallim 1 prt pr freq pow start end
-		       set rfreq=freq if(freq>0)
+		       set rfreq=freq/fradius if(freq>0)
 		       set rpow=pow if(freq>0)
 		       #
 		       do jjj=0,$1/2-1,1 {\
@@ -490,7 +558,7 @@ printsonogram 0 #
 		#
 showsonogram 2  # showsonogram sonogrampow 50
 		define snx ($2/2)
-		define sny (dimen(sonogrampow)/$snx)
+		define sny (INT(dimen(sonogrampow)/$snx))
 		set ii=0,$snx*$sny-1
 		set ix = ii%$snx
 		set iy = int(ii/$snx)
