@@ -1535,6 +1535,8 @@ jrdpheader3d 1  # assume directory put in name
                     # also read-in nprlist data
                     jrdpnprlist
 		    #
+                    gsetupfromheader
+                    gcalcheader
 		    #
 jrdpnprlist  0      #
                     da nprlistinfo.dat
@@ -1557,6 +1559,8 @@ jrdpheader3dold 1  #
 		    {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord}
 		    #
 		    #
+                    gsetupfromheader
+                    gcalcheader
 		    #
 jrdpheader2d 1    #
 		da dumps/$1
@@ -1581,6 +1585,8 @@ jrdpheader2d 1    #
 		    #
 		    if(_hslope==-1) { echo "error with hslope $myhostname $mydirname" }
 		    #
+                    gsetupfromheader
+                    gcalcheader
 		    #
 jrdp1col 2	#
 		echo "jrdp1col"
@@ -2023,9 +2029,22 @@ gcalcbasic      0 # physics stuff
 		  set K = Sden
 		}
 		#
+gcalcheader 0   #                
 		#set _rhor = 1+sqrt(1-a**2)
 		set _rhor = _MBH + sqrt(_MBH**2 - _a**2)
 		define rhor (_rhor)
+		#
+		if(a>=0.0){\
+		 riscocalc 0 risco # assumes stuff always goes positive
+		 riscocalc 1 risco2 # assumes stuff always goes positive
+		}
+		if(a<0.0){\
+		 riscocalc 1 risco # assumes stuff always goes positive
+		 riscocalc 0 risco2 # assumes stuff always goes positive
+		}
+		riscocalc 0 riscoprograde
+		riscocalc 1 riscoretrograde
+		elinfcalc risco tdeinfisco tdlinfisco
 		#
 		#
 gcalcmore       0     #              
@@ -2131,18 +2150,6 @@ gcalcmore       0     #
 		 dualb flux6$ii 2 $ii
 		 dualb flux7$ii 3 $ii
 		}
-		#
-		if(a>=0.0){\
-		 riscocalc 0 risco # assumes stuff always goes positive
-		 riscocalc 1 risco2 # assumes stuff always goes positive
-		}
-		if(a<0.0){\
-		 riscocalc 1 risco # assumes stuff always goes positive
-		 riscocalc 0 risco2 # assumes stuff always goes positive
-		}
-		riscocalc 0 riscoprograde
-		riscocalc 1 riscoretrograde
-		elinfcalc risco tdeinfisco tdlinfisco
 		#
 		set efl2=-(omega3*lfl+(einf-linf*omega3)*mfl)
 		set girat=efl/efl2

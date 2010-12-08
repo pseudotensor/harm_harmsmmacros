@@ -175,10 +175,8 @@ doall  9        # doall <animskip> <startanim> <endanim> <whichmachine 0=ki-rh42
 		       }
 		       #
 		       if(abs($tnrdegrees-0.0)>90.0){\
-		        define ixmintemp (-40*sin(($tnrdegrees-180)/(myangledeg)*pi/2) - (myRout)*cos(($tnrdegrees-180)/(myangledeg)*pi/2))
-		        define ixmaxtemp (2*myRout+$ixmintemp)
-		        define ixmin (-$ixmaxtemp)
-		        define ixmax (-$ixmintemp)
+		        define ixmin (-40*sin(($tnrdegrees-180)/(myangledeg)*pi/2) - (myRout)*cos(($tnrdegrees-180)/(myangledeg)*pi/2))
+		        define ixmax (2*myRout+$ixmintemp)
 		       }
 		       #
 		       define iymin (-myRout)

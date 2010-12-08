@@ -1,6 +1,7 @@
 getmacros 0     #
 		gogrmhd
 		jre mri.m
+		jre gtwodmaps2.m
 		#
 dothick1 0      #
 		#
@@ -85,3 +86,96 @@ betanoble 0     #
 		# betaavg2=46
 		#
 		#
+myoverlay1 0     #		
+		# bin2txt 1 2 0 -1 3 136 64 128 1 dump0000.bin dump0000 d 73
+		#
+		# jrdpcf3duentropy dump0000
+		# jrdpcf3duentropy dump0080
+		# jrdpcf3duentropy dump0160
+		#
+		overlayprobe
+		#
+probestuff1 0    #
+		# use mergeprobe.sh
+		#
+		jrdpheader3d dumps/dump0000
+		#
+		#
+		rdprobe probe.dat.grmhd.0016
+		pickprobe 16 32 0 0
+		#
+		pl 0 prt pr
+		#
+		showfft 16 32 0 0  1 0.25 1
+		#
+		set dimenit=dimen(prt)
+		print {dimenit}
+		#
+		#
+		#
+		set ratio=dimenit/64
+		print {ratio}
+		#
+		sonogram 64
+		showsonogram sonogrampow 64
+		#
+		#
+showfftpr1 1    #		
+		pickprobe 16 34 0 $1
+		set mypr1=(pr < 0 ? -1 : 1)
+		set mypr2=pr**2
+		showfftlim mypr2 2100 6513
+		#
+showfftpr2 4    #		
+		pickprobe $1 $2 $3 $4
+		showfftlim pr 2100 6513
+		#
+showfftpr3 4    #		
+		pickprobe $1 $2 $3 $4
+		set mypr2=pr**2
+		showfftlim mypr2 2100 6513
+		#
+foundqpos0  0   #
+		showfftpr2 0 32 0 7
+		showfftpr2 0 34 0 7
+		showfftpr2 0 36 0 7
+		showfftpr2 0 38 0 7
+		#
+		# matches yellow and green lines:
+		showfftpr2 8 36 0 7
+		#
+		#
+		#maybe at risco:
+		showfftpr2 24 32 0 0
+		#
+eners1 0        #
+		# use mergeeners.sh
+		# clean nan's and inf's out
+		#
+		jrdp3dener
+		#
+		#
+		jrdp3denergen enerother4.out -1E30 1E30
+		#
+qpointime1 0     #
+		set prt=t
+		showfftlim u0dot3 0 6500
+		#
+		# hard to notice, but there in time plot
+		pl 0 t u0dot3
+		set god=6810.75-6107.3 print {god}
+		set frat=1/god/fradius print {frat}
+		set fs=1/god/tlunit print {fs}
+		#
+		# 21Hz for GRS1915+105
+		#
+		# but, u0dot3 all screwed up like u0dot1?
+		#
+		pl 0 t u0dot4
+		set prt=t
+		showfftlim u0dot4 0 6500
+		#
+		set god=9756.55-6218.95 print {god}
+		set fs=1/god/tlunit print {fs}
+		#
+		# 4Hz for GRS1915+105

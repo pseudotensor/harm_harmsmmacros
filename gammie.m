@@ -327,6 +327,39 @@ energrb3d 1	# more directions to consider in general
 		    #
 		    enerdefs1
 		    #
+gammieener3d 1	# more directions to consider in general
+		# below 9 is normal 8 with ENTROPY (on regardles of dissipation on/off)
+                set NPR=9
+                set NUMDISSVERSIONS=18
+		set totalcol= 2 + NPR + 2*NPR*6 + NPR*2 + 2 + NUMDISSVERSIONS
+                print {totalcol}
+		#
+		da $1
+		lines 1 10000000
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		    {  t nstep \
+		       u0 u1 u2 u3 u4 u5 u6 u7 u8 \
+		    u0dot0 u1dot0 u2dot0 u3dot0 u4dot0 u5dot0 u6dot0 u7dot0 u8dot0 \
+		    u0dot1 u1dot1 u2dot1 u3dot1 u4dot1 u5dot1 u6dot1 u7dot1 u8dot1 \
+		    u0dot2 u1dot2 u2dot2 u3dot2 u4dot2 u5dot2 u6dot2 u7dot2 u8dot2 \
+		    u0dot3 u1dot3 u2dot3 u3dot3 u4dot3 u5dot3 u6dot3 u7dot3 u8dot3 \
+		    u0dot4 u1dot4 u2dot4 u3dot4 u4dot4 u5dot4 u6dot4 u7dot4 u8dot4 \
+		    u0dot5 u1dot5 u2dot5 u3dot5 u4dot5 u5dot5 u6dot5 u7dot5 u8dot5 \
+		    u0cum0 u1cum0 u2cum0 u3cum0 u4cum0 u5cum0 u6cum0 u7cum0 u8cum0 \
+		    u0cum1 u1cum1 u2cum1 u3cum1 u4cum1 u5cum1 u6cum1 u7cum1 u8cum1 \
+		    u0cum2 u1cum2 u2cum2 u3cum2 u4cum2 u5cum2 u6cum2 u7cum2 u8cum2 \
+		    u0cum3 u1cum3 u2cum3 u3cum3 u4cum3 u5cum3 u6cum3 u7cum3 u8cum3 \
+		    u0cum4 u1cum4 u2cum4 u3cum4 u4cum4 u5cum4 u6cum4 u7cum4 u8cum4 \
+		    u0cum5 u1cum5 u2cum5 u3cum5 u4cum5 u5cum5 u6cum5 u7cum5 u8cum5 \
+		    u0fl u1fl u2fl u3fl u4fl u5fl u6fl u7fl u8fl \
+		    u0src u1src u2src u3src u4src u5src u6src u7src u8src \
+		    divbmax divbavg \
+		    diss0 diss1 diss2 diss3 diss4 diss5 diss6 diss7 \
+		    diss8 diss9 diss10 diss11 diss12 diss13 diss14 diss15 \
+                    diss16 diss17 }
+		    #
+		    enerdefs1
+		    #
 gammieener3do1 1	# more directions to consider in general
 		# need 132
 		# 2 + NPR + 2*NPR*6 + NPR*2 + 2 + NUMDISSVERSIONS(18 currently)
@@ -2138,8 +2171,8 @@ gammienew3d 0  #
          define dx ($dx1)
          define dy ($dx2)
          define dz ($dx3)
-	 define Lx (r[$nx*$ny-1]-r[0])
-         define Ly (h[$nx*$ny-1]-h[0])
+	 define Lx (r[$nx*$ny*$nz-1]-r[0])
+         define Ly (h[$nx*$ny*$nz-1]-h[0])
          define Lz (ph[$nx*$ny*$nz-1]-ph[0])
          define ncpux1 1
          define ncpux2 1
