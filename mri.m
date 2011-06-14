@@ -20,7 +20,11 @@ mricalc 0               #
 		set dxrat=mydr/mydP
 		#
                 set omegarot=uu3/uu0*dxdxp33
-		set omegamax=3*sqrt(3)/2/pi*ABS(omegarot)
+                # gammie, but may not be good:
+		#set omegamax=3*sqrt(3)/2/pi*ABS(omegarot)
+                # as in Noble and Penna
+		set omegamax=ABS(omegarot)/(2*pi)
+                #
 		set taumax=2*pi/omegamax
 		#
 		set lambdamax=sqrt(val2)/omegamax
@@ -42,6 +46,8 @@ mricalc 0               #
 		#
 		# number of zones per wavelength
 		set idx1mri=1/dx1mri
+                # so in the end, with new version get:
+                # idx2mri = lambda2max/mydH = valh*2*pi/omegarot
 		set idx2mri=1/dx2mri
 		set idx3mri=1/dx3mri
 		set idx1fakemri=1/dx1fakemri

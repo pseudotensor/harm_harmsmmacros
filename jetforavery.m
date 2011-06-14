@@ -425,12 +425,21 @@ processdump 0   #
 		##############
 		# KS -> BL
 		#
-		set Sigma=r**2+(a*cos(h))**2
 		set Delta=r**2-2*r+a**2
+		set Sigma=r**2+(a*cos(h))**2
 		set gdetbl=Sigma*sin(h)
+                set AA=(r**2+a**2)**2-a**2*Delta*sin(h)**2
 		#
 		set geofactbl=Delta*sin(h)**2
 		#
+                #set gv300bl=-1+2*r/(r**2+a**2*cos(h)**2)
+                set gv300bl=-(1-2*r/Sigma)
+                set gv311bl=Sigma/Delta
+		set gv322bl=Sigma
+                #set gv333bl=sin(h)**2*((a**2+r**2)**2-a**2*Delta*sin(h)**2)/Sigma
+                set gv333bl=AA*sin(h)**2/Sigma
+                set gv303bl=-4*a*r*sin(h)**2/Sigma
+                #
 		#
 		#
 		set uu0bl=uu0ks-2*r/Delta*uu1ks
@@ -446,6 +455,8 @@ processdump 0   #
 		set ud1bl=(2*r*ud0ks+Delta*ud1ks+a*ud3ks)/Delta
 		set ud2bl=ud2ks
 		set ud3bl=ud3ks
+                #
+                #
 		#
 		##############
 		# KS -> BL
@@ -472,6 +483,15 @@ processdump 0   #
 		set bd2bl=bd2ks
 		set bd3bl=bd3ks
 		#
+                #
+                #
+                set denombl=1.0/(1.0+ud1bl*uu1bl+ud2bl*uu2bl+ud3bl*uu3bl)
+                #
+                set B1bl=uu0bl*(-(bu2bl*ud2bl+bu3bl*ud3bl)*uu1bl+bu1bl*(1.0+ud2bl*uu2bl+ud3bl*uu3bl))*denombl
+                set B2bl=uu0bl*(-(bu1bl*ud1bl+bu3bl*ud3bl)*uu2bl+bu2bl*(1.0+ud1bl*uu1bl+ud3bl*uu3bl))*denombl
+                set B3bl=uu0bl*(-(bu2bl*ud2bl+bu2bl*ud2bl)*uu3bl+bu3bl*(1.0+ud2bl*uu2bl+ud1bl*uu1bl))*denombl
+                #
+                # B3bl=*FBL^{3t} = *FKSP^{\mu\nu} L^3_\mu L^t_\nu
 		#
 		#
 computenumberdensity 0 #

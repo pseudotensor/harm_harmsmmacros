@@ -9,6 +9,10 @@ dothick1 0      #
 		jrdpcf3duentropy dump0000
 		#jrdpcf3duentropy dump0096
 		#jrdpcf3duentropy dump0170
+		#
+		# bin2txt 1 2 0 -1 3 136 64 128 1 gdump.bin gdump d 126
+		# 
+		#
 		#grid3d gdump
                 grid3ddxdxp gdump
                 set dxdxp1=dxdxp11
@@ -32,10 +36,13 @@ dothick1 0      #
 		plc0 0 (HoR-1) 010
 		#
                 # how many wavelengths inside the disk
-                # \gtrsim 3 for thickdisk1
+                # \gtrsim 1 (was 3 with old omegamax) for thickdisk1
                 set hor=cs/(r*uu3*dxdxp33)
                 set hdisk=hor*r
-		plc 0 (hdisk/lambda2max)
+		plc 0 (rho-1)
+		plc 0 idx2mri 010
+		plc0 0 (HoR-1) 010
+		plc 0 (hdisk/lambda2max) 010
                 #
 		plc 0 (rho-1)
 		plc 0 (sqrt(cs2)/(R*omegak)) 010
@@ -57,22 +64,24 @@ betanoble 0     #
 		set rhocut=0.25
 		#set rhocut=0.2
 		#
-		set god1=p*gdet if(rho>rhocut)
-		set god2=gdet if(rho>rhocut)
+		set use=(rho>rhocut && r<100 ? 1 : 0)
+		#
+		set god1=p*gdet if(use)
+		set god2=gdet if(use)
 		set pgavg=SUM(god1)/SUM(god2)
 		#
-		set god1=(bsq/2.0)*gdet if(rho>rhocut)
-		set god2=gdet if(rho>rhocut)
+		set god1=(bsq/2.0)*gdet if(use)
+		set god2=gdet if(use)
 		set pbavg=SUM(god1)/SUM(god2)
 		#
 		set betanoble=pgavg/pbavg
 		#
-		set god1=gdet*(p/(bsq/2)) if(rho>rhocut)
-		set god2=gdet if(rho>rhocut)
+		set god1=gdet*(p/(bsq/2)) if(use)
+		set god2=gdet if(use)
 		set betaavg=SUM(god1)/SUM(god2)
 		#
-		set god1=gdet*ibeta if(rho>rhocut)
-		set god2=gdet if(rho>rhocut)
+		set god1=gdet*ibeta if(use)
+		set god2=gdet if(use)
 		set ibetaavg=SUM(god1)/SUM(god2)
 		set betaavg2=1/ibetaavg
 		#
