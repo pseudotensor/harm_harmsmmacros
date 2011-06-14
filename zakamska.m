@@ -671,7 +671,7 @@ doscalar 2	# doscalar $foutrho0 $ifoutrho0
 		define DEFAULTVALUETYPE 0
                 #
 		if($DOINTERPS){\
-		 ! $program $DATATYPE $interptype $READHEADERDATA $WRITEHEADERDATA \
+		 ! $program -oldargs $DATATYPE $interptype $READHEADERDATA $WRITEHEADERDATA \
 		    1 $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
                     1 $iinx $iiny $iinz 0 0 $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
 		    $iRin $iRout $iR0 $ihslope $idefcoord $dofull2pi \
@@ -691,7 +691,7 @@ dovector 3      # dovector <2,3,4,5> $foutbu $ifoutbu3
 		}
 		#
 		if($DOINTERPS){\
-		 ! $program $1 $interptype $READHEADERDATA $WRITEHEADERDATA \
+		 ! $program -oldargs $1 $interptype $READHEADERDATA $WRITEHEADERDATA \
                     1 $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
                     1 $iinx $iiny $iinz 0 0 $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
 		    $iRin $iRout $iR0 $ihslope $idefcoord $dofull2pi $tnrdegrees \

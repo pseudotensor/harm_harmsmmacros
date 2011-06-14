@@ -29,6 +29,7 @@ mirrordiag 1     # CENTER or FACE1 across equator
                 #ctype default pl 0 r $1diff
                 #ctype red points r $1diff
                 #
+                set adel=0
                 errorsym $1
                 #
 mirrordel 1     # CENTER or FACE1 across equator
@@ -65,6 +66,7 @@ mirrordel 1     # CENTER or FACE1 across equator
 		#ctype default pl 0 r $1diff
 		#ctype red points r $1diff
 		#
+                set adel=0
 		errorsym $1
 		#
 errorsym1 1      #
@@ -88,10 +90,10 @@ errorsym 1      #
 		print {avgrat peakrat peak2rat}
 		print {avgratasym peakratasym peak2ratasym}
 		#
-		if(avgrat<avgratasym){
+		if(avgrat<avgratasym || adel==0){
 		   plc0 0 ($1diff/$1asum)
 		}
-		if(avgrat>avgratasym){
+		if(avgrat>avgratasym || adel==1){
 		   plc0 0 ($1sum/$1asum)
 		}
 		#
@@ -126,6 +128,7 @@ mirrordel2 1    # FACE2 or CORN across equator
 		ctype default pl 0 r $1diff
 		ctype red points r $1diff
 		#
+                set adel=0
 		errorsym $1
 		#
 mirroradel 1    #
@@ -157,6 +160,7 @@ mirroradel 1    #
 		ctype default pl 0 r $1diff
 		ctype red points r $1diff
 		#
+                set adel=1
 		errorsym $1
 		#
 mirroradel2 1   # FACE2 or CORN across equator
@@ -189,6 +193,7 @@ mirroradel2 1   # FACE2 or CORN across equator
 		ctype red points r $1diff
 		#
 		#
+                set adel=1
 		errorsym $1
 		#
 		# e.g.

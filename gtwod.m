@@ -1486,6 +1486,37 @@ jrdpflux	1	# for fluxdump in harm
 		       p3r0 p3r1 p3r2 p3r3 p3r4 p3r5 p3r6 p3r7 \
 		    }
 	        #
+jrdpfluxfull	1	# for fluxdump in harm when using jrdpcf3duentropy
+		jrdpheader3d dumps/$1
+		da dumps/$1
+		lines 2 10000000
+		#
+                # NPR=9
+		# NPR*4 + NPR*3*(1+2+2) = 171
+		#
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		    {\
+		       dUg0 dUg1 dUg2 dUg3 dUg4 dUg5 dUg6 dUg7 dUg8\
+		       dUr10 dUr11 dUr12 dUr13 dUr14 dUr15 dUr16 dUr17 dUr18 \
+		       dUr20 dUr21 dUr22 dUr23 dUr24 dUr25 dUr26 dUr27 dUr28 \
+		       dUr30 dUr31 dUr32 dUr33 dUr34 dUr35 dUr36 dUr37 dUr38 \
+		       F10 F11 F12 F13 F14 F15 F16 F17 F18 \
+		       F1l0 F1l1 F1l2 F1l3 F1l4 F1l5 F1l6 F1l7 F1l8 \
+		       F1r0 F1r1 F1r2 F1r3 F1r4 F1r5 F1r6 F1r7 F1r8 \
+		       p1l0 p1l1 p1l2 p1l3 p1l4 p1l5 p1l6 p1l7 p1l8 \
+		       p1r0 p1r1 p1r2 p1r3 p1r4 p1r5 p1r6 p1r7 p1r8 \
+		       F20 F21 F22 F23 F24 F25 F26 F27 F28 \
+		       F2l0 F2l1 F2l2 F2l3 F2l4 F2l5 F2l6 F2l7 F2l8 \
+		       F2r0 F2r1 F2r2 F2r3 F2r4 F2r5 F2r6 F2r7 F2r8 \
+		       p2l0 p2l1 p2l2 p2l3 p2l4 p2l5 p2l6 p2l7 p2l8 \
+		       p2r0 p2r1 p2r2 p2r3 p2r4 p2r5 p2r6 p2r7 p2r8 \
+		       F30 F31 F32 F33 F34 F35 F36 F37 F38 \
+		       F3l0 F3l1 F3l2 F3l3 F3l4 F3l5 F3l6 F3l7 F3l8 \
+		       F3r0 F3r1 F3r2 F3r3 F3r4 F3r5 F3r6 F3r7 F3r8 \
+		       p3l0 p3l1 p3l2 p3l3 p3l4 p3l5 p3l6 p3l7 p3l8 \
+		       p3r0 p3r1 p3r2 p3r3 p3r4 p3r5 p3r6 p3r7 p3r8 \
+		    }
+	        #
  		#
 jrdp2d	1	#
 		jrdpheader2d $1
@@ -3271,11 +3302,14 @@ agplc 17	# animplc 'dump' r 000 <0 0 0 0>
 		  set h2=sprintf('%04d',$ii) set _fname=h1+h2
                   define filename (_fname)
                     #
-		  set h1='fluxdump' set _fname=h1+h2
-                  define filenameflux (_fname)
+                    set h1='fluxdump' set _fname=h1+h2
+                    define filenameflux (_fname)
                     #
 		  set h1='debug' set _fname=h1+h2
                   define filenamedebug (_fname)
+                    #
+		  set h1='vpotdump' set _fname=h1+h2
+                  define filenamevpot (_fname)
                     #
                     #
 		  #jrdp2d $filename
@@ -3286,19 +3320,35 @@ agplc 17	# animplc 'dump' r 000 <0 0 0 0>
 		  #
 		  # GRB STUFF
 		  #echo $filename $filenameflux $filenamedebug
-                  jrdp3du $filename
-                  jrdpflux $filenameflux
-                  jrdpdebug $filenamedebug
+                  #jrdp3du $filename
+                  #jrdpflux $filenameflux
+                  #jrdpdebug $filenamedebug
+                    #
+                    jrdpcf3duentropy $filename
+                    #jrdpflux $filenameflux
+                    jrdpdebug $filenamedebug
+                    jrdpvpot $filenamevpot
+                    #
+                    #
+                    #
+                    if(0){\
+                     define POSCONTCOLOR "cyan"
+                     define NEGCONTCOLOR "cyan"
+                     plc 0 nsin 001 3 10 0.8 2.3
+		     define POSCONTCOLOR "red"
+		     define NEGCONTCOLOR "default"
+                    }
                   #
-		  #fieldcalc 0 aphi
+                  #
+                    fieldcalc 0 aphi
 		  #jre mode2.m
 		  #alfvenvp
 		  #interpsingle aphi 128 128 -2.5 2.5 -2.5 2.5
 		  #readinterp aphi
 		  #define CONSTLEVELS 1
-		  #faraday
+                    faraday
 		  #device postencap $filename.$ii
-                  if($numsend==2){ plc0  0 $2}\
+                  if($numsend==2){ plc0  0 $2 $3}\
                   else{\
                    if($numsend==3){  plc0  0 $2 $3}\
                    else{\
