@@ -231,7 +231,7 @@ fieldplot  1    #
                 #
                 #define program "/data/jon/latestcode/harmgit/iinterp"
 		#define program "/data/jon/iinterp"
-		define program "/home/jon/iinterp"
+		define program "/home/jon/bin/iinterp"
                 #
 		#
 		#
