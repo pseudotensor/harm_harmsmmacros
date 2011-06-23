@@ -60,14 +60,20 @@ fullhair1 0     #
 		#
 showfullhair 0  # get figure for ATP proposal
 		#
-		cd /data/jon/lyutikov_nohair/spin0_nodisk_Rout40_coord0
+		#cd /data/jon/lyutikov_nohair/spin0_nodisk_Rout40_coord0
+		cd /data/jon/lyutikov_nohair/spin0_nodisk_Rout40_coord0_128sq_sigmafix/
+		#cd /data/jon/lyutikov_nohair/spin0_nodisk_Rout40_coord0_64sq_sigmafix/
+		#
 		fullhair1
 		da data.txt
 		lines 1 10000000
 		read {t1 1 bsqenergyrat1 2 trueenergyrat1 3 absfluxrat1 4}
 		#
 		#
-		cd /data/jon/lyutikov_nohair/spin0.99_nodisk_Rout40_coord0
+		#cd /data/jon/lyutikov_nohair/spin0.99_nodisk_Rout40_coord0
+		cd /data/jon/lyutikov_nohair/spin0.99_nodisk_Rout40_coord0_128sq_sigmafix/
+		#cd /data/jon/lyutikov_nohair/spin0.99_nodisk_Rout40_coord0_64sq_sigmafix/
+		#
 		fullhair1
 		da data.txt
 		lines 1 10000000
@@ -75,45 +81,58 @@ showfullhair 0  # get figure for ATP proposal
 		#
 		#
 		#
-		cd /data/jon/lyutikov_nohair/spin0_nodisk_Rout40_coord0_ffde
+		# below one is 64^2
+		#cd /data/jon/lyutikov_nohair/spin0_nodisk_Rout40_coord0_ffde
+		cd /data/jon/lyutikov_nohair/spin0_nodisk_Rout40_coord0_128sq_ffde/
+		#
 		fullhair1
 		da data.txt
 		lines 1 10000000
 		read {t3 1 bsqenergyrat3 2 trueenergyrat3 3 absfluxrat3 4}
 		#
 		#
-		cd /data/jon/lyutikov_nohair/spin0.99_nodisk_Rout40_coord0_ffde
+		#cd /data/jon/lyutikov_nohair/spin0.99_nodisk_Rout40_coord0_ffde
+		cd /data/jon/lyutikov_nohair/spin0.99_nodisk_Rout40_coord0_128sq_ffde/
+		#
 		fullhair1
 		da data.txt
 		lines 1 10000000
 		read {t4 1 bsqenergyrat4 2 trueenergyrat4 3 absfluxrat4 4}
 		#
-		cd /data/jon/lyutikov_nohair/spin0.99_nodisk_Rout40_coord0_128sq/
-		fullhair1
-		da data.txt
-		lines 1 10000000
-		read {t5 1 bsqenergyrat5 2 trueenergyrat5 3 absfluxrat5 4}
-		#
-		cd /data/jon/lyutikov_nohair/spin0_nodisk_Rout40_coord0_128sq/
-		fullhair1
-		da data.txt
-		lines 1 10000000
-		read {t6 1 bsqenergyrat6 2 trueenergyrat6 3 absfluxrat6 4}
+		if(0){\
+		 #
+		 cd /data/jon/lyutikov_nohair/spin0.99_nodisk_Rout40_coord0_128sq/
+		 fullhair1
+		 da data.txt
+		 lines 1 10000000
+		 read {t5 1 bsqenergyrat5 2 trueenergyrat5 3 absfluxrat5 4}
+		 #
+		 cd /data/jon/lyutikov_nohair/spin0_nodisk_Rout40_coord0_128sq/
+		 fullhair1
+		 da data.txt
+		 lines 1 10000000
+		 read {t6 1 bsqenergyrat6 2 trueenergyrat6 3 absfluxrat6 4}
+		}
 		#
 		##########
 		#
 		plotfullhair
 		#
 		#
-plotfullhair 0  #		
+plotfullhair 1  #
+		define DOPRINTEPS ($1)
+		#
 		cd /data/jon/lyutikov_nohair/atp
 		#
+		fdraft
 		define x1label "t c^3/GM"
 		define x2label "\Phi_{\rm EM}"
 		#
-		if(0){\
+		if($DOPRINTEPS){\
 		 device postencap phivst.eps
 		}
+		#
+		ctype default
 		#
 		ltype 1 pl 0 t1 absfluxrat1 0101 0 2000 1E-16 1E2
 		ltype 2 pl 0 t2 absfluxrat2 0111 0 2000 1E-16 1E2
@@ -137,12 +156,12 @@ plotfullhair 0  #
 		#
 		ltype 0 pl 0 t1 ((t1-1)**(-4)) 0111 0 2000 1E-16 1E2
 		#
-		if(1){\
+		if(0){\
 		 ltype 5 pl 0 t5 absfluxrat5 0111 0 2000 1E-16 1E2
 		 ltype 6 pl 0 t6 absfluxrat6 0111 0 2000 1E-16 1E2
 		}
 		#
-		if(0){\
+		if($DOPRINTEPS){\
 		 device X11
 		 !cp phivst.eps /data/jon/lyutikov_nohair/atp/
 		}
@@ -178,11 +197,11 @@ fieldplot  1    #
 		############ axisymmetry (half-plane)
                 if(1){\
                 define ixmin (0) # Cart x
-                define ixmax (20)
+                define ixmax (10)
                 define iymin (-1E-15) # Cart y
                 define iymax (1E-15)
-                define izmin (-10) # Cart z
-                define izmax (10)
+                define izmin (-5) # Cart z
+                define izmax (5)
                 }
                 #
 		######################################
@@ -211,7 +230,8 @@ fieldplot  1    #
                 #
                 #
                 #define program "/data/jon/latestcode/harmgit/iinterp"
-                define program "/data/jon/iinterp"
+		#define program "/data/jon/iinterp"
+		define program "/home/jon/iinterp"
                 #
 		#
 		#
@@ -327,7 +347,8 @@ writeheader 2   # writeheader <numcolumns> <filename with path>
 		#
 showfieldplot 0 # get figure for ATP proposal
 		#
-		cd /data/jon/lyutikov_nohair/spin0.99_nodisk_Rout40_coord0/
+		#cd /data/jon/lyutikov_nohair/spin0.99_nodisk_Rout40_coord0/
+		cd /data/jon/lyutikov_nohair/spin0.99_nodisk_Rout40_coord0_128sq_sigmafix/
 		#
 		###############################################
 		fieldplot 40
