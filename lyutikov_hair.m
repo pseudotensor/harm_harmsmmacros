@@ -58,6 +58,123 @@ fullhair1 0     #
 		}
 		#
 		#
+showfullhair2 1  # get figure for no hair paper
+		#
+		#
+		cd /data1/jmckinne/
+		cd spin0_nodisk_Rout40_coord0_128sq_sigmafix_nsfield/
+		cd spin0_nodisk_Rout40_coord0_128sq_sigmafix1E2higher_nsfield/
+		cd spin0_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg3_nsfield/
+		cd spin0_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg4_nsfield/
+		#
+		fullhair1
+		da data.txt
+		lines 1 10000000
+		read {t1 1 bsqenergyrat1 2 trueenergyrat1 3 absfluxrat1 4}
+		#
+		#
+		cd /data1/jmckinne/
+		cd spin0.99_nodisk_Rout40_coord0_128sq_sigmafix_nsfield/
+		# below not done yet
+		#cd spin0.99_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg3_nsfield/
+		#
+		fullhair1
+		da data.txt
+		lines 1 10000000
+		read {t2 1 bsqenergyrat2 2 trueenergyrat2 3 absfluxrat2 4}
+		#
+		#
+		cd /data1/jmckinne/
+		cd spin0_nodisk_Rout40_coord0_128sq_sigmafix_nsfield_ffde/
+		#
+		fullhair1
+		da data.txt
+		lines 1 10000000
+		read {t3 1 bsqenergyrat3 2 trueenergyrat3 3 absfluxrat3 4}
+		#
+		#
+		cd /data1/jmckinne/
+		cd spin0.99_nodisk_Rout40_coord0_128sq_sigmafix_nsfield_ffde/
+		#
+		fullhair1
+		da data.txt
+		lines 1 10000000
+		read {t4 1 bsqenergyrat4 2 trueenergyrat4 3 absfluxrat4 4}
+		#
+		#
+		if(1){\
+		 #
+		 cd /data1/jmckinne/
+		 # below not quite done yet
+		 cd spin0.99_nodisk_Rout40_coord0_1286416sq_sigmafix_nsfield/
+		 #
+		 fullhair1
+		 da data.txt
+		 lines 1 10000000
+		 read {t5 1 bsqenergyrat5 2 trueenergyrat5 3 absfluxrat5 4}
+		 #
+		 #
+		 cd /data/jon/lyutikov_nohair/spin0_nodisk_Rout40_coord0_128sq/
+		 fullhair1
+		 #
+		 da data.txt
+		 lines 1 10000000
+		 read {t6 1 bsqenergyrat6 2 trueenergyrat6 3 absfluxrat6 4}
+		}
+		#
+		##########
+		#
+		plotfullhair2 $1
+		#
+plotfullhair2 1 #
+		define DOPRINTEPS ($1)
+		#
+		cd /data/jon/lyutikov_nohair/paper/
+		#
+		fdraft
+		define x1label "t c^3/GM"
+		define x2label "\Phi_{\rm EM}"
+		#
+		if($DOPRINTEPS){\
+		 device postencap phivst.eps
+		}
+		#
+		ctype default
+		#
+		ltype 1 pl 0 t1 absfluxrat1 0101 0 2000 1E-16 1E2
+		ltype 2 pl 0 t2 absfluxrat2 0111 0 2000 1E-16 1E2
+		ltype 3 pl 0 t3 absfluxrat3 0111 0 2000 1E-16 1E2
+		ltype 4 pl 0 t4 absfluxrat4 0111 0 2000 1E-16 1E2
+		#
+		if(1){\
+		 set decayt1=100.0
+		 set myfit1=5*exp(-(t1-500)/decayt1)
+		 ltype 0 pl 0 t1 myfit1 0111 0 2000 1E-16 1E2
+		 #
+		 set decayt2=200.0
+		 set myfit2=5*exp(-(t2-500)/decayt2)
+		 ltype 0 pl 0 t2 myfit2 0111 0 2000 1E-16 1E2
+		 #
+		 set decayt3=20.0
+		 set myfit3=1*exp(-(t3+0)/decayt3)
+		 ltype 0 pl 0 t3 myfit3 0111 0 2000 1E-16 1E2
+		 #
+		}
+		#
+		ltype 0 pl 0 t1 ((t1-1)**(-4)) 0111 0 2000 1E-16 1E2
+		#
+		if(1){\
+		 ltype 5 pl 0 t5 absfluxrat5 0111 0 2000 1E-16 1E2
+		 ltype 6 pl 0 t6 absfluxrat6 0111 0 2000 1E-16 1E2
+		}
+		#
+		if($DOPRINTEPS){\
+		 device X11
+		 !cp phivst.eps /data/jon/lyutikov_nohair/paper/
+		}
+		#
+		#
+		#
 showfullhair 0  # get figure for ATP proposal
 		#
 		#cd /data/jon/lyutikov_nohair/spin0_nodisk_Rout40_coord0
