@@ -72,23 +72,25 @@ showfullhair2 1  # get figure for no hair paper
 		cd spin0_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg3_nsfield/
 		cd /data1/jmckinne/
 		cd spin0_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg4_nsfield/
+		# below not quite done yet:
+		cd /data1/jmckinne/
+		spin0_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg5.5_nsfield
 		#
 		fullhair1
 		da data.txt
 		lines 1 10000000
-		read {t1 1 bsqenergyrat1 2 trueenergyrat1 3 absfluxrat1 4}
+		read {t1 1 bsqenergyrat1 2 trueenergyrat1 3 absfluxrat1 4 eta1 5}
 		#
 		#
 		cd /data1/jmckinne/
 		cd spin0.99_nodisk_Rout40_coord0_128sq_sigmafix_nsfield/
-		# below not done yet
-		#cd /data1/jmckinne/
-		#cd spin0.99_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg3_nsfield/
+		cd /data1/jmckinne/
+		cd spin0.99_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg3_nsfield/
 		#
 		fullhair1
 		da data.txt
 		lines 1 10000000
-		read {t2 1 bsqenergyrat2 2 trueenergyrat2 3 absfluxrat2 4}
+		read {t2 1 bsqenergyrat2 2 trueenergyrat2 3 absfluxrat2 4 eta2 5}
 		#
 		#
 		cd /data1/jmckinne/
@@ -97,7 +99,7 @@ showfullhair2 1  # get figure for no hair paper
 		fullhair1
 		da data.txt
 		lines 1 10000000
-		read {t3 1 bsqenergyrat3 2 trueenergyrat3 3 absfluxrat3 4}
+		read {t3 1 bsqenergyrat3 2 trueenergyrat3 3 absfluxrat3 4 eta3 5}
 		#
 		#
 		cd /data1/jmckinne/
@@ -106,28 +108,29 @@ showfullhair2 1  # get figure for no hair paper
 		fullhair1
 		da data.txt
 		lines 1 10000000
-		read {t4 1 bsqenergyrat4 2 trueenergyrat4 3 absfluxrat4 4}
+		read {t4 1 bsqenergyrat4 2 trueenergyrat4 3 absfluxrat4 4 eta4 5}
 		#
 		#
 		if(1){\
 		 #
 		 # below not quite done yet
 		 cd /data1/jmckinne/
-		 cd spin0_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg3_nsfield/
+		 cd spin0.1_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg5.5_nsfield/
 		 #
 		 fullhair1
 		 da data.txt
 		 lines 1 10000000
-		 read {t5 1 bsqenergyrat5 2 trueenergyrat5 3 absfluxrat5 4}
+		 read {t5 1 bsqenergyrat5 2 trueenergyrat5 3 absfluxrat5 4 eta5 5}
 		 #
 		 #
+		 # below not quite done yet
 		 cd /data1/jmckinne/
 		 cd spin0.99_nodisk_Rout40_coord0_1286416sq_sigmafix_nsfield/
 		 fullhair1
 		 #
 		 da data.txt
 		 lines 1 10000000
-		 read {t6 1 bsqenergyrat6 2 trueenergyrat6 3 absfluxrat6 4}
+		 read {t6 1 bsqenergyrat6 2 trueenergyrat6 3 absfluxrat6 4 eta6 5}
 		}
 		#
 		##########
@@ -610,6 +613,17 @@ efficiencies 0  #
 		stresscalc 1
 		#
 		effonetime
+		#
+		#################
+		set god= (gdet*$dx2*$dx3*rho*uu1*(-1)) if(ti==2)
+		set myh=h if(ti==2)
+		#
+		pl 0 myh god
+		#
+		###############
+		#
+		plc0 0 lbrel
+		plc0 0 uu1 010
 		#
 		#
 effonetime 0  #
