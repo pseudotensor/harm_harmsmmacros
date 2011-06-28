@@ -42,6 +42,9 @@ computethings 0 #
 		#
 		set omegarat=(omegaf2*2*pi/(0.5*_a/(2*$rhor)))
 		#
+		#
+		effonetime
+		#
 fullhair1 0     #
 		set startanim=0
 		set endanim=40
@@ -53,7 +56,7 @@ fullhair1 0     #
 		  #
 		  hair1 $ii
 		  #
-		  print + data.txt {_t bsqenergyrat trueenergyrat absfluxrat}
+		  print + data.txt {_t bsqenergyrat trueenergyrat absfluxrat eta}
 		  #
 		}
 		#
@@ -536,3 +539,105 @@ showbh 0        #
                 connect x y
                 lweight 1
                 #
+chargehair 0    #
+		#
+ 		jrdpcf3duentropy dump0040
+		grid3d gdump
+		#
+		# value of |b| at "infinity" or some other reasonable reference location to normalize everything
+		set Bnorm=sqrt(4.022990227)*sqrt(4.0*pi)
+		set Bnorm=sqrt(0.00338138)*sqrt(4.0*pi)
+		#
+		faraday
+		# Q = 1/(4\pi) \int F^{tr}\detg d\theta d\phi
+                # F^{tr} = fuu01
+		# 4*pi accounts for definition of Q
+                # sqrt(4\pi) accounts for Gaussian->HL for Gaussian Q
+		set dQ=sqrt(4*pi)*fuu01/(4*pi)
+		#
+		# commented out below to test Wald charge
+                #gcalc2 3 0 pi/2 dQ Qvsr
+                gcalc2 6 0 0.955 dQ Qvsr
+                #
+		#       
+		# strength at infinity (sqrt(bsq) at large radius)
+                #set Bnorm=2.0
+                set Qnorm=Qvsr/(a*2.0*Bnorm)
+                set komQnorm=Qvsr/(a*Bnorm)#
+		#
+		location 6000 31000 6000 31000
+                #
+                define x1label "r c^2/GM"
+                define x2label "Q/(2B_0 J)"
+                #
+		ctype default pl 0 newr Qnorm 1001 Rin 10 -5 5
+		#
+		define myrhor (lg($rhor))
+                ctype red vertline $myrhor
+                #
+		#
+                set myr=r if(tj==0)
+                define iii (0)
+                while {$iii<$nx} {
+                   if(myr[$iii]>$rhor) {\
+                       define myiii ($iii)
+                       BREAK
+                    }
+                    define iii ($iii+1)
+                }
+                #
+                set myQrat=Qnorm[$myiii]
+                print {myQrat}
+:               #
+		#
+		#
+efficiencies 0  #
+		#
+ 		jrdpcf3duentropy dump0040
+		grid3d gdump
+		#
+		set myuse=(r>5 && r<20 ? 1 : 0)
+		#
+		set gridcheck=gdet*$dx1*$dx2*$dx3 if(myuse)
+		#
+		set totalgridcheck=SUM(gridcheck)
+		#
+		set totalgridcorrect=4/3*pi*20**3 - 4/3*pi*5**3
+		#
+		print {totalgridcheck totalgridcorrect}
+		#
+		faraday
+		stresscalc 1
+		#
+		effonetime
+		#
+		#
+effonetime 0  #
+		#
+		#
+		#
+		#
+		#
+		set myuse=(r>0.98*$rhor && r<1.2*$rhor)
+		set myti=ti if(myuse)
+		set mytrueti=myti[0]
+		#
+		set EdotEMgrid=(gdet*$dx2*$dx3)*(-Tud10EM) if(ti==mytrueti)
+		set EdotMAgrid=(gdet*$dx2*$dx3)*(-Tud10MA) if(ti==mytrueti)
+		set Edotgrid=(gdet*$dx2*$dx3)*(-Tud10) if(ti==mytrueti)
+		set Mdotgrid=(gdet*$dx2*$dx3)*(-rho*uu1) if(ti==mytrueti)
+		#
+		set EdotEM=SUM(EdotEMgrid)
+		set EdotMA=SUM(EdotMAgrid)
+		set Edot=SUM(Edotgrid)
+		set Mdot=SUM(Mdotgrid)
+		#
+		# Tud10 already has no rest-mass (i.e. it's Tud10+rho uu1), so Edot is total KE+IE+EM energy flux.  So Edot=Mdot means EM out = KE+IE+REST in
+		# Edot=0 would mean EM out only balances KE+IE and not necessarily REST!
+		# So eta=1 means 100% efficient, while eta=4 means 400% efficient.
+		# That is, total true (-Tud10[true])/Mdot = Edottrue/Mdot = Edot/Mdot + Mdot/Mdot = Edot/Mdot + 1.  Then 1-(Edottrue/Mdot) = Edot/Mdot.
+		set eta=Edot/Mdot
+		#
+		#
+		#
+		
