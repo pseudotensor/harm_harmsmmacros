@@ -110,7 +110,7 @@ showfullhair2 1  # get figure for no hair paper
 		 #
 		 # below not quite done yet
 		 cd /data1/jmckinne/
-		 cd spin0.99_nodisk_Rout40_coord0_1286416sq_sigmafix_nsfield/
+		 cd spin0_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg3_nsfield/
 		 #
 		 fullhair1
 		 da data.txt
@@ -119,7 +119,7 @@ showfullhair2 1  # get figure for no hair paper
 		 #
 		 #
 		 cd /data1/jmckinne/
-		 cd /data/jon/lyutikov_nohair/spin0_nodisk_Rout40_coord0_128sq/
+		 cd spin0.99_nodisk_Rout40_coord0_1286416sq_sigmafix_nsfield/
 		 fullhair1
 		 #
 		 da data.txt
@@ -151,7 +151,7 @@ plotfullhair2 1 #
 		ltype 3 pl 0 t3 absfluxrat3 0111 0 2000 1E-16 1E2
 		ltype 4 pl 0 t4 absfluxrat4 0111 0 2000 1E-16 1E2
 		#
-		if(1){\
+		if(0){\
 		 set decayt1=100.0
 		 set myfit1=5*exp(-(t1-500)/decayt1)
 		 ltype 0 pl 0 t1 myfit1 0111 0 2000 1E-16 1E2
