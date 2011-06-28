@@ -63,8 +63,11 @@ showfullhair2 1  # get figure for no hair paper
 		#
 		cd /data1/jmckinne/
 		cd spin0_nodisk_Rout40_coord0_128sq_sigmafix_nsfield/
+		cd /data1/jmckinne/
 		cd spin0_nodisk_Rout40_coord0_128sq_sigmafix1E2higher_nsfield/
+		cd /data1/jmckinne/
 		cd spin0_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg3_nsfield/
+		cd /data1/jmckinne/
 		cd spin0_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg4_nsfield/
 		#
 		fullhair1
@@ -76,6 +79,7 @@ showfullhair2 1  # get figure for no hair paper
 		cd /data1/jmckinne/
 		cd spin0.99_nodisk_Rout40_coord0_128sq_sigmafix_nsfield/
 		# below not done yet
+		#cd /data1/jmckinne/
 		#cd spin0.99_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg3_nsfield/
 		#
 		fullhair1
@@ -104,8 +108,8 @@ showfullhair2 1  # get figure for no hair paper
 		#
 		if(1){\
 		 #
-		 cd /data1/jmckinne/
 		 # below not quite done yet
+		 cd /data1/jmckinne/
 		 cd spin0.99_nodisk_Rout40_coord0_1286416sq_sigmafix_nsfield/
 		 #
 		 fullhair1
@@ -114,6 +118,7 @@ showfullhair2 1  # get figure for no hair paper
 		 read {t5 1 bsqenergyrat5 2 trueenergyrat5 3 absfluxrat5 4}
 		 #
 		 #
+		 cd /data1/jmckinne/
 		 cd /data/jon/lyutikov_nohair/spin0_nodisk_Rout40_coord0_128sq/
 		 fullhair1
 		 #
