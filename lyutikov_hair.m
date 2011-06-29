@@ -8,6 +8,7 @@ hair1 1         #
 		define filename (_fname)
 		#
 		jrdpcf3duentropy dump0000
+		grid3d gdump
 		stresscalc 1
 		faraday
 		#
