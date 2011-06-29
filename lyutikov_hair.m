@@ -75,7 +75,7 @@ showfullhair2 1  # get figure for no hair paper
 		cd spin0_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg4_nsfield/
 		# below not quite done yet:
 		cd /data1/jmckinne/
-		spin0_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg5.5_nsfield
+		cd spin0_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg5.5_nsfield
 		#
 		fullhair1
 		da data.txt
