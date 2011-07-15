@@ -7,8 +7,8 @@ hair1 1         #
 		set h2=sprintf('%04d',$1) set _fname=h1+h2
 		define filename (_fname)
 		#
-		jrdpcf3duentropy dump0000
 		grid3d gdump
+		jrdpcf3duentropy dump0000
 		stresscalc 1
 		faraday
 		#
@@ -65,17 +65,21 @@ fullhair1 0     #
 showfullhair2 1  # get figure for no hair paper
 		#
 		#
-		cd /data1/jmckinne/
-		cd spin0_nodisk_Rout40_coord0_128sq_sigmafix_nsfield/
-		cd /data1/jmckinne/
-		cd spin0_nodisk_Rout40_coord0_128sq_sigmafix1E2higher_nsfield/
-		cd /data1/jmckinne/
-		cd spin0_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg3_nsfield/
-		cd /data1/jmckinne/
-		cd spin0_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg4_nsfield/
+		#cd /data1/jmckinne/
+		#cd spin0_nodisk_Rout40_coord0_128sq_sigmafix_nsfield/
+		#cd /data1/jmckinne/
+		#cd spin0_nodisk_Rout40_coord0_128sq_sigmafix1E2higher_nsfield/
+		#cd /data1/jmckinne/
+		#cd spin0_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg3_nsfield/
+		#cd /data1/jmckinne/
+		#cd spin0_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg4_nsfield/
+		#cd /data1/jmckinne/
+		#cd spin0_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg5.5_nsfield/
+		#cd /data1/jmckinne/
+		#cd spin0_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg6.0_sigmar1e2_nsfield/
 		# below not quite done yet:
 		cd /data1/jmckinne/
-		cd spin0_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg5.5_nsfield
+		cd spin0_nodisk_Rout1e4_coordjet6npow2_256x128_sigmafixrhoatmneg6.0_sigmar1e2_nsfield/
 		#
 		fullhair1
 		da data.txt
@@ -83,10 +87,15 @@ showfullhair2 1  # get figure for no hair paper
 		read {t1 1 bsqenergyrat1 2 trueenergyrat1 3 absfluxrat1 4 eta1 5}
 		#
 		#
+		#cd /data1/jmckinne/
+		#cd spin0.99_nodisk_Rout40_coord0_128sq_sigmafix_nsfield/
+		#cd /data1/jmckinne/
+		#cd spin0.99_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg3_nsfield/
+		#cd /data1/jmckinne/
+		#cd spin0.99_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg6.0_sigmar1e2_nsfield/
+		# not quite done yet
 		cd /data1/jmckinne/
-		cd spin0.99_nodisk_Rout40_coord0_128sq_sigmafix_nsfield/
-		cd /data1/jmckinne/
-		cd spin0.99_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg3_nsfield/
+		cd spin0.99_nodisk_Rout1e4_coordjet6npow2_256x128_sigmafixrhoatmneg6.0_sigmar1e2_nsfield
 		#
 		fullhair1
 		da data.txt
@@ -114,10 +123,13 @@ showfullhair2 1  # get figure for no hair paper
 		#
 		if(1){\
 		 #
+		 #cd /data1/jmckinne/
+		 #cd spin0.1_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg5.5_nsfield/
+		 #cd /data1/jmckinne/
+		 #cd spin0.1_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg6.0_sigmar1e2_nsfield
 		 # below not quite done yet
 		 cd /data1/jmckinne/
-		 cd spin0.1_nodisk_Rout1e4_coord0_256x128_sigmafixrhoatmneg5.5_nsfield/
-		 #
+		 cd spin0.1_nodisk_Rout1e4_coordjet6npow2_256x128_sigmafixrhoatmneg6.0_sigmar1e2_nsfield/
 		 fullhair1
 		 da data.txt
 		 lines 1 10000000
@@ -134,7 +146,38 @@ showfullhair2 1  # get figure for no hair paper
 		 read {t6 1 bsqenergyrat6 2 trueenergyrat6 3 absfluxrat6 4 eta6 5}
 		}
 		#
+		if(1){\
+		 #
+		 cd /data1/jmckinne/
+		 cd spin0.5_nodisk_Rout1e4_coordjet6npow2_256x128_sigmafixrhoatmneg6.0_sigmar1e2_nsfield/
+		 fullhair1
+		 da data.txt
+		 lines 1 10000000
+		 read {t7 1 bsqenergyrat7 2 trueenergyrat7 3 absfluxrat7 4 eta7 5}
+		 #
+		 #
+		 cd /data1/jmckinne/
+		 cd spin0.9_nodisk_Rout1e4_coordjet6npow2_256x128_sigmafixrhoatmneg6.0_sigmar1e2_nsfield/
+		 fullhair1
+		 da data.txt
+		 lines 1 10000000
+		 read {t8 1 bsqenergyrat8 2 trueenergyrat8 3 absfluxrat8 4 eta8 5}
+		 #
+		 #
+		 cd /data1/jmckinne/
+		 cd spin0.99_nodisk_Rout1e4_coordjet6npow2_256x128x16_sigmafixrhoatmneg6.0_sigmar1e2_nsfield/
+		 fullhair1
+		 da data.txt
+		 lines 1 10000000
+		 read {t9 1 bsqenergyrat9 2 trueenergyrat9 3 absfluxrat9 4 eta9 5}
+		 #
+		 #
+		}
 		##########
+		# spin0.99_nodisk_Rout1e4_coordjet6npow2_256x128x16_sigmafixrhoatmneg6.0_sigmar1e2_nsfield/
+		# spin0.99_nodisk_Rout1e4_coordjet6npow2_256x128_sigmafixrhoatmneg6.0_sigmar1e2_nsfield/
+		# spin0.9_nodisk_Rout1e4_coordjet6npow2_256x128_sigmafixrhoatmneg6.0_sigmar1e2_nsfield/
+		#
 		#
 		plotfullhair2 $1
 		#
@@ -153,12 +196,94 @@ plotfullhair2 1 #
 		#
 		ctype default
 		#
-		ltype 1 pl 0 t1 absfluxrat1 0101 0 2000 1E-16 1E2
-		ltype 2 pl 0 t2 absfluxrat2 0111 0 2000 1E-16 1E2
-		ltype 3 pl 0 t3 absfluxrat3 0111 0 2000 1E-16 1E2
-		ltype 4 pl 0 t4 absfluxrat4 0111 0 2000 1E-16 1E2
+		################# t1: a=0  t2: a=0.99  t3: ff_0   t4: ff_0.99  t5: a=0.1  t7: a=0.5  t8: a=0.9
+		# so order for ltype=1 2 3 4 5  1 5  0
+                # for models:      t=1 5 7 8 2  3 4  fit
+		#
+		ltype 1 pl 0 t1 absfluxrat1 0101 0 2000 1E-12 1E2
+		ltype 2 pl 0 t2 absfluxrat2 0111 0 2000 1E-12 1E2
+		ltype 3 pl 0 t3 absfluxrat3 0111 0 2000 1E-12 1E2
+		ltype 4 pl 0 t4 absfluxrat4 0111 0 2000 1E-12 1E2
+		#
+		#http://adsabs.harvard.edu/abs/2003ApJ...585..930B
+                # for r=20M (well, 24.7M is wavelength of mode)
+		#set tswitch=24.7 
+                # for r=1M (roughly accounting for wavelength of mode)
+                set tswitch=20
+		#
+		set vacdipole=( (t1<tswitch) ? 1 : ((t1-tswitch+1)**(-4)) )
+		#
+		ltype 0 pl 0 t1 vacdipole 0111 0 2000 1E-12 1E2
+		#
+		if(1){\
+		 ltype 5 pl 0 t5 absfluxrat5 0111 0 2000 1E-12 1E2
+		 ltype 6 pl 0 t6 absfluxrat6 0111 0 2000 1E-12 1E2
+		 ctype blue ltype 0 pl 0 t7 absfluxrat7 0111 0 2000 1E-12 1E2
+		 ctype red  ltype 0 pl 0 t8 absfluxrat8 0111 0 2000 1E-12 1E2
+		 ctype cyan ltype 0 pl 0 t9 absfluxrat9 0111 0 2000 1E-12 1E2
+		}
+		#
+		if($DOPRINTEPS){\
+		 device X11
+		 !cp phivst.eps /data/jon/lyutikov_nohair/paper/
+		}
+		#
+plotfullhair2simple 1 # for paper
+                #
+		define DOPRINTEPS ($1)
+		#
+		#
+		fdraft
+		define x1label "t c^3/GM"
+		define x2label "\Phi_{\rm EM}"
+		#
+		if($DOPRINTEPS){\
+		 device postencap phivst.eps
+		}
+		#
+		#http://adsabs.harvard.edu/abs/2003ApJ...585..930B
+                # for r=20M (well, 24.7M is wavelength of mode)
+		#set tswitch=24.7 
+                # for r=1M (roughly accounting for wavelength of mode)
+                set tswitch=20
+		#
+		set vacdipole=( (t1<tswitch) ? 1 : ((t1-tswitch+1)**(-4)) )
+		#
+		#
+		#
+		################# t1: a=0  t2: a=0.99  t3: ff_0   t4: ff_0.99  t5: a=0.1  t7: a=0.5  t8: a=0.9
+		# so order for ltype=1 2 3 4 5  1 5  0
+                # for models:      t=1 5 7 8 2  3 4  fit
+		#  
+                # print {absfluxrat1 absfluxrat5 absfluxrat7 absfluxrat8 absfluxrat2 absfluxrat3 absfluxrat4}
+		# remove returns to original point for missing dumps
+		# print {t1 t5 t7 t8 t2 t3 t4 t1}
+		#
+                set t8[39]=2050
+                set t8[40]=2100
+                set t2[37]=2050
+                set t2[38]=2100
+                set t2[39]=2150
+                set t2[40]=2200
+		#
+		#
+		ctype default
+		ltype 1 pl 0 t1 absfluxrat1 0101 0 1000 1E-12 1E2
+		ltype 2 pl 0 t5 absfluxrat5 0111 0 1000 1E-12 1E2
+		ltype 3 pl 0 t7 absfluxrat7 0111 0 1000 1E-12 1E2
+		ltype 4 pl 0 t8 absfluxrat8 0111 0 1000 1E-12 1E2
+		ltype 5 pl 0 t2 absfluxrat2 0111 0 1000 1E-12 1E2
+		ltype 1 pl 0 t3 absfluxrat3 0111 0 1000 1E-12 1E2
+		ltype 5 pl 0 t4 absfluxrat4 0111 0 1000 1E-12 1E2
+		ltype 0 pl 0 t1 vacdipole 0111 0 1000 1E-12 1E2
+		#
+		#
 		#
 		if(0){\
+		 set decayt1=500.0
+		 set myfit1=5*exp(-(t1-500)/decayt1)
+		 ltype 0 pl 0 t1 myfit1 0111 0 2000 1E-16 1E2
+		 #
 		 set decayt1=100.0
 		 set myfit1=5*exp(-(t1-500)/decayt1)
 		 ltype 0 pl 0 t1 myfit1 0111 0 2000 1E-16 1E2
@@ -172,17 +297,9 @@ plotfullhair2 1 #
 		 ltype 0 pl 0 t3 myfit3 0111 0 2000 1E-16 1E2
 		 #
 		}
-		#
-		ltype 0 pl 0 t1 ((t1-1)**(-4)) 0111 0 2000 1E-16 1E2
-		#
-		if(1){\
-		 ltype 5 pl 0 t5 absfluxrat5 0111 0 2000 1E-16 1E2
-		 ltype 6 pl 0 t6 absfluxrat6 0111 0 2000 1E-16 1E2
-		}
-		#
 		if($DOPRINTEPS){\
 		 device X11
-		 !cp phivst.eps /data/jon/lyutikov_nohair/paper/
+		 !scp phivst.eps jon@ki-rh42.slac.stanford.edu:/data/jon/lyutikov_nohair/paper/
 		}
 		#
 		#
@@ -296,23 +413,142 @@ plotfullhair 1  #
 		}
 		#
 		#
+                ###########################################################################################
+                ###########################################################################################
+iffieldplot 2   # for initial and final A_\phi plot
+                # iffieldplot  <last dump> <0 = aphi 1 = Ad3>
+                #
+                # choose model
+                #
+		# cd /data1/jmckinne/
+                # cd spin0.1_nodisk_Rout1e4_coordjet6npow2_256x128_sigmafixrhoatmneg6.0_sigmar1e2_nsfield/
+                # iffieldplot 40 0
+		# cd /data1/jmckinne/
+                # cd spin0.99_nodisk_Rout1e4_coordjet6npow2_256x128_sigmafixrhoatmneg6.0_sigmar1e2_nsfield/
+                # iffieldplot 37 0
+                #
+                # Currently high-res 3D.  This model has vpot in restart, so use vpotdump!
+		#cd /data1/jmckinne/
+		#cd spin0.99_nodisk_Rout1e4_coordjet6npow2_256x128x16_sigmafixrhoatmneg6.0_sigmar1e2_nsfield/
+                # iffieldplot 14 1
+                #
+		# choose dump
+		fieldplot 0 $2
+		plot2a
+                #
+		# choose dump
+		fieldplot $1 $2
+		plot2b
+                #
+                #
 		#
-fieldplot  1    #
+plot2a 0        #
+		plc 0 iaphi
+		set newiaphi=iaphi-$min
+		fdraft
+		device postencap iaphiti.eps
+		define POSCONTCOLOR "default"
+		define NEGCONTCOLOR "default"
+		define BOXCOLOR "default"
+		define x1label "R c^2/GM"
+		define x2label "z c^2/GM"
+		define cres 50
+		plc 0 newiaphi
+		showbh
+		device X11
+		!scp iaphiti.eps jon@ki-rh42.slac.stanford.edu:/data/jon/lyutikov_nohair/paper/
+                #
+plot2b 0        #
+		plc 0 iaphi
+		set newiaphi=iaphi-$min
+		fdraft
+		device postencap iaphitf.eps
+		define POSCONTCOLOR "default"
+		define NEGCONTCOLOR "default"
+		define BOXCOLOR "default"
+		define x1label "R c^2/GM"
+		define x2label "z c^2/GM"
+		define cres 50
+		plc 0 newiaphi
+		showbh
+		device X11
+		!scp iaphitf.eps jon@ki-rh42.slac.stanford.edu:/data/jon/lyutikov_nohair/paper/
+                #
+fieldplotread  2    # for interpolated A_\phi plot
+                # fieldplotread <dump#>
+		#
 		set h1='dump'
 		set h2=sprintf('%04d',$1) set _fname=h1+h2
 		define filename (_fname)
-		#
-		#
-                define print_noheader (1)
-		#
 		jrdpcf3duentropy $filename
-		#
 		fieldcalc 0 aphi
 		#
+  	        if($2==1){\
+	 	 set h1='vpotdump'
+		 set h2=sprintf('%04d',$1) set _fname=h1+h2
+		 define filename (_fname)
+		 jrdpvpot $filename
+		}
+                #
+                #
+fieldplotwrite  1    # for interpolated A_\phi plot
+                #
+                # choose if from vpot or aphi calculation (vpotdump best if exists and correct -- i.e. restarted process correctly saved vpot in restart file and reloaded it correctly)
 		writeheader 1 aphi.txt
-		print + aphi.txt {aphi}
+                #
+                # fieldplot <aphi or Ad3>
+                #
+		if($1==0){\
+		 set Ad3avg=aphi
+		 #
+		}
+	        #
+		if($1==1){\
+		 set Ad3avg=Ad3
+		 #
+		}
+	        #
+		if($nz>1){\
+		 # then average in phi
+		 do ii=0,$nx-1,1 {\
+		  do jj=0,$ny-1,1 {\
+                   echo Doing $ii $jj
+		   set Ad3avg[$ii + $jj*$nx + 0] = Ad3avg[$ii + $jj*$nx + 0]/$nz
+		   do kk=1,$nz-1,1 {\
+		    set Ad3avg[$ii + $jj*$nx + 0] = Ad3avg[$ii + $jj*$nx + 0] + Ad3avg[$ii + $jj*$nx + $kk*$nx*$ny]/$nz
+		   }
+		  }
+		 }
+		}
+                #
+                print + aphi.txt {Ad3avg}
 		#
 		#
+fieldplotredo  0 #interp+replot only (used when changing interp parameters while file will be same)
+                #
+                # get back to normal data setup
+                jrdpcf3duentropy dump0000
+                #
+                # now can redo plot from same existing file
+                fieldplotsetup
+                fieldplotinterp
+                #
+fieldplot  2    # for interpolated A_\phi plot
+                # fieldplot <dump#> <0=aphi 1=Ad3>
+                #
+                define print_noheader (1)
+		#
+                #
+                fieldplotread $1 $2
+                #
+                fieldplotsetup
+                #
+                fieldplotwrite $2
+		#
+                fieldplotinterp
+                #
+		#
+fieldplotsetup 0 #
 		# normal x,y,z
                 define inx (256) # Cart x
                 define iny (1) # Cart y
@@ -392,6 +628,12 @@ fieldplot  1    #
 		#
                 #define DEFAULTVALUETYPE 4
                 define DEFAULTVALUETYPE 0
+                #
+fieldplotinterp 0 #
+                #
+		#
+                #
+                #
                 #
 		! $program -oldargs $DATATYPE $interptype $READHEADERDATA $WRITEHEADERDATA \
                     1 $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
@@ -480,7 +722,7 @@ showfieldplot 0 # get figure for ATP proposal
 		cd /data/jon/lyutikov_nohair/spin0.99_nodisk_Rout40_coord0_128sq_sigmafix/
 		#
 		###############################################
-		fieldplot 40
+		fieldplot 40 0
 		#
 		plc 0 iaphi
 		set newiaphi=iaphi-$min
@@ -502,7 +744,7 @@ showfieldplot 0 # get figure for ATP proposal
 		!cp iaphi_nohairt2000.eps /data/jon/lyutikov_nohair/atp/
 		#
 		###############################################
-		fieldplot 0
+		fieldplot 0 0
 		#
 		plc 0 iaphi
 		set newiaphi=iaphi-$min
@@ -592,7 +834,7 @@ chargehair 0    #
                 #
                 set myQrat=Qnorm[$myiii]
                 print {myQrat}
-:               #
+                #
 		#
 		#
 efficiencies 0  #
