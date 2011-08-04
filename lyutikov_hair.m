@@ -868,33 +868,130 @@ efficiencies 0  #
 		plc0 0 lbrel
 		plc0 0 uu1 010
 		#
+effonetimepre 0 #
+	        #
+		gogrmhd
+		define DOGCALC 0
+		jrdpcf3duentropy dump0252
+		#
+		# 272x128x256 simulation eats 10GB by this point
+		#
+		set bsq = bu0*bd0 + bu1*bd1 + bu2*bd2 + bu3*bd3
+ 		define gam (_gam)
+ 		set p = ($gam - 1.)*u
+ 		set ptot = p + 0.5*bsq
+		#
+		stresscalc 1
+		# 272x128x256 simulation eats 21GB by this point
 		#
 effonetime 0  #
+		set myuse=(r>10 && r<12)
+		set myti=ti if(myuse)
+		set mytrueti=myti[0]
 		#
+		set Mdotinr10grid=(gdet*$dx2*$dx3)*(rho*uu1) if(ti==mytrueti && uu1<0.0 && bsq/rho<10)
+		set Mdotinr10=SUM(Mdotinr10grid)
 		#
+		set myuse=(r>90 && r<110)
+		set myti=ti if(myuse)
+		set mytrueti=myti[0]
 		#
+		set Mdotinr100grid=(gdet*$dx2*$dx3)*(rho*uu1) if(ti==mytrueti && uu1<0.0 && bsq/rho<10)
+		set Mdotinr100=SUM(Mdotinr100grid)
+		#
+		set myuse=(r>90 && r<110)
+		set myti=ti if(myuse)
+		set mytrueti=myti[0]
+		#
+		set v4asq=bsq/(rho+u+($gam-1)*u)
+		set mum1fake=uu0*(1.0+v4asq)-1.0
+		set Mdotjetr100grid=(gdet*$dx2*$dx3)*(rho*uu1) if(ti==mytrueti && uu1>0.0 && mum1fake>1.0 && (rho+u+($gam-1)*u)/rho*(-ud0)>1 && bsq/rho<10)
+		set Mdotjetr100=SUM(Mdotinr100grid)
+		#
+		print {Mdotinr10 Mdotinr100}
 		#
 		#
 		set myuse=(r>0.98*$rhor && r<1.2*$rhor)
 		set myti=ti if(myuse)
 		set mytrueti=myti[0]
 		#
+		# Edot>0 means energy out of BH
 		set EdotEMgrid=(gdet*$dx2*$dx3)*(-Tud10EM) if(ti==mytrueti)
+		# don't want to include mass injected into jet that falls into BH, which usually has bsq/rho>30
 		set EdotMAgrid=(gdet*$dx2*$dx3)*(-Tud10MA) if(ti==mytrueti)
+		set EdotMAtruegrid=(gdet*$dx2*$dx3)*(-Tud10MA) if(ti==mytrueti && bsq/rho<30)
 		set Edotgrid=(gdet*$dx2*$dx3)*(-Tud10) if(ti==mytrueti)
-		set Mdotgrid=(gdet*$dx2*$dx3)*(-rho*uu1) if(ti==mytrueti)
+		# Mdot<0 means mass flows into BH
+		set Mdotgrid=(gdet*$dx2*$dx3)*(rho*uu1) if(ti==mytrueti)
+		set Mdotgridi50=(gdet*$dx2*$dx3)*(rho*uu1) if(ti==50)
+		set Mdot30grid=(gdet*$dx2*$dx3)*(rho*uu1) if(ti==mytrueti && bsq/rho>30)
+		set Mdot40grid=(gdet*$dx2*$dx3)*(rho*uu1) if(ti==mytrueti && bsq/rho>40)
+		set tigrid=ti if(ti==mytrueti)
 		#
 		set EdotEM=SUM(EdotEMgrid)
+		set EdotMAtrue=SUM(EdotMAtruegrid)
 		set EdotMA=SUM(EdotMAgrid)
 		set Edot=SUM(Edotgrid)
+		set Edottrue=EdotEM+EdotMAtrue
+		#
 		set Mdot=SUM(Mdotgrid)
+		set Mdot30=SUM(Mdot30grid)
+		set Mdot40=SUM(Mdot40grid)
+		set Mdoti50=SUM(Mdotgridi50)
 		#
-		# Tud10 already has no rest-mass (i.e. it's Tud10+rho uu1), so Edot is total KE+IE+EM energy flux.  So Edot=Mdot means EM out = KE+IE+REST in
-		# Edot=0 would mean EM out only balances KE+IE and not necessarily REST!
-		# So eta=1 means 100% efficient, while eta=4 means 400% efficient.
-		# That is, total true (-Tud10[true])/Mdot = Edottrue/Mdot = Edot/Mdot + Mdot/Mdot = Edot/Mdot + 1.  Then 1-(Edottrue/Mdot) = Edot/Mdot.
-		set eta=Edot/Mdot
+		set trueMdot=Mdot-Mdot30
+		#
+		print {EdotEM EdotMA EdotMAtrue Edot Edottrue}
+		print {Mdot Mdot30 Mdot40 Mdoti50 trueMdot}
+		#
+                # eta =  (Mdot - Edot)/Mdot = (-Mdot -Edot)/(-Mdot) for Mdot>0
+                # so (Mdot + Edot)/Mdot for Mdot>0
+		# (Edot - Mdot)/Mdot for Mdot>0 (correct)
+		set eta=1-Edot/Mdot
+		# eta = 1 - EdotMA/Mdot - EdotEM/Mdot
+		set etaEM=-EdotEM/Mdot
+		set etaMA=1-EdotMA/Mdot
+		#
+		set etatrue=1-Edottrue/Mdot
+		set etaMAtrue=1-EdotMAtrue/Mdot
+		#
+		print {eta etaEM etaMA etatrue etaMAtrue}
+		#
+		# Edot/Mdot=0.95 means eff=1-Edot/Mdot = 5%
+		# Edot/Mdot smaller means higher efficiency
+		# eff =  1 - Edot/Mdot
+                # Edot = KEdot + Mdot
+                # eff = 1 - (Kedot + Mdot)/Mdot = (Mdot - (Kedot + Mdot))/Mdot = -Kedot/Mdot for Mdot<0 meaning normal ingoing mass.  So then eff = Kedot/(-Mdot)>0 is + efficiency.  eff>1 means |Mdot|/(-Mdot)>1 means Ke out is as much as mass in.
+		# Kedot = Edot - Mdot
+		set etatrue2 = 1-Edottrue/trueMdot
+		set etatrue2EM=-EdotEM/trueMdot
+		set etatrue2MA=1-EdotMAtrue/trueMdot
+		print {etatrue2 etatrue2EM etatrue2MA}
+	        #
+mricheck 0      #
+ 		# in the end: idx2mri = lambda2max/mydH = valh*2*pi/omegarot
+		#
+		dercalc 0 h hd
+		# if doesn't work, have to do on commandline: ~/bin/smcalc 1 2 0 272 128 256 dumps/forder dumps/hd
+		da dumps/hd
+ 		lines 2 100000000
+  		read {dhdx2 2}
+		set dH=r*(dhdx2*_dx2)
+		#
+		set omegarot=(2*pi)*uu3/uu0+1E-15
+		set omegarot=r**(-3/2)
+		#
+ 		set omegarat=(((2*pi)*uu3/uu0+1E-15)/r**(-3/2))
+		#
+ 		set vua2 = sqrt(abs(bu2*bd2)/(rho + u + p + bsq))
+	 	set res=abs(2.0*pi*vua2/omegarot/dH)
+		#
+		set vua2alt = abs(sqrt(bsq/(rho + u + p + bsq)))
+	 	set res3=abs(2.0*pi*vua2alt/omegarot/dH)
+		#
+		set vua2less = abs(bu2/_dx2)/sqrt(rho + u + p + bsq)
+	 	set res2=abs(2.0*pi*vua2less/omegarot)
 		#
 		#
+		set resdisk = (r*2*0.6)/abs(2.0*pi*vua2/omegarot)
 		#
-		
