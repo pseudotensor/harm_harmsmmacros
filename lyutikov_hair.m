@@ -21,6 +21,7 @@ hair1 1         #
 		jrdpcf3duentropy $filename
 		stresscalc 1
 		faraday
+        fieldcalc 0 aphi
 		#
 		computethings
 		#
