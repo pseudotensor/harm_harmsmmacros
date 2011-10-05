@@ -105,3 +105,54 @@ fluxbh 0 #
      # /data2/jmckinne/thickdisk13cd
      # flux at dump 0241:
      # max = -156 at eq.
+     #
+vphivsr 0
+     #
+     #cd /data2/jmckinne/sasha0/moviefinal15noavg/
+     cd /data2/jmckinne/thickdisk7/moviefinal15noavg/
+     #gogrmhd
+     #
+     set which=1
+     #
+     if(which==1){\
+      da datavsr1.txt
+      #da datavsr2.txt
+      #da datavsr3.txt
+      lines 1 100000
+      read '%g %g %g %g %g %g %g %g %g' {i r a b c d e f vphi}
+     }
+     #
+     if(which==2){\
+      da datavsr4.txt
+      lines 1 100000
+      read '%g %g %g %g %g %g %g %g %g %g %g' {i r a b c d e f g h vphi}
+     }
+     #
+     ctype default pl 0 r vphi 1101 3 200 1E-2 1
+     ctype red pl 0 r (r**(-1/2)) 1111 3 200 1E-2 1
+     #set n=(-1.03324+0.270618)/(1.26421-0.476911) print {n}
+     #
+mdinvsr 0
+     #
+     cd /data2/jmckinne/sasha99/moviefinal15noavg/
+     #cd /data2/jmckinne/thickdisk7/moviefinal15noavg/
+     #cd /data2/jmckinne/thickdisk11/moviefinal15noavg/
+     #cd /data2/jmckinne/thickdisk9/moviefinal15noavg/
+     #cd /data2/jmckinne/thickdiskr2/moviefinal15noavg/
+     #gogrmhd
+     #
+     da datavsr5.txt
+     lines 1 100000
+     read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii r mdotfinavgvsr mdotfinavgvsr5 edemvsr edmavsr edmvsr ldemvsr ldmavsr ldmvsr phiabsj_mu1vsr pjemfinavgvsr pjmakefinavgvsr pjkefinavgvsr ljemfinavgvsr ljmakefinavgvsr ljkefinavgvsr mdin_vsr mdjet_vsr mdmwind_vsr mdwind_vsr alphamag1_vsr alphamag2_vsr alphamag3_vsr fstot_vsr fsin_vsr feqtot_vsr fsmaxtot_vsr}
+     #
+     ctype default pl 0 r mdin_vsr 1101 3 300 1 1E4
+     points (LG(r)) (LG(mdin_vsr))
+     set pic=60
+     ctype red pl 0 r (mdin_vsr[pic]*(r/r[pic])**(1)) 1111 3 300 1 1E4
+     set pic=120
+     ctype yellow pl 0 r (mdin_vsr[pic]*(r/r[pic])**(1.5)) 1111 3 300 1 1E4
+     ctype blue pl 0 r mdmwind_vsr 1111 3 300 1 1E4
+     points (LG(r)) (LG(mdmwind_vsr))
+     ctype cyan pl 0 r mdwind_vsr 1111 3 300 1 1E4
+     points (LG(r)) (LG(mdwind_vsr))
+     #
