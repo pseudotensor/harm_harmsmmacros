@@ -190,6 +190,10 @@ qpointime1 0     #
 		# 4Hz for GRS1915+105
 #       FINALPLOTS
 velvsrad 0 #
+        velvsradrd
+        velvsradpl
+        #
+velvsradrd 0 #
         # datavsr1.txt: rho,u over non-jet, v,B over whole flow
         # datavsr2.txt: rho,u,v,B at equator no matter disk or jet
         # datavsr3.txt: rho,u over 2.5*hoverr3d non-jet and v,B over 2.5*hoverr3d
@@ -247,6 +251,7 @@ velvsrad 0 #
         da datavst1.txt
         lines 1 1000000
         read '%d %g %g %g %g %g %g %g %g %g %g %g' {tici ts mdtotihor md10ihor md30ihor mdinrdiskin mdinrdiskout mdjetrjetout mdmwindrjetin mdmwindrjetout mdwindrdiskin mdwindrdiskout}
+        set mdothor=mdtotihor-md30ihor
         #
         da datavst2.txt
         lines 1 1000000
@@ -275,6 +280,161 @@ velvsrad 0 #
         lines 1 1000000
         read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {tici ts  phibh phirdiskin phirdiskout phij phimwin phimwout phiwin phiwout phijn phijs fstotihor fsmaxtotihor fmaxvst rifmaxvst reqstagvst feqstag feqstagnearfin fstotnormA0 fstotnormA1 fstotnormA2 fstotnormC fstotnormBwhichfirstlimited fstotnormD}
         #
+        # only read some of the data that's required for the plot
+        da dataavgvsh0.txt
+        lines 1 2
+        read {avg_ts 1 avg_te 2 avg_nitems 3 a 4 rhor 5 ihor 6 dx1 7 dx2 8 dx3 9 wedgef 10 n1 11 n2 12 n3 13}
+        da dataavgvsh1.txt
+        lines 2 1000000
+        read {avgjj 1 avgh 2 avgrho 3 avgug 4 avgbsq 5 avgunb 6}
+        read {avgB1 23 avggdetB1 26 avgrhouu1 34 avgomegaf2 29 avgomegaf2b 30 avgomegaf1 31 avgomegaf1b 32}
+        read {avgTud10 58 avgTud13 70 avgTudEM10 170 avgTudEM13 182 avgTudMA10 186 avgTudMA13 198 avgTudPA10 202 avgTudPA13 214 avgTudIE10 218 avgTudIE13 230}
+        set avgTudMAKE10=-avgTudMA10-avgrhouu1
+        # print {avgh avgbsqorho avgTudEM10 avgTudMA10 avgrhouu1 avgTudPA10 avgTudIE10}
+        read {avgmu 233 avgsigma 234 avgbsqorho 235 avgabsB1 236 avgabsgdetB1 239 avggamma 243}
+        read {avggdet 244 dxdxp11 245 dtheta 246}
+        #
+        set omegah=a/(2*rhor)
+        set fakegdet=avgabsgdetB1/avgabsB1
+        #
+        # for a=0.9375:
+        set fofr=0.214494
+        set avgabsgdetB1bz0=(avgabsgdetB1/avgabsB1)*avgabsB1[0]
+        set avgabsgdetB1bz=(avgabsgdetB1/avgabsB1)*avgabsB1[0]*(1+(a/rhor)**2 * (-2*cos(avgh)+rhor**2*(1+3*cos(2*avgh))*fofr))
+        set hbz=(avgh<=pi/2) ? avgh : (pi-avgh)
+        set faker=rhor
+        set avgabsgdetB1bz2=avgabsgdetB1bz*(faker+2*ln(1+cos(hbz)))
+        #
+        set omegafpara=(1/4*sin(hbz)**2*(1+ln(1+cos(hbz))))/(4*ln(2)+sin(hbz)**2+(sin(hbz)**2-2*(1+cos(hbz)))*ln(1+cos(hbz)))
+        set omegafohpara=omegafpara/(1.0/(2*2))
+        #
+        if(1==0){\
+        #
+        set parabz=a*(0.25*sin(hbz)**2*(1.0+ln(1.0+cos(hbz)))/(4.0*ln(2)+sin(hbz)**2+(sin(hbz)**2-2*(1+cos(hbz)))*ln(1+cos(hbz))))
+        set fakeomegah=a/4
+        #
+        set fakehor=2
+        set Bparahor=Brpara[ihor+0*$nx]
+        set efluxdenpara=2*Brpara**2*parabz*fakehor*(fakeomegah-parabz)*sin(hbz)**2/Bparahor**2
+        #
+        set fakegdetks=fakehor**2*sin(hbz)
+        set efluxpara=2*pi*efluxdenpara*fakegdetks
+        }
+        #
+        #
+        #
+        set cleanatbsqorho=45
+        #        set cleanattheta=0.5834
+        # print {avgh avgjj}
+        set cleanatthetal=1.2
+        set cleanatthetah=pi-1.2
+        set cleanjj=16
+        #        set cleanvalue=0.5
+        set cleanavgomegaf2=(avgomegaf2*2*pi/omegah)
+        set cleanvalue=cleanavgomegaf2[cleanjj]
+        set myusel=abs(avgh-0.5*pi)<=abs(cleanatthetal-0.5*pi)
+        set myuseh=abs(avgh-0.5*pi)<=abs(cleanatthetah-0.5*pi)
+        set n=2
+        set cleanfuncl=cleanvalue + (0.5-cleanvalue)*(abs(avgh**n-(0.5*pi)**n)-abs(cleanatthetal**n-(0.5*pi)**n)) / ( abs( 0**n-(0.5*pi)**n) - abs(cleanatthetal**n-(0.5*pi)**n))
+        set cleanfunch=cleanvalue + (0.5-cleanvalue)*(abs((pi-avgh)**n-(pi-0.5*pi)**n)-abs((pi-cleanatthetah)**n-(pi-0.5*pi)**n)) / ( abs((pi-pi)**n-(pi-0.5*pi)**n) - abs((pi-cleanatthetah)**n-(pi-0.5*pi)**n))
+        set cleanavgomegaf2l=(myusel==1 ? cleanavgomegaf2 : cleanfuncl  )
+        set cleanavgomegaf2h=(myuseh==1 ? cleanavgomegaf2 : cleanfunch  )
+        set cleanavgomegaf2=(avgh<0.5*pi ? cleanavgomegaf2l : cleanavgomegaf2h)
+        #
+        # FULL bz formula using code B1 and omegaf, not as in his paper's mono or paraboloidal models.
+        set sigma=rhor**2+a**2*cos(avgh)**2
+        set gdetbz=sigma*abs(sin(avgh))
+        # add our gdet and remove their gdet
+        set avgabsBr=dxdxp11*avgabsB1
+        set avggdetTudEM10bz=-2*(avgabsBr)**2*(cleanavgomegaf2*omegah)*rhor*(omegah-cleanavgomegaf2*omegah)*sin(avgh)**2*(2*pi*gdetbz*dtheta)
+        #*(fakegdet/(gdetbz*2*pi*dtheta))
+        set omegah1=(1/2)
+        #        set LdotEMvshbz=4*EdotEMvshbz*(omegah/omegah1)**(-1)
+        #set LdotEMvshbz=8*EdotEMvshbz/(a)
+        set avggdetTudEM13bz=avggdetTudEM10bz/(cleanavgomegaf2*omegah)
+        # (omegah/omegah1)^{-1}=omegah1/omegah=(1/2)/(a/(2*rp)) = rp/a \sim 2/a for small a. 
+        # omega=a/8 for small a
+        #
+        # integrate in theta around equator
+        set intavgabsgdetB1=avgabsgdetB1*0
+        set intavgabsgdetB1bz0=avgabsgdetB1*0
+        set intavgabsgdetB1bz=avgabsgdetB1*0
+        set intavgabsgdetB1bz2=avgabsgdetB1*0
+        set intavgTudEM10=avgabsgdetB1*0
+        set intavggdetTudEM10bz=avgabsgdetB1*0
+        set intavggdetTudEM13bz=avgabsgdetB1*0
+        set intavgTudMA10=avgabsgdetB1*0
+        set intavgrhouu1=avgabsgdetB1*0
+        set intavgTudEM13=avgabsgdetB1*0
+        set intavgTudMA13=avgabsgdetB1*0
+        #
+        #
+        set SAH=avgabsgdetB1*0
+        # dx3/n3 takes care of fact that only 1 phi slice (that was averaged over all phi) is summed below
+        #
+        do jj=0,dimen(avgabsgdetB1)-1,1 {
+          set myuse=(abs(avgh-pi*0.5)<=abs(avgh[$jj]-pi*0.5) ? 1 : 0)
+          #set myuse=((avgh[$jj]-pi*0.5)<0 ? myuse*((avgh-pi*0.5)<0) : myuse*((avgh-pi*0.5)>0))
+          #
+          set preSAH=(1/rhor**2)*(fakegdet*dx2*(dx3*n3)*wedgef) if(myuse)
+          set SAH[$jj]=SUM(preSAH)
+          #
+          set preintavgabsgdetB1=avgabsgdetB1*dx2*(dx3*n3)*wedgef if(myuse)
+          set intavgabsgdetB1[$jj]=SUM(preintavgabsgdetB1)
+          #
+          set preintavgabsgdetB1bz0=avgabsgdetB1bz0*dx2*(dx3*n3)*wedgef if(myuse)
+          set intavgabsgdetB1bz0[$jj]=SUM(preintavgabsgdetB1bz0)
+          #
+          set preintavgabsgdetB1bz=avgabsgdetB1bz*dx2*(dx3*n3)*wedgef if(myuse)
+          set intavgabsgdetB1bz[$jj]=SUM(preintavgabsgdetB1bz)
+          #
+          set preintavgabsgdetB1bz2=avgabsgdetB1bz2*dx2*(dx3*n3)*wedgef if(myuse)
+          set intavgabsgdetB1bz2[$jj]=SUM(preintavgabsgdetB1bz2)
+          #
+          set preintavgTudEM10=fakegdet*(-avgTudEM10)*dx2*(dx3*n3)*wedgef if(myuse)
+          set intavgTudEM10[$jj]=SUM(preintavgTudEM10)
+          #
+          # uses gdetbz, not code's gdet
+          set preintavggdetTudEM10bz=(-avggdetTudEM10bz) if(myuse)
+          set intavggdetTudEM10bz[$jj]=SUM(preintavggdetTudEM10bz)
+          #
+          # uses gdetbz, not code's gdet
+          set preintavggdetTudEM13bz=(-avggdetTudEM13bz) if(myuse)
+          set intavggdetTudEM13bz[$jj]=SUM(preintavggdetTudEM13bz)
+          #
+          set preintavgTudMA10=fakegdet*(-avgTudMA10)*dx2*(dx3*n3)*wedgef if(myuse && avgbsqorho<30.0)
+          set intavgTudMA10[$jj]=SUM(preintavgTudMA10)
+          #
+          set preintavgrhouu1=fakegdet*(-avgrhouu1)*dx2*(dx3*n3)*wedgef if(myuse && avgbsqorho<30.0)
+          set intavgrhouu1[$jj]=SUM(preintavgrhouu1)
+          #
+          set preintavgTudEM13=fakegdet*avgTudEM13*dx2*(dx3*n3)*wedgef if(myuse)
+          set intavgTudEM13[$jj]=SUM(preintavgTudEM13)
+          #
+          set preintavgTudMA13=fakegdet*avgTudMA13*dx2*(dx3*n3)*wedgef if(myuse && avgbsqorho<30.0)
+          set intavgTudMA13[$jj]=SUM(preintavgTudMA13)
+        }
+        #
+        set Mdotvsh=intavgrhouu1*(abs(mdotfinavgvsr30[ihor]/(intavgrhouu1[0])))
+        set EdotEMvsh=intavgTudEM10/abs(mdotfinavgvsr30[ihor])
+        set EdotEMvshbz=intavggdetTudEM10bz/abs(mdotfinavgvsr30[ihor])
+        set LdotEMvshbz=intavggdetTudEM13bz/abs(mdotfinavgvsr30[ihor])
+        set EdotMAvsh=(intavgTudMA10+intavgrhouu1)/abs(mdotfinavgvsr30[ihor])
+        set LdotEMvsh=intavgTudEM13/(2*pi)/abs(mdotfinavgvsr30[ihor])
+        set LdotMAvsh=intavgTudMA13/(2*pi)/abs(mdotfinavgvsr30[ihor])
+        set preupsilon=(sqrt(2)*(1.0/abs(mdotfinavgvsr30[ihor]))*sqrt(abs(mdotfinavgvsr30[ihor])/SAH))
+        set upsilon=intavgabsgdetB1*preupsilon
+        set upsilonbz0=intavgabsgdetB1bz0*preupsilon
+        set upsilonbz=intavgabsgdetB1bz*preupsilon
+        set upsilonbz2=intavgabsgdetB1bz2*preupsilon
+        # normalize so total flux same, not field at pole
+        set upsilonbz0=upsilonbz0*(upsilon[0]/upsilonbz0[0])
+        set upsilonbz=upsilonbz*(upsilon[0]/upsilonbz[0])
+        set upsilonbz2=upsilonbz2*(upsilon[0]/upsilonbz2[0])
+        #
+        #
+        #
+velvsradpl 0 #
         #########################################
         # jet included:
         #pl 0 r vus1rhosq_vsr 1101 2.1 1E4 1E-3 1
@@ -308,6 +468,11 @@ velvsrad 0 #
         panelplot5
         device X11
         !scp fluxvst.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
+        #
+        device postencap horizonflux.eps
+        panelplot6
+        device X11
+        !scp horizonflux.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
         #
 panelplot1   0 #
 		#
@@ -818,7 +983,6 @@ panelplot5replot 0 #
         ctype default window 1 -$numpanels 1 $numpanels box 0 2 0 0
         yla "\dot{M}"
         #
-        set mdothor=mdtotihor-md30ihor
         ltype 0 pl 0 ((ts)) (LG(mdothor)) 0011 $mytin $mytout $lminy $lmaxy
         #ltype 2 pl 0 ((ts)) (LG(mdinrdiskout)) 0011 $mytin $mytout $lminy $lmaxy
         #ltype 1 pl 0 ((ts)) (LG(mdjetrjetout)) 0011 $mytin $mytout $lminy $lmaxy
@@ -929,4 +1093,127 @@ panelplot5replot 0 #
 		##########################
 		#
         #
-
+panelplot6   0 #
+		#
+		#
+        #define myhin (pi/4)
+		#define myhout (pi-pi/4)
+        define myhin (0)
+		define myhout (pi)
+        # 
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+        #        define numpanels 5
+        define numpanels 5
+        #
+		panelplot6replot
+		#
+panelplot6replot 0 #		
+        #
+        #
+        #
+        ticksize 0 0 0 0
+        define lminy (-.5)
+        define lmaxy (0.6)
+        limits $myhin $myhout $lminy $lmaxy
+        ctype default window 1 -$numpanels 1 $numpanels box 0 2 0 0
+        yla "\Omega_F/\Omega_H"
+        #
+		###################################
+        # omegaf/omegah\sim 0.33 in most of magnetosphere
+        # But drifts down to omegaf/omegah\sim 0.25 near disk
+        # Within disk it's noisy and has an average value of omegaf/omegah\sim 0.1
+        ltype 0 pl 0 avgh cleanavgomegaf2 0011 $myhin $myhout  $lminy $lmaxy
+        ltype 2 pl 0 avgh (0.5+cleanavgomegaf2*0) 0011 $myhin $myhout $lminy $lmaxy
+        #ltype 1 pl 0 avgh (0.33+cleanavgomegaf2*0) 0011 $myhin $myhout $lminy $lmaxy
+        #ltype 2 pl 0 avgh (0.25+cleanavgomegaf2*0) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 2 pl 0 avgh (omegafohpara) 0011 $myhin $myhout $lminy $lmaxy
+        #
+        #
+		###################################
+        #
+        ticksize 0 0 0 0
+        define lminy (0)
+        define lmaxy (55)
+        limits $myhin $myhout $lminy $lmaxy
+        define nm1 ($numpanels-1)
+        ctype default window 1 -$numpanels 1 $nm1 box 0 2 0 0
+        yla "\dot{M}"
+        #
+        ltype 0 pl 0 avgh ((Mdotvsh)) 0011 $myhin $myhout $lminy $lmaxy
+        #
+		###################################
+        #
+        ticksize 0 0 0 0
+        define lminy (-1)
+        define lmaxy (3.5)
+        limits $myhin $myhout $lminy $lmaxy
+        define nm1 ($numpanels-2)
+        ctype default window 1 -$numpanels 1 $nm1 box 0 2 0 0
+        #yla "\dot{E}/\dot{M}"
+        yla "\eta_{\rm BH}"
+        #
+        ltype 0 pl 0 avgh ((EdotEMvsh)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 2 pl 0 avgh ((EdotMAvsh)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 1 pl 0 avgh ((EdotEMvshbz)) 0011 $myhin $myhout $lminy $lmaxy
+        #
+		###################################
+        #
+        ticksize 0 0 0 0
+        define lminy (-20)
+        define lmaxy (50)
+        limits $myhin $myhout $lminy $lmaxy
+        define nm1 ($numpanels-3)
+        ctype default window 1 -$numpanels 1 $nm1 box 0 2 0 0
+        yla "\dot{L}/\dot{M}"
+        #
+        ltype 0 pl 0 avgh ((LdotEMvsh)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 2 pl 0 avgh ((LdotMAvsh)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 1 pl 0 avgh ((LdotEMvshbz)) 0011 $myhin $myhout $lminy $lmaxy
+        #
+        ###################################
+        #
+        ticksize 0 0 0 0
+        define lminy (0)
+        define lmaxy (24)
+        limits $myhin $myhout $lminy $lmaxy
+        define nm1 ($numpanels-4)
+        ctype default window 1 -$numpanels 1 $nm1 box 1 2 0 0
+        yla "\Upsilon"
+        xla "\theta"
+        #
+        #
+        #
+        ltype 0 pl 0 avgh (upsilon) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 2 pl 0 avgh (upsilonbz) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 1 pl 0 avgh (upsilonbz2) 0011 $myhin $myhout $lminy $lmaxy
+        #ctype blue pl 0 avgh (upsilonbz0) 0011 $myhin $myhout $lminy $lmaxy
+        #ctype default
+        #
+		###################################
+        if(1==0){
+        #
+        ticksize 0 0 0 0
+        define lminy (-4)
+        define lmaxy (5)
+        limits $myhin $myhout $lminy $lmaxy
+        define nm1 ($numpanels-4)
+        ctype default window 1 -$numpanels 1 $nm1 box 1 2 0 0
+        yla "-\mu  \sigma  b^2/\rho_0  \gamma"
+        #
+        ltype 0 pl 0 avgh ((-avgmu)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 2 pl 0 avgh ((avgsigma)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 1 pl 0 avgh ((avgbsqorho)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 3 pl 0 avgh ((avggamma)) 0011 $myhin $myhout $lminy $lmaxy
+        #
+        }
+		###################################
