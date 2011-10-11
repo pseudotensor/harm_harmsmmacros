@@ -1019,7 +1019,7 @@ panelplot5replot 0 #
         yla "\eta_{\rm BH}"
         #
         ltype 0 pl 0 ((ts)) ((etabhEM/100)) 0011 $mytin $mytout $lminy $lmaxy
-        ltype 0 pl 0 ((ts)) ((etabhMAKE/100)) 0011 $mytin $mytout $lminy $lmaxy
+        ltype 2 pl 0 ((ts)) ((etabhMAKE/100)) 0011 $mytin $mytout $lminy $lmaxy
         #
 		###################################
         #
@@ -1032,7 +1032,7 @@ panelplot5replot 0 #
         yla "\dot{L}/\dot{M}"
         #
         ltype 0 pl 0 ((ts)) ((letabhEM/100)) 0011 $mytin $mytout $lminy $lmaxy
-        ltype 0 pl 0 ((ts)) ((letabhMAKE/100)) 0011 $mytin $mytout $lminy $lmaxy
+        ltype 2 pl 0 ((ts)) ((letabhMAKE/100)) 0011 $mytin $mytout $lminy $lmaxy
         #
         ###################################
         #
@@ -1083,8 +1083,8 @@ panelplot5replot 0 #
 		##########################
         #
         ticksize 0 0 0 0
-        define lminy (-0.1)
-        define lmaxy (0.1)
+        define lminy (-0.02)
+        define lmaxy (0.11)
         limits $mytin $mytout $lminy $lmaxy
         define nm6 ($numpanels-6)
         ctype default window 8 -$numpanels 2:8 $nm6 box 0 2 0 0
@@ -1176,7 +1176,7 @@ panelplot6replot 0 #
         #
         ticksize 0 0 0 0
         define lminy (-1)
-        define lmaxy (3.5)
+        define lmaxy (3.8)
         limits $myhin $myhout $lminy $lmaxy
         define nm1 ($numpanels-2)
         ctype default window 8 -$numpanels 2:8 $nm1 box 0 2 0 0
