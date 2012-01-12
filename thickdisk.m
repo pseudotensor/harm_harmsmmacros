@@ -213,6 +213,20 @@ velvsradrd 0 #
         velvsradrd4
         #
 velvsradrd1 0 #
+        da datavsrhead.txt
+        lines 1 1
+        read '%g %g %g %g' {iin1 rfitin1 iout1 rfitout1}
+        lines 2 2
+        read '%g %g %g %g' {iin2 rfitin2 iout2 rfitout2}
+        lines 3 3
+        read '%g %g %g %g' {iin3 rfitin3 iout3 rfitout3}
+        lines 4 4
+        read '%g %g %g %g' {iin4 rfitin4 iout4 rfitout4}
+        lines 5 5
+        read '%g %g %g %g' {iin5 rfitin5 iout5 rfitout5}
+        lines 6 6
+        read '%g %g %g %g' {iin6 rfitin6 iout6 rfitout6}
+        #
         # datavsr1.txt: rho,u over non-jet, v,B over whole flow
         # datavsr1b.txt : all only over bsq/rho<=1
         # datavsr1c.txt : all only in non-jet and density weighted to focus on disky part
@@ -221,27 +235,33 @@ velvsradrd1 0 #
         # datavsr4.txt: rho,u,v,B over 2.0*hoverr3d non-jet
         #
         ################################################
+        # 22
         da datavsr1.txt
         lines 1 1000000
         read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii r rhosrhosqvsr ugsrhosqvsr uu0rhosqvsr vus1rhosqvsr vuas1rhosqvsr vus3rhosqvsr vuas3rhosqvsr Bs1rhosqvsr Bas1rhosqvsr Bs2rhosqvsr Bas2rhosqvsr Bs3rhosqvsr Bas3rhosqvsr bs1rhosqvsr bas1rhosqvsr bs2rhosqvsr bas2rhosqvsr bs3rhosqvsr bas3rhosqvsr bsqrhosqvsr}
         #
+        # 22
         da datavsr1b.txt
         lines 1 1000000
         read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii r rhosrhosqdcvsr ugsrhosqdcvsr uu0rhosqdcvsr vus1rhosqdcvsr vuas1rhosqdcvsr vus3rhosqdcvsr vuas3rhosqdcvsr Bs1rhosqdcvsr Bas1rhosqdcvsr Bs2rhosqdcvsr Bas2rhosqdcvsr Bs3rhosqdcvsr Bas3rhosqdcvsr bs1rhosqdcvsr bas1rhosqdcvsr bs2rhosqdcvsr bas2rhosqdcvsr bs3rhosqdcvsr bas3rhosqdcvsr bsqrhosqdcvsr}
         #
+        # 22
         da datavsr1c.txt
         lines 1 1000000
         read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii r rhosrhosqdcdenvsr ugsrhosqdcdenvsr uu0rhosqdcdenvsr vus1rhosqdcdenvsr vuas1rhosqdcdenvsr vus3rhosqdcdenvsr vuas3rhosqdcdenvsr Bs1rhosqdcdenvsr Bas1rhosqdcdenvsr Bs2rhosqdcdenvsr Bas2rhosqdcdenvsr Bs3rhosqdcdenvsr Bas3rhosqdcdenvsr bs1rhosqdcdenvsr bas1rhosqdcdenvsr bs2rhosqdcdenvsr bas2rhosqdcdenvsr bs3rhosqdcdenvsr bas3rhosqdcdenvsr bsqrhosqdcdenvsr}
         #
+        # 22
         da datavsr2.txt
         lines 1 1000000
         read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii r rhosrhosqeqvsr ugsrhosqeqvsr uu0rhosqeqvsr vus1rhosqeqvsr vuas1rhosqeqvsr vus3rhosqeqvsr vuas3rhosqeqvsr Bs1rhosqeqvsr Bas1rhosqeqvsr Bs2rhosqeqvsr Bas2rhosqeqvsr Bs3rhosqeqvsr Bas3rhosqeqvsr bs1rhosqeqvsr bas1rhosqeqvsr bs2rhosqeqvsr bas2rhosqeqvsr bs3rhosqeqvsr bas3rhosqeqvsr bsqrhosqeqvsr}
         #
+        # 22
         da datavsr3.txt
         lines 1 0000000
         read '%d %g   %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
         {ii r rhosrhosqhorpickvsr ugsrhosqhorpickvsr uu0rhosqhorpickvsr vus1rhosqhorpickvsr vuas1rhosqhorpickvsr vus3rhosqhorpickvsr vuas3rhosqhorpickvsr Bs1rhosqhorpickvsr Bas1rhosqhorpickvsr Bs2rhosqhorpickvsr Bas2rhosqhorpickvsr Bs3rhosqhorpickvsr Bas3rhosqhorpickvsr bs1rhosqhorpickvsr bas1rhosqhorpickvsr bs2rhosqhorpickvsr bas2rhosqhorpickvsr bs3rhosqhorpickvsr bas3rhosqhorpickvsr bsqrhosqhorpickvsr}
         #
+        # 25
         da datavsr4.txt
         lines 1 1000000
         read '%d %g   %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii r rhoshorvsr ugshorvsr bsqshorvsr bsqorhoshorvsr bsqougshorvsr uu0horvsr vus1horvsr vuas1horvsr vus3horvsr vuas3horvsr Bs1horvsr Bas1horvsr Bs2horvsr Bas2horvsr Bs3horvsr Bas3horvsr bs1horvsr bas1horvsr bs2horvsr bas2horvsr bs3horvsr bas3horvsr bsqhorvsr}
@@ -249,22 +269,48 @@ velvsradrd1 0 #
         set pg=(gam-1.0)*ugshorvsr
         set beta=pg/bsqshorvsr
         #
+        # 44
         da datavsr5.txt
         lines 1 1000000
-        read '%d %g   %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-        {ii r mdotfinavgvsr mdotfinavgvsr5 mdotfinavgvsr10 mdotfinavgvsr30 edemvsr edmavsr edmvsr ldemvsr ldmavsr ldmvsr phiabsjmu1vsr pjemfinavgvsr pjmakefinavgvsr pjkefinavgvsr ljemfinavgvsr ljmakefinavgvsr ljkefinavgvsr mdinvsr mdjetvsr mdmwindvsr mdwindvsr alphamag1vsr alphamag2vsr alphamag3vsr fstotvsr fsinvsr feqtotvsr fsmaxtotvsr upsilonvsr}
+        read '%d %g   %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+        {ii r mdotfinavgvsr mdotfinavgvsr5 mdotfinavgvsr10 mdotfinavgvsr30 edemvsr edmavsr edmvsr ldemvsr ldmavsr ldmvsr phiabsjmu1vsr pjemfinavgvsr pjmakefinavgvsr pjkefinavgvsr ljemfinavgvsr ljmakefinavgvsr ljkefinavgvsr mdinvsr mdjetvsr mdmwindvsr mdwindvsr alphamag1vsr alphamag2vsr alphamag3vsr fstotvsr fsinvsr feqtotvsr fsmaxtotvsr fsuphalfvsr upsilonvsr etajEMvsr etajMAKEvsr etamwEMvsr etamwMAKEvsr etawEMvsr etawMAKEvsr letajEMvsr letajMAKEvsr letamwEMvsr letamwMAKEvsr letawEMvsr letawMAKEvsr}
         #
         set edottotvsr=edemvsr+edmavsr
         set ldottotvsr=ldemvsr+ldmavsr
         set eomdot=edottotvsr/mdotfinavgvsr30
         set lomdot=ldottotvsr/mdotfinavgvsr30
         #
+        set etajtotvsr=etajEMvsr+etajMAKEvsr
+        set etamwtotvsr=etamwEMvsr+etamwMAKEvsr
+        set etawtotvsr=etawEMvsr+etawMAKEvsr
+        set effjlocal=etajtotvsr*(mdotfinavgvsr/mdinvsr)
+        set effmwlocal=etamwtotvsr*(mdotfinavgvsr/mdinvsr)
+        set effwlocal=etawtotvsr*(mdotfinavgvsr/mdinvsr)
+        #
+        # below factor1 converts upsilon so that both numerator and denominator are vs. radius
+        set factor1=(mdotfinavgvsr30[ihor]/mdotfinavgvsr30)**0.5
+        set upsilonvsrnorm=upsilonvsr*factor1
+        # below factor2 is just constant that converts to upsilon
+        set factor2=(upsilonvsr/fstotvsr)
+        # below factor3 converts so upsilon uses mdotin(r) rather than fixed mdot at hole
+        set factor3=(mdotfinavgvsr30[ihor]/mdinvsr)**0.5
+        set upsiloninnorm=fsinvsr*factor2*factor3
+        #
+        # 15
         da datavsr6.txt
         lines 1 1000000
         read '%d %g   %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii rnyO2 dtheta dphi drvsr dHvsr dPvsr hoverrvsr hoverrcoronavsr hoverrjetvsr thetaalongfield qmridiskvsr iq2mridiskvsr qmridiskweakvsr iq2mridiskweakvsr}
         # iq2 comes without H/R
         set q2mridiskvsr=hoverrvsr/iq2mridiskvsr
         #
+        set ug=ugsrhosqdcdenvsr
+        set pg=(gam-1.0)*ug
+        set rho=rhosrhosqdcdenvsr
+        set cs2=gam*pg/(rho+ug+pg)
+        set vphi=vus3rhosqdcdenvsr
+        set vk=r/(a+r**(1.5))
+        set horalt1=sqrt(cs2)/vphi
+        set horalt2=sqrt(cs2)/vk
         ################################################
 velvsradrd2 0 #
         da datavsh1.txt
@@ -309,13 +355,20 @@ velvsradrd3 0 #
         !sed 's/nan/0/g' datavst6.txt > datavst6n.txt
         da datavst6n.txt
         lines 1 1000000
+        # below 10,20,100 are really now rfitin2,rfitout2,rfitout6
         read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g' {tici ts  qmridisk10 qmridisk20 qmridisk100 iq2mridisk10 iq2mridisk20 iq2mridisk100 qmridiskweak10 qmridiskweak20 qmridiskweak100 iq2mridiskweak10 iq2mridiskweak20 iq2mridiskweak100}
         #
+        # 30
         !sed 's/nan/0/g' datavst7.txt > datavst7n.txt
         !sed 's/inf/0/g' datavst7n.txt > datavst7nn.txt
         da datavst7nn.txt
         lines 1 1000000
-        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {tici ts  phibh phirdiskin phirdiskout phij phimwin phimwout phiwin phiwout phijn phijs fstotihor fsmaxtotihor fmaxvst rifmaxvst reqstagvst feqstag feqstagnearfin fstotnormA0 fstotnormA1 fstotnormA2 fstotnormC fstotnormC2 fstotnormBwhichfirstlimited fstotnormD fstotnormE fstotnormE2}
+        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {tici ts  phibh phirdiskin phirdiskout phij phimwin phimwout phiwin phiwout phijn phijs fstotihor fsmaxtotihor fsuphalfihor fmaxvst rifmaxvst reqstagvst feqstag feqstagnearfin fstotnormA0 fstotnormA1 fstotnormA2 fstotnormC fstotnormC2 fstotnormBwhichfirstlimited fstotnormD fstotnormE fstotnormE2 fstotnormF}
+        #
+        da datavsrrm1.txt
+        lines 1 1000000
+        read '%d %g %g' {tici ts rm1vstorig}
+        set rm1vst=(rm1vstorig<2.2 ? 0 : rm1vstorig)
         #
         ################################################################
 velvsradrd4 0 #
@@ -329,30 +382,66 @@ velvsradrd4 0 #
         read {avguu0 7 avguu1 8 avguu2 9 avguu3 10}
         read {avgbu0 11 avgbu1 12 avgbu2 13 avgbu3 14}
         read {avgud0 15 avgud1 16 avgud2 17 avgud3 18}
+        read {avgbd0 19 avgbd1 20 avgbd2 21 avgbd3 22}
         read {avgB1 23 avgB2 24 avgB3 25}
         read {avggdetB1 26 avggdetB2 27 avggdetB3 28}
         read {avgrhouu1 34}
         read {avgomegaf2 29 avgomegaf2b 30 avgomegaf1 31 avgomegaf1b 32}
-        read {avgfdd00 73 avgfdd10 74 avgfdd20 75 avgfdd30 76 avgfdd01 77 avgfdd11 78 avgfdd21 79 avgfdd31 80 avgfdd02 81 avgfdd12 82 avgfdd22 83 avgfdd32 84 avgfdd03 85 avgfdd13 86 avgfdd23 87 avgfdd33 88}
+        read {avgvsrfdd00 73 avgvsrfdd10 74 avgvsrfdd20 75 avgvsrfdd30 76 avgvsrfdd01 77 avgvsrfdd11 78 avgvsrfdd21 79 avgvsrfdd31 80 \
+              avgvsrfdd02 81 avgvsrfdd12 82 avgvsrfdd22 83 avgvsrfdd32 84 avgvsrfdd03 85 avgvsrfdd13 86 avgvsrfdd23 87 avgvsrfdd33 88}
         read {avgTud10 58 avgTud13 70 avgTudEM10 170 avgTudEM13 182 avgTudMA10 186 avgTudMA13 198 avgTudPA10 202 avgTudPA13 214 avgTudIE10 218 avgTudIE13 230}
         set avgTudMAKE10=-avgTudMA10-avgrhouu1
         # print {avgh avgbsqorho avgTudEM10 avgTudMA10 avgrhouu1 avgTudPA10 avgTudIE10}
         read {avgmu 233 avgsigma 234 avgbsqorho 235 avgabsB1 236 avgabsgdetB1 239 avgabsgdetB2 240 avgabsgdetB3 241 avggamma 243}
         read {avggdet 244 avgdxdxp11 245 avgdtheta 246 avgdxdxp12 247 avgdxdxp21 248 avgdxdxp33 249}
         #
+        # new abs versions
+        read {avgabsuu0 250 avgabsuu1 251 avgabsuu2 252 avgabsuu3 253}
+        read {avgabsbu0 254 avgabsbu1 255 avgabsbu2 256 avgabsbu3 257}
+        read {avgabsud0 258 avgabsud1 259 avgabsud2 260 avgabsud3 261}
+        read {avgabsbd0 262 avgabsbd1 263 avgabsbd2 264 avgabsbd3 265}
+        read {avgabsomegaf2 266 avgabsomegaf2b 267 avgabsomegaf1 268 avgabsomegaf1b 269}
+        read {avgabsrhouu0 270 avgabsrhouu1 271 avgabsrhouu2 272 avgabsrhouu3 273}
+        read {avgabsfdd00 274 avgabsfdd10 275 avgabsfdd20 276 avgabsfdd30 277 avgabsfdd01 278 avgabsfdd11 279 avgabsfdd21 280 avgabsfdd31 281 \
+              avgabsfdd02 282 avgabsfdd12 283 avgabsfdd22 284 avgabsfdd32 285 avgabsfdd03 286 avgabsfdd13 287 avgabsfdd23 288 avgabsfdd33 289}
+        #
+        #
         set avgdxdxp22=avgdtheta/dx2
         #
         set avgomegaalt1=(avguu3/avguu0 + (avguu1/avguu0/avgabsgdetB1)*avgabsgdetB3)*avgdxdxp33
-        set avgomegaalt2=(avgfdd02/avgfdd23)*avgdxdxp33
-        set avgomegaalt3=(avgfdd01/avgfdd13)*avgdxdxp33
+        set avgomegaalt2=(avgvsrfdd02/avgvsrfdd23)*avgdxdxp33
+        set avgomegaalt3=(avgvsrfdd01/avgvsrfdd13)*avgdxdxp33
         #
-        set avguur=avguu1*avgdxdxp11 + avguu2*avgdxdxp12
-        set avguuh=avguu1*avgdxdxp21 + avguu2*avgdxdxp22
-        set avguup=avguu3*avgdxdxp33
+        set avgabsomegaalt1=(avgabsuu3/avgabsuu0 + (avgabsuu1/avgabsuu0/avgabsgdetB1)*avgabsgdetB3)*avgdxdxp33
+        set avgabsomegaalt2=(avgabsfdd02/avgabsfdd23)*avgdxdxp33
+        set avgabsomegaalt3=(avgabsfdd01/avgabsfdd13)*avgdxdxp33
         #
-        set avgbur=avgbu1*avgdxdxp11 + avgbu2*avgdxdxp12
-        set avgbuh=avgbu1*avgdxdxp21 + avgbu2*avgdxdxp22
-        set avgbup=avgbu3*avgdxdxp33
+        set rks=rhor
+        set hks=avgh
+        #
+        set sigmaks=rks**2+(a*cos(hks))**2
+        set deltaks=rks**2-2*rks+a**2
+        set Aks=(rks**2+a**2)**2-a**2*deltaks*(sin(hks))**2
+        #
+        set gvks00=-(1.0-2.0*rks/sigmaks)
+        set gvks11=(1.0+2.0*rks/sigmaks)
+        set gvks22=sigmaks
+        set gvks33=(sin(hks))**2*(sigmaks + a**2*(1.0 + 2.0*rks/sigmaks)*(sin(hks))**2)
+        #
+        # 3-vel quasi-orthonormal
+        set avguur=(avguu1*avgdxdxp11 + avguu2*avgdxdxp12)*sqrt(gvks11)/avguu0
+        set avguuh=(avguu1*avgdxdxp21 + avguu2*avgdxdxp22)*sqrt(gvks22)/avguu0
+        set avguup=(avguu3*avgdxdxp33)*sqrt(gvks33)/avguu0
+        #
+        # 4-field quasi-orthonormal
+        set avgbur=(avgbu1*avgdxdxp11 + avgbu2*avgdxdxp12)*sqrt(gvks11)
+        set avgbuh=(avgbu1*avgdxdxp21 + avgbu2*avgdxdxp22)*sqrt(gvks22)
+        set avgbup=(avgbu3*avgdxdxp33)*sqrt(gvks33)
+        #
+        # 4-field quasi-orthonormal
+        set avgabsbur=(avgabsbu1*avgdxdxp11 + avgabsbu2*avgdxdxp12)*sqrt(gvks11)
+        set avgabsbuh=(avgabsbu1*avgdxdxp21 + avgabsbu2*avgdxdxp22)*sqrt(gvks22)
+        set avgabsbup=(avgabsbu3*avgdxdxp33)*sqrt(gvks33)
         #
         #
         #
@@ -378,29 +467,78 @@ velvsradrd4 0 #
         read {avgvsrud0 15 avgvsrud1 16 avgvsrud2 17 avgvsrud3 18}
         read {avgvsrB1 23 avgvsrgdetB1 26 avgvsrrhouu1 34 avgvsromegaf2 29 avgvsromegaf2b 30 avgvsromegaf1 31 avgvsromegaf1b 32}
         read {avgvsrTud10 58 avgvsrTud13 70 avgvsrTudEM10 170 avgvsrTudEM13 182 avgvsrTudMA10 186 avgvsrTudMA13 198 avgvsrTudPA10 202 avgvsrTudPA13 214 avgvsrTudIE10 218 avgvsrTudIE13 230}
-        read {fdd00 73 fdd10 74 fdd20 75 fdd30 76 fdd01 77 fdd11 78 fdd21 79 fdd31 80 fdd02 81 fdd12 82 fdd22 83 fdd32 84 fdd03 85 fdd13 86 fdd23 87 fdd33 88}
+        read {avgvsrfdd00 73 avgvsrfdd10 74 avgvsrfdd20 75 avgvsrfdd30 76 avgvsrfdd01 77 avgvsrfdd11 78 avgvsrfdd21 79 avgvsrfdd31 80 \
+              avgvsrfdd02 81 avgvsrfdd12 82 avgvsrfdd22 83 avgvsrfdd32 84 avgvsrfdd03 85 avgvsrfdd13 86 avgvsrfdd23 87 avgvsrfdd33 88}
         set avgvsrTudMAKE10=-avgvsrTudMA10-avgvsrrhouu1
         # print {avgvsrh avgvsrbsqorho avgvsrTudEM10 avgvsrTudMA10 avgvsrrhouu1 avgvsrTudPA10 avgvsrTudIE10}
         read {avgvsrmu 233 avgvsrsigma 234 avgvsrbsqorho 235 avgvsrabsB1 236 avgvsrabsgdetB1 239 avgvsrabsgdetB2 240 avgvsrabsgdetB3 241 avgvsrgamma 243}
         read {avgvsrgdet 244 avgvsrdxdxp11 245 avgvsrdxdxp22 246 avgvsrdxdxp12 247 avgvsrdxdxp21 248 avgvsrdxdxp33 249}
-        read {avgvsrhor 250 avgvsrrhosqint 251 avgvsrrhosqint2 252}
-        # omegaf2b=np.fabs(vphi) + (vpol/Bpol)*np.fabs(B[3])
-        set omegaalt1=(avgvsruu3/avgvsruu0 - (avgvsruu1/avgvsruu0/avgvsrabsgdetB1)*avgvsrabsgdetB3)*avgvsrdxdxp33
-        set omegaalt2=(fdd02/fdd23)*avgvsrdxdxp33
-        set omegaalt3=(fdd01/fdd13)*avgvsrdxdxp33
         #
-        4panelinflowsetup
+        # new abs versions
+        read {avgvsrabsuu0 250 avgvsrabsuu1 251 avgvsrabsuu2 252 avgvsrabsuu3 253}
+        read {avgvsrabsbu0 254 avgvsrabsbu1 255 avgvsrabsbu2 256 avgvsrabsbu3 257}
+        read {avgvsrabsud0 258 avgvsrabsud1 259 avgvsrabsud2 260 avgvsrabsud3 261}
+        read {avgvsrabsbd0 262 avgvsrabsbd1 263 avgvsrabsbd2 264 avgvsrabsbd3 265}
+        read {avgvsrabsomegaf2 266 avgvsrabsomegaf2b 267 avgvsrabsomegaf1 268 avgvsrabsomegaf1b 269}
+        read {avgvsrabsrhouu0 270 avgvsrabsrhouu1 271 avgvsrabsrhouu2 272 avgvsrabsrhouu3 273}
+        read {avgvsrabsfdd00 274 avgvsrabsfdd10 275 avgvsrabsfdd20 276 avgvsrabsfdd30 277 avgvsrabsfdd01 278 avgvsrabsfdd11 279 avgvsrabsfdd21 280 avgvsrabsfdd31 281 \
+              avgvsrabsfdd02 282 avgvsrabsfdd12 283 avgvsrabsfdd22 284 avgvsrabsfdd32 285 avgvsrabsfdd03 286 avgvsrabsfdd13 287 avgvsrabsfdd23 288 avgvsrabsfdd33 289}
+        #
+        # more:
+        read {avgvsrhor 290 avgvsrrhosqint 291 avgvsrrhosqint2 292}
+        #
+        #
+        #
+        # omegaf2b=np.fabs(vphi) + (vpol/Bpol)*np.fabs(B[3])
+        set avgvsromegaalt1=(avgvsruu3/avgvsruu0 - (avgvsruu1/avgvsruu0/avgvsrabsgdetB1)*avgvsrabsgdetB3)*avgvsrdxdxp33
+        set avgvsromegaalt2=(avgvsrfdd02/avgvsrfdd23)*avgvsrdxdxp33
+        set avgvsromegaalt3=(avgvsrfdd01/avgvsrfdd13)*avgvsrdxdxp33
+        #
+        set avgvsrabsomegaalt1=(avgvsruu3/avgvsruu0 - (avgvsruu1/avgvsruu0/avgvsrabsgdetB1)*avgvsrabsgdetB3)*avgvsrdxdxp33
+        set avgvsrabsomegaalt2=(avgvsrabsfdd02/avgvsrabsfdd23)*avgvsrdxdxp33
+        set avgvsrabsomegaalt3=(avgvsrabsfdd01/avgvsrabsfdd13)*avgvsrdxdxp33
+        #
+        #4panelinflowsetup 0.2 1.61346241523502 100 5
+        4panelinflowsetup 0.2 1.799 100 5
         #
         defaults
-        ctype default ltype 0 pl 0 avgvsrr (avgvsromegaf2/omegah*avgvsrdxdxp33) 1000
-        ctype yellow ltype 0 pl 0 avgvsrr (avgvsromegaf2b/omegah*avgvsrdxdxp33) 1010
-        ctype green ltype 0 pl 0 avgvsrr (avgvsromegaf1/omegah*avgvsrdxdxp33) 1010
-        ctype magenta ltype 0 pl 0 avgvsrr (avgvsromegaf1b/omegah*avgvsrdxdxp33) 1010
-        ctype cyan ltype 0 pl 0 avgvsrr (omegaalt1/omegah) 1010
-        ctype blue ltype 0 pl 0 avgvsrr (omegaalt2/omegah) 1010
-        ctype red ltype 0 pl 0 avgvsrr (omegaalt3/omegah) 1010
+        #
+        ltype 0 ctype default  pl 0 avgvsrr (avgvsromegaf2/omegah*avgvsrdxdxp33) 1000
+        # pretty good (sits offset from average --- high and low -- but ok)
+        ctype yellow   pl 0 avgvsrr (avgvsromegaf2b/omegah*avgvsrdxdxp33) 1010
+        # noisy as expected:
+        #ctype green   pl 0 avgvsrr (avgvsromegaf1/omegah*avgvsrdxdxp33) 1010
+        # not bad (sits closer to average than above)
+        ctype magenta   pl 0 avgvsrr (avgvsromegaf1b/omegah*avgvsrdxdxp33) 1010
+        #
+        ltype 0 ctype default  pl 0 avgvsrr (avgvsromegaf2/omegah*avgvsrdxdxp33) 1000
+        # much higher than normal version, so signed-version flips alot:
+        ctype cyan  pl 0 avgvsrr (avgvsrabsomegaf2/omegah*avgvsrdxdxp33) 1010
+        # not too bad, but generally above normal version:
+        ctype yellow   pl 0 avgvsrr (avgvsrabsomegaf2b/omegah*avgvsrdxdxp33) 1010
+        # noisy as expected:
+        #ctype green   pl 0 avgvsrr (avgvsrabsomegaf1/omegah*avgvsrdxdxp33) 1010
+        # sits a bit inside average, but not as good as non-abs version
+        ctype magenta   pl 0 avgvsrr (avgvsrabsomegaf1b/omegah*avgvsrdxdxp33) 1010
+        #
+        ltype 0 ctype default  pl 0 avgvsrr (avgvsromegaf2/omegah*avgvsrdxdxp33) 1000
+        # ok at small radii, but grows ever different at small radii -- very smooth though.
+        ctype cyan  pl 0 avgvsrr (avgvsromegaalt1/omegah) 1010
+        # noisy:
+        ctype blue  pl 0 avgvsrr (avgvsromegaalt2/omegah) 1010
+        # noisy:
+        ctype red  pl 0 avgvsrr (avgvsromegaalt3/omegah) 1010
+        #
+        ltype 0 ctype default  pl 0 avgvsrr (avgvsromegaf2/omegah*avgvsrdxdxp33) 1000
+        # just like non-avs version:
+        ctype cyan  pl 0 avgvsrr (avgvsrabsomegaalt1/omegah) 1010
+        # kinda ok:
+        ctype blue  pl 0 avgvsrr (avgvsrabsomegaalt2/omegah) 1010
+        # diverges at smaller radii
+        ctype red  pl 0 avgvsrr (avgvsrabsomegaalt3/omegah) 1010
         #
         ################################################################
+        #
         #
         ################
         # powervsm
@@ -633,14 +771,22 @@ velvsradpl 1 # velvsradpl <doscp=0,1>
          !scp rhoveleqvsr.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
         }
         #
-        device postencap4 fluxvsr.eps
+        device postencap rhovelhorvsr.eps
+        panelplot1hor
+        device X11
+        if(doscp==1){\
+         !scp rhovelhorvsr.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
+        }
+        #
+        device postencap6c2 fluxvsr.eps
+        #device postencap6c fluxvsr.eps
         panelplot2
         device X11
         if(doscp==1){\
         !scp fluxvsr.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
         }
         #
-        device postencap4 othersvsr.eps
+        device postencap5 othersvsr.eps
         panelplot3
         device X11
         if(doscp==1){\
@@ -654,7 +800,7 @@ velvsradpl 1 # velvsradpl <doscp=0,1>
         !scp rhovelvsh.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
         }
         #
-        device postencap6 fluxvst.eps
+        device postencap6b2 fluxvst.eps
         panelplot5
         device X11
         if(doscp==1){\
@@ -668,7 +814,7 @@ velvsradpl 1 # velvsradpl <doscp=0,1>
         !scp horizonflux.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
         }
         #
-        device postencap3 powervsm.eps
+        device postencap5t powervsm.eps
         panelplot7
         device X11
         if(doscp==1){\
@@ -682,11 +828,18 @@ velvsradpl 1 # velvsradpl <doscp=0,1>
         !scp gammieplot.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
         }
         #
-        device postencap7 rhovsphi.eps
+        device postencap4t rhovsphi.eps
         panelplot8
         device X11
         if(doscp==1){\
          !scp rhovsphi.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
+        }
+        #
+        device postencap2t rhovsphib.eps
+        panelplot8b
+        device X11
+        if(doscp==1){\
+         !scp rhovsphib.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
         }
         #
         #
@@ -735,7 +888,9 @@ bzcomparisonsetup 0 #
         #
         set pickomegaf=avgomegaf2*avgdxdxp33
         # alt's already have dxdxp33's in them
-        set pickomegaf=avgomegaalt1
+        #set pickomegaf=avgomegaalt1
+        # below is closest to <omegaf2> without being noisy -- rests near average of noisy part rather than trending above or below
+        set pickomegaf=avgomegaf1b*avgdxdxp33
         #
         set cleanavgomegaf2=(pickomegaf/omegah)
         #
@@ -795,7 +950,10 @@ bzcomparisonsetup 0 #
         set intavgTudEM13=avgabsgdetB1*0
         set intavgTudMA13=avgabsgdetB1*0
         #
-        set maxbsqorho=40.0
+        # for thickdisk models
+        set maxbsqorho=30.0
+        # for sasha models
+        #set maxbsqorho=100.0
         #
         set SAH=avgabsgdetB1*0
         # dx3/n3 takes care of fact that only 1 phi slice (that was averaged over all phi) is summed below
@@ -893,21 +1051,31 @@ bzcomparisonsetup 0 #
         #
 trygammies 0 #
         do iijj=5,20,1 {\
-          4panelinflowsetup2 upsilongammie 1000 $iijj
+          4panelinflowsetup2 upsilongammie 100 $iijj
           set printiijj=$iijj
           print {printiijj}
         }
         #
         #
-4panelinflowsetup 0 # Gammie plot setup all parts
-        4panelinflowsetup1
+        # 4panelinflowsetup 0.1 1.81 100 7
+         #        4panelinflowsetup 0.2 1.61346241523502 100 5
+4panelinflowsetup 4 # Gammie plot setup all parts
+        #
+        set myhor=$1
+        set myfactor=$2
+        set numiters=$3
+        set numpoints=$4
+        #
+        4panelinflowsetup1 myhor
         #
         # get Gammie solution
-        #        set upsilongammie=upsilonH*1.5
-        set upsilongammie=upsilonH*1.72 # matches F_L better even though bsq a bit worse still looks good in log
+        #        set upsilongammie=upsilonH*1.49
+        set upsilongammie=upsilonH*myfactor # matches F_L better even though bsq a bit worse still looks good in log
+        #set upsilongammie=8.26301122953957 # trial from before
         #4panelinflowsetup2 upsilongammie 1000 43
         #4panelinflowsetup2 upsilongammie 1000 7000
-        4panelinflowsetup2 upsilongammie 1000 5
+        #4panelinflowsetup2 upsilongammie 1000 5
+        4panelinflowsetup2 upsilongammie numiters numpoints
         #
         #      gfl  tdlinfisco         gfe  tdeinfisco
         #       1.017        1.95    -0.05233      0.8209
@@ -922,7 +1090,9 @@ trygammies 0 #
         define router (10)
         #
         #
-4panelinflowsetup1 0 # Gammie plot setup
+4panelinflowsetup1 1 # Gammie plot setup
+        #
+        set myhor=$1
         #
         # need uurvsr, bsqvsr, rhovsr, uvsr, hor, gdetvsr, uu0vsr, ud0vsr, uuphivsr, udphivsr, ud0vsr, Tud10Bvsr, Tud10PAvsr, Tud10IEvsr, Tud13Bvsr, Tud13PAvsr, Tud13IEvsr
         set dxdxp11=avgvsrdxdxp11
@@ -939,7 +1109,7 @@ trygammies 0 #
         set idxdxp33=1/dxdxp33
         #
         set uutvsr=avgvsruu0
-        set uurvsr=-(avgvsruu1*dxdxp11+avgvsruu2*dxdxp12) # - so matches gammie
+        set uurvsr=(avgvsruu1*dxdxp11+avgvsruu2*dxdxp12) # matches gammie
         set uuhvsr=avgvsruu1*dxdxp21+avgvsruu2*dxdxp22
         set uupvsr=avgvsruu3*dxdxp33
         #
@@ -951,7 +1121,8 @@ trygammies 0 #
         set bsqvsr=avgvsrbsq
         set rhovsr=avgvsrrho
         set uvsr=avgvsrug
-        set hor=avgvsrhor
+        #set hor=avgvsrhor
+        set hor=myhor
         set gdetvsr=avgvsrgdet
         set uu0vsr=uutvsr
         set uuphivsr=uupvsr
@@ -962,10 +1133,15 @@ trygammies 0 #
         # GODMARK: Until new averages are created, floor contamination in these averages will mean not as flat vs. radius as vsr versions that took at the floor.
         # assuming sign not modified during avgvsr creation, then - added below since gammie comparison is such that inflow of +angle momentum gives + value
         # i.e. Ldot/Mdot>0 with Mdot>0 means inflow of mass and Ldot>0 means inflow of + ang momentum (+ meaning w.r.t. \phi and normally disk rotates with +\phi as set by IC)
+        # avoid cookie-cutout effect for disk-jet boundary:
         set Tud10Bvsr=-avgvsrTudEM10*avgvsrrhosqint
+        smooth Tud10Bvsr sTud10Bvsr 5
+        set Tud10Bvsr=sTud10Bvsr
         set Tud10PAvsr=-avgvsrTudPA10*avgvsrrhosqint
         set Tud10IEvsr=-avgvsrTudIE10*avgvsrrhosqint
         set Tud13Bvsr=-avgvsrTudEM13*avgvsrrhosqint
+        smooth Tud13Bvsr sTud13Bvsr 5
+        set Tud13Bvsr=sTud13Bvsr
         set Tud13PAvsr=-avgvsrTudPA13*avgvsrrhosqint
         set Tud13IEvsr=-avgvsrTudIE13*avgvsrrhosqint
         #
@@ -1013,7 +1189,17 @@ trygammies 0 #
 		define magpar ($1)
 		define bhspin (a)
 		define numpoints ($2)
+        #
 		!./inf_const $magpar $bhspin $numpoints > ./gammiesol1.txt
+        !wc -l ./gammiesol1.txt | awk '{print \\$1}' > wcit.txt
+        da wcit.txt
+        lines 1 1
+        read {numlines 1}
+        if(numlines==0){\
+         define numpoints 1000
+ 		 !./inf_const $magpar $bhspin $numpoints > ./gammiesol1.txt
+        }
+        #
 		!tail -1 gammiesol1.txt > gammiesol2.txt
 		da gammiesol2.txt
 		lines 1 1
@@ -1110,7 +1296,7 @@ trygammies 0 #
          # below works for no stratification.
          #set divfactor=1/(2*hor[0])
          set divfactor=1/(2*sin(hor[0]))
-         set FMvsrg1=FMvsr[0]/(2*hor[0])*boxfactor + FMvsr*0
+         set FMvsrg1=FMvsr[0]/(2*hor[0])*boxfactor
          #
          # below better when there is stratification, but requires u^r be similar to Gammie model at horizon.
          set FMgammie=grho*guu1
@@ -1126,25 +1312,39 @@ trygammies 0 #
          # total comoving energy density
          set ecovsrg=rhovsrg+uvsrg+bcog
          #
+         # (Tud10PAvsr+Tud10Bvsr+Tud10IEvsr)/FMvsr = constant(r)
+         set C10vsr=(Tud10PAvsr+Tud10Bvsr+Tud10IEvsr)/FMvsr
+         set newTud10Bvsr = C10vsr[0]*FMvsr - (Tud10PAvsr+Tud10IEvsr)
+         #
          # for below, signs shouldn't be problem
          # integral, not average
          # FE and FL parts (these use FMvsr directly, since flux ratio)
          set Tud10totvsr=(Tud10PAvsr+Tud10Bvsr+Tud10IEvsr)
          set factorTud10=(Tud10totvsr[0]/FMvsr[0])/(Tud10totvsr/FMvsr)
          #set factorTud10=1
-         set FEPAvsr=-Tud10PAvsr/(FMvsr)*factorTud10
-         set FEEMvsr=-Tud10Bvsr/(FMvsr)*factorTud10
-         set FEIEvsr=-Tud10IEvsr/(FMvsr)*factorTud10
+         smooth factorTud10 sfactorTud10 5
+         #set sfactorTud10=1
+         #
+         # only EM flux is cut-off at edge of non-jet cut, so only need to de-cookie that term
+         set FEPAvsr=-Tud10PAvsr/(FMvsr)*1
+         set FEEMvsr=-newTud10Bvsr/(FMvsr)*1
+         set FEIEvsr=-Tud10IEvsr/(FMvsr)*1
          set FEtotvsr=FEPAvsr+FEEMvsr+FEIEvsr
          #
          # print {newr FMvsr Tud10totvsr FEtotvsr FEPAvsr FEEMvsr FEIEvsr factorTud10}
          #
+         set C13vsr=(Tud13PAvsr+Tud13Bvsr+Tud13IEvsr)/FMvsr
+         set newTud13Bvsr = C13vsr[0]*FMvsr - (Tud13PAvsr+Tud13IEvsr)
+         #
          set Tud13totvsr=Tud13PAvsr+Tud13Bvsr+Tud13IEvsr
          set factorTud13=(Tud13totvsr[0]/FMvsr[0])/(Tud13totvsr/FMvsr)
          #set factorTud13=1
-         set FLPAvsr=Tud13PAvsr/dxdxp33/(FMvsr)*factorTud13
-         set FLEMvsr=Tud13Bvsr/dxdxp33/(FMvsr)*factorTud13
-         set FLIEvsr=Tud13IEvsr/dxdxp33/(FMvsr)*factorTud13
+         smooth factorTud13 sfactorTud13 5
+         #set sfactorTud13=1
+         #
+         set FLPAvsr=Tud13PAvsr/dxdxp33/(FMvsr)*1
+         set FLEMvsr=newTud13Bvsr/dxdxp33/(FMvsr)*1
+         set FLIEvsr=Tud13IEvsr/dxdxp33/(FMvsr)*1
          set FLtotvsr=FLPAvsr+FLEMvsr+FLIEvsr
          #
          # print {newr FMvsr Tud13totvsr FLtotvsr FLPAvsr FLEMvsr FLIEvsr factorTud13}
@@ -1187,11 +1387,19 @@ panelplot1replot 0 #
         ctype default window 1 -$numpanels 1 $numpanels box 0 2 0 0
         yla "\rho_0 u_g u_b"
         #
+        #
         #rhoshorvsr
         ltype 0 pl 0 (LG(r)) (LG(rhosrhosqdcdenvsr)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 2 pl 0 (LG(r)) (LG(ugsrhosqdcdenvsr)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 1 pl 0 (LG(r)) (LG(bsqrhosqdcdenvsr*0.5)) 0011 $myrin $myrout $lminy $lmaxy
         #
+        lweight 5
+        ltype 0 ctype red vertline (LG(risco))
+        ltype 0 ctype cyan vertline (LG(rfitin2))
+        ltype 0 ctype cyan vertline (LG(rfitout2))
+        #ltype 2 ctype cyan vertline (LG(rfitin6))
+        ltype 2 ctype cyan vertline (LG(rfitout6))
+        lweight 3
         #
         ###################################
         #
@@ -1202,11 +1410,67 @@ panelplot1replot 0 #
         define nm ($numpanels-1)
         #ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         ctype default window 1 -$numpanels 1 $nm box 0 2 0 0
-        yla "-u^r u^\phi"
+        yla "-v_{r} v_{\phi} v_{\rm K} v_{\rm visc}"
         #
-        ltype 0 pl 0 (LG(r)) (LG(-vus1rhosqdcdenvsr*uu0rhosqdcdenvsr)) 0011 $myrin $myrout $lminy $lmaxy
-        ltype 2 pl 0 (LG(r)) (LG(vus3rhosqdcdenvsr*uu0rhosqdcdenvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 0 pl 0 (LG(r)) (LG(-vus1rhosqdcdenvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 (LG(r)) (LG(vus3rhosqdcdenvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        set rcut1=r if(r>risco)
+        #set rcut1=r
+        set omegak=1.0/(a + rcut1**(1.5))
+        set vus3rhosqdcdenvsrkep=rcut1*omegak
+        ctype blue ltype 2 pl 0 (LG(rcut1)) (LG(vus3rhosqdcdenvsrkep)) 0011 $myrin $myrout $lminy $lmaxy
+        # G*M*m/r = (1/2)*m*v^2 -> v=sqrt(2GM/r)
+        if(1==0){\
+         set vus1rhosqdcdenvsrff=sqrt(rhor/rcut1)
+        }
         #
+        if(1==1){\
+         #
+         set rcut2=r if(r>risco)
+         set thetat=atan(horalt1)
+         #
+         set alphahorsqvel=(alphamag3vsr*hoverrvsr**2*vus3rhosqdcdenvsr) if (r>risco)
+         #set alphahorsqvel=(0.11*1**2*vus3rhosqdcdenvsr) if (r>risco)
+         #set alphahorsqvel=(alphamag3vsr*horalt1**2*vus3rhosqdcdenvsr) if (r>risco)
+         # bad fit vs. radius:
+         #set alphahorsqvel=(alphamag3vsr*thetat**2*vus3rhosqdcdenvsr) if (r>risco)
+         #
+         set xx=sqrt(rcut2)
+         set signa=(a>=0 ? 1 : -1)
+         set Z1=1 + (1-a**2)**(1/3)*((1+a)**(1/3) + (1-a)**(1/3) )
+         set Z2=sqrt(3*a**2+Z1**2)
+         set rms=3 + Z2 - signa*sqrt((3 - Z1)*(3 + Z1 + 2*Z2) )
+         set xx0=sqrt(rms)
+         set xx1=2*cos((1/3)*acos(a)-pi/3)
+         set xx2=2*cos((1/3)*acos(a)+pi/3)
+         set xx3=-2*cos((1/3)*acos(a))
+         #
+         set AA=1 + a**2/xx**4 + 2*a**2/xx**6
+         set BB=1 + a/xx**3
+         set CC=1 - 3/xx**2 + 2*a/xx**3
+         set DD=1 - 2/xx**2 + a**2/xx**4
+         set EE=1 + 4*a**2/xx**4 - 4*a**2/xx**6 + 3*a**4/xx**8
+         set FF=1 - 2*a/xx**3 + a**2/xx**4
+         set GG=1 - 2/xx**2 + a/xx**3
+         #
+         set QQa=((1 + a/xx**3)/sqrt(1 - 3/xx**2 + 2*a/xx**3))*(1/xx)
+         set QQb=xx - xx0 - (3/2)*a*ln(xx/xx0) - (3*(xx1-a)**2)/(xx1*(xx1-xx2)*(xx1-xx3))*ln((xx-xx1)/(xx0-xx1)) - (3*(xx2-a)**2)/(xx2*(xx2-xx1)*(xx2-xx3))*ln((xx-xx2)/(xx0-xx2)) - (3*(xx3-a)**2)/(xx3*(xx3-xx1)*(xx3-xx2))*ln((xx-xx3)/(xx0-xx3))
+         set QQ=QQa*QQb
+         set GRFACTOR=AA**(-2)*BB**(3)*CC**(-3/2)*DD**(3/2)*EE*QQ**(-1)
+         #
+         #set vus1rhosqdcdenvsrff=(alphahorsq)*vus3rhosqdcdenvsrkep
+         set vus1rhosqdcdenvsrff=(alphahorsqvel)*GRFACTOR
+        }
+        #
+        ctype blue ltype 0 pl 0 (LG(rcut2)) (LG(vus1rhosqdcdenvsrff)) 0011 $myrin $myrout $lminy $lmaxy
+        #
+        lweight 5
+        ltype 0 ctype red vertline (LG(risco))
+        ltype 0 ctype cyan vertline (LG(rfitin2))
+        ltype 0 ctype cyan vertline (LG(rfitout2))
+        #ltype 2 ctype cyan vertline (LG(rfitin6))
+        ltype 2 ctype cyan vertline (LG(rfitout6))
+        lweight 3
 		###################################
         #
         ticksize -1 0 -1 0
@@ -1216,13 +1480,20 @@ panelplot1replot 0 #
         define nm ($numpanels-2)
         #ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         ctype default window 1 -$numpanels 1 $nm box 1 2 0 0
-        yla "|b^{r,\theta,\phi}|"
+        yla "|b_{r,\theta,\phi}|"
         xla "r [r_g]"
         #
         ltype 0 pl 0 (LG(r)) (LG(bas1rhosqdcdenvsr)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 2 pl 0 (LG(r)) (LG(bas2rhosqdcdenvsr)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 1 pl 0 (LG(r)) (LG(bas3rhosqdcdenvsr)) 0011 $myrin $myrout $lminy $lmaxy
         #
+        lweight 5
+        ltype 0 ctype red vertline (LG(risco))
+        ltype 0 ctype cyan vertline (LG(rfitin2))
+        ltype 0 ctype cyan vertline (LG(rfitout2))
+        #ltype 2 ctype cyan vertline (LG(rfitin6))
+        ltype 2 ctype cyan vertline (LG(rfitout6))
+        lweight 3
 		#
         #
 panelplot1eq   0 #
@@ -1273,10 +1544,10 @@ panelplot1eqreplot 0 #
         define nm ($numpanels-1)
         #ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         ctype default window 1 -$numpanels 1 $nm box 0 2 0 0
-        yla "-u^r u^\phi"
+        yla "-v_{r} v_{\phi}"
         #
-        ltype 0 pl 0 (LG(r)) (LG(abs(-vus1rhosqeqvsr*uu0rhosqeqvsr))) 0011 $myrin $myrout $lminy $lmaxy
-        ltype 2 pl 0 (LG(r)) (LG(abs(vus3rhosqeqvsr*uu0rhosqeqvsr))) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 0 pl 0 (LG(r)) (LG(abs(-vus1rhosqeqvsr))) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 (LG(r)) (LG(abs(vus3rhosqeqvsr))) 0011 $myrin $myrout $lminy $lmaxy
         #
 		###################################
         #
@@ -1293,6 +1564,77 @@ panelplot1eqreplot 0 #
         ltype 0 pl 0 (LG(r)) (LG(bas1rhosqeqvsr)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 2 pl 0 (LG(r)) (LG(bas2rhosqeqvsr)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 1 pl 0 (LG(r)) (LG(bas3rhosqeqvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        #
+		#
+        #
+panelplot1hor   0 #
+		#
+		#
+        define myrin ((rhor))
+		define myrout ((1E2))
+        define xin (LG($myrin))
+        define xout (LG($myrout))
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+        define numpanels 3
+        #
+		panelplot1horreplot
+		#
+panelplot1horreplot 0 #		
+		###################################
+        #
+        ticksize -1 0 -1 0
+        define lminy (-1.9)
+        define lmaxy (2)
+        limits $xin $xout $lminy $lmaxy
+        #ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
+        ctype default window 1 -$numpanels 1 $numpanels box 0 2 0 0
+        yla "\rho_0 u_g u_b"
+        #
+        #rhoshorvsr
+        ltype 0 pl 0 (LG(r)) (LG(rhoshorvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 (LG(r)) (LG(ugshorvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 1 pl 0 (LG(r)) (LG(bsqhorvsr*0.5)) 0011 $myrin $myrout $lminy $lmaxy
+        #
+        #
+        ###################################
+        #
+        ticksize -1 0 -1 0
+        define lminy (-3.9)
+        define lmaxy (0.1)
+        limits $xin $xout $lminy $lmaxy
+        define nm ($numpanels-1)
+        #ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        ctype default window 1 -$numpanels 1 $nm box 0 2 0 0
+        yla "-v_r v_\phi"
+        #
+        ltype 0 pl 0 (LG(r)) (LG(abs(-vus1horvsr))) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 (LG(r)) (LG(abs(vus3horvsr))) 0011 $myrin $myrout $lminy $lmaxy
+        #
+		###################################
+        #
+        ticksize -1 0 -1 0
+        define lminy (-2.9)
+        define lmaxy (1.1)
+        limits $xin $xout $lminy $lmaxy
+        define nm ($numpanels-2)
+        #ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        ctype default window 1 -$numpanels 1 $nm box 1 2 0 0
+        yla "|b_{r,\theta,\phi}|"
+        xla "r [r_g]"
+        #
+        ltype 0 pl 0 (LG(r)) (LG(bas1horvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 (LG(r)) (LG(bas2horvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 1 pl 0 (LG(r)) (LG(bas3horvsr)) 0011 $myrin $myrout $lminy $lmaxy
         #
 		#
         #
@@ -1318,17 +1660,18 @@ panelplot2   0 #
 		notation -4 4 -4 4
 		erase
 		#
-        define numpanels 8
+        define numpanels 10
         #
 		notation -2 2 -2 2
-        define expandlow (1.2)
-        define expanddefault (1.5)
+        define expandlow (0.9)
+        define expanddefault (1.1)
 		panelplot2replot
 		notation -4 4 -4 4
 		#
 panelplot2replot 0 #		
 		###################################
         #
+        expand $expanddefault
         ticksize -1 0 0 0
         define lminy (0)
         define lmaxy (100)
@@ -1350,13 +1693,16 @@ panelplot2replot 0 #
         define nm ($numpanels-1)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         expand $expandlow
-        yla "\dot{M}_{\rm in}/\dot{M}_{\rm BH}"
+        yla "\dot{M}_{\rm in}/\dot{M}_{\rm H}"
         expand $expanddefault
+        #
         #
         set toplot=mdinvsr/mdotfinavgvsr30[ihor]
         pl 0 (LG(r)) (LG(toplot)) 0011 $myrin $myrout $lminy $lmaxy
-        set tofit=toplot[whichi]*(r/r[whichi])**1.7
-        ltype 2 pl 0 (LG(r)) (LG(tofit)) 0011 $myrin $myrout $lminy $lmaxy
+        #set rcut3=r if(r>=rfitin3 && r<=rfitout3)
+        set rcut3=r
+        set tofit=toplot[whichi]*(rcut3/r[whichi])**1.7
+        ltype 2 pl 0 (LG(rcut3)) (LG(tofit)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 0
         #
 		###################################
@@ -1368,7 +1714,7 @@ panelplot2replot 0 #
         define nm ($numpanels-2)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         expand $expandlow
-        yla "\dot{M}_{\rm j}/\dot{M}_{\rm BH}"
+        yla "\dot{M}_{\rm j}/\dot{M}_{\rm H}"
         expand $expanddefault
         #
         set toplot=mdjetvsr/mdotfinavgvsr30[ihor]
@@ -1386,7 +1732,7 @@ panelplot2replot 0 #
         define nm ($numpanels-3)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         expand $expandlow
-        yla "\dot{M}_{\rm mw}/\dot{M}_{\rm BH}"
+        yla "\dot{M}_{\rm mw}/\dot{M}_{\rm H}"
         expand $expanddefault
         #
         set toplot=mdmwindvsr/mdotfinavgvsr30[ihor]
@@ -1404,7 +1750,7 @@ panelplot2replot 0 #
         define nm ($numpanels-4)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         expand $expandlow
-        yla "\dot{M}_{\rm w}/\dot{M}_{\rm BH}"
+        yla "\dot{M}_{\rm w}/\dot{M}_{\rm H}"
         expand $expanddefault
         #
         set toplot=mdwindvsr/mdotfinavgvsr30[ihor]
@@ -1416,19 +1762,37 @@ panelplot2replot 0 #
 		###################################
         #
         ticksize -1 0 0 0
-        define lminy (0)
+        define lminy (-0.3)
         #define lmaxy (130)
         define lmaxy (2.9)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-5)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         expand $expandlow
-        yla "\dot{E}/\dot{M}_{\rm BH}"
+        yla "\dot{E}/\dot{M}_{\rm H}"
         #yla "\dot{E}/\dot{M}"
         expand $expanddefault
         #
         #pl 0 (LG(r)) ((eomdot)) 0011 $myrin $myrout $lminy $lmaxy
-        pl 0 (LG(r)) ((edottotvsr/mdotfinavgvsr30[ihor])) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 0 pl 0 (LG(r)) ((edottotvsr/mdotfinavgvsr30[ihor])) 0011 $myrin $myrout $lminy $lmaxy
+        #
+        #
+		###################################
+        #
+        ticksize -1 0 -1 0
+        define lminy (LG(0.011))
+        define lmaxy (LG(995))
+        limits $xin $xout $lminy $lmaxy
+        define nm ($numpanels-6)
+        ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        expand $expandlow
+        yla "\eta_{\rm j,mw,w}"
+        expand $expanddefault
+        #
+        ltype 0 pl 0 (LG(r)) (LG(etajtotvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 (LG(r)) (LG(etamwtotvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 1 pl 0 (LG(r)) (LG(etawtotvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        #
         #
         ###################################
         #
@@ -1437,40 +1801,61 @@ panelplot2replot 0 #
         #define lmaxy (1999)
         define lmaxy (55)
         limits $xin $xout $lminy $lmaxy
-        define nm ($numpanels-6)
+        define nm ($numpanels-7)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         expand $expandlow
-        yla "\dot{L}/\dot{M}_{\rm BH}"
+        yla "\dot{L}/\dot{M}_{\rm H}"
         #yla "\dot{L}/\dot{M}"
         expand $expanddefault
         #
         #pl 0 (LG(r)) ((lomdot)) 0011 $myrin $myrout $lminy $lmaxy
-        pl 0 (LG(r)) ((ldottotvsr/mdotfinavgvsr30[ihor])) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 0 pl 0 (LG(r)) ((ldottotvsr/mdotfinavgvsr30[ihor])) 0011 $myrin $myrout $lminy $lmaxy
         #
-		##########################
+        ##########################
         #
         ticksize -1 0 0 0
         define lminy (0)
         #define lmaxy (1999)
         define lmaxy (55)
         limits $xin $xout $lminy $lmaxy
-        define nm ($numpanels-7)
-        ctype default window 8 -$numpanels 2:8 $nm box 1 2 0 0
+        define nm ($numpanels-8)
+        ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         expand $expandlow
         yla "\Upsilon_{\rm in,total}"
+        expand $expanddefault
+        #
+        #
+        ltype 0 pl 0 (LG(r)) ((upsilonvsrnorm)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 (LG(r)) ((upsiloninnorm)) 0011 $myrin $myrout $lminy $lmaxy
+        #
+		##########################
+        #
+        expand $expanddefault
+        ticksize -1 0 0 0
+        define lminy (0)
+        define lmaxy (0.29)
+        limits $xin $xout $lminy $lmaxy
+        define nm ($numpanels-9)
+        ctype default window 8 -$numpanels 2:8 $nm box 1 2 0 0
+        expand $expandlow
+        yla "\Omega_F/\Omega_H"
 		xla "r [r_g]"
         expand $expanddefault
         #
-        # below factor1 converts upsilon so that both numerator and denominator are vs. radius
-        set factor1=(mdotfinavgvsr30[ihor]/mdotfinavgvsr30)**0.5
-        ltype 0 pl 0 (LG(r)) ((upsilonvsr*factor1)) 0011 $myrin $myrout $lminy $lmaxy
-        # below factor2 is just constant that converts to upsilon
-        set factor2=(upsilonvsr/fstotvsr)
-        # below factor3 converts so upsilon uses mdotin(r) rather than fixed mdot at hole
-        set factor3=(mdotfinavgvsr30[ihor]/mdinvsr)**0.5
-        ltype 2 pl 0 (LG(r)) ((fsinvsr*factor2*factor3)) 0011 $myrin $myrout $lminy $lmaxy
-        #
-		##########################
+        # orig:
+        #ltype 0 ctype default  pl 0 (LG(avgvsrr)) (avgvsromegaf2/omegah*avgvsrdxdxp33)   0011 $myrin $myrout $lminy $lmaxy
+        # much higher than normal version, so signed-version flips alot:
+        #ctype cyan  pl 0 (LG(avgvsrr)) (avgvsrabsomegaf2/omegah*avgvsrdxdxp33)   0011 $myrin $myrout $lminy $lmaxy
+        # not bad (sits closer to average than above)
+        ctype default ltype 0 pl 0 (LG(avgvsrr)) (avgvsromegaf1b/omegah*avgvsrdxdxp33)  0011 $myrin $myrout $lminy $lmaxy
+        # pretty good (sits offset from average --- high and low -- but ok)
+        ctype default ltype 2  pl 0 (LG(avgvsrr)) (avgvsromegaf2b/omegah*avgvsrdxdxp33)   0011 $myrin $myrout $lminy $lmaxy
+        # kinda ok:
+        ctype default ltype 1  pl 0 (LG(avgvsrr)) (avgvsrabsomegaalt2/omegah)   0011 $myrin $myrout $lminy $lmaxy
+        # sits a bit inside average, but not as good as non-abs version
+        ctype default ltype 3   pl 0 (LG(avgvsrr)) (avgvsrabsomegaf1b/omegah*avgvsrdxdxp33)   0011 $myrin $myrout $lminy $lmaxy
+        # not too bad, but generally above normal version:
+        ctype default ltype 4   pl 0 (LG(avgvsrr)) (avgvsrabsomegaf2b/omegah*avgvsrdxdxp33)   0011 $myrin $myrout $lminy $lmaxy
 		#
         #
 iofr    2 # iofr r whichr whichi
@@ -1512,13 +1897,15 @@ panelplot3replot 0 #
 		###################################
         #
         ticksize -1 0 0 0
-        define lminy (-0.2)
-        define lmaxy (1.0)
+        define lminy (-0.3)
+        define lmaxy (pi/2)
         limits $xin $xout $lminy $lmaxy
         ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
-        yla "\theta^d"
+        yla "\theta^{\rm d, t}"
+        #c_s/v_\phi
         #
-        pl 0 (LG(r)) ((hoverrvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 0 pl 0 (LG(r)) ((hoverrvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 (LG(r)) ((atan(horalt1))) 0011 $myrin $myrout $lminy $lmaxy
         #
 		###################################
         #
@@ -1531,19 +1918,19 @@ panelplot3replot 0 #
         yla "\theta^{\rm dc, cj}"
         #
         ltype 0 pl 0 (LG(r)) ((hoverrcoronavsr)) 0011 $myrin $myrout $lminy $lmaxy
-        ltype 2 pl 0 (LG(r)) ((hoverr_jetvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 (LG(r)) ((hoverrjetvsr)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 0
         #
         #
 		###################################
         #
         ticksize -1 0 0 0
-        define lminy (0.1)
-        define lmaxy (59)
+        define lminy (0.0)
+        define lmaxy (190)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-2)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
-        yla "Q_1"
+        yla "Q_{1,\rm MRI}"
         #
         pl 0 (LG(r)) ((qmridiskvsr)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 2
@@ -1553,16 +1940,16 @@ panelplot3replot 0 #
 		###################################
         #
         ticksize -1 0 0 0
-        define lminy (0.1)
-        define lmaxy (4.5)
+        define lminy (0.0)
+        define lmaxy (2.5)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-3)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
-        yla "Q_2"
+        yla "Q_{2,\rm MRI}"
         #
         pl 0 (LG(r)) ((q2mridiskvsr)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 2
-        pl 0 (LG(r)) ((1.0+0*q2mridiskvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        pl 0 (LG(r)) ((0.5+0*q2mridiskvsr)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 0
         #
 		###################################
@@ -1597,7 +1984,7 @@ panelplot3replot 0 #
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-6)
         ctype default window 8 -$numpanels 2:8 $nm box 1 2 0 0
-        yla "\Phi_{\rm eq}"
+        yla "\Psi_{\rm eq}"
 		xla "r [r_g]"
         #
         pl 0 (LG(r)) (LG(feqtotvsr)) 0011 $myrin $myrout $lminy $lmaxy
@@ -1627,6 +2014,41 @@ panelplot4   0 #
 		panelplot4replot
         expand 1.5
 		#
+checkingondensityweight 0 #
+        #print {avgh   avgrhoclean avgugclean  ubvsh}
+        #       1.574  31.21       79.61       91.86
+        #
+        # print {r      rhosrhosqdcdenvsr bsqrhosqdcdenvsr rhosrhosqeqvsr bsqrhosqeqvsr }
+        #        1.333  61.86             129.9            38.67          186.2 
+        # print {r      rhosrhosqdcdenvsr bsqrhosqdcdenvsr/2 rhosrhosqeqvsr bsqrhosqeqvsr/2 }
+        #        1.333  61.86             65                 38.67          93
+        #
+        set norm=avggdet*avgrhoclean
+        # print {avgh norm}
+        #
+        ctype default pl 0 avgh (avgrhoclean/avgrhoclean[64]) 0101 0 pi 1E-3 1E2
+        ctype red pl 0 avgh (norm/norm[64]) 0111 0 pi 1E-3 1E2
+        set hortest=0.12
+        set dentest=exp(-(avgh-pi/2)**2/(2*hortest**2))
+        ctype blue pl 0 avgh dentest 0111 0 pi 1E-3 1E2
+        set hortest=0.16
+        set dentest=exp(-(avgh-pi/2)**2/(2*hortest**2))
+        ctype cyan pl 0 avgh dentest 0111 0 pi 1E-3 1E2
+        #
+        set norm=avggdet*avgrhoclean
+        set numerator=SUM(norm*avgrhoclean)
+        set denominator=SUM(norm)
+        set ratio1=numerator/denominator
+        set fracratio1=ratio1/avgrhoclean[64]
+        #
+        set norm=avggdet
+        set numerator=SUM(norm*avgrhoclean)
+        set denominator=SUM(norm)
+        set ratio2=numerator/denominator
+        set fracratio2=ratio2/avgrhoclean[64]
+        print {ratio1 fracratio1 ratio2 fracratio2}
+        #
+        #
 panelplot4replot 0 #		
 		###################################
         #
@@ -1653,7 +2075,7 @@ panelplot4replot 0 #
 		###################################
         #
         ticksize 0 0 -1 0
-        define lminy (-0.3)
+        define lminy (-0.9)
         define lmaxy (2.5)
         limits $myhin $myhout $lminy $lmaxy
         define nm1 ($numpanels-1)
@@ -1713,7 +2135,7 @@ panelplot4replot 0 #
         limits $myhin $myhout $lminy $lmaxy
         define nm ($numpanels-4)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
-        yla "|u^r|"
+        yla "|v_r|"
         #
         ltype 0 pl 0 ((avgh)) (LG(abs(avguur))) 0011 $myhin $myhout $lminy $lmaxy
         ltype 2 pl 0 ((hinnx4)) (LG(vuas1rhosqrad4vsh)) 0011 $myhin $myhout $lminy $lmaxy
@@ -1728,7 +2150,7 @@ panelplot4replot 0 #
         limits $myhin $myhout $lminy $lmaxy
         define nm ($numpanels-5)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
-        yla "u^\phi"
+        yla "v_\phi"
         #
         ltype 0 pl 0 ((avgh)) (LG(abs(avguup))) 0011 $myhin $myhout $lminy $lmaxy
         ltype 2 pl 0 ((hinnx4)) (LG(vuas3rhosqrad4vsh)) 0011 $myhin $myhout $lminy $lmaxy
@@ -1743,9 +2165,9 @@ panelplot4replot 0 #
         limits $myhin $myhout $lminy $lmaxy
         define nm ($numpanels-6)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
-        yla "|b^r|"
+        yla "|b_r|"
         #
-        ltype 0 pl 0 ((avgh)) (LG(abs(avgbur))) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 0 pl 0 ((avgh)) (LG(abs(avgabsbur))) 0011 $myhin $myhout $lminy $lmaxy
         ltype 2 pl 0 ((hinnx4)) (LG(bas1rhosqrad4vsh)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 1 pl 0 ((hinnx8)) (LG(bas1rhosqrad8vsh)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 3 pl 0 ((hinnx30)) (LG(bas1rhosqrad30vsh)) 0011 $myhin $myhout $lminy $lmaxy
@@ -1754,14 +2176,14 @@ panelplot4replot 0 #
         #
         ticksize 0 0 -1 0
         define lminy (-2.9)
-        define lmaxy (0.1)
+        define lmaxy (0.3)
         limits $myhin $myhout $lminy $lmaxy
         define nm ($numpanels-7)
         ctype default window 8 -$numpanels 2:8 $nm box 1 2 0 0
-        yla "|b^\theta|"
+        yla "|b_\theta|"
 		xla "\theta"
         #
-        ltype 0 pl 0 ((avgh)) (LG(abs(avgbuh))) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 0 pl 0 ((avgh)) (LG(abs(avgabsbuh))) 0011 $myhin $myhout $lminy $lmaxy
         ltype 2 pl 0 ((hinnx4)) (LG(bas2rhosqrad4vsh)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 1 pl 0 ((hinnx8)) (LG(bas2rhosqrad8vsh)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 3 pl 0 ((hinnx30)) (LG(bas2rhosqrad30vsh)) 0011 $myhin $myhout $lminy $lmaxy
@@ -1786,9 +2208,11 @@ panelplot5   0 #
 		notation -4 4 -4 4
 		erase
 		#
-        define numpanels 8
+        define numpanels 9
         #
+        expand 0.9
 		panelplot5replot
+        expand 1.5
 		#
 panelplot5replot 0 #		
 		###################################
@@ -1815,9 +2239,9 @@ panelplot5replot 0 #
         define lminy (-1)
         define lmaxy (4.5)
         limits $mytin $mytout $lminy $lmaxy
-        define nm1 ($numpanels-1)
-        ctype default window 8 -$numpanels 2:8 $nm1 box 0 2 0 0
-        yla "\eta_{\rm BH}"
+        define nm ($numpanels-1)
+        ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        yla "\eta_{\rm H}"
         #
         ltype 0 pl 0 ((ts)) ((etabhEM/100)) 0011 $mytin $mytout $lminy $lmaxy
         ltype 2 pl 0 ((ts)) ((etabhMAKE/100)) 0011 $mytin $mytout $lminy $lmaxy
@@ -1828,9 +2252,9 @@ panelplot5replot 0 #
         define lminy (-4)
         define lmaxy (39.5)
         limits $mytin $mytout $lminy $lmaxy
-        define nm2 ($numpanels-2)
-        ctype default window 8 -$numpanels 2:8 $nm2 box 0 2 0 0
-        yla "\dot{L}/\dot{M}"
+        define nm ($numpanels-2)
+        ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        yla "\dot{L}_{\rm H}/\dot{M}_{\rm H}"
         #
         ltype 0 pl 0 ((ts)) ((letabhEM/100)) 0011 $mytin $mytout $lminy $lmaxy
         ltype 2 pl 0 ((ts)) ((letabhMAKE/100)) 0011 $mytin $mytout $lminy $lmaxy
@@ -1838,12 +2262,12 @@ panelplot5replot 0 #
         ###################################
         #
         ticksize 0 0 0 0
-        define lminy (-0.2)
+        define lminy (-0.19)
         define lmaxy (pi/4)
         limits $mytin $mytout $lminy $lmaxy
-        define nm3 ($numpanels-3)
-        ctype default window 8 -$numpanels 2:8 $nm3 box 0 2 0 0
-        yla "|\frac{h}{r}|"
+        define nm ($numpanels-3)
+        ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        yla "\theta^d"
         #
         ltype 0 pl 0 ((ts)) ((hoverrhor)) 0011 $mytin $mytout $lminy $lmaxy
         #ltype 2 pl 0 ((ts)) ((hoverr2)) 0011 $mytin $mytout $lminy $lmaxy
@@ -1855,11 +2279,23 @@ panelplot5replot 0 #
         #
         ticksize 0 0 0 0
         define lminy (0)
-        define lmaxy (49)
+        define lmaxy (0.29)
         limits $mytin $mytout $lminy $lmaxy
-        define nm4 ($numpanels-4)
-        ctype default window 8 -$numpanels 2:8 $nm4 box 0 2 0 0
-        yla "\Upsilon"
+        define nm ($numpanels-4)
+        ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        yla "\alpha_{b\ [r=10r_g]}"
+        #
+        ltype 0 pl 0 ((ts)) ((alphamag210)) 0011 $mytin $mytout $lminy $lmaxy
+        #
+		###################################
+        #
+        ticksize 0 0 0 0
+        define lminy (0)
+        define lmaxy (24)
+        limits $mytin $mytout $lminy $lmaxy
+        define nm ($numpanels-5)
+        ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        yla "\Upsilon_{\rm H\ out}"
         #
         ltype 0 pl 0 ((ts)) ((phibh)) 0011 $mytin $mytout $lminy $lmaxy
         #ltype 2 pl 0 ((ts)) ((phij)) 0011 $mytin $mytout $lminy $lmaxy
@@ -1874,25 +2310,26 @@ panelplot5replot 0 #
         #define lmaxy (LG(5.3*r[dimen(r)-1]))
         define lmaxy (2.5)
         limits $mytin $mytout $lminy $lmaxy
-        define nm5 ($numpanels-5)
-        ctype default window 8 -$numpanels 2:8 $nm5 box 0 2 0 0
+        define nm ($numpanels-6)
+        ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         #yla "r_{\rm flux,stag}"
-        yla "r_{\Phi_{\rm a}}"
+        yla "r_m r_{\Psi_{\rm a}}"
         #
         ltype 0 pl 0 ((ts)) (LG(rifmaxvst)) 0011 $mytin $mytout $lminy $lmaxy
+        ltype 2 pl 0 ((ts)) (LG(rm1vst)) 0011 $mytin $mytout $lminy $lmaxy
         #ltype 2 pl 0 ((ts)) (LG(reqstagvst)) 0011 $mytin $mytout $lminy $lmaxy
         #
 		##########################
         #
         ticksize 0 0 0 0
-        define lminy (-1.1)
+        define lminy (-0.15)
         define lmaxy (1.1)
         limits $mytin $mytout $lminy $lmaxy
-        define nm6 ($numpanels-6)
-        ctype default window 8 -$numpanels 2:8 $nm6 box 0 2 0 0
-        #yla "\frac{\Phi_{\rm BH}}{\Phi_{\rm BH}}"
-        #yla "\Phi/\Phi_{a,s}"
-        yla "\Phi/\Phi_{a}"
+        define nm ($numpanels-7)
+        ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        #yla "\frac{\Phi_{\rm H}}{\Phi_{\rm H}}"
+        #yla "\Phi/\Phi_{\rm a,s}"
+        yla "\Psi_{\rm H}/\Psi_{a}"
         #
         #ltype 0 pl 0 ((ts)) ((fstotnormA0)) 0011 $mytin $mytout $lminy $lmaxy
         #ltype 0 pl 0 ((ts)) ((fstotnormA1)) 0011 $mytin $mytout $lminy $lmaxy
@@ -1905,16 +2342,28 @@ panelplot5replot 0 #
 		##########################
         #
         ticksize 0 0 0 0
-        define lminy (-9)
-        define lmaxy (9)
+        define lminy (-1.1)
+        define lmaxy (1.1)
         limits $mytin $mytout $lminy $lmaxy
-        define nm7 ($numpanels-7)
-        ctype default window 8 -$numpanels 2:8 $nm7 box 1 2 0 0
-        #yla "\frac{\Phi_{\rm BH}}{\Psi_{\rm BH}}"
-        yla "\Phi/\Psi"
-		xla "t [r_g/c]"
+        define nm ($numpanels-8)
+        ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        expand 0.9
+        #yla "\frac{\Phi_{\rm H}}{\Psi_{\rm tH}}"
+        yla "\Psi_{\rm tH}/\Phi_{\rm H}"
+        expand 0.7
+		#xla "t [r_g/c]"
+        expand 0.9
+        # SM acting stupid and not putting down consistent ticks (depends upon box 1 2 0 0 vs. box 0 2 0 0)
+        # so put in tick labels manually
+        relocate 0 -1.5
+        putlabel 5 "0"
+        relocate 10000 -1.5
+        putlabel 5 "10^4"
+        relocate 15000 -1.6
+        putlabel 5 "t [r_g/c]"
+        expand 1.1
         #
-        ltype 0 pl 0 ((ts)) ((fstotnormD)) 0011 $mytin $mytout $lminy $lmaxy
+        ltype 0 pl 0 ((ts)) ((1.0/fstotnormD)) 0011 $mytin $mytout $lminy $lmaxy
         #
         notation -4 4 -4 4
 		##########################
@@ -1978,7 +2427,7 @@ panelplot6replot 0 #
         limits $myhin $myhout $lminy $lmaxy
         define nm1 ($numpanels-1)
         ctype default window 8 -$numpanels 2:8 $nm1 box 0 2 0 0
-        yla "\dot{M}"
+        yla "\dot{M}_{\rm H}"
         #
         ltype 0 pl 0 avgh ((Mdotvsh)) 0011 $myhin $myhout $lminy $lmaxy
         #
@@ -1991,7 +2440,7 @@ panelplot6replot 0 #
         define nm1 ($numpanels-2)
         ctype default window 8 -$numpanels 2:8 $nm1 box 0 2 0 0
         #yla "\dot{E}/\dot{M}"
-        yla "\eta_{\rm BH}"
+        yla "\eta_{\rm H}"
         #
         ltype 0 pl 0 avgh ((EdotEMvsh)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 2 pl 0 avgh ((EdotMAvsh)) 0011 $myhin $myhout $lminy $lmaxy
@@ -2005,7 +2454,7 @@ panelplot6replot 0 #
         limits $myhin $myhout $lminy $lmaxy
         define nm1 ($numpanels-3)
         ctype default window 8 -$numpanels 2:8 $nm1 box 0 2 0 0
-        yla "\dot{L}/\dot{M}"
+        yla "l_{\rm H}"
         #
         ltype 0 pl 0 avgh ((LdotEMvsh)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 2 pl 0 avgh ((LdotMAvsh)) 0011 $myhin $myhout $lminy $lmaxy
@@ -2019,7 +2468,7 @@ panelplot6replot 0 #
         limits $myhin $myhout $lminy $lmaxy
         define nm1 ($numpanels-4)
         ctype default window 8 -$numpanels 2:8 $nm1 box 1 2 0 0
-        yla "\Upsilon"
+        yla "\Upsilon_{\rm H}"
         xla "\theta"
         #
         #
@@ -2069,6 +2518,10 @@ panelplot7   0 #
         define numpanels 5
         #
 		notation -3 3 -3 3
+        define expandlow (1.01)
+        define expandverylow (0.67)
+        define expanddefault (1.5)
+        #
 		panelplot7replot
 		#
 panelplot7replot 0 #		
@@ -2085,8 +2538,10 @@ panelplot7replot 0 #
         define lminy (-5.9)
         define lmaxy (-0.1)
         limits $mymin $mymout $lminy $lmaxy
-        ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
+        expand $expandlow
+        ctype default window 8 -$numpanels 3:8 $numpanels box 0 2 0 0
         yla "|a_m|/|a_0|"
+        expand $expanddefault
         #
         set normstringradhor=sprintf('|a_{m>0}|/|a_{m=0}|=%3.2g',normpowerm1radhor)
         define normstringradhordef (normstringradhor)
@@ -2100,13 +2555,13 @@ panelplot7replot 0 #
         set normstringall=sprintf('|a_{m>0}|/|a_{m=0}|=%3.2g',normpowerm1radhor) + sprintf(' %3.2g',normpowerm1rad4)
         #+ sprintf(' %3.2g',normpowerm1rad8) + sprintf(' %3.2g',normpowerm1rad30)
         define normstringalldef (normstringall)
-        expand 0.9
+        expand $expandverylow
         relocate 0.07  -4
         putlabel 6 "\dot{M} in Disk"
-        # at r=r_+
+        # at r=r_{\rm H}
         relocate 0.07  -5.2
         putlabel 6 $normstringalldef
-        expand 1.5
+        expand $expanddefault
         #
         ltype 0 pl 0 mm powerm1radhor 1111 $mymin $mymout  $lminy $lmaxy
         ltype 2 pl 0 mm powerm1rad4 1111 $mymin $mymout  $lminy $lmaxy
@@ -2121,8 +2576,10 @@ panelplot7replot 0 #
         define lmaxy (-0.1)
         limits $mymin $mymout $lminy $lmaxy
         define nm1 ($numpanels-1)
-        ctype default window 8 -$numpanels 2:8 $nm1 box 0 2 0 0
+        expand $expandlow
+        ctype default window 8 -$numpanels 3:8 $nm1 box 0 2 0 0
         yla "|a_m|/|a_0|"
+        expand $expanddefault
         #
         set normstringradhor=sprintf('|a_{m>0}|/|a_{m=0}|=%3.2g',normpowerm2radhor)
         define normstringradhordef (normstringradhor)
@@ -2135,13 +2592,13 @@ panelplot7replot 0 #
         print {normpowerm2radhor normpowerm2rad4 normpowerm2rad8 normpowerm2rad30}
         set normstringall=sprintf('|a_{m>0}|/|a_{m=0}|=%3.2g',normpowerm2radhor) + sprintf(' %3.2g',normpowerm2rad4) + sprintf(' %3.2g',normpowerm2rad8) + sprintf(' %3.2g',normpowerm2rad30)
         define normstringalldef (normstringall)
-        expand 0.9
+        expand $expandverylow
         relocate 0.07  -4
         #  at r/r_g=r_+/r_g,4,8,30
         putlabel 6 "M_0 in Disk"
         relocate 0.07  -5.2
         putlabel 6 $normstringalldef
-        expand 1.5
+        expand $expanddefault
         #
         ltype 0 pl 0 mm powerm2radhor 1111 $mymin $mymout $lminy $lmaxy
         ltype 2 pl 0 mm powerm2rad4 1111 $mymin $mymout $lminy $lmaxy
@@ -2155,8 +2612,10 @@ panelplot7replot 0 #
         define lmaxy (-0.1)
         limits $mymin $mymout $lminy $lmaxy
         define nm1 ($numpanels-2)
-        ctype default window 8 -$numpanels 2:8 $nm1 box 0 2 0 0
+        expand $expandlow
+        ctype default window 8 -$numpanels 3:8 $nm1 box 0 2 0 0
         yla "|a_m|/|a_0|"
+        expand $expanddefault
         #
         set normstringradhor=sprintf('|a_{m>0}|/|a_{m=0}|=%3.2g',normpowerm3radhor)
         define normstringradhordef (normstringradhor)
@@ -2169,13 +2628,13 @@ panelplot7replot 0 #
         print {normpowerm3radhor normpowerm3rad4 normpowerm3rad8 normpowerm3rad30}
         set normstringall=sprintf('|a_{m>0}|/|a_{m=0}|=%3.2g',normpowerm3radhor) + sprintf(' %3.2g',normpowerm3rad4) + sprintf(' %3.2g',normpowerm3rad8) + sprintf(' %3.2g',normpowerm3rad30)
         define normstringalldef (normstringall)
-        expand 0.9
+        expand $expandverylow
         relocate 0.07  -4
         putlabel 6 "E_g in Disk"
         # at r=4r_g
         relocate 0.07 -5.2
         putlabel 6 $normstringalldef
-        expand 1.5
+        expand $expanddefault
         #
         ltype 0 pl 0 mm powerm3radhor 1111 $mymin $mymout $lminy $lmaxy
         ltype 2 pl 0 mm powerm3rad4 1111 $mymin $mymout $lminy $lmaxy
@@ -2189,8 +2648,10 @@ panelplot7replot 0 #
         define lmaxy (-0.1)
         limits $mymin $mymout $lminy $lmaxy
         define nm1 ($numpanels-3)
-        ctype default window 8 -$numpanels 2:8 $nm1 box 0 2 0 0
+        expand $expandlow
+        ctype default window 8 -$numpanels 3:8 $nm1 box 0 2 0 0
         yla "|a_m|/|a_0|"
+        expand $expanddefault
         #
         set normstringradhor=sprintf('|a_{m>0}|/|a_{m=0}|=%3.2g',normpowerm4radhor)
         define normstringradhordef (normstringradhor)
@@ -2203,13 +2664,14 @@ panelplot7replot 0 #
         print {normpowerm4radhor normpowerm4rad4 normpowerm4rad8 normpowerm4rad30}
         set normstringall=sprintf('|a_{m>0}|/|a_{m=0}|=%3.2g',normpowerm4radhor) + sprintf(' %3.2g',normpowerm4rad4) + sprintf(' %3.2g',normpowerm4rad8) + sprintf(' %3.2g',normpowerm4rad30)
         define normstringalldef (normstringall)
-        expand 0.9
+        expand $expandverylow
         relocate 0.07  -4
         putlabel 6 "E_B in Jet"
         # at r=4r_g
-        relocate 0.07  -5.2
+        #relocate 0.07  -5.2
+        relocate 0.07  -1
         putlabel 6 $normstringalldef
-        expand 1.5
+        expand $expanddefault
         #
         ltype 0 pl 0 mm powerm4radhor 1111 $mymin $mymout $lminy $lmaxy
         ltype 2 pl 0 mm powerm4rad4 1111 $mymin $mymout $lminy $lmaxy
@@ -2223,9 +2685,11 @@ panelplot7replot 0 #
         define lmaxy (-0.1)
         limits $mymin $mymout $lminy $lmaxy
         define nm1 ($numpanels-4)
-        ctype default window 8 -$numpanels 2:8 $nm1 box 1 2 0 0
+        expand $expandlow
+        ctype default window 8 -$numpanels 3:8 $nm1 box 1 2 0 0
         yla "|a_m|/|a_0|"
-        xla "m mode at r=r_+,4r_g,8r_g,30r_g"
+        xla "m [at r=r_{\rm H},4r_g,8r_g,30r_g]"
+        expand $expanddefault
         #
         set normstringradhor=sprintf('|a_{m>0}|/|a_{m=0}|=%3.2g',normpowerm5radhor)
         define normstringradhordef (normstringradhor)
@@ -2238,13 +2702,13 @@ panelplot7replot 0 #
         print {normpowerm5radhor normpowerm5rad4 normpowerm5rad8 normpowerm5rad30}
         set normstringall=sprintf('|a_{m>0}|/|a_{m=0}|=%3.2g',normpowerm5radhor) + sprintf(' %3.2g',normpowerm5rad4) + sprintf(' %3.2g',normpowerm5rad8) + sprintf(' %3.2g',normpowerm5rad30)
         define normstringalldef (normstringall)
-        expand 0.9
+        expand $expandverylow
         relocate 0.07  -4
         putlabel 6 "\dot{E}^{\rm EM} in Jet"
         # at r=4r_g
         relocate 0.07  -5.2
         putlabel 6 $normstringalldef
-        expand 1.5
+        expand $expanddefault
         #
         ltype 0 pl 0 mm powerm5radhor 1111 $mymin $mymout $lminy $lmaxy
         ltype 2 pl 0 mm powerm5rad4 1111 $mymin $mymout $lminy $lmaxy
@@ -2304,7 +2768,7 @@ gammieplot 0    #
                 #
                 ctype default window 2 2 1 2 box 1 2 0 0
                 yla u^r
-                xla r/M
+                xla "r [r_g]"
                 ltype 0 ctype default ltype 0 plo 0 xsim uurvsr
                 #
                 ltype 2 ctype default ltype 2 plo 0 xgam guu1
@@ -2320,7 +2784,7 @@ gammieplot 0    #
                 }\
                 else{\
                  limits $xinner $xouter -7 7
-                 define x2label "\dot{L}/\dot{M}"
+                 define x2label "-\dot{L}/\dot{M}"
                  set jshow=gl
                  set jsimshow=FLPAvsr
                  set divisor=1
@@ -2346,26 +2810,26 @@ gammieplot 0    #
                 ctype red ltype 0 vertline xisco
                 #
                 #####################################
-                limits $xinner $xouter -3 1
+                limits $xinner $xouter -1 3
                 if(logr==0){ ticksize 0 0 -1 0 } else{ ticksize -1 0 -1 0  }
                 notation -2 2 -2 2
                 #
                 ctype default window 2 2 1 1 box 1 2 0 0
-                xla r/M
-                yla "comoving energy density"
-                set lbcog=LG(bcog)
+                xla "r [r_g]"
+                yla "\rho_0 u_g u_b"
+                set lbcog=LG(bcog*(FMvsrg))
                 ctype green ltype 0 plo 0 xsim lbcog
-                set lrhovsrg=LG(rhovsrg)
+                set lrhovsrg=LG(rhovsrg*(FMvsrg))
                 ctype default ltype 0 plo 0 xsim lrhovsrg
-                set luvsrg=LG(uvsrg)
+                set luvsrg=LG(uvsrg*(FMvsrg))
                 ctype magenta ltype 0 plo 0 xsim luvsrg
                 #
                 set lmygbsqvsr=LG(mygbsqvsr)
-                set lged=LG(ged)
+                set lged=LG(ged*(FMvsrg))
                 #
                 ctype green ltype 2 plo 0 xgam lged
                 #
-                set lgrho=LG(grho)
+                set lgrho=LG(grho*(FMvsrg))
                 #
                 ctype default ltype 2 plo 0 xgam lgrho
                 #
@@ -2382,7 +2846,7 @@ gammieplot 0    #
                 }\
                 else{\
                  limits $xinner $xouter -2.0 2.0
-                 define x2label "\dot{E}/\dot{M}"
+                 define x2label "-\dot{E}/\dot{M}"
                  set eshow=gE
                  set esimshow=FEPAvsr
                  set divisor=1
@@ -2444,8 +2908,10 @@ panelplot8replot 0 #
         define lminy (-0)
         define lmaxy (2.6)
         limits $myphiin $myphiout $lminy $lmaxy
-        ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
-        yla "\rho [\rm avg]"
+        ctype default window 8 -$numpanels 3:8 $numpanels box 0 2 0 0
+        expand 1.2
+        yla "\rho^{\rm avg}_0"
+        expand 1.5
         #
         relocate 0.17   2.2
         expand 0.9
@@ -2454,9 +2920,9 @@ panelplot8replot 0 #
         putlabel 6 $ts1def
         expand 1.5
         #
-        relocate 3.14   2
+        relocate 3.14   1.83
         expand 0.9
-        putlabel 5 "r=r_+"
+        putlabel 5 "r=r_{\rm H}"
         expand 1.5
         ltype 0 pl 0 phi1 rhovsphi1radhor 0111 $myphiin $myphiout  $lminy $lmaxy
         relocate 3.14   1.1
@@ -2481,9 +2947,11 @@ panelplot8replot 0 #
         define lmaxy (2.6)
         limits $myphiin $myphiout $lminy $lmaxy
         define nm ($numpanels-1)
-        ctype default window 8 -$numpanels 2:8 $nm  box 0 2 0 0
-        yla "\rho [\rm eq]"
+        ctype default window 8 -$numpanels 3:8 $nm  box 0 2 0 0
+        expand 1.2
+        yla "\rho^{\rm eq}_0"
         #xla "\phi"
+        expand 1.5
         #
         relocate 0.17   2.2
         expand 0.9
@@ -2503,8 +2971,10 @@ panelplot8replot 0 #
         define lmaxy (2.6)
         limits $myphiin $myphiout $lminy $lmaxy
         define nm ($numpanels-2)
-        ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
-        yla "\rho [\rm avg]"
+        ctype default window 8 -$numpanels 3:8 $nm box 0 2 0 0
+        expand 1.2
+        yla "\rho^{\rm avg}_0"
+        expand 1.5
         #
         relocate 0.17   2.2
         expand 0.9
@@ -2524,9 +2994,11 @@ panelplot8replot 0 #
         define lmaxy (2.6)
         limits $myphiin $myphiout $lminy $lmaxy
         define nm ($numpanels-3)
-        ctype default window 8 -$numpanels 2:8 $nm  box 1 2 0 0
-        yla "\rho [\rm eq]"
+        ctype default window 8 -$numpanels 3:8 $nm  box 1 2 0 0
+        expand 1.2
+        yla "\rho^{\rm eq}_0"
         xla "\phi"
+        expand 1.5
         #
         relocate 0.17   2.2
         expand 0.9
@@ -2541,4 +3013,195 @@ panelplot8replot 0 #
         #ltype 3 pl 0 phi2 rhovsphi2eqrad30 0111 $myphiin $myphiout  $lminy $lmaxy
         #
         #
+        #
+		###################################
+panelplot8b   0 #
+		#
+		#
+        define myphiin (0)
+		define myphiout (2*pi)
+        # 
+		#
+		fdraft
+		ctype default window 8 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+		fdraft
+		ctype default window 8 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+        define numpanels 2
+        #
+		panelplot8breplot
+		#
+panelplot8breplot 0 #		
+        #
+		###################################
+        #
+        ticksize 0 0 -1 0
+        define lminy (-0)
+        define lmaxy (2.6)
+        limits $myphiin $myphiout $lminy $lmaxy
+        ctype default window 8 -$numpanels 3:8 $numpanels box 0 2 0 0
+        expand 1.2
+        yla "\rho^{\rm avg}_0"
+        expand 1.5
+        #
+        relocate 3.14   1.73
+        expand 0.9
+        putlabel 5 "r=r_{\rm H}"
+        expand 1.5
+        ltype 0 pl 0 phi2 rhovsphi2radhor 0111 $myphiin $myphiout  $lminy $lmaxy
+        relocate 3.14   0.9
+        expand 0.9
+        putlabel 5 "r=4r_g"
+        expand 1.5
+        ltype 2 pl 0 phi2 rhovsphi2rad4 0111 $myphiin $myphiout  $lminy $lmaxy
+        relocate 3.14   0.25
+        expand 0.9
+        putlabel 5 "r=8r_g"
+        expand 1.5
+        ltype 1 pl 0 phi2 rhovsphi2rad8 0111 $myphiin $myphiout  $lminy $lmaxy
+        #relocate 3.14   -0.3
+        #expand 0.9
+        #putlabel 5 "r=30r_g"
+        #expand 1.5
+        #ltype 3 pl 0 phi2 rhovsphi2rad30 0111 $myphiin $myphiout  $lminy $lmaxy
+        #
+        #
+        ticksize 0 0 -1 0
+        define lminy (-0)
+        define lmaxy (2.6)
+        limits $myphiin $myphiout $lminy $lmaxy
+        define nm ($numpanels-1)
+        ctype default window 8 -$numpanels 3:8 $nm  box 1 2 0 0
+        expand 1.2
+        yla "\rho^{\rm eq}_0"
+        xla "\phi"
+        expand 1.5
+        #
+        #
+        #
+        ltype 0 pl 0 phi2 rhovsphi2eqradhor 0111 $myphiin $myphiout  $lminy $lmaxy
+        ltype 2 pl 0 phi2 rhovsphi2eqrad4 0111 $myphiin $myphiout  $lminy $lmaxy
+        ltype 1 pl 0 phi2 rhovsphi2eqrad8 0111 $myphiin $myphiout  $lminy $lmaxy
+        #ltype 3 pl 0 phi2 rhovsphi2eqrad30 0111 $myphiin $myphiout  $lminy $lmaxy
+        #
+        #
+        #
+###############
+extra1 0 # from fluxvsr plot, removed
+		###################################
+        #
+        ticksize -1 0 -1 0
+        define lminy (LG(0.011))
+        define lmaxy (LG(5.0))
+        limits $xin $xout $lminy $lmaxy
+        define nm ($numpanels-8)
+        ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        expand $expandlow
+        yla "l_{j,mw,w}"
+        expand $expanddefault
+        #
+        ltype 0 pl 0 (LG(r)) (LG(letajEMvsr+letajMAKEvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 (LG(r)) (LG(letamwEMvsr+letamwMAKEvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 1 pl 0 (LG(r)) (LG(letawEMvsr+letawMAKEvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        #
+thickdisk3lmode # 0
+        #
+        cd /data2/jmckinne/thickdisk3/fromorange/thickdisk3/
+        !sed 's/nan/0/g' datavst7.txt > datavst7n.txt
+        !sed 's/inf/0/g' datavst7n.txt > datavst7nn.txt
+        #  !cat datavst7nn.txt | column -t | less -S
+        da datavst7nn.txt
+        lines 1 1000000
+        read {tici1 1 ts1 2 phibh1 3 phij1 6 lmode1 26}
+        #
+        cd /data2/jmckinne/thickdisk3/fromorange/thickdiskhr3/
+        !sed 's/nan/0/g' datavst7.txt > datavst7n.txt
+        !sed 's/inf/0/g' datavst7n.txt > datavst7nn.txt
+        da datavst7nn.txt
+        #  !cat datavst7nn.txt | column -t | less -S
+        lines 4 1000000
+        read {tici2 1 ts2 2 phibh2 3 phij2 6 lmode2 26}
+        set myuse=(tici2!=25360 && tici2!=25361)
+        set ts2new=ts2 if(myuse)
+        set lmode2new=lmode2 if(myuse)
+        set phibh2new=phibh2 if(myuse)
+        set phij2new=phij2 if(myuse)
+        #
+        set psiophi1=(1.0/lmode1)
+        set psiophi1=(psiophi1>1.0 ? 1.0 : psiophi1)
+        set psiophi1=(psiophi1<-1.0 ? -1.0 : psiophi1)
+        #
+        set psiophi2=(1.0/lmode2new)
+        set psiophi2=(psiophi2>1.0 ? 1.0 : psiophi2)
+        set psiophi2=(psiophi2<-1.0 ? -1.0 : psiophi2)
+        #
+        #        
+        #        
+        #        
+		fdraft
+        ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+        #
+        device postencap psiophitoroidal.eps
+        #
+        define x1label "t[r_g/c]"
+        define x2label "\Psi_{\rm tH}/\Phi_{\rm H}"
+        #ctype default ltype 0 pl 0 ts1 psiophi1
+        #ctype red ltype 0 pl 0 ts2new psiophi2 0010
+        ctype default ltype 0 pl 0 ts2new psiophi2 
+        #
+        device X11
+        #
+        set doscp=1
+        #
+        if(doscp==1){\
+         !scp psiophitoroidal.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
+        }
+        #
+        defaults
+        #
+        ctype default ltype 0 pl 0 ts1 phibh1
+        ctype red ltype 0 pl 0 ts2new phibh2new 0010
+        #
+        ctype default ltype 0 pl 0 ts1 phij1
+        ctype red ltype 0 pl 0 ts2new phij2new 0010
+        #
+        #
+        #
+boundcheck 0
+        #jrdpcf3dudipole dump0000
+        #
+        jrdpcf3duentropy dump0000
+        #        jrdpcf3duentropy dump0001
+        #
+        # negative is unbound
+        #
+        set myuse=(rho>1E-4 ? 1 : 0)
+        set cons1=(myuse==1 ? -(1+ud0) : 0)
+        # cons1: min:-0.174734205 max:0.00496853888
+        #
+        set cons2=(myuse==1 ? -ud0*(u+p)/rho : 0)
+        # cons2: min:-0.2810166478 max:0
+        #
+        set cons3=(myuse==1 ? -ud0*(bsq)/rho : 0)
+        # cons3: min:-0.003286495339 max:0
+        #
+        set constotal=cons1+cons2+cons3
+        # constotal: min:-0.2786330283 max:0
+        #
+        set cons3rat=(myuse==1 ? (cons3/constotal) : 0)
+        #
+        # at most 1% effect over all points within the torus
+        #
+        stresscalc 1
+        set mu1 = -(Tud10+rho*uu1)/(rho*uu1)
+        set mu3 = -Tud30/(rho*uu3)
+        #
+        set entropy=p/rho**$gam
         #
