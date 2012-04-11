@@ -206,11 +206,14 @@ velvsrad 1 #
         #
 velvsradrd 0 #
         #
+        !cp /data2/jmckinne/thickdisk7/fromorange_movie8new5/inf* .
+        #
         rdheaderstuff
         #
         #
         # 1D stuff
         rdvsr
+        riscocalcs
         visctheory
         #
         rdvsh
@@ -225,8 +228,28 @@ velvsradrd 0 #
         #
         # other 1D stuff
         rdvsphi
+        #
         rdpowervsm
+        rdpowervsn
+        rdpowervsl
+        #
         rdrbarnormvsphi
+        rdrbarnormvsrad
+        rdrbarnormvstheta
+        #
+riscocalcs 0 #
+        #
+        if(a>=0.0){\
+         riscocalc 0 risco # assumes stuff always goes positive
+         riscocalc 1 risco2 # assumes stuff always goes positive
+        }
+        if(a<0.0){\
+         riscocalc 1 risco # assumes stuff always goes positive
+         riscocalc 0 risco2 # assumes stuff always goes positive
+        }
+        riscocalc 0 riscoprograde
+        riscocalc 1 riscoretrograde
+        elinfcalc risco tdeinfisco tdlinfisco
         #
 rdheaderstuff 0 #
         #
@@ -261,36 +284,37 @@ rdvsr 0 #
         # datavsr4.txt: rho,u,v,B over 2.0*hoverr3d non-jet
         #
         ################################################
-        # 22
+        # 23
         da datavsr1.txt
         lines 1 1000000
-        read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii r rhosrhosqvsr ugsrhosqvsr uu0rhosqvsr vus1rhosqvsr vuas1rhosqvsr vus3rhosqvsr vuas3rhosqvsr Bs1rhosqvsr Bas1rhosqvsr Bs2rhosqvsr Bas2rhosqvsr Bs3rhosqvsr Bas3rhosqvsr bs1rhosqvsr bas1rhosqvsr bs2rhosqvsr bas2rhosqvsr bs3rhosqvsr bas3rhosqvsr bsqrhosqvsr}
+        read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii r rhosrhosqvsr ugsrhosqvsr uu0rhosqvsr vus1rhosqvsr vuas1rhosqvsr vus3rhosqvsr vuas3rhosqvsr vuasrotrhosqvsr Bs1rhosqvsr Bas1rhosqvsr Bs2rhosqvsr Bas2rhosqvsr Bs3rhosqvsr Bas3rhosqvsr bs1rhosqvsr bas1rhosqvsr bs2rhosqvsr bas2rhosqvsr bs3rhosqvsr bas3rhosqvsr bsqrhosqvsr}
         #
-        # 22
+        # 23
         da datavsr1b.txt
         lines 1 1000000
-        read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii r rhosrhosqdcvsr ugsrhosqdcvsr uu0rhosqdcvsr vus1rhosqdcvsr vuas1rhosqdcvsr vus3rhosqdcvsr vuas3rhosqdcvsr Bs1rhosqdcvsr Bas1rhosqdcvsr Bs2rhosqdcvsr Bas2rhosqdcvsr Bs3rhosqdcvsr Bas3rhosqdcvsr bs1rhosqdcvsr bas1rhosqdcvsr bs2rhosqdcvsr bas2rhosqdcvsr bs3rhosqdcvsr bas3rhosqdcvsr bsqrhosqdcvsr}
+        read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii r rhosrhosqdcvsr ugsrhosqdcvsr uu0rhosqdcvsr vus1rhosqdcvsr vuas1rhosqdcvsr vus3rhosqdcvsr vuas3rhosqdcvsr vuasrotrhosqdcvsr Bs1rhosqdcvsr Bas1rhosqdcvsr Bs2rhosqdcvsr Bas2rhosqdcvsr Bs3rhosqdcvsr Bas3rhosqdcvsr bs1rhosqdcvsr bas1rhosqdcvsr bs2rhosqdcvsr bas2rhosqdcvsr bs3rhosqdcvsr bas3rhosqdcvsr bsqrhosqdcvsr}
         #
-        # 22
+        # 23
         da datavsr1c.txt
         lines 1 1000000
-        read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii r rhosrhosqdcdenvsr ugsrhosqdcdenvsr uu0rhosqdcdenvsr vus1rhosqdcdenvsr vuas1rhosqdcdenvsr vus3rhosqdcdenvsr vuas3rhosqdcdenvsr Bs1rhosqdcdenvsr Bas1rhosqdcdenvsr Bs2rhosqdcdenvsr Bas2rhosqdcdenvsr Bs3rhosqdcdenvsr Bas3rhosqdcdenvsr bs1rhosqdcdenvsr bas1rhosqdcdenvsr bs2rhosqdcdenvsr bas2rhosqdcdenvsr bs3rhosqdcdenvsr bas3rhosqdcdenvsr bsqrhosqdcdenvsr}
+        read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii r rhosrhosqdcdenvsr ugsrhosqdcdenvsr uu0rhosqdcdenvsr vus1rhosqdcdenvsr vuas1rhosqdcdenvsr vus3rhosqdcdenvsr vuas3rhosqdcdenvsr vuasrotrhosqdcdenvsr Bs1rhosqdcdenvsr Bas1rhosqdcdenvsr Bs2rhosqdcdenvsr Bas2rhosqdcdenvsr Bs3rhosqdcdenvsr Bas3rhosqdcdenvsr bs1rhosqdcdenvsr bas1rhosqdcdenvsr bs2rhosqdcdenvsr bas2rhosqdcdenvsr bs3rhosqdcdenvsr bas3rhosqdcdenvsr bsqrhosqdcdenvsr}
         #
-        # 22
+        # 23
         da datavsr2.txt
         lines 1 1000000
-        read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii r rhosrhosqeqvsr ugsrhosqeqvsr uu0rhosqeqvsr vus1rhosqeqvsr vuas1rhosqeqvsr vus3rhosqeqvsr vuas3rhosqeqvsr Bs1rhosqeqvsr Bas1rhosqeqvsr Bs2rhosqeqvsr Bas2rhosqeqvsr Bs3rhosqeqvsr Bas3rhosqeqvsr bs1rhosqeqvsr bas1rhosqeqvsr bs2rhosqeqvsr bas2rhosqeqvsr bs3rhosqeqvsr bas3rhosqeqvsr bsqrhosqeqvsr}
+        read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii r rhosrhosqeqvsr ugsrhosqeqvsr uu0rhosqeqvsr vus1rhosqeqvsr vuas1rhosqeqvsr vus3rhosqeqvsr vuas3rhosqeqvsr vuasrotrhosqeqvsr Bs1rhosqeqvsr Bas1rhosqeqvsr Bs2rhosqeqvsr Bas2rhosqeqvsr Bs3rhosqeqvsr Bas3rhosqeqvsr bs1rhosqeqvsr bas1rhosqeqvsr bs2rhosqeqvsr bas2rhosqeqvsr bs3rhosqeqvsr bas3rhosqeqvsr bsqrhosqeqvsr}
         #
-        # 22
+        # 23
         da datavsr3.txt
         lines 1 0000000
-        read '%d %g   %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-        {ii r rhosrhosqhorpickvsr ugsrhosqhorpickvsr uu0rhosqhorpickvsr vus1rhosqhorpickvsr vuas1rhosqhorpickvsr vus3rhosqhorpickvsr vuas3rhosqhorpickvsr Bs1rhosqhorpickvsr Bas1rhosqhorpickvsr Bs2rhosqhorpickvsr Bas2rhosqhorpickvsr Bs3rhosqhorpickvsr Bas3rhosqhorpickvsr bs1rhosqhorpickvsr bas1rhosqhorpickvsr bs2rhosqhorpickvsr bas2rhosqhorpickvsr bs3rhosqhorpickvsr bas3rhosqhorpickvsr bsqrhosqhorpickvsr}
+        read '%d %g   %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+        {ii r rhosrhosqhorpickvsr ugsrhosqhorpickvsr uu0rhosqhorpickvsr vus1rhosqhorpickvsr vuas1rhosqhorpickvsr vus3rhosqhorpickvsr vuas3rhosqhorpickvsr vuasrotrhosqhorpickvsr Bs1rhosqhorpickvsr Bas1rhosqhorpickvsr Bs2rhosqhorpickvsr Bas2rhosqhorpickvsr Bs3rhosqhorpickvsr Bas3rhosqhorpickvsr bs1rhosqhorpickvsr bas1rhosqhorpickvsr bs2rhosqhorpickvsr bas2rhosqhorpickvsr bs3rhosqhorpickvsr bas3rhosqhorpickvsr bsqrhosqhorpickvsr}
         #
-        # 25
+        # 26
         da datavsr4.txt
         lines 1 1000000
-        read '%d %g   %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii r rhoshorvsr ugshorvsr bsqshorvsr bsqorhoshorvsr bsqougshorvsr uu0horvsr vus1horvsr vuas1horvsr vus3horvsr vuas3horvsr Bs1horvsr Bas1horvsr Bs2horvsr Bas2horvsr Bs3horvsr Bas3horvsr bs1horvsr bas1horvsr bs2horvsr bas2horvsr bs3horvsr bas3horvsr bsqhorvsr}
+        read '%d %g   %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+        {ii r rhoshorvsr ugshorvsr bsqshorvsr bsqorhoshorvsr bsqougshorvsr uu0horvsr vus1horvsr vuas1horvsr vus3horvsr vuas3horvsr vuasrothorvsr Bs1horvsr Bas1horvsr Bs2horvsr Bas2horvsr Bs3horvsr Bas3horvsr bs1horvsr bas1horvsr bs2horvsr bas2horvsr bs3horvsr bas3horvsr bsqhorvsr}
         set gam=4.0/3.0
         set pg=(gam-1.0)*ugshorvsr
         set beta=pg/bsqshorvsr
@@ -349,18 +373,18 @@ rdvsr 0 #
 rdvsh 0 #
         da datavsh1.txt
         lines 1 1000000
-        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-        {ii hinnx4 rhosrhosqrad4vsh ugsrhosqrad4vsh uu0rhosqrad4vsh vus1rhosqrad4vsh vuas1rhosqrad4vsh vus3rhosqrad4vsh vuas3rhosqrad4vsh Bs1rhosqrad4vsh Bas1rhosqrad4vsh Bs2rhosqrad4vsh Bas2rhosqrad4vsh Bs3rhosqrad4vsh Bas3rhosqrad4vsh bs1rhosqrad4vsh bas1rhosqrad4vsh bs2rhosqrad4vsh bas2rhosqrad4vsh bs3rhosqrad4vsh bas3rhosqrad4vsh bsqrhosqrad4vsh}
+        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+        {ii hinnx4 rhosrhosqrad4vsh ugsrhosqrad4vsh uu0rhosqrad4vsh vus1rhosqrad4vsh vuas1rhosqrad4vsh vus3rhosqrad4vsh vuas3rhosqrad4vsh vuasrotrhosqrad4vsh Bs1rhosqrad4vsh Bas1rhosqrad4vsh Bs2rhosqrad4vsh Bas2rhosqrad4vsh Bs3rhosqrad4vsh Bas3rhosqrad4vsh bs1rhosqrad4vsh bas1rhosqrad4vsh bs2rhosqrad4vsh bas2rhosqrad4vsh bs3rhosqrad4vsh bas3rhosqrad4vsh bsqrhosqrad4vsh}
         #
         da datavsh2.txt
         lines 1 1000000
-        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-        {ii hinnx8 rhosrhosqrad8vsh ugsrhosqrad8vsh uu0rhosqrad8vsh vus1rhosqrad8vsh vuas1rhosqrad8vsh vus3rhosqrad8vsh vuas3rhosqrad8vsh Bs1rhosqrad8vsh Bas1rhosqrad8vsh Bs2rhosqrad8vsh Bas2rhosqrad8vsh Bs3rhosqrad8vsh Bas3rhosqrad8vsh bs1rhosqrad8vsh bas1rhosqrad8vsh bs2rhosqrad8vsh bas2rhosqrad8vsh bs3rhosqrad8vsh bas3rhosqrad8vsh bsqrhosqrad8vsh}
+        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+        {ii hinnx8 rhosrhosqrad8vsh ugsrhosqrad8vsh uu0rhosqrad8vsh vus1rhosqrad8vsh vuas1rhosqrad8vsh vus3rhosqrad8vsh vuas3rhosqrad8vsh vuasrotrhosqrad8vsh Bs1rhosqrad8vsh Bas1rhosqrad8vsh Bs2rhosqrad8vsh Bas2rhosqrad8vsh Bs3rhosqrad8vsh Bas3rhosqrad8vsh bs1rhosqrad8vsh bas1rhosqrad8vsh bs2rhosqrad8vsh bas2rhosqrad8vsh bs3rhosqrad8vsh bas3rhosqrad8vsh bsqrhosqrad8vsh}
         #
         da datavsh3.txt
         lines 1 1000000
-        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-        {ii hinnx30 rhosrhosqrad30vsh ugsrhosqrad30vsh uu0rhosqrad30vsh vus1rhosqrad30vsh vuas1rhosqrad30vsh vus3rhosqrad30vsh vuas3rhosqrad30vsh Bs1rhosqrad30vsh Bas1rhosqrad30vsh Bs2rhosqrad30vsh Bas2rhosqrad30vsh Bs3rhosqrad30vsh Bas3rhosqrad30vsh bs1rhosqrad30vsh bas1rhosqrad30vsh bs2rhosqrad30vsh bas2rhosqrad30vsh bs3rhosqrad30vsh bas3rhosqrad30vsh bsqrhosqrad30vsh}
+        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+        {ii hinnx30 rhosrhosqrad30vsh ugsrhosqrad30vsh uu0rhosqrad30vsh vus1rhosqrad30vsh vuas1rhosqrad30vsh vus3rhosqrad30vsh vuas3rhosqrad30vsh vuasrotrhosqrad30vsh Bs1rhosqrad30vsh Bas1rhosqrad30vsh Bs2rhosqrad30vsh Bas2rhosqrad30vsh Bs3rhosqrad30vsh Bas3rhosqrad30vsh bs1rhosqrad30vsh bas1rhosqrad30vsh bs2rhosqrad30vsh bas2rhosqrad30vsh bs3rhosqrad30vsh bas3rhosqrad30vsh bsqrhosqrad30vsh}
         #
         ################################################
 rdvst 0 #
@@ -624,6 +648,184 @@ rdvsphi 0
         #
         #
         #
+rdpowervsmold 0
+        ################
+        # powervsm
+        #
+        # powervsm%d%s_%s.txt" % (filenum,fileletter,pllabel)
+        #(_dx1,_dx2,_dx3))
+        #("ii","xtoplot","ytoplot"))
+        #(normpowersumnotm0a,normpowersumnotm0b,np.fabs(qty[0]),(1.0/_dx1)*np.fabs(qty[0])))
+        #
+        #
+        #
+        define filename powervs7vsmz_FMrhosq_diskcorona_phipow_radhor_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm1radhor}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm1radhor}
+        #
+        define filename powervs9vsma_FMrhosq_diskcorona_phipow_rad4_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm1rad4}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm1rad4}
+        #
+        define filename powervs9vsmb_FMrhosq_diskcorona_phipow_rad8_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm1rad8}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm1rad8}
+        #
+        define filename powervs9vsmc_FMrhosq_diskcorona_phipow_rad30_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm1rad30}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm1rad30}
+        #
+        ###########################
+        define filename powervs1vsmz_rhosrhosq_diskcorona_phipow_radhor_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm2radhor}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm2radhor}
+        #
+        #
+        define filename powervs1vsma_rhosrhosq_diskcorona_phipow_rad4_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm2rad4}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm2rad4}
+        #
+        define filename powervs1vsmb_rhosrhosq_diskcorona_phipow_rad8_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm2rad8}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm2rad8}
+        #
+        define filename powervs1vsmc_rhosrhosq_diskcorona_phipow_rad30_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm2rad30}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm2rad30}
+        #
+        ##############################
+        #
+        define filename powervs2vsmz_ugsrhosq_diskcorona_phipow_radhor_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm3radhor}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm3radhor}
+        #
+        define filename powervs2vsma_ugsrhosq_diskcorona_phipow_rad4_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm3rad4}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm3rad4}
+        #
+        define filename powervs2vsmb_ugsrhosq_diskcorona_phipow_rad8_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm3rad8}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm3rad8}
+        #
+        define filename powervs2vsmc_ugsrhosq_diskcorona_phipow_rad30_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm3rad30}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm3rad30}
+        #
+        ##############################
+  
+        define filename powervs6vsmz_bsqrhosq_jet_phipow_radhor_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm4radhor}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm4radhor}
+        #
+        define filename powervs8vsma_bsqrhosq_jet_phipow_rad4_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm4rad4}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm4rad4}
+        #
+        define filename powervs8vsmb_bsqrhosq_jet_phipow_rad8_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm4rad8}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm4rad8}
+        #
+        define filename powervs8vsmc_bsqrhosq_jet_phipow_rad30_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm4rad30}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm4rad30}
+        #
+        ##############################
+        define filename powervs9vsmz_FEEMrhosq_jet_phipow_radhor_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm5radhor}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm5radhor}
+        #
+        define filename powervs11vsma_FEEMrhosq_jet_phipow_rad4_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm5rad4}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm5rad4}
+        #
+        define filename powervs11vsmb_FEEMrhosq_jet_phipow_rad8_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm5rad8}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm5rad8}
+        #
+        define filename powervs11vsmc_FEEMrhosq_jet_phipow_rad30_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {mmi mm powerm5rad30}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerm5rad30}
+        #
 rdpowervsm 0
         ################
         # powervsm
@@ -635,180 +837,538 @@ rdpowervsm 0
         #
         #
         #
-        define filename powervsm7vsmz_FMrhosq_diskcorona_phipow_radhor_vsm.txt
+        define filename powervs7vsmz_FMrhosq_diskcorona_phipow_radhor_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm1radhor}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm1radhor}
         #
-        define filename powervsm9vsma_FMrhosq_diskcorona_phipow_rad4_vsm.txt
+        define filename powervs10vsma_FMrhosq_diskcorona_phipow_rad4_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm1rad4}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm1rad4}
         #
-        define filename powervsm9vsmb_FMrhosq_diskcorona_phipow_rad8_vsm.txt
+        define filename powervs10vsmb_FMrhosq_diskcorona_phipow_rad8_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm1rad8}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm1rad8}
         #
-        define filename powervsm9vsmc_FMrhosq_diskcorona_phipow_rad30_vsm.txt
+        define filename powervs10vsmc_FMrhosq_diskcorona_phipow_rad30_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm1rad30}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm1rad30}
         #
         ###########################
-        define filename powervsm1vsmz_rhosrhosq_diskcorona_phipow_radhor_vsm.txt
+        define filename powervs1vsmz_rhosrhosq_diskcorona_phipow_radhor_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm2radhor}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm2radhor}
         #
         #
-        define filename powervsm1vsma_rhosrhosq_diskcorona_phipow_rad4_vsm.txt
+        define filename powervs1vsma_rhosrhosq_diskcorona_phipow_rad4_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm2rad4}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm2rad4}
         #
-        define filename powervsm1vsmb_rhosrhosq_diskcorona_phipow_rad8_vsm.txt
+        define filename powervs1vsmb_rhosrhosq_diskcorona_phipow_rad8_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm2rad8}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm2rad8}
         #
-        define filename powervsm1vsmc_rhosrhosq_diskcorona_phipow_rad30_vsm.txt
+        define filename powervs1vsmc_rhosrhosq_diskcorona_phipow_rad30_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm2rad30}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm2rad30}
         #
         ##############################
         #
-        define filename powervsm2vsmz_ugsrhosq_diskcorona_phipow_radhor_vsm.txt
+        define filename powervs2vsmz_ugsrhosq_diskcorona_phipow_radhor_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm3radhor}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm3radhor}
         #
-        define filename powervsm2vsma_ugsrhosq_diskcorona_phipow_rad4_vsm.txt
+        define filename powervs2vsma_ugsrhosq_diskcorona_phipow_rad4_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm3rad4}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm3rad4}
         #
-        define filename powervsm2vsmb_ugsrhosq_diskcorona_phipow_rad8_vsm.txt
+        define filename powervs2vsmb_ugsrhosq_diskcorona_phipow_rad8_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm3rad8}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm3rad8}
         #
-        define filename powervsm2vsmc_ugsrhosq_diskcorona_phipow_rad30_vsm.txt
+        define filename powervs2vsmc_ugsrhosq_diskcorona_phipow_rad30_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm3rad30}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm3rad30}
         #
         ##############################
   
-        define filename powervsm6vsmz_bsqrhosq_jet_phipow_radhor_vsm.txt
+        define filename powervs6vsmz_bsqrhosq_jet_phipow_radhor_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm4radhor}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm4radhor}
         #
-        define filename powervsm8vsma_bsqrhosq_jet_phipow_rad4_vsm.txt
+        define filename powervs9vsma_bsqrhosq_jet_phipow_rad4_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm4rad4}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm4rad4}
         #
-        define filename powervsm8vsmb_bsqrhosq_jet_phipow_rad8_vsm.txt
+        define filename powervs9vsmb_bsqrhosq_jet_phipow_rad8_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm4rad8}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm4rad8}
         #
-        define filename powervsm8vsmc_bsqrhosq_jet_phipow_rad30_vsm.txt
+        define filename powervs9vsmc_bsqrhosq_jet_phipow_rad30_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm4rad30}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm4rad30}
         #
         ##############################
-        define filename powervsm9vsmz_FEEMrhosq_jet_phipow_radhor_vsm.txt
+        define filename powervs9vsmz_FEEMrhosq_jet_phipow_radhor_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm5radhor}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm5radhor}
         #
-        define filename powervsm11vsma_FEEMrhosq_jet_phipow_rad4_vsm.txt
+        define filename powervs12vsma_FEEMrhosq_jet_phipow_rad4_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm5rad4}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm5rad4}
         #
-        define filename powervsm11vsmb_FEEMrhosq_jet_phipow_rad8_vsm.txt
+        define filename powervs12vsmb_FEEMrhosq_jet_phipow_rad8_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm5rad8}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm5rad8}
         #
-        define filename powervsm11vsmc_FEEMrhosq_jet_phipow_rad30_vsm.txt
+        define filename powervs12vsmc_FEEMrhosq_jet_phipow_rad30_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {mmi mm powerm5rad30}
-        !head -3 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
         da $filename.norm
         read '%g' {normpowerm5rad30}
         #
         #
-rdrbarnormvsphi 0
+rdpowervsl 0
         ################
-        # rbarnormvsphi
+        # powervsl
+        #
+        # powervsl%d%s_%s.txt" % (filenum,fileletter,pllabel)
+        #(_dx1,_dx2,_dx3))
+        #("ii","xtoplot","ytoplot"))
+        #(normpowersumnotm0a,normpowersumnotm0b,np.fabs(qty[0]),(1.0/_dx1)*np.fabs(qty[0])))
+        #
+        #
+        #
+        define filename powervs7vslz_FMrhosq_diskcorona_thetapow_radhor_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl1radhor}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl1radhor}
+        #
+        define filename powervs9vsla_FMrhosq_diskcorona_thetapow_rad4_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl1rad4}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl1rad4}
+        #
+        define filename powervs9vslb_FMrhosq_diskcorona_thetapow_rad8_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl1rad8}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl1rad8}
+        #
+        define filename powervs9vslc_FMrhosq_diskcorona_thetapow_rad30_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl1rad30}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl1rad30}
+        #
+        ###########################
+        define filename powervs1vslz_rhosrhosq_diskcorona_thetapow_radhor_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl2radhor}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl2radhor}
+        #
+        #
+        define filename powervs1vsla_rhosrhosq_diskcorona_thetapow_rad4_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl2rad4}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl2rad4}
+        #
+        define filename powervs1vslb_rhosrhosq_diskcorona_thetapow_rad8_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl2rad8}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl2rad8}
+        #
+        define filename powervs1vslc_rhosrhosq_diskcorona_thetapow_rad30_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl2rad30}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl2rad30}
+        #
+        ##############################
+        #
+        define filename powervs2vslz_ugsrhosq_diskcorona_thetapow_radhor_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl3radhor}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl3radhor}
+        #
+        define filename powervs2vsla_ugsrhosq_diskcorona_thetapow_rad4_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl3rad4}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl3rad4}
+        #
+        define filename powervs2vslb_ugsrhosq_diskcorona_thetapow_rad8_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl3rad8}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl3rad8}
+        #
+        define filename powervs2vslc_ugsrhosq_diskcorona_thetapow_rad30_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl3rad30}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl3rad30}
+        #
+        ##############################
+  
+        define filename powervs6vslz_bsqrhosq_jet_thetapow_radhor_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl4radhor}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl4radhor}
+        #
+        define filename powervs8vsla_bsqrhosq_jet_thetapow_rad4_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl4rad4}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl4rad4}
+        #
+        define filename powervs8vslb_bsqrhosq_jet_thetapow_rad8_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl4rad8}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl4rad8}
+        #
+        define filename powervs8vslc_bsqrhosq_jet_thetapow_rad30_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl4rad30}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl4rad30}
+        #
+        ##############################
+        define filename powervs9vslz_FEEMrhosq_jet_thetapow_radhor_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl5radhor}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl5radhor}
+        #
+        define filename powervs11vsla_FEEMrhosq_jet_thetapow_rad4_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl5rad4}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl5rad4}
+        #
+        define filename powervs11vslb_FEEMrhosq_jet_thetapow_rad8_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl5rad8}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl5rad8}
+        #
+        define filename powervs11vslc_FEEMrhosq_jet_thetapow_rad30_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {lli ll powerl5rad30}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowerl5rad30}
+        #
+        #
+rdpowervsn 0
+        ################
+        # powervsn
+        #
+        # powervsn%d%s_%s.txt" % (filenum,fileletter,pllabel)
+        #(_dx1,_dx2,_dx3))
+        #("ii","xtoplot","ytoplot"))
+        #(normpowersumnotm0a,normpowersumnotm0b,np.fabs(qty[0]),(1.0/_dx1)*np.fabs(qty[0])))
+        #
+        #
+        #
+        define filename powervs7vsnz_FMrhosq_diskcorona_radiuspow_radhor_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern1radhor}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern1radhor}
+        #
+        define filename powervs9vsna_FMrhosq_diskcorona_radiuspow_rad4_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern1rad4}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern1rad4}
+        #
+        define filename powervs9vsnb_FMrhosq_diskcorona_radiuspow_rad8_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern1rad8}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern1rad8}
+        #
+        define filename powervs9vsnc_FMrhosq_diskcorona_radiuspow_rad30_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern1rad30}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern1rad30}
+        #
+        ###########################
+        define filename powervs1vsnz_rhosrhosq_diskcorona_radiuspow_radhor_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern2radhor}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern2radhor}
+        #
+        #
+        define filename powervs1vsna_rhosrhosq_diskcorona_radiuspow_rad4_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern2rad4}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern2rad4}
+        #
+        define filename powervs1vsnb_rhosrhosq_diskcorona_radiuspow_rad8_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern2rad8}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern2rad8}
+        #
+        define filename powervs1vsnc_rhosrhosq_diskcorona_radiuspow_rad30_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern2rad30}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern2rad30}
+        #
+        ##############################
+        #
+        define filename powervs2vsnz_ugsrhosq_diskcorona_radiuspow_radhor_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern3radhor}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern3radhor}
+        #
+        define filename powervs2vsna_ugsrhosq_diskcorona_radiuspow_rad4_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern3rad4}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern3rad4}
+        #
+        define filename powervs2vsnb_ugsrhosq_diskcorona_radiuspow_rad8_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern3rad8}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern3rad8}
+        #
+        define filename powervs2vsnc_ugsrhosq_diskcorona_radiuspow_rad30_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern3rad30}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern3rad30}
+        #
+        ##############################
+  
+        define filename powervs6vsnz_bsqrhosq_jet_radiuspow_radhor_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern4radhor}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern4radhor}
+        #
+        define filename powervs8vsna_bsqrhosq_jet_radiuspow_rad4_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern4rad4}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern4rad4}
+        #
+        define filename powervs8vsnb_bsqrhosq_jet_radiuspow_rad8_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern4rad8}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern4rad8}
+        #
+        define filename powervs8vsnc_bsqrhosq_jet_radiuspow_rad30_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern4rad30}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern4rad30}
+        #
+        ##############################
+        define filename powervs9vsnz_FEEMrhosq_jet_radiuspow_radhor_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern5radhor}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern5radhor}
+        #
+        define filename powervs11vsna_FEEMrhosq_jet_radiuspow_rad4_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern5rad4}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern5rad4}
+        #
+        define filename powervs11vsnb_FEEMrhosq_jet_radiuspow_rad8_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern5rad8}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern5rad8}
+        #
+        define filename powervs11vsnc_FEEMrhosq_jet_radiuspow_rad30_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {nni nn powern5rad30}
+        !head -4 $filename | tail -1 | awk '{print \\$2}' > $filename.norm
+        da $filename.norm
+        read '%g' {normpowern5rad30}
+        #
+        #
+rdrbarnormvsphiold 0
+        ################
+        # rbarnormvs
         #
         # FILE:
-        #file1 = open("rbarnormvsphi%d%s_%s.txt" % (filenum,fileletter,pllabel) , 'w')
+        #file1 = open("rbarnormvs%d%s_%s.txt" % (filenum,fileletter,pllabel) , 'w')
         #file1.write("#%g %g %g\n" % (_dx1,_dx2,_dx3))
         #file1.write("#%s %s   %s\n" % ("ii","myph","Rbarnorm"))
         #file1.write("#%g\n" % (mcor))
@@ -819,172 +1379,805 @@ rdrbarnormvsphi 0
         #
         #
         #
-        define filename rbarnormvsphi7vsmz_FMrhosq_diskcorona_phipow_radhor_vsm.txt
+        define filename rbarnormvs7vsmz_FMrhosq_diskcorona_phipow_radhor_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm1radhor}
         !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm1radhor}
         #
-        define filename rbarnormvsphi9vsma_FMrhosq_diskcorona_phipow_rad4_vsm.txt
+        define filename rbarnormvs9vsma_FMrhosq_diskcorona_phipow_rad4_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm1rad4}
         !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm1rad4}
         #
-        define filename rbarnormvsphi9vsmb_FMrhosq_diskcorona_phipow_rad8_vsm.txt
+        define filename rbarnormvs9vsmb_FMrhosq_diskcorona_phipow_rad8_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm1rad8}
         !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm1rad8}
         #
-        define filename rbarnormvsphi9vsmc_FMrhosq_diskcorona_phipow_rad30_vsm.txt
+        define filename rbarnormvs9vsmc_FMrhosq_diskcorona_phipow_rad30_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm1rad30}
         !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm1rad30}
         #
         ###########################
-        define filename rbarnormvsphi1vsmz_rhosrhosq_diskcorona_phipow_radhor_vsm.txt
+        define filename rbarnormvs1vsmz_rhosrhosq_diskcorona_phipow_radhor_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm2radhor}
         !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm2radhor}
         #
         #
-        define filename rbarnormvsphi1vsma_rhosrhosq_diskcorona_phipow_rad4_vsm.txt
+        define filename rbarnormvs1vsma_rhosrhosq_diskcorona_phipow_rad4_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm2rad4}
         !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm2rad4}
         #
-        define filename rbarnormvsphi1vsmb_rhosrhosq_diskcorona_phipow_rad8_vsm.txt
+        define filename rbarnormvs1vsmb_rhosrhosq_diskcorona_phipow_rad8_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm2rad8}
         !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm2rad8}
         #
-        define filename rbarnormvsphi1vsmc_rhosrhosq_diskcorona_phipow_rad30_vsm.txt
+        define filename rbarnormvs1vsmc_rhosrhosq_diskcorona_phipow_rad30_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm2rad30}
         !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm2rad30}
         #
         ##############################
         #
-        define filename rbarnormvsphi2vsmz_ugsrhosq_diskcorona_phipow_radhor_vsm.txt
+        define filename rbarnormvs2vsmz_ugsrhosq_diskcorona_phipow_radhor_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm3radhor}
         !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm3radhor}
         #
-        define filename rbarnormvsphi2vsma_ugsrhosq_diskcorona_phipow_rad4_vsm.txt
+        define filename rbarnormvs2vsma_ugsrhosq_diskcorona_phipow_rad4_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm3rad4}
         !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm3rad4}
         #
-        define filename rbarnormvsphi2vsmb_ugsrhosq_diskcorona_phipow_rad8_vsm.txt
+        define filename rbarnormvs2vsmb_ugsrhosq_diskcorona_phipow_rad8_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm3rad8}
         !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm3rad8}
         #
-        define filename rbarnormvsphi2vsmc_ugsrhosq_diskcorona_phipow_rad30_vsm.txt
+        define filename rbarnormvs2vsmc_ugsrhosq_diskcorona_phipow_rad30_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm3rad30}
         !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm3rad30}
         #
         ##############################
   
-        define filename rbarnormvsphi6vsmz_bsqrhosq_jet_phipow_radhor_vsm.txt
+        define filename rbarnormvs6vsmz_bsqrhosq_jet_phipow_radhor_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm4radhor}
         !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm4radhor}
         #
-        define filename rbarnormvsphi8vsma_bsqrhosq_jet_phipow_rad4_vsm.txt
+        define filename rbarnormvs8vsma_bsqrhosq_jet_phipow_rad4_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm4rad4}
         !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm4rad4}
         #
-        define filename rbarnormvsphi8vsmb_bsqrhosq_jet_phipow_rad8_vsm.txt
+        define filename rbarnormvs8vsmb_bsqrhosq_jet_phipow_rad8_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm4rad8}
         !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm4rad8}
         #
-        define filename rbarnormvsphi8vsmc_bsqrhosq_jet_phipow_rad30_vsm.txt
+        define filename rbarnormvs8vsmc_bsqrhosq_jet_phipow_rad30_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm4rad30}
         !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm4rad30}
         #
         ##############################
-        define filename rbarnormvsphi9vsmz_FEEMrhosq_jet_phipow_radhor_vsm.txt
+        define filename rbarnormvs9vsmz_FEEMrhosq_jet_phipow_radhor_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm5radhor}
         !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm5radhor}
         #
-        define filename rbarnormvsphi11vsma_FEEMrhosq_jet_phipow_rad4_vsm.txt
+        define filename rbarnormvs11vsma_FEEMrhosq_jet_phipow_rad4_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm5rad4}
         !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm5rad4}
         #
-        define filename rbarnormvsphi11vsmb_FEEMrhosq_jet_phipow_rad8_vsm.txt
+        define filename rbarnormvs11vsmb_FEEMrhosq_jet_phipow_rad8_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm5rad8}
         !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm5rad8}
         #
-        define filename rbarnormvsphi11vsmc_FEEMrhosq_jet_phipow_rad30_vsm.txt
+        define filename rbarnormvs11vsmc_FEEMrhosq_jet_phipow_rad30_vsm.txt
         da $filename
         lines 3 100000
         read '%d %g   %g' {phii myph rbarm5rad30}
         !head -3 $filename | tail -1 | sed 's/\#//g' | awk '{print \\$1}' > $filename.norm
+        lines 1 2
         da $filename.norm
         read '%g' {mcorm5rad30}
+        #
+rdrbarnormvsphi 0
+        ################
+        # rbarnormvs
+        #
+        # FILE:
+        #file1 = open("rbarnormvs%d%s_%s.txt" % (filenum,fileletter,pllabel) , 'w')
+        #file1.write("#%g %g %g\n" % (_dx1,_dx2,_dx3))
+        #file1.write("#%s %s   %s\n" % ("ii","myph","Rbarnorm"))
+        #file1.write("#%g\n" % (mcor))
+        #file1.write("#Recall that ii and myph here are not true grid, but from inverse Fourier of (possibly) low-m-filled-with-zero Fourier transform, so myph always goes from 0 to 2pi.  Better than duplicating original \phi cells since anyways\n")
+        #for ii in np.arange(0,len(myph)):
+        #    file1.write("%d %g   %g\n" % (ii,myph[ii],Rbarnorm[ii]))
+        #file1.close()
+        #
+        #
+        #
+        define filename rbarnormvs7vsmz_FMrhosq_diskcorona_phipow_radhor_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm1radhor}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm1radhor}
+        #
+        define filename rbarnormvs10vsma_FMrhosq_diskcorona_phipow_rad4_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm1rad4}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm1rad4}
+        #
+        define filename rbarnormvs10vsmb_FMrhosq_diskcorona_phipow_rad8_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm1rad8}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm1rad8}
+        #
+        define filename rbarnormvs10vsmc_FMrhosq_diskcorona_phipow_rad30_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm1rad30}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm1rad30}
+        #
+        ###########################
+        define filename rbarnormvs1vsmz_rhosrhosq_diskcorona_phipow_radhor_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm2radhor}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm2radhor}
+        #
+        #
+        define filename rbarnormvs1vsma_rhosrhosq_diskcorona_phipow_rad4_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm2rad4}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm2rad4}
+        #
+        define filename rbarnormvs1vsmb_rhosrhosq_diskcorona_phipow_rad8_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm2rad8}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm2rad8}
+        #
+        define filename rbarnormvs1vsmc_rhosrhosq_diskcorona_phipow_rad30_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm2rad30}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm2rad30}
+        #
+        ##############################
+        #
+        define filename rbarnormvs2vsmz_ugsrhosq_diskcorona_phipow_radhor_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm3radhor}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm3radhor}
+        #
+        define filename rbarnormvs2vsma_ugsrhosq_diskcorona_phipow_rad4_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm3rad4}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm3rad4}
+        #
+        define filename rbarnormvs2vsmb_ugsrhosq_diskcorona_phipow_rad8_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm3rad8}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm3rad8}
+        #
+        define filename rbarnormvs2vsmc_ugsrhosq_diskcorona_phipow_rad30_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm3rad30}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm3rad30}
+        #
+        ##############################
+  
+        define filename rbarnormvs6vsmz_bsqrhosq_jet_phipow_radhor_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm4radhor}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm4radhor}
+        #
+        define filename rbarnormvs9vsma_bsqrhosq_jet_phipow_rad4_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm4rad4}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm4rad4}
+        #
+        define filename rbarnormvs9vsmb_bsqrhosq_jet_phipow_rad8_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm4rad8}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm4rad8}
+        #
+        define filename rbarnormvs9vsmc_bsqrhosq_jet_phipow_rad30_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm4rad30}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm4rad30}
+        #
+        ##############################
+        define filename rbarnormvs9vsmz_FEEMrhosq_jet_phipow_radhor_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm5radhor}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm5radhor}
+        #
+        define filename rbarnormvs12vsma_FEEMrhosq_jet_phipow_rad4_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm5rad4}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm5rad4}
+        #
+        define filename rbarnormvs12vsmb_FEEMrhosq_jet_phipow_rad8_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm5rad8}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm5rad8}
+        #
+        define filename rbarnormvs12vsmc_FEEMrhosq_jet_phipow_rad30_vsm.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {phii myph rbarm5rad30}
+        !head -3 $filename | tail -1 | sed 's/\#//g' | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {mcorm5rad30}
+        #
+        #
+        #
+rdrbarnormvstheta 0
+        ################
+        # rbarnormvs
+        #
+        # FILE:
+        #file1 = open("rbarnormvs%d%s_%s.txt" % (filenum,fileletter,pllabel) , 'w')
+        #file1.write("#%g %g %g\n" % (_dx1,_dx2,_dx3))
+        #file1.write("#%s %s   %s\n" % ("ii","myth","Rbarnorm"))
+        #file1.write("#%g\n" % (lcor))
+        #file1.write("#Recall that ii and myth here are not true grid, but from inverse Fourier of (possibly) low-m-filled-with-zero Fourier transform, so myth always goes from 0 to 2pi.  Better than duplicating original \phi cells since anyways\n")
+        #for ii in np.arange(0,len(myth)):
+        #    file1.write("%d %g   %g\n" % (ii,myth[ii],Rbarnorm[ii]))
+        #file1.close()
+        #
+        #
+        #
+        define filename rbarnormvs7vslz_FMrhosq_diskcorona_thetapow_radhor_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl1radhor}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm1radhor}
+        #
+        define filename rbarnormvs9vsla_FMrhosq_diskcorona_thetapow_rad4_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl1rad4}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm1rad4}
+        #
+        define filename rbarnormvs9vslb_FMrhosq_diskcorona_thetapow_rad8_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl1rad8}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm1rad8}
+        #
+        define filename rbarnormvs9vslc_FMrhosq_diskcorona_thetapow_rad30_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl1rad30}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm1rad30}
+        #
+        ###########################
+        define filename rbarnormvs1vslz_rhosrhosq_diskcorona_thetapow_radhor_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl2radhor}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm2radhor}
+        #
+        #
+        define filename rbarnormvs1vsla_rhosrhosq_diskcorona_thetapow_rad4_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl2rad4}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm2rad4}
+        #
+        define filename rbarnormvs1vslb_rhosrhosq_diskcorona_thetapow_rad8_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl2rad8}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm2rad8}
+        #
+        define filename rbarnormvs1vslc_rhosrhosq_diskcorona_thetapow_rad30_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl2rad30}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm2rad30}
+        #
+        ##############################
+        #
+        define filename rbarnormvs2vslz_ugsrhosq_diskcorona_thetapow_radhor_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl3radhor}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm3radhor}
+        #
+        define filename rbarnormvs2vsla_ugsrhosq_diskcorona_thetapow_rad4_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl3rad4}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm3rad4}
+        #
+        define filename rbarnormvs2vslb_ugsrhosq_diskcorona_thetapow_rad8_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl3rad8}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm3rad8}
+        #
+        define filename rbarnormvs2vslc_ugsrhosq_diskcorona_thetapow_rad30_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl3rad30}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm3rad30}
+        #
+        ##############################
+  
+        define filename rbarnormvs6vslz_bsqrhosq_jet_thetapow_radhor_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl4radhor}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm4radhor}
+        #
+        define filename rbarnormvs8vsla_bsqrhosq_jet_thetapow_rad4_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl4rad4}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm4rad4}
+        #
+        define filename rbarnormvs8vslb_bsqrhosq_jet_thetapow_rad8_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl4rad8}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm4rad8}
+        #
+        define filename rbarnormvs8vslc_bsqrhosq_jet_thetapow_rad30_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl4rad30}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm4rad30}
+        #
+        ##############################
+        define filename rbarnormvs9vslz_FEEMrhosq_jet_thetapow_radhor_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl5radhor}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm5radhor}
+        #
+        define filename rbarnormvs11vsla_FEEMrhosq_jet_thetapow_rad4_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl5rad4}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm5rad4}
+        #
+        define filename rbarnormvs11vslb_FEEMrhosq_jet_thetapow_rad8_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl5rad8}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm5rad8}
+        #
+        define filename rbarnormvs11vslc_FEEMrhosq_jet_thetapow_rad30_vsl.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {thetaii myth rbarl5rad30}
+        !head -3 $filename | tail -1 | sed 's/\#//g' | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {lcorm5rad30}
+        #
+        #
+        #
+rdrbarnormvsrad 0
+        ################
+        # rbarnormvs
+        #
+        # FILE:
+        #file1 = open("rbarnormvs%d%s_%s.txt" % (filenum,fileletter,pllabel) , 'w')
+        #file1.write("#%g %g %g\n" % (_dx1,_dx2,_dx3))
+        #file1.write("#%s %s   %s\n" % ("ii","myrad","Rbarnorm"))
+        #file1.write("#%g\n" % (ncor))
+        #file1.write("#Recall that ii and myrad here are not true grid, but from inverse Fourier of (possibly) low-m-filled-with-zero Fourier transform, so myrad always goes from 0 to 2pi.  Better than duplicating original \phi cells since anyways\n")
+        #for ii in np.arange(0,len(myrad)):
+        #    file1.write("%d %g   %g\n" % (ii,myrad[ii],Rbarnorm[ii]))
+        #file1.close()
+        #
+        #
+        #
+        define filename rbarnormvs7vsnz_FMrhosq_diskcorona_radiuspow_radhor_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myradhor rbarn1radhor}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm1radhor}
+        #
+        define filename rbarnormvs9vsna_FMrhosq_diskcorona_radiuspow_rad4_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myrad4 rbarn1rad4}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm1rad4}
+        #
+        define filename rbarnormvs9vsnb_FMrhosq_diskcorona_radiuspow_rad8_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myrad8 rbarn1rad8}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm1rad8}
+        #
+        define filename rbarnormvs9vsnc_FMrhosq_diskcorona_radiuspow_rad30_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myrad30 rbarn1rad30}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm1rad30}
+        #
+        ###########################
+        define filename rbarnormvs1vsnz_rhosrhosq_diskcorona_radiuspow_radhor_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myradhor rbarn2radhor}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm2radhor}
+        #
+        #
+        define filename rbarnormvs1vsna_rhosrhosq_diskcorona_radiuspow_rad4_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myrad4 rbarn2rad4}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm2rad4}
+        #
+        define filename rbarnormvs1vsnb_rhosrhosq_diskcorona_radiuspow_rad8_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myrad8 rbarn2rad8}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm2rad8}
+        #
+        define filename rbarnormvs1vsnc_rhosrhosq_diskcorona_radiuspow_rad30_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myrad30 rbarn2rad30}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm2rad30}
+        #
+        ##############################
+        #
+        define filename rbarnormvs2vsnz_ugsrhosq_diskcorona_radiuspow_radhor_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myradhor rbarn3radhor}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm3radhor}
+        #
+        define filename rbarnormvs2vsna_ugsrhosq_diskcorona_radiuspow_rad4_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myrad4 rbarn3rad4}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm3rad4}
+        #
+        define filename rbarnormvs2vsnb_ugsrhosq_diskcorona_radiuspow_rad8_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myrad8 rbarn3rad8}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm3rad8}
+        #
+        define filename rbarnormvs2vsnc_ugsrhosq_diskcorona_radiuspow_rad30_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myrad30 rbarn3rad30}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm3rad30}
+        #
+        ##############################
+  
+        define filename rbarnormvs6vsnz_bsqrhosq_jet_radiuspow_radhor_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myradhor rbarn4radhor}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm4radhor}
+        #
+        define filename rbarnormvs8vsna_bsqrhosq_jet_radiuspow_rad4_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myrad4 rbarn4rad4}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm4rad4}
+        #
+        define filename rbarnormvs8vsnb_bsqrhosq_jet_radiuspow_rad8_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myrad8 rbarn4rad8}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm4rad8}
+        #
+        define filename rbarnormvs8vsnc_bsqrhosq_jet_radiuspow_rad30_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myrad30 rbarn4rad30}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm4rad30}
+        #
+        ##############################
+        define filename rbarnormvs9vsnz_FEEMrhosq_jet_radiuspow_radhor_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myradhor rbarn5radhor}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm5radhor}
+        #
+        define filename rbarnormvs11vsna_FEEMrhosq_jet_radiuspow_rad4_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myrad4 rbarn5rad4}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm5rad4}
+        #
+        define filename rbarnormvs11vsnb_FEEMrhosq_jet_radiuspow_rad8_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myrad8 rbarn5rad8}
+        !head -3 $filename | tail -1 | sed 's/\#//g'  | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm5rad8}
+        #
+        define filename rbarnormvs11vsnc_FEEMrhosq_jet_radiuspow_rad30_vsn.txt
+        da $filename
+        lines 3 100000
+        read '%d %g   %g' {radii myrad30 rbarn5rad30}
+        !head -3 $filename | tail -1 | sed 's/\#//g' | awk '{print \\$1}' > $filename.norm
+        lines 1 2
+        da $filename.norm
+        read '%g' {ncorm5rad30}
         #
         #
         #
@@ -993,7 +2186,7 @@ visctheory 0 #
         set rcut1=r if(r>risco)
         #set rcut1=r
         set omegak=1.0/(a + rcut1**(1.5))
-        set vuas3rhosqdcdenvsrkep=rcut1*omegak
+        set vuasrotrhosqdcdenvsrkep=rcut1*omegak
         # G*M*m/r = (1/2)*m*v^2 -> v=sqrt(2GM/r)
          #
         set rcut2=rcut1
@@ -1005,14 +2198,14 @@ visctheory 0 #
         #set myhor=thetat
         #set myhor=1.0 + r*0 # for getting epsilon or fit
         #
-        #set myalpha=alphatot3vsr
-        set myalpha=alphatot3vsr*betamagplus1
+        #set myalpha=alphatot3vsr # better for normal disks
+        set myalpha=alphatot3vsr*betamagplus1  # better for fiducial model
         #set myalpha=alphamag4vsr
         #set myalpha=0.10 + r*0 # for getting epsilon or fit
         #
         set alphahorsq=(myalpha*myhor**2) if (r>risco)
-        set alphahorsqvel=(myalpha*myhor**2*vuas3rhosqdcdenvsr) if (r>risco)
-        set alphahorsqvelalt=(0.1*vuas3rhosqdcdenvsr) if (r>risco)
+        set alphahorsqvel=(myalpha*myhor**2*vuasrotrhosqdcdenvsr) if (r>risco)
+        set alphahorsqvelalt=(0.1*vuasrotrhosqdcdenvsr) if (r>risco)
         #
         # Page & Thorne (1974) eq14,15
         set xx=sqrt(rcut2)
@@ -1042,14 +2235,16 @@ visctheory 0 #
         set QQ=QQa*QQb
         set GRFACTOR=AA**(-2)*BB**(3)*CC**(-3/2)*DD**(3/2)*EE*QQ**(-1)
         #
-        set vus1rhosqdcdenvsrffNEWT=(alphahorsq)*vuas3rhosqdcdenvsrkep
+        set vus1rhosqdcdenvsrffNEWT=(alphahorsq)*vuasrotrhosqdcdenvsrkep
         set vus1rhosqdcdenvsrffGR=(alphahorsqvel)*GRFACTOR
         set vus1rhosqdcdenvsrffGRalt=(alphahorsqvelalt)*GRFACTOR
         #
         #
-        set horsqvphi=(myhor**2*vuas3rhosqdcdenvsr) if (r>risco)
-        set myvr=vuas1rhosqdcdenvsr if (r>risco)
-        set alphaeffvsr =myvr/(GRFACTOR*horsqvphi)
+        set horsqvphi=(myhor**2*vuasrotrhosqdcdenvsr) if (r>risco)
+        #set myvr=vuas1rhosqdcdenvsr if (r>risco)
+        #GODMARK: Different in disk! even for thin disk
+        set myvr=vus1rhosqdcdenvsr if (r>risco)
+        set alphaeffvsr =-myvr/(GRFACTOR*horsqvphi)
         #
         #
         #
@@ -1590,17 +2785,6 @@ trygammies 0 #
         set upsilonvsrgammie=sqrt(2)*(intBr/intFM)*sqrt(intFMH/SAH)
         set upsilonH=upsilonvsrgammie[ihor]
         #
-        if(a>=0.0){\
-         riscocalc 0 risco # assumes stuff always goes positive
-         riscocalc 1 risco2 # assumes stuff always goes positive
-        }
-        if(a<0.0){\
-         riscocalc 1 risco # assumes stuff always goes positive
-         riscocalc 0 risco2 # assumes stuff always goes positive
-        }
-        riscocalc 0 riscoprograde
-        riscocalc 1 riscoretrograde
-        elinfcalc risco tdeinfisco tdlinfisco
         #
         #
         #
@@ -1830,12 +3014,15 @@ panelplot1replot 0 #
         define nm ($numpanels-1)
         #ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         ctype default window 1 -$numpanels 1 $nm box 0 2 0 0
-        yla "-v_{r} v_{\phi} v_{\rm K} v_{\rm visc}"
+        yla "-v_{r} v_{\rm rot} v_{\rm K} v_{\rm visc}"
         #
         ltype 0 pl 0 (LG(r)) (LG(-vus1rhosqdcdenvsr)) 0011 $myrin $myrout $lminy $lmaxy
-        ltype 2 pl 0 (LG(r)) (LG(vus3rhosqdcdenvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        #ltype 2 pl 0 (LG(r)) (LG(vus3rhosqdcdenvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        # GODMARK: below different than above for thick disk high negative spin poloidal field models!
+        #ltype 2 pl 0 (LG(r)) (LG(vus3rhosqdcdenvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 (LG(r)) (LG(vuasrotrhosqdcdenvsr)) 0011 $myrin $myrout $lminy $lmaxy
         #
-        ctype blue ltype 2 pl 0 (LG(rcut1)) (LG(vuas3rhosqdcdenvsrkep)) 0011 $myrin $myrout $lminy $lmaxy
+        ctype blue ltype 2 pl 0 (LG(rcut1)) (LG(vuasrotrhosqdcdenvsrkep)) 0011 $myrin $myrout $lminy $lmaxy
         ctype blue ltype 0 pl 0 (LG(rcut2)) (LG(vus1rhosqdcdenvsrffGR)) 0011 $myrin $myrout $lminy $lmaxy
         ctype blue ltype 1 pl 0 (LG(rcut2)) (LG(vus1rhosqdcdenvsrffGRalt)) 0011 $myrin $myrout $lminy $lmaxy
         #ctype yellow ltype 0 pl 0 (LG(rcut2)) (LG(vus1rhosqdcdenvsrffNEWT)) 0011 $myrin $myrout $lminy $lmaxy
@@ -1920,10 +3107,10 @@ panelplot1eqreplot 0 #
         define nm ($numpanels-1)
         #ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         ctype default window 1 -$numpanels 1 $nm box 0 2 0 0
-        yla "-v_{r} v_{\phi}"
+        yla "-v_{r} v_{\rm rot}"
         #
         ltype 0 pl 0 (LG(r)) (LG(abs(-vus1rhosqeqvsr))) 0011 $myrin $myrout $lminy $lmaxy
-        ltype 2 pl 0 (LG(r)) (LG(abs(vus3rhosqeqvsr))) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 (LG(r)) (LG(abs(vusarotrhosqeqvsr))) 0011 $myrin $myrout $lminy $lmaxy
         #
 		###################################
         #
@@ -1991,10 +3178,10 @@ panelplot1horreplot 0 #
         define nm ($numpanels-1)
         #ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         ctype default window 1 -$numpanels 1 $nm box 0 2 0 0
-        yla "-v_r v_\phi"
+        yla "-v_r v_{\rm rot}"
         #
         ltype 0 pl 0 (LG(r)) (LG(abs(-vus1horvsr))) 0011 $myrin $myrout $lminy $lmaxy
-        ltype 2 pl 0 (LG(r)) (LG(abs(vus3horvsr))) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 (LG(r)) (LG(abs(vuasrothorvsr))) 0011 $myrin $myrout $lminy $lmaxy
         #
 		###################################
         #
@@ -2302,7 +3489,7 @@ panelplot3   0 #
 		#
 		fdraft
 		ctype default window 1 1 1 1
-		notation -4 4 -4 4
+		notation -3 3 -3 3
 		erase
 		#
         define numpanels 8
@@ -2318,7 +3505,7 @@ panelplot3replot 0 #
         limits $xin $xout $lminy $lmaxy
         ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
         yla "\theta^{\rm d, t}"
-        #c_s/v_\phi
+        #c_s/v_{\rm rot}
         #
         ltype 0 pl 0 (LG(r)) ((hoverrvsr)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 2 pl 0 (LG(r)) ((atan(horalt1))) 0011 $myrin $myrout $lminy $lmaxy
@@ -2407,7 +3594,7 @@ panelplot3replot 0 #
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         yla "\Phi_r"
         #
-        pl 0 (LG(r)) (LG(fstotvsr*0.5)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 0 pl 0 (LG(r)) (LG(fstotvsr*0.5)) 0011 $myrin $myrout $lminy $lmaxy
         #
 		##########################
         #
@@ -2420,7 +3607,7 @@ panelplot3replot 0 #
         yla "\Psi_{\rm eq}"
 		xla "r [r_g]"
         #
-        pl 0 (LG(r)) (LG(feqtotvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 0 pl 0 (LG(r)) (LG(feqtotvsr)) 0011 $myrin $myrout $lminy $lmaxy
         #
 		##########################
 		#
@@ -2583,12 +3770,12 @@ panelplot4replot 0 #
         limits $myhin $myhout $lminy $lmaxy
         define nm ($numpanels-5)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
-        yla "v_\phi"
+        yla "v_{\rm rot}"
         #
         ltype 0 pl 0 ((avgh)) (LG(abs(avguup))) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 2 pl 0 ((hinnx4)) (LG(vuas3rhosqrad4vsh)) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 1 pl 0 ((hinnx8)) (LG(vuas3rhosqrad8vsh)) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 3 pl 0 ((hinnx30)) (LG(vuas3rhosqrad30vsh)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 2 pl 0 ((hinnx4)) (LG(vuasrotrhosqrad4vsh)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 1 pl 0 ((hinnx8)) (LG(vuasrotrhosqrad8vsh)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 3 pl 0 ((hinnx30)) (LG(vuasrotrhosqrad30vsh)) 0011 $myhin $myhout $lminy $lmaxy
         #
 		###################################
         #
@@ -3028,7 +4215,7 @@ panelplot7   0 #
         #        define numpanels 5
         define numpanels 5
         #
-		notation -3 3 -3 3
+		notation -2 2 -2 2
         define expandlow (1.01)
         define expandverylow (0.67)
         define expanddefault (1.5)
@@ -3039,11 +4226,11 @@ panelplot7replot 0 #
         #
         # for fil in `ls rbar*rad4*` ; do echo $fil ; head -3 $fil | tail -1 ; done
         #
-        #define filename powervsm7vsmz_FMrhosq_diskcorona_phipow_radhor_vsm.txt
-        #define filename powervsm1vsma_rhosrhosq_diskcorona_phipow_rad4_vsm.txt
-        #define filename powervsm2vsma_ugsrhosq_diskcorona_phipow_rad4_vsm.txt
-        #define filename powervsm8vsma_bsqrhosq_jet_phipow_rad4_vsm.txt
-        #define filename powervsm11vsma_FEEMrhosq_jet_phipow_rad4_vsm.txt
+        #define filename powervs7vsmz_FMrhosq_diskcorona_phipow_radhor_vsm.txt
+        #define filename powervs1vsma_rhosrhosq_diskcorona_phipow_rad4_vsm.txt
+        #define filename powervs2vsma_ugsrhosq_diskcorona_phipow_rad4_vsm.txt
+        #define filename powervs8vsma_bsqrhosq_jet_phipow_rad4_vsm.txt
+        #define filename powervs11vsma_FEEMrhosq_jet_phipow_rad4_vsm.txt
         #
 		###################################
         #
@@ -3216,8 +4403,8 @@ panelplot7replot 0 #
         relocate 0.07  -4
         putlabel 6 "E_B in Jet"
         # at r=4r_g
-        #relocate 0.07  -5.2
-        relocate 0.07  -1
+        relocate 0.07  -5.2
+        #relocate 0.07  -1
         putlabel 6 $normstringalldef
         expand $expanddefault
         #
@@ -3691,7 +4878,8 @@ thickdisk3lmode # 0
         #  !cat datavst7nn.txt | column -t | less -S
         da datavst7nn.txt
         lines 1 1000000
-        read {tici1 1 ts1 2 phibh1 3 phij1 6 lmode1 26}
+        #read {tici1 1 ts1 2 phibh1 3 phij1 6 lmode1 26}
+        read {tici1 1 ts1 2 phibh1 3 phij1 6 lmode1 27}
         #
         cd /data2/jmckinne/thickdisk3/fromorange/thickdiskhr3/
         !sed 's/nan/0/g' datavst7.txt > datavst7n.txt
@@ -3726,9 +4914,9 @@ thickdisk3lmode # 0
         #
         define x1label "t[r_g/c]"
         define x2label "\Psi_{\rm tH}/\Phi_{\rm H}"
-        #ctype default ltype 0 pl 0 ts1 psiophi1
+        ctype default ltype 0 pl 0 ts1 psiophi1
         #ctype red ltype 0 pl 0 ts2new psiophi2 0010
-        ctype default ltype 0 pl 0 ts2new psiophi2 
+        #ctype default ltype 0 pl 0 ts2new psiophi2 
         #
         device X11
         #
@@ -3778,4 +4966,36 @@ boundcheck 0
         set mu3 = -Tud30/(rho*uu3)
         #
         set entropy=p/rho**$gam
+        #
+othertd9 0
+        # # thickdisk9 feqtotvsr plot
+        fdraft
+        define x2label "\Psi_{\rm H} + \Psi_{\rm eq}"
+        #device postencap thickdisk9.feqtotvsr.eps
+        ctype default ltype 0 pl 0  r (fsuphalfvsr[ihor]-feqtotvsr) 0001 rhor 30 1E1 1E3
+        #ctype red ltype 0 pl 0  r feqtotvsr 1100
+        #device X11
+        #
+othertd9b 0
+        # # thickdisk9 feqtotvsr plot
+        fdraft
+        define x2label "B_z"
+        #device postencap thickdisk9.bzvsr.eps
+        #ctype default ltype 0 pl 0  r (Bas2rhosqdcdenvsr) 1101 rhor 30 0.001 10
+        ctype default ltype 0 pl 0  r (Bas2rhosqeqvsr) 1101 rhor 30 0.001 10
+        #
+        #ctype red ltype 0 pl 0  r feqtotvsr 1100
+        #device X11
+        #
+mdotvst 0 #
+        #
+        da datavst1.txt
+        lines 1 1000000
+        read {tici 1 ts 2 mdtotihor 3}
+        #
+        smooth mdtotihor smdtotihor 400
+        #
+        #
+        ctype default pl 0 ts mdtotihor
+        ctype red pl 0 ts smdtotihor 0010
         #
