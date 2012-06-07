@@ -167,7 +167,10 @@ vis5dpremake 0  #
 		#
 		#cd /data/jon/orange3d
 		#
-		jrdpheader3d dump0000.head
+                set _MBH=1
+                set _QBH=0
+		jrdpheader3dold dumps/dump0000.head
+                #
 		gsetup
 		gammienew
 		#
@@ -206,7 +209,14 @@ vis5dpremake 0  #
 		       # caution: vis5d's trajectory can get stuck in long trajectories when resolution too low
 		       define inx 128
 		       define iny 128
-		       define inz 128
+		       define inz 256
+		    }
+                  #
+		if($FIDUCIAL==3){\
+                  # for super-high res single frame
+		       define inx 256
+		       define iny 256
+		       define inz 256
 		    }
                   #
 		if($FIDUCIAL==2){\
@@ -346,6 +356,14 @@ vis5dpremake 0  #
 		 define izmax (1E3*0.9)
                 }
 		#
+                # new parameters for new iinterp code, but not important here
+                define nt (1)
+                define iint ($nt)
+                define iitmin (0)
+                define iitmax (0)
+                define dofull2pi (1)
+                define tnrdegrees (0)
+                #
 		######################################
 		# startxc,endxc, etc. for iinterp
 		# iinterp has x->xc y->zc z->yc since originally was doing 2D in x-z
@@ -449,7 +467,9 @@ dump2singlecol 1  # dump2singlecol 0
 		#
 		if($DOINTERPSTAGE){\
 		 #
-		 # avoid slow system's drive
+                 echo "GODMARK: should create appropriate link from dumps to origdumpsused"
+                 echo "e.g. ln -s dumps origdumpsused"
+		 # avoid slow system's drive 
 		 #set h1old='$dumpsdir'
 		 set h1old='origdumpsused/'
 		 #
@@ -637,7 +657,8 @@ vis5dmakepart2  2  # vis5dmakepart2 'im0p0s0l' 0
                 #
 		define refinement (1.0)
                 #
-		define program "iinterpnoextrap"
+		#define program "iinterp.orange -oldargs "
+                define program "iinterp -oldargs "
 		define iRin (_Rin)
                 define iRout (_Rout)
                 define ihslope (_hslope)
@@ -1075,8 +1096,12 @@ vis5dmakepart5  2 #   vis5dmakepart5 'im0p0s0l' 0
 		  # now using remote framebuffer if no X server exists
 		  # -alpha only works between iso's not between iso's and volume rendering due to back-to-front issue
 		  #! vis5d $truev5d -alpha -geometry  $flinx'x'$fliny
+                  #
+		  #! vis5d $truev5d -mbs 1400 -geometry  $flinx'x'$fliny \
+		  #    -framebuffer ki-rh42.slac.stanford.edu:2 -offscreen -script 3dmovie.$arg2.tcl
+                  #
 		  ! vis5d $truev5d -mbs 1000 -geometry  $flinx'x'$fliny \
-		      -framebuffer ki-rh42.slac.stanford.edu:2 -offscreen -script 3dmovie.$arg2.tcl
+		      -offscreen -script 3dmovie.$arg2.tcl
 		  #
 		  #
 		  if($removeinterpolateddump){\
@@ -1096,6 +1121,9 @@ vis5dmakepart5  2 #   vis5dmakepart5 'im0p0s0l' 0
 		  #! vis5d $truev5d -mbs 1000 -alpha -geometry $flinx'x'$fliny
 		  ! vis5d $truev5d -geometry $flinx'x'$fliny \
 		      -framebuffer ki-rh42.slac.stanford.edu:2 -offscreen -script 3dmovie.$arg2.tcl
+		  #
+		  #! vis5dalt $truev5d -geometry $flinx'x'$fliny \
+		  #    -framebuffer ki-rh42.slac.stanford.edu:2 -offscreen -script 3dmovie.$arg2.tcl
 		  #
 		  if($removeinterpolateddump){\
 		   # remove temp files
@@ -1163,72 +1191,65 @@ blandinterpsingle 2
 		#
 		define DATATYPE 0
 		# want extrapolation so smoothly connects at outer edges
-		define program "iinterp"
 		define EXTRAPOLATE 0
 		define DEFAULTVALUETYPE 4
 		#
-                !~/sm/$program $DATATYPE $interptype $doing2d $WRITEHEADER \
-		    $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
-		    $iinx $iiny $iinz  $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
-		    $iRin $iRout $iR0 $ihslope  $idefcoord $EXTRAPOLATE $DEFAULTVALUETYPE < $1 > $2
+                !~/bin/$program $DATATYPE $interptype $doing2d $WRITEHEADER \
+		    $nt $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
+		    $iint $iinx $iiny $iinz  $iitmin $iitmax $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
+		    $iRin $iRout $iR0 $ihslope  $idefcoord $dofull2pi $tnrdegrees $EXTRAPOLATE $DEFAULTVALUETYPE < $1 > $2
 		#
+                #
 blandinterpsingledata 2
 		#
 		define DATATYPE 1
 		# want extrapolation so smoothly connects at outer edges
 		# GODMARK: sets to 0 otherwise, and should really choose (maybe) min for scalars and 0 for vectors
-		define program "iinterp"
 		define EXTRAPOLATE 0
 		define DEFAULTVALUETYPE 4
 		#
-                !~/sm/$program $DATATYPE $interptype $READHEADERDATA $WRITEHEADERDATA \
-		    $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
-		    $iinx $iiny $iinz  $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
-		    $iRin $iRout $iR0 $ihslope  $idefcoord $EXTRAPOLATE $DEFAULTVALUETYPE < $1 > $2
-		#
+                !~/bin/$program $DATATYPE $interptype $READHEADERDATA $WRITEHEADERDATA \
+		    $nt $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
+		    $iint $iinx $iiny $iinz  $iitmin $iitmax  $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
+		    $iRin $iRout $iR0 $ihslope  $idefcoord $dofull2pi $tnrdegrees $EXTRAPOLATE $DEFAULTVALUETYPE < $1 > $2
+		#                
+blandinterpwithgdump 2
+                #
+                !~/bin/$program $DATATYPE $interptype $READHEADERDATA $WRITEHEADERDATA \
+		    $nt $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
+		    $iint $iinx $iiny $iinz  $iitmin $iitmax  $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
+		    $iRin $iRout $iR0 $ihslope  $idefcoord $dofull2pi $tnrdegrees $EXTRAPOLATE $DEFAULTVALUETYPE $dumpsdir/gdump < $1 > $2
+                #
 blandinterpsinglevec 3
 		#
 		define DATATYPE ($3+2)
-		define program "iinterp"
 		define EXTRAPOLATE 0
 		define DEFAULTVALUETYPE 4
 		#
 		# for vectors need to transform, so need also gdump info
 		#
-                !~/sm/$program $DATATYPE $interptype $READHEADERDATA $WRITEHEADERDATA \
-		    $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
-		    $iinx $iiny $iinz  $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
-		    $iRin $iRout $iR0 $ihslope  $idefcoord $EXTRAPOLATE $DEFAULTVALUETYPE $dumpsdir/gdump  < $1 > $2
+                blandinterpwithgdump $1 $2
 		#
 		#
 blandinterpsingledpdw 2
 		#
 		define DATATYPE (11)
-		define program "iinterp"
 		define EXTRAPOLATE 0
 		define DEFAULTVALUETYPE 4
 		#
 		# for vectors need to transform, so need also gdump info
 		#
-                !~/sm/$program $DATATYPE $interptype $READHEADERDATA $WRITEHEADERDATA \
-		    $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
-		    $iinx $iiny $iinz  $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
-		    $iRin $iRout $iR0 $ihslope  $idefcoord $EXTRAPOLATE $DEFAULTVALUETYPE $dumpsdir/gdump  < $1 > $2
+                blandinterpwithgdump $1 $2
 		#
 		#
 blandinterpsingleBd3 2
 		#
 		define DATATYPE (12)
-		define program "iinterp"
 		define EXTRAPOLATE 0
 		define DEFAULTVALUETYPE 4
 		#
 		# for vectors need to transform, so need also gdump info
-		#
-                !~/sm/$program $DATATYPE $interptype $READHEADERDATA $WRITEHEADERDATA \
-		    $nx $ny $nz $refinement 0 0  $oldgrid $igrid \
-		    $iinx $iiny $iinz  $iixmin $iixmax $iiymin $iiymax $iizmin $iizmax \
-		    $iRin $iRout $iR0 $ihslope  $idefcoord $EXTRAPOLATE $DEFAULTVALUETYPE $dumpsdir/gdump  < $1 > $2
+                blandinterpwithgdump $1 $2
 		#
 		#
 subblandinterpdata 2 # subblandinterpdata 'rho' var

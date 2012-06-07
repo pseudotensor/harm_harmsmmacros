@@ -214,6 +214,7 @@ readtypelong1 1   # # first have to get rid of "'s in file.
                     #
 		#
  		setgrbconsts
+                #
 		#
 		set Bgaussr=Br*sqrt(4*pi)
 		set Bgaussphi=Bphi*sqrt(4*pi)
@@ -294,12 +295,19 @@ readtypelong1 1   # # first have to get rid of "'s in file.
                 # ctherms,cthermg: ""
                 # vdprime: low field at large radius
                 #
-		set vrecl=0.018*c
+		#set vrecl=0.018*c
+                set vrecl=0.1*c
+                #set vrecl=1.0*c
 		#
 		set fakem=0.1
 		set TF=2*pi/((fakem*omegaf))
-		set vrecm=0.018*c
-		set dtminobsm=(c/vrecm)*TF
+		#set vrecm=0.018*c
+                set vrecm=0.1*c
+                #set vrecm=1.0*c
+                # not sure why c/vrecm was there
+		#set dtminobsm=(c/vrecm)*TF
+                set dtminobsm=TF
+                #
                 set dtdissfast=lp/(4*vrecm)
                 set dtdissfastobs=dtdissfast/(2*gammalorentz)
                 #
@@ -311,7 +319,9 @@ readtypelong1 1   # # first have to get rid of "'s in file.
 		#
 		set Bc=4.41E13
 		#
-                set taualongjetalt=taualongjet - necenter*sigmaesosigmat*sigmat*rjet
+                #set taualongjetalt=taualongjet - necenter*sigmaesosigmat*sigmat*rjet
+                # remove bad piece left in mathematica code as redundant
+                set taualongjetalt=taualongjet - necenter*sigmaesosigmat*sigmat*ljet/(2*gammalorentz)
                 # other term already there
                 set taualongjetother=necenter*sigmaesosigmat*sigmat*ljet/(2*gammalorentz)
 		#
@@ -413,11 +423,33 @@ readnormal 0    #
 		#
 		#readtypelong6 finalnondiss.dat
 		#readtypelong6 grbaddedcoul.dat
-                readtypelong6 grbrjetfixnodiss.dat
+                #readtypelong6 grbrjetfixnodiss.dat
+                #
+                #readtypelong6 grb_final_nodiss_ivr0.dat
+                readtypelong6 grb_final_nodiss_ivr1.dat
+                #
 		#
+                # temporary fudge
+                #
+                set ljet[34]=2.607e+16
+                set ljet[35]=5.407e+16
+                set ljet[36]=1.121e+17
+                #
+                set Bgaussphi[34]=Bgaussphi[33]*(ljet[33]/ljet[34])**(1)
+                set Bgaussphi[35]=Bgaussphi[33]*(ljet[33]/ljet[35])**(1)
+                set Bgaussphi[36]=Bgaussphi[33]*(ljet[33]/ljet[36])**(1)
+                #
+                set bgauss[34]=bgauss[33]*(ljet[33]/ljet[34])**(1)
+                set bgauss[35]=bgauss[33]*(ljet[33]/ljet[35])**(1)
+                set bgauss[36]=bgauss[33]*(ljet[33]/ljet[36])**(1)
+                #
+                #
+                set bcophinodiss=bcophi
+                set bcopnodiss=bcop
 		set bsqnodiss=bsq
 		set bgaussnodiss=bgauss
 		set Bgaussphinodiss=Bgaussphi
+		set Bphinodiss=Bphi
 		set gammalorentznodiss=gammalorentz
 		set Tnodiss=T
 		set tauradscanodiss=tauradsca
@@ -440,20 +472,35 @@ readnormal 0    #
                 #
 		#readtypelong6 grbaddedcouldiss.bsqfix.dat
                 #
-                readtypelong6 grbrjetfixdiss.dat
+                #readtypelong6 grbrjetfixdiss.dat
                 #
+                #readtypelong6 grb_final_diss_ivr0.dat
+                #readtypelong6 grb_final_diss_ivr1.dat
+                readtypelong6 grb_final_dissnew_ivr1.dat
+                #
+                #bsqplasmavalue 233 Bphiplasmavalue 234  bsqTvalue 235 BphiTvalue 236
+                #
+                set bcophidissest=Bphiplasmavalue/gammalorentz
+                #
+                # to check if bcophi<bcop so guide field would become strong
+                # print {ljet bcophinodiss bcopnodiss bcophi bcop bcophidissest}
                 #
                 #
  		getminV
 		#
+                #
 dissmods 0      #		
+		# fast reconnection rate:
+		#set vrocfast=0.018
+                set vrocfast=0.1
+                #set vrocfast=1.0
 		#
-		set vrocfast=0.018
 		#
-		#
+                # bsq0 is bsq at rtrans:
 		set bsq0=4.5E10
-		set r0=4.8E13
-		set rother=1E14
+		#set r0=4.8E13
+                # r0 is rtrans:
+                set r0=3.0E13
 		#
 		#
 		set bsqdiss1=bsq0*(ljet/r0)**(-2)*exp(-4*vrocfast/lp/gammalorentz*(ljet-r0))
@@ -663,6 +710,8 @@ donewplot1 2    # jetfull.eps 4-panel
 		}
 		#
 donewplot1better 2    # jetfull.eps 4-panel
+                # args:    donewplot1better <doprint> <readnormal>
+                # default: donewplot1better 0 1
 		#
 		#
 		define doprint $1
@@ -1268,7 +1317,7 @@ donewplot3 2    # jetfullrec2.eps 4-panel
 		#myxaxis 3
 		myyaxis 3
 		#xla "r [cm]"
-		yla "\delta_{\rm Pet}\ \ \ \ \delta_{\rm SP'}"
+		yla "d_i\ \ \ \ \delta_{\rm SP'}"
 		ctype default ltype 0 pl 0 ljet deltapetp 1110
 		ctype default ltype 2 pl 0 ljet deltaspt  1110
 		ctype default ltype 2 pl 0 ljet deltasptnodiss  1110
@@ -1336,7 +1385,7 @@ donewplot3 2    # jetfullrec2.eps 4-panel
 		myxaxis 3
 		myyaxis 4
 		define x1label "r [cm]"
-		define x2label " \tau_{\\nu,\rm sca}\  \tau_{\gamma,\rm sca}\  \tau_{||} \ \tau_{\rm pairs, sca}"
+		define x2label " \tau_{\\nu,\rm sca}\  \tau_{\gamma,\rm sca}\  \tau_{\gamma} \ \tau_{\rm pairs, sca}"
 		xla $x1label
 		yla $x2label
 		ctype default ltype 0 pl 0 ljet taunusca 1110
@@ -1434,7 +1483,7 @@ donewplot2better 2    # jetfullrec1.eps 4-panel
 		myxaxis 3
 		myyaxis 4
 		xla "r [cm]"
-		yla "\delta_{\rm Pet}\ \ \ \ \delta_{\rm SP'}"
+		yla "d_i\ \ \ \ \delta_{\rm SP'}"
 		ctype default ltype 0 pl 0 ljet deltapetp 1110
 		ctype default ltype 2 pl 0 ljet deltaspt  1110
 		ctype default ltype 2 pl 0 ljet deltasptnodiss  1110
@@ -1456,7 +1505,10 @@ donewplot2better 2    # jetfullrec1.eps 4-panel
 		expand 1.5
 		#
 		#
-		limits $rinner $router 0.5 40
+                # start at 0.5 to avoid nnutrue
+		#limits $rinner $router 0.5 40
+                # start at 6 to avoid nnutrue
+		limits $rinner $router 6 40
 		ticksize .5 2 2 8
 		ctype default window 2 2 1 1
 		ltype 0
@@ -1485,7 +1537,8 @@ donewplot2better 2    # jetfullrec1.eps 4-panel
 		#
 		#
 		#limits $rinner $router -28 20
-		limits $rinner $router -20 20
+		#limits $rinner $router -20 20
+                limits $rinner $router -12 16
 		ticksize .5 2 2 4
 		ctype default window 2 2 2 1
 		ltype 0
@@ -1555,7 +1608,8 @@ donewplot3better 2    # jetfullrec2.eps 4-panel
 		define lrmono (LG(rmono[0]))
 		#
 		#
-		limits $rinner $router -4 28
+		#limits $rinner $router -4 28
+                limits $rinner $router 8 28
 		ticksize 0.5 2 1 4
 		ctype default window 2 2 1 2
 		ltype 0
@@ -1565,11 +1619,12 @@ donewplot3better 2    # jetfullrec2.eps 4-panel
 		#define x1label "r [cm]"
 		#define x2label "V\ v_{r,\rm SP'}\  S"
 		#define x2label "v_{r,\rm SP'}\  S"
-                define x2label "V\  S"
+                #define x2label "V\  S"
+                define x2label "S"
 		xla $x1label
 		yla $x2label
 		# print {ljet necenter npairsrad netotforomegape nnutrue} 
-		ctype default ltype 0 pl 0 ljet (minv) 1110
+		#ctype default ltype 0 pl 0 ljet (minv) 1110
 		#ctype default ltype 0 pl 0 ljet (minvnodiss) 1110
 		#ctype default ltype 2 pl 0 ljet (vrect) 1110
 		ctype default ltype 2 pl 0 ljet lundquistt 1110
@@ -1583,7 +1638,7 @@ donewplot3better 2    # jetfullrec2.eps 4-panel
 		# fdraft expand
 		#expand 1.5
                 #
-		relocate 16.7   21
+		relocate 16.9   21
 		angle 0
 		expand 0.8
 		putlabel 5 "Id"
@@ -1611,10 +1666,13 @@ donewplot3better 2    # jetfullrec2.eps 4-panel
 		#ctype default ltype 4 pl 0 ljet (Tdiffsca1obs) 1110
 		ctype default ltype 3 pl 0 ljet (dtradobs) 1110
 		#
+                # to read off values for paper, load dissipation file and do:
+                # print {ljet conditionpt dttransitobs dtdissfastobs dtminobsm Tdiffabs1obs Tdiffsca1obs dtradobs}
 		#
 		#
 		# -4.0 to avoid showing neutrino Q_\nu that just barely exists at Q_\nu = 10**(-4.472)
-		limits $rinner $router -4 36
+		# 0 to avoid showing neutrino Q_\nu that just barely exists at Q_\nu = 10**(0)
+		limits $rinner $router 0 36
 		notation -2 2 -2 2
 		ticksize 0.5 2 1 4
 		ctype default window 2 2 1 1
@@ -1632,7 +1690,8 @@ donewplot3better 2    # jetfullrec2.eps 4-panel
 		ctype default ltype 1 pl 0 ljet Qum0 1110
 		#ctype default ltype 2 pl 0 ljet QEM 1110
 		#
-		limits $rinner $router -4 32
+		# -2.0 to avoid showing neutrino Q_\nu that just barely exists at p_\nu = 10**(-2)
+		limits $rinner $router -2 32
 		ticksize 0.5 2 1 4
 		ctype default window 2 2 2 1
 		ltype 0
@@ -2752,7 +2811,8 @@ plottype1setup 0     #
 		plc0 0 toplot
 		set pbaryonopgnewfun=newfun
 		#
-		smooth2d taualongjet taualongjetnew 40 40 3
+		#smooth2d taualongjet taualongjetnew 40 40 3
+                smooth2d tauradsca taualongjetnew 40 40 3
 		set toplot=(mycondition>1.0 ? 1E30 : taualongjetnew-1)
 		#set toplot=(taualongjetnew-1)
 		plc0 0 toplot
@@ -2819,6 +2879,14 @@ plottype1doit 0     #
 		ltype 4 ctype default contour
                 #
 		#
+                #
+                #
+                #######################################################################
+                #
+                # Latest 2D parameter space plot macros
+                #
+                #######################################################################
+                #
 		###########################
                 # TYPE2
                 ###########################
@@ -2847,7 +2915,8 @@ plottype2setup 0     #
 		plc0 0 toplot
 		set pbaryonopgnewfun=newfun
 		#
-		smooth2d taualongjet taualongjetnew 40 40 3
+                # use tauradsca since taualongjet wasn't computed correctly and should just be tauradsca
+		smooth2d tauradsca taualongjetnew 40 40 3
 		#set toplot=(mycondition>1.0 ? 1E30 : taualongjetnew-1)
 		set toplot=(taualongjetnew-1)
 		plc0 0 toplot
@@ -3106,10 +3175,14 @@ ghirlandacheck 0 #
 		# others not interesting
 		#
 		#
+                #######################################################################
+                #
+                # Latest 2D parameter space plot macros
+                #
+                #######################################################################
 doalllatest 1   #
 		#
 		plotlatesttype1 $1 1
-		
 		#
 		#######################
 		# latest 2D contour plots
@@ -3118,7 +3191,8 @@ readbrzeta1e4 0 # 2D
 		#
 		#readtypelong1 grb_40._1._40._1._1._1._1._1.1._1._1._1._1._1._1._1.40._1._40._1._1._1._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e8_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
 		#
-		readtypelong5 model2.sorted.dat
+		#readtypelong5 model2.sorted.dat
+                readtypelong6 ivr1.model2.sorted.dat
 		#
 		grabdtlabatrtrans
                 #
@@ -3128,7 +3202,8 @@ readbrzeta1e2 0 # 2D
 		# well, that caused problems.  And found even though updated gamma_jet, the lorentz factor was wrong -- so updates were stupid -- could redo, but just describe plot results
 		#readtypelong1 grb_40._1._40._1._1._1._1._1.1._1._1._1._1._1._1._1.40._1._40._1._1._1._1._1._1._1.e12_5.e14_100._1.e6_100._1.e8_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
 		#
-		readtypelong5 model3.sorted.dat
+		#readtypelong5 model3.sorted.dat
+		readtypelong6 ivr1.model3.sorted.dat
 		#
 		grabdtlabatrtrans
                 #
@@ -3139,7 +3214,8 @@ readmu	0	# 2D
 		#readtypelong3 grb_40._40._1._1._1._1._1._1.1._1._1._1._1._1._1._1.40._40._1._1._1._1._1._1._1._1.e12_5.e14_50._1.e6_1.e4_1.e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0_redo
 		#
 		#
-		readtypelong5 model1.sorted.dat
+		#readtypelong5 model1.sorted.dat
+                readtypelong6 ivr1.model1.sorted.dat
 		#
 		#
 		grabdtlabatrtrans
@@ -3154,7 +3230,8 @@ readnu  0       #
 		#readtypelong1 grb_40._1._1._40._1._1._1._1.1._1._1._1._1._1._1._1.40._1._1._40._1._1._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e15_1.e17_0.0001_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
 		#
 		#
-		readtypelong5 model4.sorted.dat
+		#readtypelong5 model4.sorted.dat
+		readtypelong6 ivr1.model4.sorted.dat
 		#
 		#
 		grabdtlabatrtrans
@@ -3165,7 +3242,8 @@ readrmono 0     #
 		#
 		#readtypelong1 grb_40._1._1._1._40._1._1._1.1._1._1._1._1._1._1._1.40._1._1._1._40._1._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e15_1.e17_0.75_1._0.75_1._1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
 		#
-		readtypelong5 model5.sorted.dat
+		#readtypelong5 model5.sorted.dat
+		readtypelong6 ivr1.model5.sorted.dat
 		#
 		#
 		grabdtlabatrtrans
@@ -3179,7 +3257,8 @@ readthfp 0      #
 		#readtypelong1 grb_40._1._1._1._1._40._1._1.1._1._1._1._1._1._1._1.40._1._1._1._1._40._1._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_0.0001_1.571_1.571_2._1.e4_2._0_1.e4_0
 		#read {muconst 202}
 		#
-		readtypelong5 model6.sorted.dat
+		#readtypelong5 model6.sorted.dat
+		readtypelong6 ivr1.model6.sorted.dat
 		#
 		#
 		grabdtlabatrtrans
@@ -3188,7 +3267,8 @@ readlmode 0     #
 		#readtypelong1 grb_40._1._1._1._1._1._40._1.1._1._1._1._1._1._1._1.40._1._1._1._1._1._40._1._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
 		#
 		#
-		readtypelong5 model7.sorted.dat
+		#readtypelong5 model7.sorted.dat
+		readtypelong6 ivr1.model7.sorted.dat
 		#
 		#
 		grabdtlabatrtrans
@@ -3196,7 +3276,8 @@ readlmode 0     #
 readmmode 0     #		
 		#readtypelong1 grb_40._1._1._1._1._1._1._40.1._1._1._1._1._1._1._1.40._1._1._1._1._1._1._40._1._1.e12_5.e14_1.e4_1.e6_1.e4_1.e15_1.e17_0.75_1._0.75_3.e10_1.e12_3.e10_1.571_1.571_1.571_2._1.e4_2._0.01_1.e4_0
 		#
-		readtypelong5 model8.sorted.dat
+		#readtypelong5 model8.sorted.dat
+		readtypelong6 ivr1.model8.sorted.dat
 		#
 		#
 		grabdtlabatrtrans
@@ -3204,7 +3285,8 @@ readmmode 0     #
 readm87   0     #
 		#readtypelong1 m87_40._40._1._1._1._1._1._1.1._1._1._1._1._1._1._1.40._40._1._1._1._1._1._1._1._1.e12_1.e8_50._1.e6_50._1000._1.e6_0.75_1._0.75_100._1.e12_100._1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
 		#
-		readtypelong5 model9.sorted.dat
+		#readtypelong5 model9.sorted.dat
+		readtypelong6 ivr1.model9.sorted.dat
 		#
 		#
 		grabdtlabatrtrans
@@ -3212,7 +3294,8 @@ readm87   0     #
 readgrs   0     #		
 		#readtypelong1 grs_40._40._1._1._1._1._1._1.1._1._1._1._1._1._1._1.40._40._1._1._1._1._1._1._1._1.e12_1.e8_50._1.e6_50._1.e9_1.e11_0.75_1._0.75_100._1.e12_100._1.571_1.571_1.571_2._1.e4_2._0_1.e4_0
 		#
-		readtypelong5 model10.sorted.dat
+		#readtypelong5 model10.sorted.dat
+		readtypelong6 ivr1.model10.sorted.dat
 		#
 		grabdtlabatrtrans
 		#
@@ -3238,6 +3321,7 @@ plotlatesttype1      2
 		define WHICHLEV 0
 		#
 		setgrbconsts
+                set showrdissalt=0
 		#
 		plottype2setuplatest
 		plottype2setup2latest
@@ -3278,6 +3362,7 @@ plotlatesttype2      2
 		define WHICHLEV 0
 		#
 		setgrbconsts
+                set showrdissalt=0
 		#
 		plottype2setuplatest
 		plottype2setup2latest
@@ -3312,6 +3397,7 @@ plotlatesttype3      2
 		define WHICHLEV 0
 		#
 		setgrbconsts
+                set showrdissalt=0
 		#
 		plottype2setuplatest
 		plottype2setup2latest
@@ -3350,6 +3436,7 @@ plotlatesttype4      2
 		define WHICHLEV 0
 		#
 		setgrbconsts
+                set showrdissalt=0
 		#
 		plottype2setuplatest
 		plottype2setup2latest
@@ -3384,6 +3471,7 @@ plotlatesttype5      2
 		define WHICHLEV 0
 		#
 		setgrbconsts
+                set showrdissalt=0
 		#
 		plottype2setuplatest
 		plottype2setup2latest
@@ -3418,6 +3506,7 @@ plotlatesttype6      2
 		define WHICHLEV 0
 		#
 		setgrbconsts
+                set showrdissalt=0
 		#
 		plottype2setuplatest
 		plottype2setup2latest
@@ -3510,7 +3599,6 @@ plotlatesttype7      2
 		define WHICHLEV 0
 		#
 		setgrbconsts
-		#
 		set showrdissalt=1
 		#
 		#plottype2setuplatest
@@ -3552,6 +3640,7 @@ plotlatesttype8      2
 		define WHICHLEV 0
 		#
 		setgrbconsts
+                set showrdissalt=0
 		#
 		#plottype2setuplatest
 		plottype2setuplatest # forlmode
@@ -3591,6 +3680,7 @@ plotlatesttype9      2
 		define WHICHLEV 0
 		#
 		setgrbconsts
+                set showrdissalt=0
 		#
 		#plottype2setuplatest
 		plottype2setuplatest
@@ -3626,6 +3716,7 @@ plotlatesttype10      2
 		define WHICHLEV 0
 		#
 		setgrbconsts
+                set showrdissalt=0
 		#
 		#plottype2setuplatest
 		plottype2setuplatest
@@ -3657,7 +3748,7 @@ shadehottodo    0 #
 		# print '%g ' {myy}
 		# and then add braces
 		#
-doshadething1lmode 0  #
+doshadething1lmode 0  # (not using lmode=2 mode=0 version anymore, see doshadething1mmode)
 		#
 		define shadenum 500
 		#define shadenum 2000
@@ -3669,7 +3760,7 @@ doshadething1lmode 0  #
 		#
 		relocate 7.82489   10.0036
 		angle 20
-		putlabel 5 "\tau_{||}=1" 
+		putlabel 5 "\tau_{\gamma}=1" 
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
 		set myx={6.9245 6.65984 6.39519 6.18328 6.05974 5.79509 5.61834 5.60076 6.96013}
@@ -3727,7 +3818,7 @@ doshadething1lmode 0  #
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
 		#
-doshadething1mmode 0  #  plotlatesttype1 0 2
+doshadething1mmode 0  #  used for plotlatesttype1 0 2
 		#
 		define shadenum 500
 		#define shadenum 2000
@@ -3737,33 +3828,38 @@ doshadething1mmode 0  #  plotlatesttype1 0 2
 		putlabel 5 "|b|=b_{\rm QED}" 
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
+                ######################################################################################
 		# taupar==1
 		#
-		set myx={16.9542 15.4661 14.0307 13.3042 11.6778 10.173 8.16604 6.28068 5.60598}
-		set myy={16.9951 16.1124 15.2749 14.7965 13.7495 12.5828 11.2668 9.9656 9.51691}
+		#set myx={16.9542 15.4661 14.0307 13.3042 11.6778 10.173 8.16604 6.28068 5.60598}
+		#set myy={16.9951 16.1124 15.2749 14.7965 13.7495 12.5828 11.2668 9.9656 9.51691}
+		set myx={15.9721 15.6808 15.2556 14.5386 13.508 11.9177 10.5512 9.2294 8.06436 7.05659 6.00368 5.64542}
+		set myy={16.9993 16.6299 16.3081 15.8257 15.1345 14.0411 13.2053 12.321 11.5653 10.8901 10.1986 9.95742}
 		ltype 1 connect myx myy
 		ltype 0
 		#
-		relocate 16.1  16.1
-		angle 30
-		putlabel 5 "\tau_{||}=1" 
+		relocate 15.9  16.4
+		angle 45
+		putlabel 5 "\tau_{\gamma}=1" 
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
-		set myx={6.86035 6.44413 6.10678 5.84878 5.63069 5.61074 6.781}
-		set myy={17.0393 16.6443 16.3209 15.9976 15.8539 17.0393 17.0216}
+                ######################################################################################
+		set myx={6.67552 6.38426 6.20514 6.07067 5.86921 5.69008 5.60028}
+		set myy={17.0317 16.7905 16.6299 16.4849 16.2761 16.1154 16.0509}
 		#
 		lweight 3 ltype 0 angle (39+90)
 		shade $shadenum myx myy
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		connect myx myy
-		relocate 6.5 16.3
+		relocate 6.4 16.4
 		angle 50
 		putlabel 5 \tau_{\\nu}=1
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
 		#
-		set myx={11.0254 10.728 10.728 9.41898 8.12993 7.05896 6.76105 6.64226 6.76105 7.23714 8.09001 8.80415 10.5693 11.8384 13.6434 15.4281 16.6383 11.0848}
-		set myy={17.0216 16.7879 16.2132 14.7402 13.1235 11.7764 11.3454 11.1297 11.004 11.0397 11.5787 12.0997 13.0698 14.0575 15.3869 16.4286 17.0216 17.0216}
+                ######################################################################################
+		set myx={11.0254 10.728 10.728 9.41898 8.12993 7.05896 6.65319 7.32551 8.26629 9.20707 10.2376 10.9993 11.9847 13.441 14.6056 15.2328}
+		set myy={17.0216 16.7879 16.2132 14.7402 13.1235 11.7764 11.1634 11.5653 12.0477 12.7389 13.2534 14.1697 14.8933 15.7937 16.5975 16.9993}
 		lweight 3 ltype 0 angle 39
 		shade $shadenum myx myy
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
@@ -3774,20 +3870,23 @@ doshadething1mmode 0  #  plotlatesttype1 0 2
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
 		#
-		set myx={15.6219 13.6325 12.8713 12.1102 11.3837 10.3807 8.99658 7.2666 5.70956 5.62309 5.60598 8.18362 10.2419 12.5254 14.2725 14.9648 15.2242 15.7431}
-		set myy={17.0249 15.3348 14.7814 14.1681 13.6599 12.7173 11.7901 10.4591 9.36735 9.26262 8.14073 9.89065 11.2668 12.7625 13.8991 15.4546 16.3968 17.024}
+                ######################################################################################
+		#set myx={15.6219 13.6325 12.8713 12.1102 11.3837 10.3807 8.99658 7.2666 5.70956 5.62309 5.60598 8.18362 10.2419 12.5254 14.2725 14.9648 15.2242 15.7431}
+		#set myy={17.0249 15.3348 14.7814 14.1681 13.6599 12.7173 11.7901 10.4591 9.36735 9.26262 8.14073 9.89065 11.2668 12.7625 13.8991 15.4546 16.3968 17.024}
+                set myx={15.3003 14.7624 14.0906 13.6425 12.4775 11.4474 10.7974 10.4391 9.58765 8.40075 7.5493 6.51873 5.91387 5.62261 6.20514 6.80999 7.4595 8.19882 9.09493 10.2823 11.2454 12.2537 13.1274 13.8891 14.2473 14.5609 14.8522 15.4347}
+                set myy={17.0317 16.5654 15.9704 15.633 14.8289 14.0896 13.5911 12.948 12.4175 11.5813 10.8901 10.07 9.60396 9.41087 9.44295 9.5876 10.054 10.6329 11.26 12.0153 12.6424 13.382 14.0251 14.6682 15.5204 16.099 16.4849 17.0317}
 		lweight 3 ltype 0 angle 0
 		shade $shadenum myx myy
 		lweight 3 ltype 0 angle 90
 		shade $shadenum myx myy
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		connect myx myy
-		relocate 9.22132   10.2795
+		relocate 8.6 10.5
 		angle 45
 		putlabel 5 "r_{\rm diss}" 
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
-		relocate 6.95  10.5544
-		angle 42
+		relocate 6.7  10.5
+		angle 50
 		putlabel 5 "r_{\rm trans}" 
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
@@ -3834,7 +3933,7 @@ doshadething2lmode 0  #
 		#
 		relocate 12.2   5.52392
 		angle 50
-		putlabel 5 \tau_{||}=1
+		putlabel 5 \tau_{\gamma}=1
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
 		relocate 13.9499   2.09388
@@ -3851,8 +3950,9 @@ doshadething2mmode 0  # plotlatesttype3 0 2
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
 		#
-		set myx={9.75775 9.75775 10.0001 10.0866 10.0866 10.2077 10.3284 10.346 10.3631 11.9025 12.1277 12.4908 12.7849 13.0966 13.3907 13.823 14.3072 14.8608 15.5183 15.9678 16.5736 17.9919 18.009 9.79244}
-		set myy={1.69475 2.6954 2.84555 4.26082 5.39723 5.49733 5.71879 5.89036 6.01908 6.01189 5.71879 5.29713 4.96838 4.65386 4.33933 3.9391 3.63897 3.30302 3.01712 2.80973 2.60969 2.58827 1.69475 1.68051}
+                ###########################################################################
+		set myx={10.365 10.3298 10.2234 10.135 10.0999 10.0999 10.0823 10.0291 9.99342 9.90505 9.81667 9.78151 9.76346 9.74588 9.7283 9.76346 16.8402 15.9735 15.2128 14.9296 14.5229 13.9566 13.7798 13.4434 13.0191 12.5768 12.3287 11.9752 11.6037 11.2673 10.4714}
+		set myy={6.01814 5.70518 5.50953 5.39223 4.82887 4.14039 3.70216 3.21716 2.97458 2.80238 2.70072 2.55996 2.23918 2.02006 1.8244 1.69928 1.69146 1.92622 2.23918 2.37994 2.59124 3.0997 3.3892 3.66305 3.92909 4.31243 4.68811 5.18093 5.62698 6.01032 6.01032}
 		#
 		lweight 3 ltype 0 angle (39+90)
 		shade 500 myx myy
@@ -3864,8 +3964,9 @@ doshadething2mmode 0  # plotlatesttype3 0 2
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
 		#
-		set myx={15.4827 15.4827 15.3283 14.9895 14.6355 14.1889 13.9423 13.4805 13.2035 13.0338 12.8338 12.7568 15.8367 15.8367 15.7288 15.4979 15.267 15.0052 14.8047 14.6507 14.5894 14.5125 14.4355 14.4816 14.5738 14.7434 15.0052 15.3901 15.5131 15.544}
-		set myy={1.69209 1.88868 2.14143 2.42217 2.75921 3.24359 3.85433 4.46508 4.99872 5.49717 5.90428 6.01658 6.00954 5.67969 5.47606 4.94945 4.60553 4.18434 3.84026 3.66478 3.48929 3.33493 3.20152 3.03307 2.89966 2.7101 2.50647 2.14847 1.89572 1.68505}
+                ###########################################################################
+		set myx={16.7166 16.0975 15.2836 14.8413 14.3989 14.0806 13.8858 13.585 13.0011 12.5411 12.2404 11.9752 14.5049 14.5581 14.6465 14.6289 14.5757 14.5049 14.3281 14.2397 14.1514 14.0625 14.0982 14.1333 14.2222 14.3813 14.7173 15.1245 15.7787 16.2567 16.7694}
+		set myy={1.69928 1.88696 2.21572 2.39558 2.64598 2.89638 3.311 3.77269 4.53155 5.22003 5.65826 6.01814 6.01814 5.82248 5.58006 5.29056 4.91489 4.57065 4.24205 3.96037 3.63959 3.42063 3.13895 3.00586 2.85728 2.70072 2.51304 2.33302 2.04352 1.8635 1.68364}
 		lweight 3 ltype 0 angle 0
 		shade 500 myx myy
 		lweight 3 ltype 0 angle 90
@@ -3873,34 +3974,36 @@ doshadething2mmode 0  # plotlatesttype3 0 2
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		connect myx myy
 		#
-		relocate 16.2137   5.58835
+		relocate 15.0 5.58
 		angle -90
 		putlabel 5 "r_{\rm diss}" 
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
-		relocate 12.649   5.63042
+		relocate 12.0   5.58
 		angle -70
 		putlabel 5 "r_{\rm trans}" 
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
 		#
+                ###########################################################################
 		# taupar==1
 		#
-		set myx={18.0081 17.4384 16.6682 15.8828 14.9282 14.235 13.8192 13.6035 13.3417}
-		set myy={1.89572 2.11328 2.47144 2.85039 3.45426 4.05797 4.47212 5.30057 5.99562}
+		set myx={18.0257 17.3358 15.9559 14.8413 14.4873 14.1333 13.6206 12.8243 12.4176 11.9928 11.8869}
+		set myy={1.71492 1.96532 2.42686 2.92766 3.21716 3.68652 4.21859 4.82105 5.36095 5.93212 6.03378}
 		ltype 1 connect myx myy
 		ltype 0
 		#
-		relocate 15.5   3.38404
-		angle -55
-		putlabel 5 \tau_{||}=1
+		relocate 15.7   2.75
+		angle -45
+		putlabel 5 \tau_{\gamma}=1
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
+                ###########################################################################
 		relocate 13.95   2.05
 		angle 0
 		putlabel 5 "\gamma\theta_j=1"
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
-		set myx={9.38429 10.4624 10.7855 17.9772 18.0233 9.50735}
-		set myy={1.70616 1.98002 2.24669 2.23261 1.70616 1.69913}
+		set myx={9.33916 9.71072 10.2234 10.365 11.0554 12.506 14.3813 15.5312 17.035 18.0432}
+		set myy={1.69146 1.80876 1.94186 1.98096 1.93404 1.93404 1.92622 1.92622 1.93404 1.94186}
 		ltype 3 connect myx myy
 		ltype 0
 		#
@@ -3914,7 +4017,7 @@ doshadething3lmode 0  #
 		#
 		relocate 14.25   3.30486
 		angle 90
-		putlabel 5 \tau_{||}=1
+		putlabel 5 \tau_{\gamma}=1
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
 		set myx={9.64277 9.66083 13.2795 13.385 13.4206 13.5969 13.5793 13.6145 9.66083}
@@ -3952,9 +4055,10 @@ doshadething3mmode 0  # plotlatesttype7 0 2
 		putlabel 5 "|b|=b_{\rm QED}" 
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
+                ################################################################
 		relocate 13.881  3.49506
 		angle -90
-		putlabel 5 \tau_{||}=1
+		putlabel 5 \tau_{\gamma}=1
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
 		# taupar==1
@@ -3965,8 +4069,9 @@ doshadething3mmode 0  # plotlatesttype7 0 2
 		ltype 0
 		#
 		#
-		set myx={10.077 10.0618 14.6203 14.5894 14.3889 14.235 14.1271 13.9119 13.8192 13.804 10.1388}
-		set myy={0.289059 4.0082 4.0082 3.27164 2.7102 2.07627 1.54496 0.995495 0.434058 0.289059 0.289059}
+                ################################################################
+		set myx={10.0642 10.0642 13.0011 13.3018 13.6206 13.5142 13.4083 13.3018 12.8775 12.4703 12.1168 11.9572 10.1531}
+		set myy={4.0156 0.287848 0.281123 0.678056 1.04822 1.6336 2.09792 2.42088 2.6833 3.38987 3.82043 4.0156 4.00888}
 		lweight 3 ltype 0 angle (39+90)
 		shade 500 myx myy
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
@@ -3978,9 +4083,10 @@ doshadething3mmode 0  # plotlatesttype7 0 2
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
 		#
+                ################################################################
 		# diss
-		set myx={13.804 13.881 13.8349 13.6805 13.2956 13.003 12.6642 12.295 12.1254 12.1715 12.3872 12.649 12.9417 13.1726 13.4653 13.8653 14.2968 14.5429 14.7125 14.8356 14.8973 14.8973 13.8653}
-		set myy={0.295112 1.33365 1.70193 2.09429 2.64981 3.06033 3.44677 3.82716 4.00215 4.00215 3.77887 3.53124 3.28374 3.06638 2.80678 2.511 2.191 1.87101 1.58114 1.32759 0.578924 0.295112 0.289059}
+		set myx={11.9928 12.1876 12.3995 12.7183 12.8419 13.0367 13.355 13.4966 13.5142 13.5498 13.5674 13.4966 13.4083 14.2573 14.2573 14.2222 14.0098 13.8682 13.7442 13.4083 12.9835 12.8067 12.4527 12.2404 12.046}
+		set myy={4.02233 3.77335 3.51093 3.10054 2.85157 2.58915 2.30654 2.0643 1.71431 1.4317 0.953932 0.57045 0.294574 0.301299 0.75217 1.16255 1.6067 1.93638 2.1181 2.4276 2.69675 3.12072 3.52438 3.80026 4.0156}
 		lweight 3 ltype 0 angle 0
 		shade 500 myx myy
 		lweight 3 ltype 0 angle 90
@@ -3988,25 +4094,26 @@ doshadething3mmode 0  # plotlatesttype7 0 2
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		connect myx myy
 		#
-		# alt diss
-		set myx={17.962 16.8069 15.8519 14.9591 13.958 13.3883 12.9108 12.3563 12.1715}
-		set myy={2 2.1 2.2 2.3 2.47468 2.86717 3.31387 3.809 4.0082}
-		connect myx myy
 		#
-		#
-		relocate 15.1743   1.18865
-		angle -85
+		relocate 14.1   2.11
+		angle -75
 		putlabel 5 "r_{\rm diss}" 
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
-		#
-		relocate 16.6839    1.9193
-		angle -25
-		putlabel 5 "r_{\rm dissalt}" 
+                #
+		relocate  13.07   2.11
+		angle -80
+		putlabel 5 "r_{\rm trans}" 
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
-		relocate  13.5266   1.69588
-		angle -75
-		putlabel 5 "r_{\rm trans}" 
+                ################################################################
+		# alt diss
+		set myx={18.0081 16.4335 15.3364 14.1689 13.9}
+		set myy={1.28375 1.42498 1.57307 1.75466 1.8624}
+		connect myx myy
+		#
+		relocate 16.35 1.56
+		angle -20
+		putlabel 5 "r_{\rm dissalt}" 
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
 		#
@@ -4020,7 +4127,7 @@ doshadething4lmode 0  #
 		#
 		relocate 13.4733   3.25076
 		angle 90
-		putlabel 5 \tau_{||}=1
+		putlabel 5 \tau_{\gamma}=1
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
 		set myx={9.66083 9.66083 13.385 13.2439 13.1027 13.0676 13.1379 12.9968 12.944 12.7849 12.697 12.6789 12.6789 9.69599}
@@ -4064,23 +4171,24 @@ doshadething4mmode 0  # plotlatesttype8 0 2
 		putlabel 5 "|b|=b_{\rm QED}" 
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		#
-		relocate 14.4507  0.517164
+		##############################################################################################
+		relocate 13.4258   2.21353
 		angle 90
-		putlabel 5 \tau_{||}=1
+		putlabel 5 \tau_{\gamma}=1
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
-		#
 		#
 		# taupar==1
 		#
-		set myx={14.0502 14.0502 14.0658 14.0658 14.0967 14.1119 14.1889 14.3276 14.5277 14.6816}
-		set myy={4.01331 3.13207 1.94691 1.13418 0.507345 -0.0605819 -0.5504 -0.961673 -1.58851 -1.99978}
+		set myx={12.8775 12.9303 12.9483 13.0543 13.1251 13.2667 13.479 13.6026 13.709 13.479 13.461 13.5318 13.6382 13.7266}
+		set myy={4.00349 3.51236 2.86829 2.35535 1.77695 1.24218 0.849236 0.303345 -0.0350546 -0.493455 -1.05004 -1.50844 -1.84684 -2.01047}
 		ltype 1 connect myx myy
 		ltype 0
 		#
 		#
 		#
-		set myx={10.0466 10.031 14.5429 14.2198 14.0502 13.9889 13.8962 13.881 13.881 13.9119 13.7423 13.6653 13.7732 13.758 13.758 10.0618}
-		set myy={-2.01942 4.02313 4.00349 3.66073 3.25927 2.93615 2.46596 1.7512 1.05585 0.321236 -0.148727 -0.589455 -1.21629 -1.67665 -1.99978 -1.99978}
+		##############################################################################################
+		set myx={10.0466 10.0823 13.3199 13.2667 12.9835 12.8067 12.7711 12.7359 12.5411 12.2404 11.8869 11.568 11.4972}
+		set myy={4.02531 -2.01047 -2.01047 -1.35571 -0.646182 0.00879993 0.761745 1.03469 1.86422 2.57375 3.29396 3.91622 4.03622}
 		#
 		lweight 3 ltype 0 angle (39+90)
 		shade 500 myx myy
@@ -4094,8 +4202,9 @@ doshadething4mmode 0  # plotlatesttype8 0 2
 		#
 		#
 		#
-		set myx={14.1428 13.7271 13.5422 12.926 12.372 11.9097 11.5248 11.6018 11.7866 12.1102 12.4641 13.0799 13.6344 14.1737 14.7125 15.2361 15.7288 15.9137 14.2198}
-		set myy={-2.0096 -0.785382 -0.119491 1.23215 2.32895 3.31796 4.01331 4.00349 3.5824 2.94596 2.31913 1.26138 0.458473 -0.197818 -0.824655 -1.31425 -1.83331 -2.0096 -1.99978}
+		##############################################################################################
+		set myx={11.4797 11.7096 11.9928 12.2052 12.3995 12.6295 12.7535 12.8775 13.1251 13.2842 13.4434 13.5142 13.6206 13.6914 15.1953 14.7348 14.3457 14.0449 13.6206 13.231 12.9483 12.7711 12.6119 12.3995 12.2228 11.9572 11.7272 11.5861}
+		set myy={4.0144 3.57782 2.9776 2.5192 2.08262 1.41673 1.02378 0.609018 -0.078691 -0.558909 -1.07185 -1.47571 -1.77047 -2.02138 -2.02138 -1.53025 -1.08276 -0.755273 -0.275055 0.303345 0.794473 1.30764 1.76604 2.23535 2.66102 3.22851 3.68691 4.02531}
 		lweight 3 ltype 0 angle 0
 		shade 500 myx myy
 		lweight 3 ltype 0 angle 90
@@ -4103,11 +4212,11 @@ doshadething4mmode 0  # plotlatesttype8 0 2
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
 		connect myx myy
 		#
-		relocate 15.0204 -0.697236
+		relocate 15.0356  -1.41025
 		angle -55
 		putlabel 5 "r_{\rm diss}" 
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
-		relocate 12.9569   0.4192
+		relocate 13.8  -1.39935
 		angle -70
 		putlabel 5 "r_{\rm trans}" 
 		angle 0 ltype 0 lweight $PLOTLWEIGHT
@@ -4141,7 +4250,8 @@ plottype2setuplatest 0  #
 		plc0 0 toplot
 		set fun3=newfun
 		#
-		smooth2d taualongjet taualongjetnew 40 40 3
+                # use tauradsca since taualongjet wasn't computed correctly and should just be tauradsca
+		smooth2d tauradsca taualongjetnew 40 40 3
 		#set toplot=(mycondition>1.0 ? 1E30 : taualongjetnew-1)
 		set toplot=(taualongjetnew-1)
 		plc0 0 toplot
@@ -4192,7 +4302,8 @@ plottype2setuplatestforlmode 0     #
 		plc0 0 toplot
 		set fun3=newfun
 		#
-		smooth2d taualongjet taualongjetnew 40 40 5
+                # use tauradsca since taualongjet wasn't computed correctly and should just be tauradsca
+		smooth2d tauradsca taualongjetnew 40 40 5
 		#set toplot=(ljet>10**14.2678 ? 1E30 : taualongjetnew-1)
 		#set toplot=(taualongjetnew-1)
 		#plc0 0 toplot
@@ -4229,78 +4340,82 @@ plottype2doitlatest 0     #
                 image ($rnx,$rny) $txl $txh $tyl $tyh
 		#
 		if($shadeonly!=1){
-                set image[ix,iy] = fun0
-		set lev={0}
-                levels lev
-		#ctype blue contour
-		ltype 0 ctype default contour
+                 set image[ix,iy] = fun0
+		 set lev={0}
+                 levels lev
+		 #ctype blue contour
+		 ltype 0 ctype default contour
+                 #
+                 set image[ix,iy] = fun0diss
+		 set lev={0}
+                 levels lev
+		 #ctype blue contour
+		 ltype 0 ctype default contour
+		 #
+                 set image[ix,iy] = fun0diss2
+		 set lev={0}
+                 levels lev
+		 #ctype blue contour
+		 ltype 0 ctype default contour
+		 #
+                 # check if fun0dissalt actually exists (only exists/computed for l-mode plot)
+                 # 
+                 if(showrdissalt==1){\
+                  set image[ix,iy] = fun0dissalt
+		  set lev={0}
+                  levels lev
+		  #ctype blue contour
+		  ltype 0 ctype default contour
+                 }
+		}
                 #
-                set image[ix,iy] = fun0diss
-		set lev={0}
-                levels lev
-		#ctype blue contour
-		ltype 0 ctype default contour
+		if($shadeonly!=1){
+                 set image[ix,iy] = fun1
+                 set lev={0}
+		 levels lev
+                 #ctype red contour
+		 ltype 2 ctype default contour
+		}
+                #
+		if($shadeonly!=1){
+		 #set image[ix,iy] = fun2
+                 #set lev={0}
+                 #levels lev
+		 #ctype yellow contour
+		 #lweight 2
+		 #ltype 1 ctype default contour
+		 #lweight 3
+		}
+                #
+		if($shadeonly!=1){
+                 set image[ix,iy] = fun3
+                 set lev={0}
+                 levels lev
+		 #ctype red contour
+		 ltype 4 ctype default contour
+		}
+                #
+		if($shadeonly!=1){
+                 set image[ix,iy] = fun4
+                 set lev={0}
+                 levels lev
+		 #ctype green contour
+		 ltype 1 ctype default contour
+                 #
+                 #set image[ix,iy] = fun4alt
+                 #set lev={0}
+                 #levels lev
+		 ##ctype green contour
+		 #ltype 1 ctype default contour
+                 ##
+		}
 		#
-                set image[ix,iy] = fun0diss2
-		set lev={0}
-                levels lev
-		#ctype blue contour
-		ltype 0 ctype default contour
-		#
-                set image[ix,iy] = fun0dissalt
-		set lev={0}
-                levels lev
-		#ctype blue contour
-		ltype 0 ctype default contour
-		}
-                #
 		if($shadeonly!=1){
-                set image[ix,iy] = fun1
-                set lev={0}
-		levels lev
-                #ctype red contour
-		ltype 2 ctype default contour
-		}
-                #
-		if($shadeonly!=1){
-		#set image[ix,iy] = fun2
-                #set lev={0}
-                #levels lev
-		#ctype yellow contour
-		#lweight 2
-		#ltype 1 ctype default contour
-		#lweight 3
-		}
-                #
-		if($shadeonly!=1){
-                set image[ix,iy] = fun3
-                set lev={0}
-                levels lev
-		#ctype red contour
-		ltype 4 ctype default contour
-		}
-                #
-		if($shadeonly!=1){
-                set image[ix,iy] = fun4
-                set lev={0}
-                levels lev
-		#ctype green contour
-		ltype 1 ctype default contour
-                    #
-		}
-                set image[ix,iy] = fun4alt
-                set lev={0}
-                levels lev
-		#ctype green contour
-		ltype 1 ctype default contour
-                #
-		#
-		if($shadeonly!=1){
-                set image[ix,iy] = fun5
-                set lev={0}
-                levels lev
-		#ctype red contour
-		ltype 3 ctype default contour
+                 set image[ix,iy] = fun5
+                 set lev={0}
+                 levels lev
+		 #ctype red contour
+		 ltype 3 ctype default contour
 		}
                 #
                 set image[ix,iy] = fun6

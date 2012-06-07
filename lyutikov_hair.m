@@ -185,7 +185,9 @@ showfullhair2 1  # get figure for no hair paper
 plotfullhair2 1 #
 		define DOPRINTEPS ($1)
 		#
-		cd /data/jon/lyutikov_nohair/paper/
+		if($DOPRINTEPS){\
+		 cd /data/jon/lyutikov_nohair/paper/
+		}
 		#
 		fdraft
 		define x1label "t c^3/GM"

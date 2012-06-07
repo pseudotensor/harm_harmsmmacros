@@ -10,13 +10,13 @@ scalingdata 0   #
 		set bluegeneeffstrong={0.98 0.98 0.97 0.95 0.91 0.84 0.8}
 		set bluegenespeedupstrong=coresstrong*bluegeneeffstrong
 		#
-		set coresstrongfrank={32 64 128 256 512 1024}
-		set franklineffstrong={0.98 0.98 0.93 0.91 0.86 0.72}
+		set coresstrongfrank ={32   64    128  256  512  1024 2048 4096 8192}
+		set franklineffstrong={0.98 0.98  0.93 0.94 0.93 0.92 0.91 0.90 0.80}
 		set franklinspeedupstrong=coresstrongfrank*franklineffstrong
 		#
-		set coreslone={1 2 4 8 16 32 64 128 256 512 1024}
-		set loneeff={1.0 0.99 0.99 0.99 0.99 0.95 0.93 0.92 0.90 0.89 0.95 0.80}
-		set lonespeedup=cores*loneeff
+		set coreslone={1   2     4     8   16   32   64   128  256  512 1024 2048 4096}
+		set loneeff  ={1.0 0.99 0.99 0.99 0.99 0.95 0.93 0.92 0.90 0.89 0.85 0.80 0.7}
+		set lonespeedup=coreslone*loneeff
 		#
 		#
 		erase
@@ -38,20 +38,20 @@ scalingdata 0   #
 		set lgcoresstrongfrank=LG(coresstrongfrank)
 		set lgfranklinspeedupstrong=LG(franklinspeedupstrong)
 		#
-		limits lgcores lgcores
+		limits lgcoresstrongfrank lgcoresstrongfrank
 		box
 		#
 		xla "Number of Cores"
 		yla "Speedup"
 		#
-		connect lgcores lgcores
+		connect lgcoresstrongfrank lgcoresstrongfrank
 		#
 		ptype 3 3
 		points lgcores lgbluegenespeedup
 		#addlegend 2 'BlueGene/L Weak'
 		#
 		ptype 6 3
-		points lgcores lglonespeedup
+		points lgcoreslone lglonespeedup
 		#addlegend 2 'Lonestar Weak'
 		#
 		ptype 4 3
@@ -60,7 +60,7 @@ scalingdata 0   #
 		#
 		ptype 5 3
 		points lgcoresstrongfrank lgfranklinspeedupstrong
-		#addlegend 2 'NERSC Franklin Strong'
+		#addlegend 2 'Kraken Weak'
 		#
 		#define startx (LG(2))
 		#define endy (LG(1E3))
@@ -71,10 +71,10 @@ scalingdata 0   #
 		set vptype2={3 3 3 3}
 		set vltype={-1 -1 -1 -1}
 		set vlweight={3 3 3 3}
-		set vtext={'BlueGene/L Weak' 'BlueGene/L Strong' 'NERSC Franklin Strong' 'TACC Lonestar Weak'}
+		set vtext={'BlueGene/L Weak' 'BlueGene/L Strong' 'Kraken Weak' 'TACC Lonestar Weak'}
 		#
-		define startx (LG(1))
-		define endy (LG(1E3))
+		define startx (LG(30))
+		define endy (LG(4E3))
 		legend $startx $endy 0.9 vptype1 vptype2 vltype vlweight vtext
 		#
 scalingdatacosmos 0   #
