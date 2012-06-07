@@ -297,6 +297,46 @@ jrdpcf3duentropy 1	# for reading file with current (jcon/jcov) and faraday (fcon
                 }
  		#
                 #
+jrdpcf3duentropystag 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
+		jrdpheader3d dumps/$1
+		da dumps/$1
+		lines 2 10000000
+		#
+                # 76
+		set totalcolumns=3*3+8+3+9 + 1 + 4*4+6+1 + 4*2+6*2 + 3
+                #
+                if(totalcolumns!=_numcolumns || dimen(nprdumplist)!=8 || dimen(nprlist)!=9){\
+                 echo "Wrong format"
+                 print {totalcolumns _numcolumns}
+                }\
+                else{\
+                     read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+                     {ti tj tk x1 x2 x3 r h ph rho u v1 v2 v3 \
+		      B1 B2 B3 \
+		      p cs2 Sden \
+		      U0 U1 U2 U3 U4 U5 U6 U7 U8 \
+		      divb \
+		      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
+		      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
+                      v1m v1p v2m v2p v3m v3p gdet \
+                      ju0 ju1 ju2 ju3  \
+                      jd0 jd1 jd2 jd3  \
+                      fu0 fu1 fu2 fu3 fu4 fu5 \
+                      fd0 fd1 fd2 fd3 fd4 fd5 \
+                      B1s B2s B3s}
+                     #
+                     set tx1=x1
+                     set tx2=x2
+                     set tx3=x3
+                     gsetup
+                     if($DOGCALC) { gcalc }
+                  # gcalc
+                  abscompute
+                  #
+                  gammienew
+                }
+ 		#
+                #
 jrdppenna 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
 		jrdpheader3dold dumps/$1
 		da dumps/$1
@@ -1556,12 +1596,27 @@ jrdpunits 0  #
 		    #
 		    #
 		    #
+jrdpheader3do 1  # assume directory put in name
+		#da dumps/$1
+		da $1
+		lines 1 1
+                # 30
+		read '%g %d %d %d %g %g %g %g %g %g %d %g %g %g %g %g %g %g %d %g %g %d %d %d %d %d %d %d %d %d' \
+		    {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord _MBH _QBH _is _ie _js _je _ks _ke _whichdump _whichdumpversion _numcolumns}
+		    #
+                    # also read-in nprlist data
+                    jrdpnprlist
+		    #
+                    gsetupfromheader
+                    gcalcheader
+		    #
 jrdpheader3d 1  # assume directory put in name
 		#da dumps/$1
 		da $1
 		lines 1 1
-		read '%g %d %d %d %g %g %g %g %g %g %d %g %g %g %g %g %g %g %d %g %g %d %d %d %d %d %d %d %d %d' \
-		    {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord _MBH _QBH _is _ie _js _je _ks _ke _whichdump _whichdumpversion _numcolumns}
+                # 30
+		read '%g %d %d %d %g %g %g %g %g %g %d %g %g %g %g %g %g %g %d %g %g %g %d %d %d %d %d %d %d %d %d' \
+		    {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord _MBH _QBH _EP3 _is _ie _js _je _ks _ke _whichdump _whichdumpversion _numcolumns}
 		    #
                     # also read-in nprlist data
                     jrdpnprlist
