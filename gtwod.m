@@ -298,7 +298,8 @@ jrdpcf3duentropy 1	# for reading file with current (jcon/jcov) and faraday (fcon
  		#
                 #
 jrdpcf3duentropystag 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
-		jrdpheader3d dumps/$1
+		#jrdpheader3dsasha dumps/$1
+                jrdpheader3d dumps/$1
 		da dumps/$1
 		lines 2 10000000
 		#
@@ -1610,13 +1611,29 @@ jrdpheader3do 1  # assume directory put in name
                     gsetupfromheader
                     gcalcheader
 		    #
+jrdpheader3dsasha 1  # assume directory put in name
+                jrdpheader3do2 $1
+jrdpheader3do2 1  # assume directory put in name
+		#da dumps/$1
+		da $1
+		lines 1 1
+                # 31
+		read '%g %d %d %d %g %g %g %g %g %g %d %g %g %g %g %g %g %g %d %g %g %g %d %d %d %d %d %d %d %d %d' \
+		    {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord _MBH _QBH _EP3 _is _ie _js _je _ks _ke _whichdump _whichdumpversion _numcolumns}
+		    #
+                    # also read-in nprlist data
+                    jrdpnprlist
+		    #
+                    gsetupfromheader
+                    gcalcheader
+		    #
 jrdpheader3d 1  # assume directory put in name
 		#da dumps/$1
 		da $1
 		lines 1 1
-                # 30
-		read '%g %d %d %d %g %g %g %g %g %g %d %g %g %g %g %g %g %g %d %g %g %g %d %d %d %d %d %d %d %d %d' \
-		    {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord _MBH _QBH _EP3 _is _ie _js _je _ks _ke _whichdump _whichdumpversion _numcolumns}
+                # 32
+		read '%g %d %d %d %g %g %g %g %g %g %d %g %g %g %g %g %g %g %d %g %g %g %g %d %d %d %d %d %d %d %d %d' \
+		    {_t _n1 _n2 _n3 _startx1 _startx2 _startx3 _dx1 _dx2 _dx3 _realnstep _gam _a _R0 _Rin _Rout _hslope _dt _defcoord _MBH _QBH _EP3 _THETAROT _is _ie _js _je _ks _ke _whichdump _whichdumpversion _numcolumns}
 		    #
                     # also read-in nprlist data
                     jrdpnprlist
@@ -1861,6 +1878,7 @@ jrdpdebuggen 1  #
 		# IMAGETS 2
 		# DEBUGTS 3
                 #
+   #
                 # columns are as in global.nondepnmemonics.h:
                 #define COUNTUTOPRIMFAILCONV 0 // if failed to converge
                 #define COUNTFLOORACT 1 // if floor activated
@@ -1874,18 +1892,22 @@ jrdpdebuggen 1  #
                 #define COUNTENTROPY 9
                 #define COUNTCOLD 10
                 #define COUNTEOSLOOKUPFAIL 11
+                #define COUNTBOUND1 12 // see bounds.tools.c (used when boundary code actually affects active zone values)
+                #define COUNTBOUND2 13
+                #define COUNTONESTEP 14
 		#
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {\
-                    nmfail0 nmfloor0 nmlimitgamma0 nminflow0 nmfailrho0 nmfailu0 nmfailrhou0 nmprecgam0 nmprecu0 nmtoentropy0 nmtocold0 nmeosfail0 \
-		    nmfail1 nmfloor1 nmlimitgamma1 nminflow1 nmfailrho1 nmfailu1 nmfailrhou1 nmprecgam1 nmprecu1 nmtoentropy1 nmtocold1 nmeosfail1\
-		    nmfail2 nmfloor2 nmlimitgamma2 nminflow2 nmfailrho2 nmfailu2 nmfailrhou2 nmprecgam2 nmprecu2 nmtoentropy2 nmtocold2 nmeosfail2 \
-		    nmfail3 nmfloor3 nmlimitgamma3 nminflow3 nmfailrho3 nmfailu3 nmfailrhou3 nmprecgam3 nmprecu3 nmtoentropy3 nmtocold3 nmeosfail3 \
-                    fsfail0 fsfloor0 fslimitgamma0 fsinflow0 fsfailrho0 fsfailu0 fsfailrhou0 fsprecgam0 fsprecu0 fstoentropy0 fstocold0 fseosfail0 \
-		    fsfail1 fsfloor1 fslimitgamma1 fsinflow1 fsfailrho1 fsfailu1 fsfailrhou1 fsprecgam1 fsprecu1 fstoentropy1 fstocold1 fseosfail1\
-		    fsfail2 fsfloor2 fslimitgamma2 fsinflow2 fsfailrho2 fsfailu2 fsfailrhou2 fsprecgam2 fsprecu2 fstoentropy2 fstocold2 fseosfail2 \
-		    fsfail3 fsfloor3 fslimitgamma3 fsinflow3 fsfailrho3 fsfailu3 fsfailrhou3 fsprecgam3 fsprecu3 fstoentropy3 fstocold3 fseosfail3 \
+                    nmfail0 nmfloor0 nmlimitgamma0 nminflow0 nmfailrho0 nmfailu0 nmfailrhou0 nmprecgam0 nmprecu0 nmtoentropy0 nmtocold0 nmeosfail0 nmcb10 nmcb20 nmcos0 \
+		    nmfail1 nmfloor1 nmlimitgamma1 nminflow1 nmfailrho1 nmfailu1 nmfailrhou1 nmprecgam1 nmprecu1 nmtoentropy1 nmtocold1 nmeosfail1 nmcb11 nmcb21 nmcos1 \
+		    nmfail2 nmfloor2 nmlimitgamma2 nminflow2 nmfailrho2 nmfailu2 nmfailrhou2 nmprecgam2 nmprecu2 nmtoentropy2 nmtocold2 nmeosfail2 nmcb12 nmcb22 nmcos2 \
+		    nmfail3 nmfloor3 nmlimitgamma3 nminflow3 nmfailrho3 nmfailu3 nmfailrhou3 nmprecgam3 nmprecu3 nmtoentropy3 nmtocold3 nmeosfail3 nmcb13 nmcb23 nmcos3 \
+                    fsfail0 fsfloor0 fslimitgamma0 fsinflow0 fsfailrho0 fsfailu0 fsfailrhou0 fsprecgam0 fsprecu0 fstoentropy0 fstocold0 fseosfail0 fscb10 fscb20 fscos0 \
+		    fsfail1 fsfloor1 fslimitgamma1 fsinflow1 fsfailrho1 fsfailu1 fsfailrhou1 fsprecgam1 fsprecu1 fstoentropy1 fstocold1 fseosfail1 fscb11 fscb21 fscos1 \
+		    fsfail2 fsfloor2 fslimitgamma2 fsinflow2 fsfailrho2 fsfailu2 fsfailrhou2 fsprecgam2 fsprecu2 fstoentropy2 fstocold2 fseosfail2 fscb12 fscb22 fscos2 \
+		    fsfail3 fsfloor3 fslimitgamma3 fsinflow3 fsfailrho3 fsfailu3 fsfailrhou3 fsprecgam3 fsprecu3 fstoentropy3 fstocold3 fseosfail3 fscb13 fscb23 fscos3 \
                     }
+		#
 		#
                 echo "Begin debug computations"
                 debuggencompute 1
