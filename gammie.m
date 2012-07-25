@@ -2764,12 +2764,11 @@ debugener 0	#
 		#
 		da debug.out
 		#
-		# 2+2+3+3*3+2+4*12 = 66
 		#
                 # See jrdpdebuggen for more descriptions/details
 		#
 		lines 1 10000000
-		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {  t nstep \
                        dt strokes \
                        wavedt sourcedt gravitydt \
@@ -2777,35 +2776,39 @@ debugener 0	#
                        wavedti2 wavedtj2 wavedtk2 \
                        wavedti3 wavedtj3 wavedtk3 \
                        horizoni horizoncpupos1 \
-		    failt0 floort0 limitt0 inflowt0 failrhot0 failut0 failrhout0 precgamt0 precut0 toentropyt0 tocoldt0 eosfailt0 \
-		    failt1 floort1 limitt1 inflowt1 failrhot1 failut1 failrhout1 precgamt1 precut1 toentropyt1 tocoldt1 eosfailt1  \
-		    failt2 floort2 limitt2 inflowt2 failrhot2 failut2 failrhout2 precgamt2 precut2 toentropyt2 tocoldt2 eosfailt2  \
-		    failt3 floort3 limitt3 inflowt3 failrhot3 failut3 failrhout3 precgamt3 precut3 toentropyt3 tocoldt3 eosfailt3  }
+                    nmfailt0 nmfloort0 nmlimitt0 nminflowt0 nmfailrhot0 nmfailut0 nmfailrhout0 nmprecgamt0 nmprecut0 nmtoentropyt0 nmtocoldt0 nmeosfailt0 nmcb10 nmcb20 nmcos0  \
+                    nmfailt1 nmfloort1 nmlimitt1 nminflowt1 nmfailrhot1 nmfailut1 nmfailrhout1 nmprecgamt1 nmprecut1 nmtoentropyt1 nmtocoldt1 nmeosfailt1 nmcb11 nmcb21 nmcos1  \
+		    nmfailt2 nmfloort2 nmlimitt2 nminflowt2 nmfailrhot2 nmfailut2 nmfailrhout2 nmprecgamt2 nmprecut2 nmtoentropyt2 nmtocoldt2 nmeosfailt2 nmcb12 nmcb22 nmcos2  \
+		    nmfailt3 nmfloort3 nmlimitt3 nminflowt3 nmfailrhot3 nmfailut3 nmfailrhout3 nmprecgamt3 nmprecut3 nmtoentropyt3 nmtocoldt3 nmeosfailt3 nmcb13 nmcb23 nmcos3  \
+		    fsfailt0 fsfloort0 fslimitt0 fsinflowt0 fsfailrhot0 fsfailut0 fsfailrhout0 fsprecgamt0 fsprecut0 fstoentropyt0 fstocoldt0 fseosfailt0 fscb10 fscb20 fscos0  \
+		    fsfailt1 fsfloort1 fslimitt1 fsinflowt1 fsfailrhot1 fsfailut1 fsfailrhout1 fsprecgamt1 fsprecut1 fstoentropyt1 fstocoldt1 fseosfailt1 fscb11 fscb21 fscos1  \
+		    fsfailt2 fsfloort2 fslimitt2 fsinflowt2 fsfailrhot2 fsfailut2 fsfailrhout2 fsprecgamt2 fsprecut2 fstoentropyt2 fstocoldt2 fseosfailt2 fscb12 fscb22 fscos2  \
+		    fsfailt3 fsfloort3 fslimitt3 fsinflowt3 fsfailrhot3 fsfailut3 fsfailrhout3 fsprecgamt3 fsprecut3 fstoentropyt3 fstocoldt3 fseosfailt3 fscb13 fscb23 fscos3  }
 		    #
 		    #
 		    	# shows where *ever* failed or not
-		set lg1failt=lg(failt0+1)
-		set lg1tott=lg(failt0+failrhot0+failut0+failrhout0+1)
+		set lg1failt=lg(fsfailt0+1)
+		set lg1tott=lg(fsfailt0+fsfailrhot0+fsfailut0+fsfailrhout0+1)
 		#
 		set lg1precgamt=lg(precgamt0+1)
 		set lg1precut=lg(precut0+1)
 		#
-		set failtott0=failt0+failrhot0+failut0+failrhout0
-		set failtott1=failt1+failrhot1+failut1+failrhout1
-		set failtott2=failt2+failrhot2+failut2+failrhout2
-		set failtott3=failt3+failrhot3+failut3+failrhout3
+		set fsfailtott0=fsfailt0+fsfailrhot0+fsfailut0+fsfailrhout0
+		set fsfailtott1=fsfailt1+fsfailrhot1+fsfailut1+fsfailrhout1
+		set fsfailtott2=fsfailt2+fsfailrhot2+fsfailut2+fsfailrhout2
+		set fsfailtott3=fsfailt3+fsfailrhot3+fsfailut3+fsfailrhout3
 		#
-		set lgftott0=lg(failtott0+1)
-		set lgftott1=lg(failtott1+1)
-		set lgftott2=lg(failtott2+1)
-		set lgftott3=lg(failtott3+1)
+		set lgftott0=lg(fsfailtott0+1)
+		set lgftott1=lg(fsfailtott1+1)
+		set lgftott2=lg(fsfailtott2+1)
+		set lgftott3=lg(fsfailtott3+1)
 		#
 		#
 		# absolute totals
-		set dtott0=failt0+floort0+limitt0+failrhot0+failut0+failrhout0+precgamt0+precut0
-		set dtott1=failt1+floort1+limitt1+failrhot1+failut1+failrhout1+precgamt1+precut1
-		set dtott2=failt2+floort2+limitt2+failrhot2+failut2+failrhout2+precgamt2+precut2
-		set dtott3=failt3+floort3+limitt3+failrhot3+failut3+failrhout3+precgamt3+precut3
+		set dtott0=fsfailt0+fsfloort0+fslimitt0+fsfailrhot0+fsfailut0+fsfailrhout0+fsprecgamt0+fsprecut0
+		set dtott1=fsfailt1+fsfloort1+fslimitt1+fsfailrhot1+fsfailut1+fsfailrhout1+fsprecgamt1+fsprecut1
+		set dtott2=fsfailt2+fsfloort2+fslimitt2+fsfailrhot2+fsfailut2+fsfailrhout2+fsprecgamt2+fsprecut2
+		set dtott3=fsfailt3+fsfloort3+fslimitt3+fsfailrhot3+fsfailut3+fsfailrhout3+fsprecgamt3+fsprecut3
 		#
 		set lgdtott0=lg(dtott0+1)
 		set lgdtott1=lg(dtott1+1)
