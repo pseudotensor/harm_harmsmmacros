@@ -2790,8 +2790,8 @@ debugener 0	#
 		set lg1failt=lg(fsfailt0+1)
 		set lg1tott=lg(fsfailt0+fsfailrhot0+fsfailut0+fsfailrhout0+1)
 		#
-		set lg1precgamt=lg(precgamt0+1)
-		set lg1precut=lg(precut0+1)
+		set lg1precgamt=lg(fsprecgamt0+1)
+		set lg1precut=lg(fsprecut0+1)
 		#
 		set fsfailtott0=fsfailt0+fsfailrhot0+fsfailut0+fsfailrhout0
 		set fsfailtott1=fsfailt1+fsfailrhot1+fsfailut1+fsfailrhout1
