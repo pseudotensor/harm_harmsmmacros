@@ -1,0 +1,21 @@
+device		x11 -bg black -name "you_can_beat_SM" -title "SM" -geometry 400x400+20+20
+filecap		/home/jon/sm/filecap 
+file_type	JonD
+fonts		/home/jon/lib/sm/fonts.bin
+graphcap        /home/jon/lib/sm/graphcap /home/jon/lib/sm/graphcap.cfa
++graphcap       /home/jon/sm/graphcap.local
+help		/home/jon/lib/sm/help/
+history		80
+history_file	/home/jon/.smhist
+macro		/home/jon/lib/sm/macro/
+macro2          /home/jon/sm/
+save_file	sm.sav
+temp_dir	/tmp/
+termcap		/etc/termcap
+device          0
+verbose		0
+history_char	`
+TeX_strings     1
+name		Jonathan
+prompt          sm:
+missing_macro_continue 1
