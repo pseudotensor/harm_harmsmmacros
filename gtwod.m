@@ -297,7 +297,53 @@ jrdpcf3duentropy 1	# for reading file with current (jcon/jcov) and faraday (fcon
                 }
  		#
                 #
+jrdprad 1	# for reading file with full set of stuff with radiation
+		jrdpheader3d dumps/$1
+		da dumps/$1
+		lines 2 10000000
+		#
+                # 81
+        set NPR=13
+        set NPRDUMP=12
+        set nprend=12
+        set NDIM=4
+		set totalcolumns=3*3 + NPRDUMP + 3 + (nprend+1) + 1 + 4 * NDIM + 6 + 1 + NDIM*2 + 2*6
+                #
+                if(totalcolumns!=_numcolumns || dimen(nprdumplist)!=12 || dimen(nprlist)!=13){\
+                 echo "Wrong format"
+                 print {totalcolumns _numcolumns}
+                 print {nprdumplist}
+                 print {nprlist}
+                }\
+                else{\
+                     read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+                     {ti tj tk x1 x2 x3 r h ph \
+                      rho u v1 v2 v3 B1 B2 B3 prad0 prad1 prad2 prad3 \
+		      p cs2 Sden \
+		      U0 U1 U2 U3 U4  U5 U6 U7  U8 U9 U10 U11  U12 \
+		      divb \
+		      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
+		      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
+                      v1m v1p v2m v2p v3m v3p gdet \
+                      ju0 ju1 ju2 ju3  \
+                      jd0 jd1 jd2 jd3  \
+                      fu0 fu1 fu2 fu3 fu4 fu5 \
+                      fd0 fd1 fd2 fd3 fd4 fd5 }
+                     #
+                     set tx1=x1
+                     set tx2=x2
+                     set tx3=x3
+                     gsetup
+                     if($DOGCALC) { gcalc }
+                  # gcalc
+                  abscompute
+                  #
+                  gammienew
+                }
+ 		#
+                #
 jrdpcf3duentropystag 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
+                  # for debugging
 		#jrdpheader3dsasha dumps/$1
                 jrdpheader3d dumps/$1
 		da dumps/$1
@@ -3513,11 +3559,13 @@ agpl  18	# agpl 'dump' r fun 000 <0 0 0 0>
                   define filenamegdump (_fnamegdump)
 		  #jrdp2d $filename
 		  #
+          # with radiation
+                  jrdprad $filename
 		  # NEW
                   #jrdpall $ii
                   #jrdp3du $filename
-                  define arg (h2)
-                  jrdpallgrb $arg
+                  #define arg (h2)
+                  #jrdpallgrb $arg
 		  #
 		  # OLD
 		  #jrdp3duold $filename
@@ -3821,7 +3869,8 @@ agpldiff  18	# agpl 'dump' r fun 000 <0 0 0 0>
 		  #
 		  # NEW
                   #jrdpall $ii
-                  jrdp3du $filename
+          #        jrdp3du $filename
+                   jrdprad $filename
 		  #
 		  #
 		  faraday
@@ -3832,7 +3881,8 @@ agpldiff  18	# agpl 'dump' r fun 000 <0 0 0 0>
                   #
 		  #
 		  #
-		  jrdp3du ../../../makedir.test106_unsplit/run/dumps/$filename
+		  #jrdp3du ../../../makedir.test106_unsplit/run/dumps/$filename
+                    jrdprad dump0000
                     #
                     #
                     set second=$3
@@ -3849,19 +3899,53 @@ agpldiff  18	# agpl 'dump' r fun 000 <0 0 0 0>
                    }
                   }
 		  #
-                  set h1debug='debug'
-		  set _fnamedebug=h1debug+h2
-                  define filenamedebug (_fnamedebug)
-                  jrdpdebug $filenamedebug
-                  ctype red
-                  plo 0 $2 fail0
-                  #
-                  #
-                  #delay loop
+          #        set h1debug='debug'
+		  #set _fnamedebug=h1debug+h2
+          #        define filenamedebug (_fnamedebug)
+          #        jrdpdebug $filenamedebug
+          #        ctype red
+          #        plo 0 $2 fail0
+          #        #
+          #        #
+          #        #delay loop
 		  #set jj=0
 		  #while {jj<10000} {set jj=jj+1}
 		  !sleep .5s
 		}
+		#
+		#
+		#
+		#
+		#
+pldiff  19	# pldiff 'dump0000' 'dump0001' r var  000 <0 0 0 0>
+                if($?5 == 0) { define numsend (2) }\
+                else{\
+                  if($?6 == 1) { define numsend (4) } else { define numsend 3 }
+                }
+                #defaults
+		  define PLANE (3)
+		  define WHICHLEV (0)
+          define filename ($1)
+          jrdprad $filename
+		  faraday
+		  ctype default
+          set first=$4
+          define filename ($2)
+          jrdprad $filename
+          set second=$4
+          set diff=first-second
+          #
+		  ctype default
+		  if($numsend==2){ pl  0 $3 diff}\
+                  else{\
+                   if($numsend==3){  pl  0 $3 diff $5}\
+                   else{\
+                    if($numsend==4){ pl  0 $3 diff $5 $6 $7 $8 $9}
+                   }
+                  }
+		  #while {jj<10000} {set jj=jj+1}
+		  !sleep .5s
+		
 		#
 		#
 		#
