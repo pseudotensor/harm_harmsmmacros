@@ -340,6 +340,37 @@ jrdprad 1	# for reading file with full set of stuff with radiation
                   #
                   gammienew
                 }
+                
+                
+ set uu0ortho=uu0*sqrt(abs(gv300))
+ set uu1ortho=uu1*sqrt(abs(gv311))
+ set uu2ortho=uu2*sqrt(abs(gv322))
+ set uu3ortho=uu3*sqrt(abs(gv333))
+ #
+ set vu1ortho=uu1ortho/uu0ortho
+ set vu2ortho=uu2ortho/uu0ortho
+ set vu3ortho=uu3ortho/uu0ortho
+ #
+ set uur1ortho=prad1*sqrt(abs(gv311))
+ set uur2ortho=prad2*sqrt(abs(gv322))
+ set uur3ortho=prad3*sqrt(abs(gv333))
+ set ursq=uur1ortho*uur1ortho+uur2ortho*uur2ortho+uur3ortho*uur3ortho
+ set uur0ortho=sqrt(1.0+ursq)
+ #
+ set vur1ortho=uur1ortho/uur0ortho
+ set vur2ortho=uur2ortho/uur0ortho
+ set vur3ortho=uur3ortho/uur0ortho
+ 
+ set Rtt=(-U8/gdet*sqrt(abs(gv300)))
+ set Rtx=(U9/gdet*sqrt(abs(gn311)))
+ set Rty=(U10/gdet*sqrt(abs(gn322)))
+ set Rtz=(U11/gdet*sqrt(abs(gn333)))
+ #
+ set myRtt=(prad0/3)*(4*uur0ortho*uur0ortho-1)
+ set myRtx=(prad0/3)*(4*uur0ortho*uur1ortho-0)
+ set myRty=(prad0/3)*(4*uur0ortho*uur2ortho-0)
+ set myRtz=(prad0/3)*(4*uur0ortho*uur3ortho-0)
+ #
  		#
                 #
 jrdpcf3duentropystag 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
@@ -3447,12 +3478,13 @@ agplc 17	# animplc 'dump' r 000 <0 0 0 0>
                   #jrdpflux $filenameflux
                   #jrdpdebug $filenamedebug
                     #
-                    jrdpcf3duentropy $filename
+                    #jrdpcf3duentropy $filename
                     #jrdpflux $filenameflux
-                    jrdpdebug $filenamedebug
-                    jrdpvpot $filenamevpot
+                    #jrdpdebug $filenamedebug
+                    #jrdpvpot $filenamevpot
                     #
                     #
+                    jrdprad $filename
                     #
                     if(0){\
                      define POSCONTCOLOR "cyan"
@@ -3463,13 +3495,13 @@ agplc 17	# animplc 'dump' r 000 <0 0 0 0>
                     }
                   #
                   #
-                    fieldcalc 0 aphi
+                    #fieldcalc 0 aphi
 		  #jre mode2.m
 		  #alfvenvp
 		  #interpsingle aphi 128 128 -2.5 2.5 -2.5 2.5
 		  #readinterp aphi
 		  #define CONSTLEVELS 1
-                    faraday
+                    #faraday
 		  #device postencap $filename.$ii
                   if($numsend==2){ plc0  0 $2 $3}\
                   else{\
