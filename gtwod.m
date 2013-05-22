@@ -340,8 +340,9 @@ jrdprad 1	# for reading file with full set of stuff with radiation
                   #
                   gammienew
                 }
-                
-                
+                #
+                jrdpraddump rad$1
+                #
  set uu0ortho=uu0*sqrt(abs(gv300))
  set uu1ortho=uu1*sqrt(abs(gv311))
  set uu2ortho=uu2*sqrt(abs(gv322))
@@ -1233,6 +1234,29 @@ jrdpeos	1	#
                     }
                 }
 	        #
+jrdpraddump	1	#
+		#
+		jrdpheader3d dumps/$1
+		da dumps/$1
+		lines 2 10000000
+		#
+		# 44
+		#
+		 read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		    { uru0 uru1 uru2 uru3 urd0 urd1 urd2 urd3 \
+              kappa kappaes \
+              tautot0 tautot1 tautot2 tautot3 tautotmax \
+              prad0ff prad1ff prad2ff prad3ff \
+              Gd0 Gd1 Gd2 Gd3 \
+              Gdabs0 Gdabs1 Gdabs2 Gdabs3 \
+              lambda \
+              ErfLTE \
+              Tgas Trad Tradff \
+              vrmin1 vrmax1 vrmin21 vrmax21 \
+              vrmin2 vrmax2 vrmin22 vrmax22 \
+              vrmin3 vrmax3 vrmin23 vrmax23 \
+            }
+	        #            
 jrdpvpot 1	#
 		#
 		jrdpheader3d dumps/$1
@@ -3593,6 +3617,7 @@ agpl  18	# agpl 'dump' r fun 000 <0 0 0 0>
 		  #
           # with radiation
                   jrdprad $filename
+                  #jrdpraddump rad$filename
 		  # NEW
                   #jrdpall $ii
                   #jrdp3du $filename

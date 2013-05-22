@@ -915,5 +915,17 @@ printd   1        #
 		set temptemp=$1
 		print '%21.15g\n' {temptemp}
 		#
-		
+showmpigrid 0
+        set ncpux1=4
+        set ncpux2=4
+        define cresold ($cres)
+        define cres 2
+        plc0 0 (ti-$nx/ncpux1*1) 010
+        plc0 0 (ti-$nx/ncpux1*2) 010
+        plc0 0 (ti-$nx/ncpux1*3) 010
+        plc0 0 (tj-$ny/ncpux2*1) 010
+        plc0 0 (tj-$ny/ncpux2*2) 010
+        plc0 0 (tj-$ny/ncpux2*3) 010
+        define cres ($cresold)
+        #
 		
