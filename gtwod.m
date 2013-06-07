@@ -342,7 +342,27 @@ jrdprad 1	# for reading file with full set of stuff with radiation
                 }
                 #
                 jrdpraddump rad$1
+                jrdpraddims
                 #
+ #
+ set qsqrad=gv311*prad1*prad1+gv312*prad1*prad2+gv313*prad1*prad3\
+            +gv321*prad2*prad1+gv322*prad2*prad2+gv323*prad2*prad3\
+            +gv331*prad3*prad1+gv332*prad3*prad2+gv333*prad3*prad3
+ set gammarad=sqrt(1+qsqrad)
+ set alpha=1/sqrt(-gn300)
+ set uru0=gammarad/alpha
+ set beta1=alpha**2*gn301
+ set beta2=alpha**2*gn302
+ set beta3=alpha**2*gn303
+ set eta0=(1/alpha)
+ set eta1=-(1/alpha)*beta1
+ set eta2=-(1/alpha)*beta2
+ set eta3=-(1/alpha)*beta3
+ set uru1=prad1 + gammarad*eta1
+ set uru2=prad2 + gammarad*eta2
+ set uru3=prad3 + gammarad*eta3
+ #
+ #
  set uu0ortho=uu0*sqrt(abs(gv300))
  set uu1ortho=uu1*sqrt(abs(gv311))
  set uu2ortho=uu2*sqrt(abs(gv322))
@@ -352,9 +372,9 @@ jrdprad 1	# for reading file with full set of stuff with radiation
  set vu2ortho=uu2ortho/uu0ortho
  set vu3ortho=uu3ortho/uu0ortho
  #
- set uur1ortho=prad1*sqrt(abs(gv311))
- set uur2ortho=prad2*sqrt(abs(gv322))
- set uur3ortho=prad3*sqrt(abs(gv333))
+ set uur1ortho=uru1*sqrt(abs(gv311))
+ set uur2ortho=uru2*sqrt(abs(gv322))
+ set uur3ortho=uru3*sqrt(abs(gv333))
  set ursq=uur1ortho*uur1ortho+uur2ortho*uur2ortho+uur3ortho*uur3ortho
  set uur0ortho=sqrt(1.0+ursq)
  #
@@ -372,8 +392,14 @@ jrdprad 1	# for reading file with full set of stuff with radiation
  set myRty=(prad0/3)*(4*uur0ortho*uur2ortho-0)
  set myRtz=(prad0/3)*(4*uur0ortho*uur3ortho-0)
  #
+ #
+jrdpraddims 0
+          da dimensions.txt
+          lines 1 1
+          read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+          {GGG CCCTRUE MSUNCM MPERSUN LBAR TBAR VBAR RHOBAR MBAR ENBAR UBAR TEMPBAR ARAD_CODE_DEF XFACT ZATOM AATOM MUE MUI OPACITYBAR MASSCM KORAL2HARMRHO1}
  		#
-                #
+        #
 jrdpcf3duentropystag 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
                   # for debugging
 		#jrdpheader3dsasha dumps/$1
