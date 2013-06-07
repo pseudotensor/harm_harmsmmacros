@@ -51,3 +51,33 @@
   plc 0 (U4/gdet/(Tud03))
   plc 0 (U12/gdet/(myU12pergdet))
   
+   #
+   #
+   set dMdot=(rho*uu1*gdet*$dx2*$dx3)
+   set dMdothor=dMdot if(ti==4)
+   set Mdothor=abs(SUM(dMdothor))*MBAR/TBAR print {Mdothor}
+   set Mdothormsun=Mdothor/MSUN*(3.14E7) print {Mdothormsun}
+   set Edothor=Mdothor*CCCTRUE**2 print {Edothor}
+   #
+   set R10=-(prad0/3.0)*(4.0*uru1*urd0)
+   set R20=-(prad0/3.0)*(4.0*uru2*urd0)
+   set R30=-(prad0/3.0)*(4.0*uru3*urd0)
+   #
+   set dRdot=((-R20*gdet*$dx1*$dx3)) if(ti<=50 && tj==7)
+   set Rdot=SUM(dRdot)*ENBAR/TBAR print {Rdot}
+   #
+   set dRdot2=((R10*gdet*$dx2*$dx3)) if(ti==50 && tautotmax<=1.0)
+   set Rdot2=SUM(dRdot2)*ENBAR/TBAR print {Rdot2}
+   #
+   set MSUN=1.9891E33
+   set sigmaT=0.665E-24
+   set mproton=1.673E-24
+   set Ledd=4*pi*GGG*(MPERSUN*MSUN)*mproton*CCCTRUE/sigmaT
+   print {Ledd}
+   #
+   set result=Edothor/Ledd print {result}
+   set result2=Rdot/Ledd print {result2}
+   set result3=Rdot/Edothor print {result3}
+   set result4=Rdot2/Ledd print {result4}
+   set result5=Rdot2/Edothor print {result5}
+   #
