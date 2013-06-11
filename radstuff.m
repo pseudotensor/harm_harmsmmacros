@@ -52,6 +52,7 @@
   plc 0 (U12/gdet/(myU12pergdet))
   
    #
+   stresscalc 1
    #
    set dMdot=(rho*uu1*gdet*$dx2*$dx3)
    set dMdothor=dMdot if(ti==4)
@@ -66,8 +67,24 @@
    set dRdot=((-R20*gdet*$dx1*$dx3)) if(ti<=50 && tj==7)
    set Rdot=SUM(dRdot)*ENBAR/TBAR print {Rdot}
    #
-   set dRdot2=((R10*gdet*$dx2*$dx3)) if(ti==50 && tautotmax<=1.0)
-   set Rdot2=SUM(dRdot2)*ENBAR/TBAR print {Rdot2}
+   set whichti=int($nx*4.0/5.0)
+   set myuse=(ti==whichti && tautotmax<=1.0)
+   #set myuse=(ti==50)
+   set dh=$dx2*dxdxp22
+   set dphi=$dx3*dxdxp33
+   set dRdot2=((R10*gdet*$dx2*$dx3*ENBAR/TBAR)) if(myuse)
+   set area=(sin(h)*dh*dphi)
+   set myarea=area if(myuse)
+   set totalarea=SUM(myarea)
+   set dRdot2iso=((R10*gdet*$dx2*$dx3*ENBAR/TBAR))*(totalarea/area) if(myuse)
+   set dEMdot2=((-Tud10EM*gdet*$dx2*$dx3*ENBAR/TBAR)) if(myuse)
+   set dMAdot2=((-Tud10MA*gdet*$dx2*$dx3*ENBAR/TBAR)) if(myuse)
+   set dMdot2=(((rho*uu1)*gdet*$dx2*$dx3*ENBAR/TBAR)) if(myuse)
+   set gamma2=uu0 if(myuse)
+   set dtheta=h  if(myuse)
+   set Rdot2=SUM(dRdot2) print {Rdot2}
+   set Rdot2iso=dRdot2iso/Rdot2
+   # print {dtheta dRdot2 Rdot2iso dEMdot2 dMAdot2 dMdot2 gamma2}
    #
    set MSUN=1.9891E33
    set sigmaT=0.665E-24
