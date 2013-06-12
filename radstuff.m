@@ -1,4 +1,4 @@
- 
+test1 0 #
  
  jrdprad dump0000
  set prad0t0=prad0[799]
@@ -50,7 +50,8 @@
   plc 0 (U3/gdet/(Tud02))
   plc 0 (U4/gdet/(Tud03))
   plc 0 (U12/gdet/(myU12pergdet))
-  
+
+radcomp1 0 #  
    #
    stresscalc 1
    #
@@ -77,6 +78,7 @@
    set myarea=area if(myuse)
    set totalarea=SUM(myarea)
    set dRdot2iso=((R10*gdet*$dx2*$dx3*ENBAR/TBAR))*(totalarea/area) if(myuse)
+   set dRdot2iso2=((R10*gdet*$dx2*$dx3*ENBAR/TBAR))*(4.0*pi/area) if(myuse)
    set dEMdot2=((-Tud10EM*gdet*$dx2*$dx3*ENBAR/TBAR)) if(myuse)
    set dMAdot2=((-Tud10MA*gdet*$dx2*$dx3*ENBAR/TBAR)) if(myuse)
    set dMdot2=(((rho*uu1)*gdet*$dx2*$dx3*ENBAR/TBAR)) if(myuse)
@@ -84,7 +86,8 @@
    set dtheta=h  if(myuse)
    set Rdot2=SUM(dRdot2) print {Rdot2}
    set Rdot2iso=dRdot2iso/Rdot2
-   # print {dtheta dRdot2 Rdot2iso dEMdot2 dMAdot2 dMdot2 gamma2}
+   set Rdot2iso2=dRdot2iso2/Rdot2
+   # print {dtheta dRdot2 Rdot2iso Rdot2iso2 dEMdot2 dMAdot2 dMdot2 gamma2}
    #
    set MSUN=1.9891E33
    set sigmaT=0.665E-24
@@ -92,9 +95,10 @@
    set Ledd=4*pi*GGG*(MPERSUN*MSUN)*mproton*CCCTRUE/sigmaT
    print {Ledd}
    #
-   set result=Edothor/Ledd print {result}
-   set result2=Rdot/Ledd print {result2}
-   set result3=Rdot/Edothor print {result3}
-   set result4=Rdot2/Ledd print {result4}
-   set result5=Rdot2/Edothor print {result5}
+   set result1=Edothor/Ledd
+   set result2=Rdot/Ledd
+   set result3=Rdot/Edothor
+   set result4=Rdot2/Ledd
+   set result5=Rdot2/Edothor
+   print {result1 result2 result3 result4 result5}
    #
