@@ -53,7 +53,15 @@ test1 0 #
 
 radcomp1 0 #  
    #
+   define print_noheader (0)
+   #
    stresscalc 1
+   #
+   set MSUN=1.9891E33
+   set sigmaT=0.665E-24
+   set mproton=1.673E-24
+   set Ledd=4*pi*GGG*(MPERSUN*MSUN)*mproton*CCCTRUE/sigmaT
+   print {Ledd}
    #
    set dMdot=(rho*uu1*gdet*$dx2*$dx3)
    set dMdothor=dMdot if(ti==4)
@@ -101,11 +109,6 @@ radcomp1 0 #
    set Rdot2=SUM(dRdot2) print {Rdot2}
    #
    #
-   set MSUN=1.9891E33
-   set sigmaT=0.665E-24
-   set mproton=1.673E-24
-   set Ledd=4*pi*GGG*(MPERSUN*MSUN)*mproton*CCCTRUE/sigmaT
-   print {Ledd}
    #
    set Rdot2iso=dRdot2iso/Ledd
    # print {dtheta dRdot2 Rdot2iso dEMdot2 dMAdot2 dMdot2 gamma2}
