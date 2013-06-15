@@ -126,3 +126,26 @@ radcomp1 0 #
    set Rdot2oEdothor=Rdot2/Edothor
    print {EdothoroLedd RdotoLedd RdotoEdothor Rdot2oLedd Rdot2oEdothor}
    #
+radcomp2 0 #
+   set Rcyl=abs(r*sin(h))
+   set phi=-1/(r-2)
+   set phieq=-1/(Rcyl-2)
+   set rs=2
+   set r0=40*rs
+   set l0=r0**1.5/(r0-rs)
+   set aa=0.46
+   set ll=l0*(Rcyl/r0)**aa
+   set rhoc=1.0
+   set nn=1/(4/3-1)
+   set phir0=-1/(r0-rs)
+   set phieff=phi+0.5*(ll/Rcyl)**2/(1-aa)
+   set phieffr0=phir0+0.5*(l0/r0)**2/(1-aa)
+   set phieffeq=phieq+0.5*(ll/Rcyl)**2/(1-aa)
+radcomp3 0 #
+   set kappatot = kappa+kappaes
+   set H = r*cos(h)
+   set lambdatot=1/kappatot
+   # diffusion time at a given height
+   set Td=3.0*H*H/lambdatot
+   set Tds=3.0*H*H*kappaes
+   set Tda=3.0*H*H*kappa
