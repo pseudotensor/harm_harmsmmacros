@@ -86,6 +86,7 @@ radcomp1 0 #
    set dphi=$dx3*dxdxp33
    set ddRdot2=(R10*gdet*$dx2*$dx3*ENBAR/TBAR)
    set dRdot2=ddRdot2 if(myuse)
+   set Rdot2=SUM(dRdot2)
    set area=(sin(h)*dh*dphi)
    set myarea=area if(myuse)
    set totalarea=SUM(myarea)
@@ -93,38 +94,44 @@ radcomp1 0 #
    set dRdot2iso2=(ddRdot2)*(4.0*pi/area) if(myuse)
    set ddEMdot2=(-Tud10EM*gdet*$dx2*$dx3*ENBAR/TBAR)
    set dEMdot2=(ddEMdot2) if(myuse)
+   set EMdot2=SUM(dEMdot2)
    set dEMdot2iso=(ddEMdot2)*(totalarea/area) if(myuse)
    set dEMdot2iso2=(ddEMdot2)*(4.0*pi/area) if(myuse)
    set ddMAdot2=(-Tud10MA*gdet*$dx2*$dx3*ENBAR/TBAR)
    set dMAdot2=(ddMAdot2) if(myuse)
+   set MAdot2=SUM(dMAdot2)
    set dMAdot2iso=(ddMAdot2)*(totalarea/area) if(myuse)
    set dMAdot2iso2=(ddMAdot2)*(4.0*pi/area) if(myuse)
    set ddMdot2=((rho*uu1)*gdet*$dx2*$dx3*ENBAR/TBAR)
    set dMdot2=(ddMdot2) if(myuse)
+   set Mdot2=SUM(dMdot2)
    set dMdot2iso=(ddMdot2)*(totalarea/area) if(myuse)
    set dMdot2iso2=(ddMdot2)*(4.0*pi/area) if(myuse)
    #
    set gamma2=uu0 if(myuse)
    set dtheta=h  if(myuse)
-   set Rdot2=SUM(dRdot2) print {Rdot2}
    #
    #
    #
    set Rdot2iso=dRdot2iso/Ledd
-   # print {dtheta dRdot2 Rdot2iso dEMdot2 dMAdot2 dMdot2 gamma2}
+   set dRdot2=dRdot2/Ledd
+   set dEMdot2=dEMdot2/Ledd
+   set dMAdot2=dMAdot2/Ledd
+   set dMdot2=dMdot2/Ledd
+   # print '%14g %14g %14g %14g %14g %14g %14g\n'{dtheta Rdot2iso dRdot2 dEMdot2 dMAdot2 dMdot2 gamma2}
    #
    set Rdot2iso2=dRdot2iso2/Ledd
    set EMdot2iso2=dEMdot2iso2/Ledd
    set MAdot2iso2=dMAdot2iso2/Ledd
    set Mdot2iso2=dMdot2iso2/Ledd
-   # print {dtheta Rdot2iso2 EMdot2iso2 MAdot2iso2 Mdot2iso2 gamma2}
+   # print '%14g %14g %14g %14g %14g %14g\n' {dtheta Rdot2iso2 EMdot2iso2 MAdot2iso2 Mdot2iso2 gamma2}
    #
-   set EdothoroLedd=Edothor/Ledd
-   set RdotoLedd=Rdot/Ledd
-   set RdotoEdothor=Rdot/Edothor
-   set Rdot2oLedd=Rdot2/Ledd
-   set Rdot2oEdothor=Rdot2/Edothor
-   print {EdothoroLedd RdotoLedd RdotoEdothor Rdot2oLedd Rdot2oEdothor}
+   set Edothor=Edothor/Ledd
+   set Rdot2=Rdot2/Ledd
+   set EMdot2=EMdot2/Ledd
+   set MAdot2=MAdot2/Ledd
+   set Mdot2=Mdot2/Ledd
+   print '%14g %14g %14g %14g %14g\n' {Edothor Rdot2 EMdot2 MAdot2 Mdot2}
    #
 radcomp2 0 #
    set Rcyl=abs(r*sin(h))
