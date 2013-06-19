@@ -124,7 +124,7 @@ radcomp1 0 #
    set EMdot2iso2=dEMdot2iso2/Ledd
    set MAdot2iso2=dMAdot2iso2/Ledd
    set Mdot2iso2=dMdot2iso2/Ledd
-   # print '%14g %14g %14g %14g %14g %14g\n' {dtheta Rdot2iso2 EMdot2iso2 MAdot2iso2 Mdot2iso2 gamma2}
+   # print '%14g %14g %14g %14g %14g\n' {dtheta Rdot2iso2 EMdot2iso2 MAdot2iso2 Mdot2iso2}
    #
    set Edothor=Edothor/Ledd
    set Rdot2=Rdot2/Ledd
