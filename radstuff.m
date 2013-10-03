@@ -51,6 +51,37 @@ test1 0 #
   plc 0 (U4/gdet/(Tud03))
   plc 0 (U12/gdet/(myU12pergdet))
 
+  
+doallrad 0 #
+       #
+       cd /data/jon/harmgit/torusradchecklongdouble/runnorada9375/
+       grid3d gdump
+       jrdprad dump2000
+       radcomp1
+       !cp rad.txt ~/runnorada9375.txt
+       #
+       #
+       cd /data/jon/harmgit/torusradchecklongdouble/runnorada0/
+       grid3d gdump
+       jrdprad dump2000
+       radcomp1
+       !cp rad.txt ~/runnorada0.txt
+       #
+       #
+       cd /data/jon/harmgit/torusradchecklongdouble/runrada9375/
+       grid3d gdump
+       jrdprad dump1875
+       radcomp1
+       !cp rad.txt ~/runrada9375.txt
+       #
+       #
+       cd /data/jon/harmgit/torusradchecklongdouble/runrada0/
+       grid3d gdump
+       jrdprad dump2000
+       radcomp1
+       !cp rad.txt ~/runrada0.txt
+       #
+  
 radcomp1 0 #  
    #
    define print_noheader (0)
@@ -111,27 +142,35 @@ radcomp1 0 #
    set gamma2=uu0 if(myuse)
    set dtheta=h  if(myuse)
    #
+   print rad.txt {_t _a}
    #
-   #
-   set Rdot2iso=dRdot2iso/Ledd
-   set dRdot2=dRdot2/Ledd
-   set dEMdot2=dEMdot2/Ledd
-   set dMAdot2=dMAdot2/Ledd
-   set dMdot2=dMdot2/Ledd
-   # print '%14g %14g %14g %14g %14g %14g %14g\n'{dtheta Rdot2iso dRdot2 dEMdot2 dMAdot2 dMdot2 gamma2}
-   #
-   set Rdot2iso2=dRdot2iso2/Ledd
-   set EMdot2iso2=dEMdot2iso2/Ledd
-   set MAdot2iso2=dMAdot2iso2/Ledd
-   set Mdot2iso2=dMdot2iso2/Ledd
-   # print '%14g %14g %14g %14g %14g\n' {dtheta Rdot2iso2 EMdot2iso2 MAdot2iso2 Mdot2iso2}
+   print + rad.txt '\n' {}
+   print + rad.txt  '%14g %14g %14g\n' {Ledd Mdothor Mdothormsun}
    #
    set Edothor=Edothor/Ledd
    set Rdot2=Rdot2/Ledd
    set EMdot2=EMdot2/Ledd
    set MAdot2=MAdot2/Ledd
    set Mdot2=Mdot2/Ledd
-   print '%14g %14g %14g %14g %14g\n' {Edothor Rdot2 EMdot2 MAdot2 Mdot2}
+   print + rad.txt '\n' {}
+   print + rad.txt  '%14g %14g %14g %14g %14g\n' {Edothor Rdot2 EMdot2 MAdot2 Mdot2}
+   #
+   set Rdot2iso=dRdot2iso/Ledd
+   set dRdot2=dRdot2/Ledd
+   set dEMdot2=dEMdot2/Ledd
+   set dMAdot2=dMAdot2/Ledd
+   set dMdot2=dMdot2/Ledd
+   set bsqorho=bsq/rho if(myuse)
+   print + rad.txt '\n' {}
+   print + rad.txt '%14g %14g %14g %14g %14g %14g %14g %14g\n'{dtheta Rdot2iso dRdot2 dEMdot2 dMAdot2 dMdot2 gamma2 bsqorho}
+   #
+   set Rdot2iso2=dRdot2iso2/Ledd
+   set EMdot2iso2=dEMdot2iso2/Ledd
+   set MAdot2iso2=dMAdot2iso2/Ledd
+   set Mdot2iso2=dMdot2iso2/Ledd
+   print + rad.txt '\n' {}
+   print + rad.txt '%14g %14g %14g %14g %14g\n' {dtheta Rdot2iso2 EMdot2iso2 MAdot2iso2 Mdot2iso2}
+   #
    #
 radcomp2 0 #
    set Rcyl=abs(r*sin(h))

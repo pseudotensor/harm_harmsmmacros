@@ -442,6 +442,18 @@ jrdpcf3duentropystag 1	# for reading file with current (jcon/jcov) and faraday (
                 }
  		#
                 #
+jrdpdissmeasure 1	# for reading file with dissmeasure stuff
+		jrdpheader3d dumps/$1
+		da dumps/$1
+		lines 2 10000000
+		#
+        read '%g %g %g %g %g %g %g %g %g %g %g %g %g' \
+                     {dm0 dm1 dm2 dm3 dm4 dm5 dm \
+                      Fi1 Fi2 Fi3 \
+                      Firad1 Firad2 Firad3 \
+                     }
+        #
+        #
 jrdppenna 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
 		jrdpheader3dold dumps/$1
 		da dumps/$1
@@ -3497,8 +3509,8 @@ agplc 17	# animplc 'dump' r 000 <0 0 0 0>
                   if($?4 == 1) { define numsend (4) } else { define numsend 3 }
                 }
                 #defaults
-		define PLANE (3)
-		define WHICHLEV (0)
+		#define PLANE (3)
+		#define WHICHLEV (0)
 		#set constlevelshit=0
 		#
                 do ii=startanim,endanim,$ANIMSKIP {
