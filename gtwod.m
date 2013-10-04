@@ -342,6 +342,7 @@ jrdprad 1	# for reading file with full set of stuff with radiation
                 }
                 #
                 jrdpraddump rad$1
+                jrdpdissmeasure dissmeasure$1
                 jrdpraddims
                 #
  #
