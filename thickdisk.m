@@ -379,18 +379,18 @@ rdvsr 0 #
 rdvsh 0 #
         da datavsh1.txt
         lines 1 1000000
-        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-        {ii hinnx4 rhosrhosqrad4vsh ugsrhosqrad4vsh uu0rhosqrad4vsh vus1rhosqrad4vsh vuas1rhosqrad4vsh vus3rhosqrad4vsh vuas3rhosqrad4vsh vuasrotrhosqrad4vsh Bs1rhosqrad4vsh Bas1rhosqrad4vsh Bs2rhosqrad4vsh Bas2rhosqrad4vsh Bs3rhosqrad4vsh Bas3rhosqrad4vsh bs1rhosqrad4vsh bas1rhosqrad4vsh bs2rhosqrad4vsh bas2rhosqrad4vsh bs3rhosqrad4vsh bas3rhosqrad4vsh bsqrhosqrad4vsh}
+        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+        {ii hinnx4 rhosrhosqrad4vsh ugsrhosqrad4vsh uu0rhosqrad4vsh vus1rhosqrad4vsh vuas1rhosqrad4vsh vus3rhosqrad4vsh vuas3rhosqrad4vsh vuasrotrhosqrad4vsh Bs1rhosqrad4vsh Bas1rhosqrad4vsh Bs2rhosqrad4vsh Bas2rhosqrad4vsh Bs3rhosqrad4vsh Bas3rhosqrad4vsh bs1rhosqrad4vsh bas1rhosqrad4vsh bs2rhosqrad4vsh bas2rhosqrad4vsh bs3rhosqrad4vsh bas3rhosqrad4vsh bsqrhosqrad4vsh uradsrhosqrad4vsh}
         #
         da datavsh2.txt
         lines 1 1000000
-        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-        {ii hinnx8 rhosrhosqrad8vsh ugsrhosqrad8vsh uu0rhosqrad8vsh vus1rhosqrad8vsh vuas1rhosqrad8vsh vus3rhosqrad8vsh vuas3rhosqrad8vsh vuasrotrhosqrad8vsh Bs1rhosqrad8vsh Bas1rhosqrad8vsh Bs2rhosqrad8vsh Bas2rhosqrad8vsh Bs3rhosqrad8vsh Bas3rhosqrad8vsh bs1rhosqrad8vsh bas1rhosqrad8vsh bs2rhosqrad8vsh bas2rhosqrad8vsh bs3rhosqrad8vsh bas3rhosqrad8vsh bsqrhosqrad8vsh}
+        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+        {ii hinnx8 rhosrhosqrad8vsh ugsrhosqrad8vsh uu0rhosqrad8vsh vus1rhosqrad8vsh vuas1rhosqrad8vsh vus3rhosqrad8vsh vuas3rhosqrad8vsh vuasrotrhosqrad8vsh Bs1rhosqrad8vsh Bas1rhosqrad8vsh Bs2rhosqrad8vsh Bas2rhosqrad8vsh Bs3rhosqrad8vsh Bas3rhosqrad8vsh bs1rhosqrad8vsh bas1rhosqrad8vsh bs2rhosqrad8vsh bas2rhosqrad8vsh bs3rhosqrad8vsh bas3rhosqrad8vsh bsqrhosqrad8vsh uradsrhosqrad8vsh}
         #
         da datavsh3.txt
         lines 1 1000000
-        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-        {ii hinnx30 rhosrhosqrad30vsh ugsrhosqrad30vsh uu0rhosqrad30vsh vus1rhosqrad30vsh vuas1rhosqrad30vsh vus3rhosqrad30vsh vuas3rhosqrad30vsh vuasrotrhosqrad30vsh Bs1rhosqrad30vsh Bas1rhosqrad30vsh Bs2rhosqrad30vsh Bas2rhosqrad30vsh Bs3rhosqrad30vsh Bas3rhosqrad30vsh bs1rhosqrad30vsh bas1rhosqrad30vsh bs2rhosqrad30vsh bas2rhosqrad30vsh bs3rhosqrad30vsh bas3rhosqrad30vsh bsqrhosqrad30vsh}
+        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+        {ii hinnx30 rhosrhosqrad30vsh ugsrhosqrad30vsh uu0rhosqrad30vsh vus1rhosqrad30vsh vuas1rhosqrad30vsh vus3rhosqrad30vsh vuas3rhosqrad30vsh vuasrotrhosqrad30vsh Bs1rhosqrad30vsh Bas1rhosqrad30vsh Bs2rhosqrad30vsh Bas2rhosqrad30vsh Bs3rhosqrad30vsh Bas3rhosqrad30vsh bs1rhosqrad30vsh bas1rhosqrad30vsh bs2rhosqrad30vsh bas2rhosqrad30vsh bs3rhosqrad30vsh bas3rhosqrad30vsh bsqrhosqrad30vsh uradsrhosqrad30vsh}
         #
         ################################################
 rdvst 0 #
@@ -491,6 +491,11 @@ rdavgvsh 0
         read {avgabsfdd00 274 avgabsfdd10 275 avgabsfdd20 276 avgabsfdd30 277 avgabsfdd01 278 avgabsfdd11 279 avgabsfdd21 280 avgabsfdd31 281 \
               avgabsfdd02 282 avgabsfdd12 283 avgabsfdd22 284 avgabsfdd32 285 avgabsfdd03 286 avgabsfdd13 287 avgabsfdd23 288 avgabsfdd33 289}
         #
+        read {avgTudRAD10 291 avgTudRAD13 303}
+        read {avgkappaabs 306 avgkappaes 307}
+        read {avgtauradint 308}
+        read {avgurad 309}
+        #
         #
         set avgdxdxp22=avgdtheta/dx2
         #
@@ -575,6 +580,9 @@ rdavgvsr 0 #
         # more:
         read {avgvsrhor 290 avgvsrrhosqint 291 avgvsrrhosqint2 292}
         #
+        # rad
+        read {avgvsrTudRAD10 294 avgvsrTudRAD13 306}
+        read {avgvsrurad 309}
         #
         #
         # omegaf2b=np.fabs(vphi) + (vpol/Bpol)*np.fabs(B[3])
@@ -2526,9 +2534,11 @@ bzcomparisonsetup 0 #
         set intavggdetTudEM10bz2altaltaltalt=avgabsgdetB1*0
         set intavggdetTudEM13bz2altaltaltalt=avgabsgdetB1*0
         set intavgTudMA10=avgabsgdetB1*0
+        set intavgTudRAD10=avgabsgdetB1*0
         set intavgrhouu1=avgabsgdetB1*0
         set intavgTudEM13=avgabsgdetB1*0
         set intavgTudMA13=avgabsgdetB1*0
+        set intavgTudRAD13=avgabsgdetB1*0
         #
         # for thickdisk models
         set maxbsqorho=30.0
@@ -2621,6 +2631,9 @@ bzcomparisonsetup 0 #
           set preintavgTudMA10=fakegdet*(-avgTudMA10)*dx2*(dx3*n3)*wedgef if(myuse && avgbsqorho<maxbsqorho)
           set intavgTudMA10[$jj]=SUM(preintavgTudMA10)
           #
+          set preintavgTudRAD10=fakegdet*(-avgTudRAD10)*dx2*(dx3*n3)*wedgef if(myuse && avgbsqorho<maxbsqorho)
+          set intavgTudRAD10[$jj]=SUM(preintavgTudRAD10)
+          #
           set preintavgrhouu1=fakegdet*(-avgrhouu1)*dx2*(dx3*n3)*wedgef if(myuse && avgbsqorho<maxbsqorho)
           set intavgrhouu1[$jj]=SUM(preintavgrhouu1)
           #
@@ -2629,6 +2642,9 @@ bzcomparisonsetup 0 #
           #
           set preintavgTudMA13=fakegdet*avgTudMA13*dx2*(dx3*n3)*wedgef if(myuse && avgbsqorho<maxbsqorho)
           set intavgTudMA13[$jj]=SUM(preintavgTudMA13)
+          #
+          set preintavgTudRAD13=fakegdet*avgTudRAD13*dx2*(dx3*n3)*wedgef if(myuse && avgbsqorho<maxbsqorho)
+          set intavgTudRAD13[$jj]=SUM(preintavgTudRAD13)
         }
         #
         if(intfromeq==1){\
@@ -2653,8 +2669,10 @@ bzcomparisonsetup 0 #
         set LdotEMvshbz2altaltalt=intavggdetTudEM13bz2altaltalt/abs(mdotfinavgvsr30[ihor])
         ###########################
         set EdotMAvsh=(intavgTudMA10+intavgrhouu1)/abs(mdotfinavgvsr30[ihor])
+        set EdotRADvsh=(intavgTudRAD10)/abs(mdotfinavgvsr30[ihor])
         set LdotEMvsh=intavgTudEM13/(2*pi)/abs(mdotfinavgvsr30[ihor])
         set LdotMAvsh=intavgTudMA13/(2*pi)/abs(mdotfinavgvsr30[ihor])
+        set LdotRADvsh=intavgTudRAD13/(2*pi)/abs(mdotfinavgvsr30[ihor])
         set preupsilon=(sqrt(2)*(1.0/abs(mdotfinavgvsr30[ihor]))*sqrt(abs(mdotfinavgvsr30[ihor])/SAH))
         set upsilon=intavgabsgdetB1*preupsilon
         set upsilonbz0=intavgabsgdetB1bz0*preupsilon
@@ -3747,10 +3765,10 @@ panelplot4replot 0 #
         yla "p_{\rm tot}/u_{\rm Edd}"
         #
         set gam=(5.0/3.0)
-        set pradhor=(gam-1.0)*avgugclean
-        set prad4=(gam-1.0)*ugsrhosqrad4vshclean
-        set prad8=(gam-1.0)*ugsrhosqrad8vshclean
-        set prad30=(gam-1.0)*ugsrhosqrad30vshclean
+        set pradhor=(gam-1.0)*avgugclean+(4.0/3.0-1.0)*avgurad
+        set prad4=(gam-1.0)*ugsrhosqrad4vshclean+(4.0/3.0-1.0)*uradsrhosqrad4vshclean
+        set prad8=(gam-1.0)*ugsrhosqrad8vshclean+(4.0/3.0-1.0)*uradsrhosqrad8vshclean
+        set prad30=(gam-1.0)*ugsrhosqrad30vshclean+(4.0/3.0-1.0)*uradsrhosqrad30vshclean
         ltype 0 pl 0 ((avgh)) (LG((0.5*avgbsq+pradhor)/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 2 pl 0 ((hinnx4)) (LG((0.5*bsqrhosqrad4vsh+prad4)/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 1 pl 0 ((hinnx8)) (LG((0.5*bsqrhosqrad8vsh+prad8)/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
