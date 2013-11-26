@@ -48,6 +48,10 @@ mricalc 0               #
 		set idx1mri=1/dx1mri
                 # so in the end, with new version get:
                 # idx2mri = lambda2max/mydH = valh*2*pi/omegarot
+                # idx2mri = lambda2max/mydH = sqrt(val22)*2*pi/omegarot/mydH 
+        set idx2mrialt = sqrt(val22)*2*pi/omegarot/mydH
+        set idx2mrialtcut = (idx2mrialt>30 ? 30 : idx2mrialt)
+        #
 		set idx2mri=1/dx2mri
 		set idx3mri=1/dx3mri
 		set idx1fakemri=1/dx1fakemri

@@ -214,6 +214,7 @@ velvsradrd 0 #
         # 1D stuff
         rdvsr
         riscocalcs
+        jrdpraddims # so gets effnom for Mdoteddcode
         visctheory
         #
         rdvsh
@@ -260,6 +261,9 @@ rdheaderstuff 0 #
         da dataavgvsh0.txt
         lines 1 2
         read {avgts 1 avgte 2 avgnitems 3 a 4 rhor 5 ihor 6 dx1 7 dx2 8 dx3 9 wedgef 10 n1 11 n2 12 n3 13}
+        #
+        #
+        jrdpraddims
         #
 rdvsr 0 #
         da datavsrhead.txt
@@ -2966,7 +2970,8 @@ panelplot1   0 #
 		#
 		#
         define myrin ((rhor))
-		define myrout ((1E2))
+		#define myrout ((1E2))
+        define myrout ((25.0))
         define xin (LG($myrin))
         define xout (LG($myrout))
 		#
@@ -2988,18 +2993,18 @@ panelplot1replot 0 #
 		###################################
         #
         ticksize -1 0 -1 0
-        define lminy (-1.9)
+        define lminy (-2-1)
         define lmaxy (2)
         limits $xin $xout $lminy $lmaxy
         #ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
         ctype default window 1 -$numpanels 1 $numpanels box 0 2 0 0
-        yla "\rho_0 u_g u_b"
+        yla "\rho_0 u_g u_b [Edd]"
         #
         #
         #rhoshorvsr
-        ltype 0 pl 0 (LG(r)) (LG(rhosrhosqdcdenvsr)) 0011 $myrin $myrout $lminy $lmaxy
-        ltype 2 pl 0 (LG(r)) (LG(ugsrhosqdcdenvsr)) 0011 $myrin $myrout $lminy $lmaxy
-        ltype 1 pl 0 (LG(r)) (LG(bsqrhosqdcdenvsr*0.5)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 0 pl 0 (LG(r)) (LG(rhosrhosqdcdenvsr/rhoeddcode)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 (LG(r)) (LG(ugsrhosqdcdenvsr/ueddcode)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 1 pl 0 (LG(r)) (LG(bsqrhosqdcdenvsr*0.5/ueddcode)) 0011 $myrin $myrout $lminy $lmaxy
         #
         lweight 5
         ltype 0 ctype red vertline (LG(risco))
@@ -3041,18 +3046,18 @@ panelplot1replot 0 #
 		###################################
         #
         ticksize -1 0 -1 0
-        define lminy (-2.9)
-        define lmaxy (1.1)
+        define lminy (-2.9-1)
+        define lmaxy (1.1-1)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-2)
         #ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         ctype default window 1 -$numpanels 1 $nm box 1 2 0 0
-        yla "|b_{r,\theta,\phi}|"
+        yla "|b_{r,\theta,\phi}| [Edd]"
         xla "r [r_g]"
         #
-        ltype 0 pl 0 (LG(r)) (LG(bas1rhosqdcdenvsr)) 0011 $myrin $myrout $lminy $lmaxy
-        ltype 2 pl 0 (LG(r)) (LG(bas2rhosqdcdenvsr)) 0011 $myrin $myrout $lminy $lmaxy
-        ltype 1 pl 0 (LG(r)) (LG(bas3rhosqdcdenvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 0 pl 0 (LG(r)) (LG(bas1rhosqdcdenvsr/sqrt(ueddcode))) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 (LG(r)) (LG(bas2rhosqdcdenvsr/sqrt(ueddcode))) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 1 pl 0 (LG(r)) (LG(bas3rhosqdcdenvsr/sqrt(ueddcode))) 0011 $myrin $myrout $lminy $lmaxy
         #
         lweight 5
         ltype 0 ctype red vertline (LG(risco))
@@ -3067,7 +3072,7 @@ panelplot1eq   0 #
 		#
 		#
         define myrin ((rhor))
-		define myrout ((1E2))
+		define myrout ((25.0))
         define xin (LG($myrin))
         define xout (LG($myrout))
 		#
@@ -3138,7 +3143,7 @@ panelplot1hor   0 #
 		#
 		#
         define myrin ((rhor))
-		define myrout ((1E2))
+		define myrout ((25.0))
         define xin (LG($myrin))
         define xout (LG($myrout))
 		#
@@ -3209,7 +3214,7 @@ panelplot2   0 #
 		#
         #
         define myrin ((rhor))
-		define myrout ((1E2))
+		define myrout ((25.0))
         #
         # can get "whichi is not a macro here" error, but stupid SM bug.  Can often ignore and is fine.
         iofr r $myrout whichi
@@ -3246,10 +3251,10 @@ panelplot2replot 0 #
         limits $xin $xout $lminy $lmaxy
         ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
         expand $expandlow
-        yla "\dot{M}"
+        yla "\dot{M}/M_{\rm Edd}"
         expand $expanddefault
         #
-        pl 0 (LG(r)) ((mdotfinavgvsr30)) 0011 $myrin $myrout $lminy $lmaxy
+        pl 0 (LG(r)) ((mdotfinavgvsr30/Mdoteddcode)) 0011 $myrin $myrout $lminy $lmaxy
         #
 		###################################
         #
@@ -3276,8 +3281,8 @@ panelplot2replot 0 #
 		###################################
         #
         ticksize -1 0 -1 0
-        define lminy (LG(0.015))
-        define lmaxy (LG(2))
+        define lminy (LG(0.015)-2)
+        define lmaxy (LG(2)-2)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-2)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3330,7 +3335,7 @@ panelplot2replot 0 #
 		###################################
         #
         ticksize -1 0 0 0
-        define lminy (-0.3)
+        define lminy (-0.3-2)
         #define lmaxy (130)
         define lmaxy (2.9)
         limits $xin $xout $lminy $lmaxy
@@ -3365,9 +3370,9 @@ panelplot2replot 0 #
         ###################################
         #
         ticksize -1 0 0 0
-        define lminy (0)
+        define lminy (-19)
         #define lmaxy (1999)
-        define lmaxy (55)
+        define lmaxy (19)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-7)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3382,9 +3387,9 @@ panelplot2replot 0 #
         ##########################
         #
         ticksize -1 0 0 0
-        define lminy (0)
+        define lminy (-20)
         #define lmaxy (1999)
-        define lmaxy (55)
+        define lmaxy (20)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-8)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3403,7 +3408,7 @@ panelplot2replot 0 #
         #define lminy (-0.5) # for sasham9
         #define lmaxy (0.5) # for sasham9
         define lminy (0)
-        define lmaxy (0.29)
+        define lmaxy (0.6)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-9)
         ctype default window 8 -$numpanels 2:8 $nm box 1 2 0 0
@@ -3482,7 +3487,7 @@ panelplot3   0 #
 		#
 		#
         define myrin ((rhor))
-		define myrout ((1E2))
+		define myrout ((25.0))
         define xin (LG($myrin))
         define xout (LG($myrout))
 		#
@@ -3533,7 +3538,7 @@ panelplot3replot 0 #
         #
         ticksize -1 0 0 0
         define lminy (0.0)
-        define lmaxy (190)
+        define lmaxy (15.0)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-2)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3548,7 +3553,7 @@ panelplot3replot 0 #
         #
         ticksize -1 0 0 0
         define lminy (0.0)
-        define lmaxy (580)
+        define lmaxy (15.0)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-3)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3563,7 +3568,7 @@ panelplot3replot 0 #
         #
         ticksize -1 0 0 0
         define lminy (0.0)
-        define lmaxy (1.4)
+        define lmaxy (35.0)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-4)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3591,8 +3596,8 @@ panelplot3replot 0 #
 		##########################
         #
         ticksize -1 0 -1 0
-        define lminy (1.9)
-        define lmaxy (3.9)
+        define lminy (1.9-4)
+        define lmaxy (3.9-4)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-6)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3603,15 +3608,15 @@ panelplot3replot 0 #
 		##########################
         #
         ticksize -1 0 -1 0
-        define lminy (0)
-        define lmaxy (2.5)
+        define lminy (0-2)
+        define lmaxy (2.5-3)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-7)
         ctype default window 8 -$numpanels 2:8 $nm box 1 2 0 0
         yla "\Psi_{\rm eq}"
 		xla "r [r_g]"
         #
-        ltype 0 pl 0 (LG(r)) (LG(feqtotvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 0 pl 0 (LG(r)) (LG(abs(feqtotvsr))) 0011 $myrin $myrout $lminy $lmaxy
         #
 		##########################
 		#
@@ -3650,14 +3655,14 @@ checkingondensityweight 0 #
         set norm=avggdet*avgrhoclean
         # print {avgh norm}
         #
-        ctype default pl 0 avgh (avgrhoclean/avgrhoclean[64]) 0101 0 pi 1E-3 1E2
-        ctype red pl 0 avgh (norm/norm[64]) 0111 0 pi 1E-3 1E2
+        ctype default pl 0 avgh (avgrhoclean/avgrhoclean[64]) 0101 0 pi 1E-3 25.0
+        ctype red pl 0 avgh (norm/norm[64]) 0111 0 pi 1E-3 25.0
         set hortest=0.12
         set dentest=exp(-(avgh-pi/2)**2/(2*hortest**2))
-        ctype blue pl 0 avgh dentest 0111 0 pi 1E-3 1E2
+        ctype blue pl 0 avgh dentest 0111 0 pi 1E-3 25.0
         set hortest=0.16
         set dentest=exp(-(avgh-pi/2)**2/(2*hortest**2))
-        ctype cyan pl 0 avgh dentest 0111 0 pi 1E-3 1E2
+        ctype cyan pl 0 avgh dentest 0111 0 pi 1E-3 25.0
         #
         set norm=avggdet*avgrhoclean
         set numerator=SUM(norm*avgrhoclean)
@@ -3680,76 +3685,76 @@ panelplot4replot 0 #
         #
         #
         ticksize 0 0 -1 0
-        define lminy (-0.3)
+        define lminy (-0.3-2)
         define lmaxy (1.8)
         limits $myhin $myhout $lminy $lmaxy
         ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
-        yla "\rho_0"
+        yla "\rho_0/\rho_{\rm Edd}"
         #
         set avgrhoclean=(avgbsq/avgrho<maxbsqorho ? avgrho : 0)
         set rhosrhosqrad4vshclean=(bsqrhosqrad4vsh/rhosrhosqrad4vsh<maxbsqorho ? rhosrhosqrad4vsh : 0)
         set rhosrhosqrad8vshclean=(bsqrhosqrad8vsh/rhosrhosqrad8vsh<maxbsqorho ? rhosrhosqrad8vsh : 0)
         set rhosrhosqrad30vshclean=(bsqrhosqrad30vsh/rhosrhosqrad30vsh<maxbsqorho ? rhosrhosqrad30vsh : 0)
         #
-        ltype 0 pl 0 ((avgh)) (LG(avgrhoclean)) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 2 pl 0 ((hinnx4)) (LG(rhosrhosqrad4vshclean)) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 1 pl 0 ((hinnx8)) (LG(rhosrhosqrad8vshclean)) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 3 pl 0 ((hinnx30)) (LG(rhosrhosqrad30vshclean)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 0 pl 0 ((avgh)) (LG(avgrhoclean/rhoeddcode)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 2 pl 0 ((hinnx4)) (LG(rhosrhosqrad4vshclean/rhoeddcode)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 1 pl 0 ((hinnx8)) (LG(rhosrhosqrad8vshclean/rhoeddcode)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 3 pl 0 ((hinnx30)) (LG(rhosrhosqrad30vshclean/rhoeddcode)) 0011 $myhin $myhout $lminy $lmaxy
         #
 		###################################
         #
         ticksize 0 0 -1 0
-        define lminy (-0.9)
-        define lmaxy (2.5)
+        define lminy (-0.9-4)
+        define lmaxy (2.5-2)
         limits $myhin $myhout $lminy $lmaxy
         define nm1 ($numpanels-1)
         ctype default window 8 -$numpanels 2:8 $nm1 box 0 2 0 0
-        yla "u_g"
+        yla "u_g/u_{\rm Edd}"
         #
         set avgugclean=(avgbsq/avgrho<maxbsqorho ? avgug : 0)
         set ugsrhosqrad4vshclean=(bsqrhosqrad4vsh/rhosrhosqrad4vsh<maxbsqorho ? ugsrhosqrad4vsh : 0)
         set ugsrhosqrad8vshclean=(bsqrhosqrad8vsh/rhosrhosqrad8vsh<maxbsqorho ? ugsrhosqrad8vsh : 0)
         set ugsrhosqrad30vshclean=(bsqrhosqrad30vsh/rhosrhosqrad30vsh<maxbsqorho ? ugsrhosqrad30vsh : 0)
         #
-        ltype 0 pl 0 ((avgh)) (LG(avgugclean)) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 2 pl 0 ((hinnx4)) (LG(ugsrhosqrad4vshclean)) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 1 pl 0 ((hinnx8)) (LG(ugsrhosqrad8vshclean)) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 3 pl 0 ((hinnx30)) (LG(ugsrhosqrad30vshclean)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 0 pl 0 ((avgh)) (LG(avgugclean/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 2 pl 0 ((hinnx4)) (LG(ugsrhosqrad4vshclean/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 1 pl 0 ((hinnx8)) (LG(ugsrhosqrad8vshclean/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 3 pl 0 ((hinnx30)) (LG(ugsrhosqrad30vshclean/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
         #
         ###################################
         #
         ticksize 0 0 -1 0
-        define lminy (-2.9)
+        define lminy (-3.5)
         define lmaxy (2.7)
         limits $myhin $myhout $lminy $lmaxy
         define nm ($numpanels-2)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
-        yla "u_b"
+        yla "u_b/u_{\rm Edd}"
         #
-        ltype 0 pl 0 ((avgh)) (LG(0.5*avgbsq)) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 2 pl 0 ((hinnx4)) (LG((0.5*bsqrhosqrad4vsh))) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 1 pl 0 ((hinnx8)) (LG((0.5*bsqrhosqrad8vsh))) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 3 pl 0 ((hinnx30)) (LG((0.5*bsqrhosqrad30vsh))) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 0 pl 0 ((avgh)) (LG(0.5*avgbsq/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 2 pl 0 ((hinnx4)) (LG((0.5*bsqrhosqrad4vsh/ueddcode))) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 1 pl 0 ((hinnx8)) (LG((0.5*bsqrhosqrad8vsh/ueddcode))) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 3 pl 0 ((hinnx30)) (LG((0.5*bsqrhosqrad30vsh/ueddcode))) 0011 $myhin $myhout $lminy $lmaxy
         #
         ###################################
         #
         ticksize 0 0 -1 0
-        define lminy (-1.9)
-        define lmaxy (3.1)
+        define lminy (-1.9-2)
+        define lmaxy (3.1-2)
         limits $myhin $myhout $lminy $lmaxy
         define nm ($numpanels-3)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
-        yla "p_{\rm tot}"
+        yla "p_{\rm tot}/u_{\rm Edd}"
         #
-        set gam=(4.0/3.0)
+        set gam=(5.0/3.0)
         set pradhor=(gam-1.0)*avgugclean
         set prad4=(gam-1.0)*ugsrhosqrad4vshclean
         set prad8=(gam-1.0)*ugsrhosqrad8vshclean
         set prad30=(gam-1.0)*ugsrhosqrad30vshclean
-        ltype 0 pl 0 ((avgh)) (LG((0.5*avgbsq+pradhor))) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 2 pl 0 ((hinnx4)) (LG((0.5*bsqrhosqrad4vsh+prad4))) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 1 pl 0 ((hinnx8)) (LG((0.5*bsqrhosqrad8vsh+prad8))) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 3 pl 0 ((hinnx30)) (LG((0.5*bsqrhosqrad30vsh+prad30))) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 0 pl 0 ((avgh)) (LG((0.5*avgbsq+pradhor)/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 2 pl 0 ((hinnx4)) (LG((0.5*bsqrhosqrad4vsh+prad4)/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 1 pl 0 ((hinnx8)) (LG((0.5*bsqrhosqrad8vsh+prad8)/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 3 pl 0 ((hinnx30)) (LG((0.5*bsqrhosqrad30vsh+prad30)/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
         #
 		##########################
         #
@@ -3789,12 +3794,12 @@ panelplot4replot 0 #
         limits $myhin $myhout $lminy $lmaxy
         define nm ($numpanels-6)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
-        yla "|b_r|"
+        yla "|b_r|/b_{\rm Edd}"
         #
-        ltype 0 pl 0 ((avgh)) (LG(abs(avgabsbur))) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 2 pl 0 ((hinnx4)) (LG(bas1rhosqrad4vsh)) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 1 pl 0 ((hinnx8)) (LG(bas1rhosqrad8vsh)) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 3 pl 0 ((hinnx30)) (LG(bas1rhosqrad30vsh)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 0 pl 0 ((avgh)) (LG(abs(avgabsbur)/sqrt(ueddcode))) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 2 pl 0 ((hinnx4)) (LG(bas1rhosqrad4vsh/sqrt(ueddcode))) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 1 pl 0 ((hinnx8)) (LG(bas1rhosqrad8vsh/sqrt(ueddcode))) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 3 pl 0 ((hinnx30)) (LG(bas1rhosqrad30vsh/sqrt(ueddcode))) 0011 $myhin $myhout $lminy $lmaxy
         #
 		##########################
         #
@@ -3804,13 +3809,13 @@ panelplot4replot 0 #
         limits $myhin $myhout $lminy $lmaxy
         define nm ($numpanels-7)
         ctype default window 8 -$numpanels 2:8 $nm box 1 2 0 0
-        yla "|b_\theta|"
+        yla "|b_\theta|/b_{\rm Edd}"
 		xla "\theta"
         #
-        ltype 0 pl 0 ((avgh)) (LG(abs(avgabsbuh))) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 2 pl 0 ((hinnx4)) (LG(bas2rhosqrad4vsh)) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 1 pl 0 ((hinnx8)) (LG(bas2rhosqrad8vsh)) 0011 $myhin $myhout $lminy $lmaxy
-        ltype 3 pl 0 ((hinnx30)) (LG(bas2rhosqrad30vsh)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 0 pl 0 ((avgh)) (LG(abs(avgabsbuh/sqrt(ueddcode)))) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 2 pl 0 ((hinnx4)) (LG(bas2rhosqrad4vsh/sqrt(ueddcode))) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 1 pl 0 ((hinnx8)) (LG(bas2rhosqrad8vsh/sqrt(ueddcode))) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 3 pl 0 ((hinnx30)) (LG(bas2rhosqrad30vsh/sqrt(ueddcode))) 0011 $myhin $myhout $lminy $lmaxy
         #
 		##########################
 		#
@@ -3848,20 +3853,20 @@ panelplot5replot 0 #
         define lmaxy (3)
         limits $mytin $mytout $lminy $lmaxy
         ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
-        yla "\dot{M}_{\rm out}"
+        yla "\dot{M}_{\rm out}/M_{\rm Edd}"
         #
         # already showing mdot in another plot, so can skip for clarity
-        #ltype 0 pl 0 ((ts)) (LG(mdothor)) 0011 $mytin $mytout $lminy $lmaxy
-        #ltype 2 pl 0 ((ts)) (LG(mdinrdiskout)) 0011 $mytin $mytout $lminy $lmaxy
-        ltype 1 pl 0 ((ts)) (LG(mdjetrjetout)) 0011 $mytin $mytout $lminy $lmaxy
-        ltype 0 pl 0 ((ts)) (LG(mdmwindrjetout)) 0011 $mytin $mytout $lminy $lmaxy
-        ltype 2 pl 0 ((ts)) (LG(mdwindrdiskout)) 0011 $mytin $mytout $lminy $lmaxy
+        #ltype 0 pl 0 ((ts)) (LG(mdothor/Mdoteddcode)) 0011 $mytin $mytout $lminy $lmaxy
+        #ltype 2 pl 0 ((ts)) (LG(mdinrdiskout/Mdoteddcode)) 0011 $mytin $mytout $lminy $lmaxy
+        ltype 1 pl 0 ((ts)) (LG(mdjetrjetout/Mdoteddcode)) 0011 $mytin $mytout $lminy $lmaxy
+        ltype 0 pl 0 ((ts)) (LG(mdmwindrjetout/Mdoteddcode)) 0011 $mytin $mytout $lminy $lmaxy
+        ltype 2 pl 0 ((ts)) (LG(mdwindrdiskout/Mdoteddcode)) 0011 $mytin $mytout $lminy $lmaxy
         #
 		###################################
         #
         ticksize 0 0 0 0
         define lminy (-1)
-        define lmaxy (4.5)
+        define lmaxy (1.0)
         limits $mytin $mytout $lminy $lmaxy
         define nm ($numpanels-1)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3869,6 +3874,7 @@ panelplot5replot 0 #
         #
         ltype 0 pl 0 ((ts)) ((etabhEM/100.0)) 0011 $mytin $mytout $lminy $lmaxy
         ltype 2 pl 0 ((ts)) ((etabhMAKE/100.0)) 0011 $mytin $mytout $lminy $lmaxy
+        ltype 3 pl 0 ((ts)) (((etabh-etabhEM-etabhMAKE)/100.0)) 0011 $mytin $mytout $lminy $lmaxy
         #
         # alt stuff below is no longer required
         #set tbreak=4000
@@ -3886,8 +3892,8 @@ panelplot5replot 0 #
 		###################################
         #
         ticksize 0 0 0 0
-        define lminy (-4)
-        define lmaxy (39.5)
+        define lminy (-10)
+        define lmaxy (10)
         limits $mytin $mytout $lminy $lmaxy
         define nm ($numpanels-2)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3895,6 +3901,7 @@ panelplot5replot 0 #
         #
         ltype 0 pl 0 ((ts)) ((letabhEM/100)) 0011 $mytin $mytout $lminy $lmaxy
         ltype 2 pl 0 ((ts)) ((letabhMAKE/100)) 0011 $mytin $mytout $lminy $lmaxy
+        ltype 3 pl 0 ((ts)) (((letabh-letabhEM-letabhMAKE)/100)) 0011 $mytin $mytout $lminy $lmaxy
         #
         ###################################
         #
@@ -3916,7 +3923,7 @@ panelplot5replot 0 #
         #
         ticksize 0 0 0 0
         define lminy (0)
-        define lmaxy (0.29)
+        define lmaxy (1.0)
         limits $mytin $mytout $lminy $lmaxy
         define nm ($numpanels-4)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3928,7 +3935,7 @@ panelplot5replot 0 #
         #
         ticksize 0 0 0 0
         define lminy (0)
-        define lmaxy (24)
+        define lmaxy (10)
         limits $mytin $mytout $lminy $lmaxy
         define nm ($numpanels-5)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3945,7 +3952,7 @@ panelplot5replot 0 #
         ticksize 0 0 -1 0
         define lminy (LG(r[0]))
         #define lmaxy (LG(5.3*r[dimen(r)-1]))
-        define lmaxy (2.5)
+        define lmaxy (1.5)
         limits $mytin $mytout $lminy $lmaxy
         define nm ($numpanels-6)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -4042,7 +4049,8 @@ panelplot6replot 0 #
         #
         #
         ticksize 0 0 0 0
-        define lminy (-.5)
+        #define lminy (-.5)
+        define lminy (-0.1)
         define lmaxy (0.6)
         limits $myhin $myhout $lminy $lmaxy
         ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
@@ -4067,7 +4075,7 @@ panelplot6replot 0 #
         #
         ticksize 0 0 0 0
         define lminy (-5)
-        define lmaxy (55)
+        define lmaxy (25)
         if($sashaplot>0){\
             define lminy (-5)
             define lmaxy (25)
@@ -4075,15 +4083,15 @@ panelplot6replot 0 #
         limits $myhin $myhout $lminy $lmaxy
         define nm1 ($numpanels-1)
         ctype default window 8 -$numpanels 2:8 $nm1 box 0 2 0 0
-        yla "\dot{M}_{\rm H}"
+        yla "\dot{M}_{\rm H}/\dot{M}_{\rm Edd}"
         #
-        ltype 0 pl 0 avgh ((Mdotvsh)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 0 pl 0 avgh ((Mdotvsh/Mdoteddcode)) 0011 $myhin $myhout $lminy $lmaxy
         #
 		###################################
         #
         ticksize 0 0 0 0
         define lminy (-0.5)
-        define lmaxy (3.8)
+        define lmaxy (0.5)
         if($sashaplot==1){\
             define lminy (-0.1)
             define lmaxy (1.3)
@@ -4120,8 +4128,8 @@ panelplot6replot 0 #
 		###################################
         #
         ticksize 0 0 0 0
-        define lminy (-20)
-        define lmaxy (35)
+        define lminy (-2)
+        define lmaxy (2)
         if($sashaplot==1){\
             define lminy (-5)
             define lmaxy (15)
@@ -4158,7 +4166,7 @@ panelplot6replot 0 #
         #
         ticksize 0 0 0 0
         define lminy (0)
-        define lmaxy (24)
+        define lmaxy (5)
         if($sashaplot==1){\
             define lminy (0)
             define lmaxy (14)

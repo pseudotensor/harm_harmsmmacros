@@ -493,6 +493,25 @@ jrdpraddims 0
           read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
           {GGG CCCTRUE MSUNCM MPERSUN LBAR TBAR VBAR RHOBAR MBAR ENBAR UBAR TEMPBAR ARAD_CODE_DEF XFACT ZATOM AATOM MUE MUI OPACITYBAR MASSCM KORAL2HARMRHO1}
  		#
+        set MSUN=1.9891E33
+        set sigmaT=0.665E-24
+        set mproton=1.673E-24
+        set Ledd=4*pi*GGG*(MPERSUN*MSUN)*mproton*CCCTRUE/sigmaT
+        set Leddcode = Ledd/ENBAR*TBAR
+        set effnom = 1.0-tdeinfisco
+        set Mdotedd = Ledd/(CCCTRUE**2*effnom)
+        set Mdoteddcode = Mdotedd/MBAR*TBAR
+        set rhoedd = Mdotedd/CCCTRUE*(GGG*MPERSUN*MSUN/CCCTRUE**2)/(GGG*MPERSUN*MSUN/CCCTRUE**2)**3
+        set rhoeddcode = rhoedd/RHOBAR
+        set uedd = rhoedd*CCCTRUE**2
+        set bedd = sqrt(uedd)
+        set ueddcode = uedd/UBAR
+        set beddcode = bedd/sqrt(UBAR)
+        print {effnom}
+        print {Ledd Mdotedd rhoedd uedd bedd}
+        print {Leddcode Mdoteddcode rhoeddcode ueddcode beddcode}
+        #
+        #
         #
 jrdpcf3duentropystag 1	# for reading file with current (jcon/jcov) and faraday (fcon,fcov).
                   # for debugging
@@ -2443,6 +2462,7 @@ gcalcmore       0     #
 		set lv2 = lg(abs(v2) + 1.e-20)
 		set ldivb = lg(abs(divb) + 1.e-20)
 		set ibeta = 0.5*bsq/p
+        set ibetatot = (0.5*bsq/(($gam-1)*u+prad0ff))
 		set libeta = lg(abs(ibeta) + 1.e-20)
 		#
 		set brel = 0.5*bsq/rho
