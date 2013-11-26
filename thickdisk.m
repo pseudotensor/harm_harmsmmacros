@@ -206,7 +206,7 @@ velvsrad 1 #
         #
 velvsradrd 0 #
         #
-        !cp /data2/jmckinne/thickdisk7/fromorange_movie8new5/inf* .
+        #!cp /data2/jmckinne/thickdisk7/fromorange_movie8new5/inf* .
         #
         rdheaderstuff
         #
@@ -320,7 +320,9 @@ rdvsr 0 #
         set beta=pg/bsqshorvsr
         #
         # (was 44, now 51 with alphamag4 and alphareynolds stuff)
-        da datavsr5.txt
+        !sed 's/nan/0/g' datavsr5.txt > datavsr5n.txt
+        !sed 's/inf/0/g' datavsr5n.txt > datavsr5nn.txt
+        da datavsr5nn.txt
         lines 1 1000000
         read '%d %g   %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
         {ii r mdotfinavgvsr mdotfinavgvsr5 mdotfinavgvsr10 mdotfinavgvsr30 edemvsr edmavsr edmvsr ldemvsr ldmavsr ldmvsr phiabsjmu1vsr pjemfinavgvsr pjmakefinavgvsr pjkefinavgvsr ljemfinavgvsr ljmakefinavgvsr ljkefinavgvsr mdinvsr mdjetvsr mdmwindvsr mdwindvsr alphamag1vsr alphamag2vsr alphamag3vsr alphamag4vsr alphareynoldsa2vsr alphareynoldsb2vsr \
@@ -2273,21 +2275,23 @@ velvsradpl 1 # velvsradpl <doscp=0,1>
         panelplot1
         device X11
         if(doscp==1){\
-         !scp rhovelvsr.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
+                     # jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
+                     # jon@physics-179.umd.edu:/data/jon/harm_harmrad/
+         !scp rhovelvsr.eps jon@physics-179.umd.edu:/data/jon/harm_harmrad/
         }
         #
         device postencap rhoveleqvsr.eps
         panelplot1eq
         device X11
         if(doscp==1){\
-         !scp rhoveleqvsr.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
+         !scp rhoveleqvsr.eps jon@physics-179.umd.edu:/data/jon/harm_harmrad/
         }
         #
         device postencap rhovelhorvsr.eps
         panelplot1hor
         device X11
         if(doscp==1){\
-         !scp rhovelhorvsr.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
+         !scp rhovelhorvsr.eps jon@physics-179.umd.edu:/data/jon/harm_harmrad/
         }
         #
         device postencap6c2 fluxvsr.eps
@@ -2295,7 +2299,7 @@ velvsradpl 1 # velvsradpl <doscp=0,1>
         panelplot2
         device X11
         if(doscp==1){\
-        !scp fluxvsr.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
+        !scp fluxvsr.eps jon@physics-179.umd.edu:/data/jon/harm_harmrad/
         }
         #
         #device postencap5 othersvsr.eps
@@ -2303,56 +2307,56 @@ velvsradpl 1 # velvsradpl <doscp=0,1>
         panelplot3
         device X11
         if(doscp==1){\
-        !scp othersvsr.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
+        !scp othersvsr.eps jon@physics-179.umd.edu:/data/jon/harm_harmrad/
         }
         #
         device postencap4 rhovelvsh.eps
         panelplot4
         device X11
         if(doscp==1){\
-        !scp rhovelvsh.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
+        !scp rhovelvsh.eps jon@physics-179.umd.edu:/data/jon/harm_harmrad/
         }
         #
         device postencap6b2 fluxvst.eps
         panelplot5
         device X11
         if(doscp==1){\
-        !scp fluxvst.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
+        !scp fluxvst.eps jon@physics-179.umd.edu:/data/jon/harm_harmrad/
         }
         #
         device postencap5 horizonflux.eps
         panelplot6
         device X11
         if(doscp==1){\
-        !scp horizonflux.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
+        !scp horizonflux.eps jon@physics-179.umd.edu:/data/jon/harm_harmrad/
         }
         #
         device postencap5t powervsm.eps
         panelplot7
         device X11
         if(doscp==1){\
-        !scp powervsm.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
+        !scp powervsm.eps jon@physics-179.umd.edu:/data/jon/harm_harmrad/
         }
         #
         device postencap gammieplot.eps
         gammieplot
         device X11
         if(doscp==1){\
-        !scp gammieplot.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
+        !scp gammieplot.eps jon@physics-179.umd.edu:/data/jon/harm_harmrad/
         }
         #
         device postencap4t rhovsphi.eps
         panelplot8
         device X11
         if(doscp==1){\
-         !scp rhovsphi.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
+         !scp rhovsphi.eps jon@physics-179.umd.edu:/data/jon/harm_harmrad/
         }
         #
         device postencap2t rhovsphib.eps
         panelplot8b
         device X11
         if(doscp==1){\
-         !scp rhovsphib.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
+         !scp rhovsphib.eps jon@physics-179.umd.edu:/data/jon/harm_harmrad/
         }
         #
         #
@@ -4923,7 +4927,7 @@ thickdisk3lmode # 0
         set doscp=1
         #
         if(doscp==1){\
-         !scp psiophitoroidal.eps jon@ki-rh42:/data/jon/thickdisk/harm_thickdisk/
+         !scp psiophitoroidal.eps jon@physics-179.umd.edu:/data/jon/harm_harmrad/
         }
         #
         defaults

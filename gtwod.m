@@ -394,6 +394,99 @@ jrdprad 1	# for reading file with full set of stuff with radiation
  set myRtz=(prad0/3)*(4*uur0ortho*uur3ortho-0)
  #
  #
+jrdprad2 1	# for reading file with full set of stuff with radiation
+		jrdpheader3d dumps/$1
+		da dumps/$1
+		lines 2 10000000
+		#
+                # 81
+        set NPR=13
+        set NPRDUMP=12
+        set nprend=12
+        set NDIM=4
+		set totalcolumns=3*3 + NPRDUMP + 3 + (nprend+1) + 1 + 4 * NDIM + 6 + 1
+                #
+                if(totalcolumns!=_numcolumns || dimen(nprdumplist)!=12 || dimen(nprlist)!=13){\
+                 echo "Wrong format"
+                 print {totalcolumns _numcolumns}
+                 print {nprdumplist}
+                 print {nprlist}
+                }\
+                else{\
+                     read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+                     {ti tj tk x1 x2 x3 r h ph \
+                      rho u v1 v2 v3 B1 B2 B3 prad0 prad1 prad2 prad3 \
+		      p cs2 Sden \
+		      U0 U1 U2 U3 U4  U5 U6 U7  U8 U9 U10 U11  U12 \
+		      divb \
+		      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
+		      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
+                      v1m v1p v2m v2p v3m v3p gdet }
+                     #
+                     set tx1=x1
+                     set tx2=x2
+                     set tx3=x3
+                     gsetup
+                     if($DOGCALC) { gcalc }
+                  # gcalc
+                  abscompute
+                  #
+                  gammienew
+                }
+                #
+                jrdpraddump rad$1
+                jrdpdissmeasure dissmeasure$1
+                jrdpraddims
+                #
+ #
+ set qsqrad=gv311*prad1*prad1+gv312*prad1*prad2+gv313*prad1*prad3\
+            +gv321*prad2*prad1+gv322*prad2*prad2+gv323*prad2*prad3\
+            +gv331*prad3*prad1+gv332*prad3*prad2+gv333*prad3*prad3
+ set gammarad=sqrt(1+qsqrad)
+ set alpha=1/sqrt(-gn300)
+ set uru0=gammarad/alpha
+ set beta1=alpha**2*gn301
+ set beta2=alpha**2*gn302
+ set beta3=alpha**2*gn303
+ set eta0=(1/alpha)
+ set eta1=-(1/alpha)*beta1
+ set eta2=-(1/alpha)*beta2
+ set eta3=-(1/alpha)*beta3
+ set uru1=prad1 + gammarad*eta1
+ set uru2=prad2 + gammarad*eta2
+ set uru3=prad3 + gammarad*eta3
+ #
+ #
+ set uu0ortho=uu0*sqrt(abs(gv300))
+ set uu1ortho=uu1*sqrt(abs(gv311))
+ set uu2ortho=uu2*sqrt(abs(gv322))
+ set uu3ortho=uu3*sqrt(abs(gv333))
+ #
+ set vu1ortho=uu1ortho/uu0ortho
+ set vu2ortho=uu2ortho/uu0ortho
+ set vu3ortho=uu3ortho/uu0ortho
+ #
+ set uur1ortho=uru1*sqrt(abs(gv311))
+ set uur2ortho=uru2*sqrt(abs(gv322))
+ set uur3ortho=uru3*sqrt(abs(gv333))
+ set ursq=uur1ortho*uur1ortho+uur2ortho*uur2ortho+uur3ortho*uur3ortho
+ set uur0ortho=sqrt(1.0+ursq)
+ #
+ set vur1ortho=uur1ortho/uur0ortho
+ set vur2ortho=uur2ortho/uur0ortho
+ set vur3ortho=uur3ortho/uur0ortho
+ 
+ set Rtt=(-U8/gdet*sqrt(abs(gv300)))
+ set Rtx=(U9/gdet*sqrt(abs(gn311)))
+ set Rty=(U10/gdet*sqrt(abs(gn322)))
+ set Rtz=(U11/gdet*sqrt(abs(gn333)))
+ #
+ set myRtt=(prad0/3)*(4*uur0ortho*uur0ortho-1)
+ set myRtx=(prad0/3)*(4*uur0ortho*uur1ortho-0)
+ set myRty=(prad0/3)*(4*uur0ortho*uur2ortho-0)
+ set myRtz=(prad0/3)*(4*uur0ortho*uur3ortho-0)
+ #
+ #
 jrdpraddims 0
           da dimensions.txt
           lines 1 1
@@ -3547,7 +3640,8 @@ agplc 17	# animplc 'dump' r 000 <0 0 0 0>
                     #jrdpvpot $filenamevpot
                     #
                     #
-                    jrdprad $filename
+                    #jrdprad $filename
+                    jrdprad2 $filename
                     #
                     if(0){\
                      define POSCONTCOLOR "cyan"
