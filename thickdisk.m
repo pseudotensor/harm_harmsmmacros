@@ -328,9 +328,10 @@ rdvsr 0 #
         !sed 's/inf/0/g' datavsr5n.txt > datavsr5nn.txt
         da datavsr5nn.txt
         lines 1 1000000
-        read '%d %g   %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+        read '%d %g   %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
         {ii r mdotfinavgvsr mdotfinavgvsr5 mdotfinavgvsr10 mdotfinavgvsr30 edemvsr edmavsr edmvsr ldemvsr ldmavsr ldmvsr phiabsjmu1vsr pjemfinavgvsr pjmakefinavgvsr pjkefinavgvsr ljemfinavgvsr ljmakefinavgvsr ljkefinavgvsr mdinvsr mdjetvsr mdmwindvsr mdwindvsr alphamag1vsr alphamag2vsr alphamag3vsr alphamag4vsr alphareynoldsa2vsr alphareynoldsb2vsr \
-        alphareynoldsc2vsr alphareynoldsa3vsr alphareynoldsb3vsr alphareynoldsc3vsr fstotvsr fsinvsr feqtotvsr fsmaxtotvsr fsuphalfvsr upsilonvsr etajEMvsr etajMAKEvsr etamwEMvsr etamwMAKEvsr etawEMvsr etawMAKEvsr letajEMvsr letajMAKEvsr letamwEMvsr letamwMAKEvsr letawEMvsr letawMAKEvsr}
+        alphareynoldsc2vsr alphareynoldsa3vsr alphareynoldsb3vsr alphareynoldsc3vsr fstotvsr fsinvsr feqtotvsr fsmaxtotvsr fsuphalfvsr upsilonvsr etajEMvsr etajMAKEvsr etamwEMvsr etamwMAKEvsr etawEMvsr etawMAKEvsr letajEMvsr letajMAKEvsr letamwEMvsr letamwMAKEvsr letawEMvsr letawMAKEvsr \
+        edradvsr ldradvsr}
         #
         #
         set betamagplus1=(alphamag4vsr>0 && alphamag3vsr>0 ? alphamag4vsr/alphamag3vsr : 0)
@@ -338,8 +339,8 @@ rdvsr 0 #
         set alphatot2vsr=alphareynoldsa2vsr+alphareynoldsb2vsr+alphareynoldsc2vsr+alphamag2vsr
         set alphatot3vsr=alphareynoldsa3vsr+alphareynoldsb3vsr+alphareynoldsc3vsr+alphamag3vsr
         #
-        set edottotvsr=edemvsr+edmavsr
-        set ldottotvsr=ldemvsr+ldmavsr
+        set edottotvsr=edemvsr+edmavsr+edradvsr
+        set ldottotvsr=ldemvsr+ldmavsr+ldradvsr
         set eomdot=edottotvsr/mdotfinavgvsr30
         set lomdot=ldottotvsr/mdotfinavgvsr30
         #
@@ -401,15 +402,15 @@ rdvst 0 #
         read '%d %g %g %g %g %g %g %g %g %g %g %g' {tici ts mdtotihor md10ihor md30ihor mdinrdiskin mdinrdiskout mdjetrjetout mdmwindrjetin mdmwindrjetout mdwindrdiskin mdwindrdiskout}
         set mdothor=mdtotihor-md30ihor
         #
-        #columns=20
+        #columns=21
         da datavst2.txt
         lines 1 1000000
-        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {tici ts  etabhEM etabhMAKE etabh etajEM etajMAKE etaj etamwinEM etamwinMAKE etamwin etamwoutEM etamwoutMAKE etamwout etawinEM etawinMAKE etawin etawoutEM etawoutMAKE etawout}
+        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {tici ts  etabhEM etabhMAKE etabhRAD etabh etajEM etajMAKE etaj etamwinEM etamwinMAKE etamwin etamwoutEM etamwoutMAKE etamwout etawinEM etawinMAKE etawin etawoutEM etawoutMAKE etawout}
         #
-        #columns=20
+        #columns=21
         da datavst3.txt
         lines 1 1000000
-        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {tici ts  letabhEM letabhMAKE letabh letajEM letajMAKE letaj letamwinEM letamwinMAKE letamwin letamwoutEM letamwoutMAKE letamwout letawinEM letawinMAKE letawin letawoutEM letawoutMAKE letawout}
+        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {tici ts  letabhEM letabhMAKE letabhRAD letabh letajEM letajMAKE letaj letamwinEM letamwinMAKE letamwin letamwoutEM letamwoutMAKE letamwout letawinEM letawinMAKE letawin letawoutEM letawoutMAKE letawout}
         #
         # in case needed to fix using original data, but no longer need this.
         #da /data2/jmckinne/thickdisk7/fromorange_movie8/datavst2.txt
@@ -2322,7 +2323,8 @@ velvsradpl 1 # velvsradpl <doscp=0,1>
         !scp othersvsr.eps jon@physics-179.umd.edu:/data/jon/harm_harmrad/
         }
         #
-        device postencap4 rhovelvsh.eps
+        #device postencap4 rhovelvsh.eps
+        device postencap5 rhovelvsh.eps
         panelplot4
         device X11
         if(doscp==1){\
@@ -3655,7 +3657,7 @@ panelplot4   0 #
 		notation -4 4 -4 4
 		erase
 		#
-        define numpanels 8
+        define numpanels 9
         #
         expand 1.2
 		panelplot4replot
@@ -3739,13 +3741,28 @@ panelplot4replot 0 #
         ltype 1 pl 0 ((hinnx8)) (LG(ugsrhosqrad8vshclean/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 3 pl 0 ((hinnx30)) (LG(ugsrhosqrad30vshclean/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
         #
+		###################################
+        #
+        ticksize 0 0 -1 0
+        define lminy (-0.9-3)
+        define lmaxy (2.5-1)
+        limits $myhin $myhout $lminy $lmaxy
+        define nm1 ($numpanels-2)
+        ctype default window 8 -$numpanels 2:8 $nm1 box 0 2 0 0
+        yla "\bar{E}/u_{\rm Edd}"
+        #
+        ltype 0 pl 0 ((avgh)) (LG(avgurad/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 2 pl 0 ((hinnx4)) (LG(uradsrhosqrad4vsh/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 1 pl 0 ((hinnx8)) (LG(uradsrhosqrad8vsh/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 3 pl 0 ((hinnx30)) (LG(uradsrhosqrad30vsh/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
+        #
         ###################################
         #
         ticksize 0 0 -1 0
         define lminy (-3.5)
         define lmaxy (2.7)
         limits $myhin $myhout $lminy $lmaxy
-        define nm ($numpanels-2)
+        define nm ($numpanels-3)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         yla "u_b/u_{\rm Edd}"
         #
@@ -3760,7 +3777,7 @@ panelplot4replot 0 #
         define lminy (-1.9-2)
         define lmaxy (3.1-2)
         limits $myhin $myhout $lminy $lmaxy
-        define nm ($numpanels-3)
+        define nm ($numpanels-4)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         yla "p_{\rm tot}/u_{\rm Edd}"
         #
@@ -3780,7 +3797,7 @@ panelplot4replot 0 #
         define lminy (-2.5)
         define lmaxy (0.0)
         limits $myhin $myhout $lminy $lmaxy
-        define nm ($numpanels-4)
+        define nm ($numpanels-5)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         yla "|v_r|"
         #
@@ -3795,7 +3812,7 @@ panelplot4replot 0 #
         define lminy (-2.9)
         define lmaxy (0.1)
         limits $myhin $myhout $lminy $lmaxy
-        define nm ($numpanels-5)
+        define nm ($numpanels-6)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         yla "v_{\rm rot}"
         #
@@ -3810,7 +3827,7 @@ panelplot4replot 0 #
         define lminy (-2.9)
         define lmaxy (1.8)
         limits $myhin $myhout $lminy $lmaxy
-        define nm ($numpanels-6)
+        define nm ($numpanels-7)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         yla "|b_r|/b_{\rm Edd}"
         #
@@ -3825,7 +3842,7 @@ panelplot4replot 0 #
         define lminy (-2.9)
         define lmaxy (0.3)
         limits $myhin $myhout $lminy $lmaxy
-        define nm ($numpanels-7)
+        define nm ($numpanels-8)
         ctype default window 8 -$numpanels 2:8 $nm box 1 2 0 0
         yla "|b_\theta|/b_{\rm Edd}"
 		xla "\theta"
@@ -3892,7 +3909,8 @@ panelplot5replot 0 #
         #
         ltype 0 pl 0 ((ts)) ((etabhEM/100.0)) 0011 $mytin $mytout $lminy $lmaxy
         ltype 2 pl 0 ((ts)) ((etabhMAKE/100.0)) 0011 $mytin $mytout $lminy $lmaxy
-        ltype 3 pl 0 ((ts)) (((etabh-etabhEM-etabhMAKE)/100.0)) 0011 $mytin $mytout $lminy $lmaxy
+        #ltype 3 pl 0 ((ts)) (((etabh-etabhEM-etabhMAKE)/100.0)) 0011 $mytin $mytout $lminy $lmaxy
+        ltype 3 pl 0 ((ts)) (((etabhRAD)/100.0)) 0011 $mytin $mytout $lminy $lmaxy
         #
         # alt stuff below is no longer required
         #set tbreak=4000
@@ -3919,7 +3937,8 @@ panelplot5replot 0 #
         #
         ltype 0 pl 0 ((ts)) ((letabhEM/100)) 0011 $mytin $mytout $lminy $lmaxy
         ltype 2 pl 0 ((ts)) ((letabhMAKE/100)) 0011 $mytin $mytout $lminy $lmaxy
-        ltype 3 pl 0 ((ts)) (((letabh-letabhEM-letabhMAKE)/100)) 0011 $mytin $mytout $lminy $lmaxy
+        #ltype 3 pl 0 ((ts)) (((letabh-letabhEM-letabhMAKE)/100)) 0011 $mytin $mytout $lminy $lmaxy
+        ltype 3 pl 0 ((ts)) (((letabhRAD)/100)) 0011 $mytin $mytout $lminy $lmaxy
         #
         ###################################
         #
@@ -4126,6 +4145,7 @@ panelplot6replot 0 #
         #
         ltype 0 pl 0 avgh ((EdotEMvsh)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 4 pl 0 avgh ((EdotMAvsh)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 5 pl 0 avgh ((EdotRADvsh)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 1 pl 0 avgh ((EdotEMvshbz)) 0011 $myhin $myhout $lminy $lmaxy
         if($sashaplot>0){\
            ctype red ltype 1 pl 0 avgh ((EdotEMvshbz2)) 0011 $myhin $myhout $lminy $lmaxy
@@ -4163,6 +4183,7 @@ panelplot6replot 0 #
         #
         ltype 0 pl 0 avgh ((LdotEMvsh)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 4 pl 0 avgh ((LdotMAvsh)) 0011 $myhin $myhout $lminy $lmaxy
+        ltype 5 pl 0 avgh ((LdotRADvsh)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 1 pl 0 avgh ((LdotEMvshbz)) 0011 $myhin $myhout $lminy $lmaxy
         if($sashaplot>0){\
            ctype red ltype 1 pl 0 avgh ((LdotEMvshbz2)) 0011 $myhin $myhout $lminy $lmaxy
