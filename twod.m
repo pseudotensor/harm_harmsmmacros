@@ -1282,6 +1282,8 @@ vplold	19	# eg. vpl dump0001.dat v  1 12 010  <0 0 0 0>
                 #
 setupvpl 0      # 		
 		#
+        #
+        set use=(tk==$nz/2 ? 1 : 0)
 		#
                 if(thebits & 0x001){\
 		  shrink3 newfunx reallyx reallyy $6 $7 $8 $9
@@ -1373,14 +1375,19 @@ vpl	19	# eg. vpl dump0001.dat v  1 12 010  <0 0 0 0>
                 #
                 setupplc2
                 #
+        set newfunx=$2x
+        set newfuny=$2y
+        set reallyx=x12
+        set reallyy=x22
+        #
 		setupvpl
 		#
 		set realx=reallyx if(use)
 		set realy=reallyy if(use)
 		#
 		# for non-interpolated plots
-		set unix=x if(use)
-		set uniy=y if(use)
+		set unix=$2x if(use)
+		set uniy=$2y if(use)
 		#
 		set VVx = newfunx if(use)
 		set VVy = newfuny if(use)
@@ -1411,7 +1418,7 @@ vpl	19	# eg. vpl dump0001.dat v  1 12 010  <0 0 0 0>
 		 else{\
 		  box
 		 }
-		 #vfield (LG(realx)) realy leng ang
+         #vfield (LG(realx)) realy leng ang
 		 vfield unix uniy leng ang
 		 #vfield (LG(realx)) realy leng ang
 		 #vfield x1 x2 leng ang
