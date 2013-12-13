@@ -211,7 +211,7 @@ testkom1 3 #
    #
    #
    #
-velvsrad 1 # velvsradpl <doscp=0,1>
+velvsrad2 1 # velvsradpl <doscp=0,1>
         #########################################
         #
         set doscp=$1
@@ -223,6 +223,19 @@ velvsrad 1 # velvsradpl <doscp=0,1>
         # FINALPLOTS:
         #
         #
+        #
+        plotradpulse3da 1
+        device X11
+        if(doscp==1){\
+         !epstopdf testradpulse3da.eps 
+         !scp testradpulse3da.eps testradpulse3da.pdf jon@physics-179.umd.edu:/data/jon/harm_harmrad/
+        }
+        #
+velvsrad1 1
+        #
+        set doscp=$1
+        #
+        if(1){\
         device postencap5 test23.eps
         panelplot1
         device X11
@@ -263,8 +276,26 @@ velvsrad 1 # velvsradpl <doscp=0,1>
          !epstopdf test25.eps 
          !scp test25.eps test25.pdf jon@physics-179.umd.edu:/data/jon/harm_harmrad/
         }
+        }
+        if(1){\
+        device postencap testradpulse3db.eps
+        plotradpulse3db
+        device X11
+        if(doscp==1){\
+         !epstopdf testradpulse3db.eps 
+         !scp testradpulse3db.eps testradpulse3db.pdf jon@physics-179.umd.edu:/data/jon/harm_harmrad/
+        }
+        }
    #
+        device postencap plot_p1d_0.eps
+        plotradpulseplanar
+        device X11
+        if(doscp==1){\
+         !epstopdf plot_p1d_0.eps 
+         !scp plot_p1d_0.eps plot_p1d_0.pdf jon@physics-179.umd.edu:/data/jon/harm_harmrad/
+        }
    #
+   
 panelplot1   0 #
 		#
         #
@@ -347,7 +378,7 @@ panelplot1replot 0 #
         define nm ($numpanels-2)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         #ctype default window 1 -$numpanels 1 $nm box 0 2 0 0
-        yla "u^x/u^t"
+        yla "u^x_{\rm gas}/u^t_{\rm gas}"
         #
         cd /data/jon/harmgit/koraltestcompare/run.radtube.pickbestnew/
         grid3d gdump
@@ -362,23 +393,24 @@ panelplot1replot 0 #
         #
         ticksize 0 0 0 0
         define lminy (-100)
-        define lmaxy (1200)
+        define lmaxy (3999)
         limits $myrin $myrout $lminy $lmaxy
         define nm ($numpanels-3)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         #ctype default window 1 -$numpanels 1 $nm box 0 2 0 0
         #yla "\hat{E}"
-        yla "E"
+        #yla "E"
+        yla "-R^t_t"
         #
         cd /data/jon/harmgit/koraltestcompare/run.radtube.pickbestnew/
         grid3d gdump
         jrdprad dump0150
-        ltype 2 pl 0 r (prad0) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 r (-U8/gdet) 0011 $myrin $myrout $lminy $lmaxy
         #
         cd /data/jon/harmgit/koraltestcompare/run.radtube3
         grid3d gdump
         jrdprad2 dump0150
-        ltype 0 pl 0 r (prad0) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 0 pl 0 r (-U8/gdet) 0011 $myrin $myrout $lminy $lmaxy
 		###################################
         #
         ticksize 0 0 0 0
@@ -481,7 +513,7 @@ panelplot2replot 0 #
         define nm ($numpanels-2)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         #ctype default window 1 -$numpanels 1 $nm box 0 2 0 0
-        yla "u^x/u^t"
+        yla "u^x_{\rm gas}/u^t_{\rm gas}"
         #
         cd /data/jon/harmgit/koraltestcompare/run.radtube2
         grid3d gdump
@@ -498,12 +530,13 @@ panelplot2replot 0 #
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         #ctype default window 1 -$numpanels 1 $nm box 0 2 0 0
         #yla "\hat{E}"
-        yla "E"
+        #yla "E"
+        yla "-R^t_t"
         #
         cd /data/jon/harmgit/koraltestcompare/run.radtube2
         grid3d gdump
         jrdprad2 dump0150
-        ltype 0 pl 0 r (prad0) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 0 pl 0 r (-U8/gdet) 0011 $myrin $myrout $lminy $lmaxy
         #
 		###################################
         #
@@ -598,7 +631,7 @@ panelplot3replot 0 #
         define nm ($numpanels-2)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         #ctype default window 1 -$numpanels 1 $nm box 0 2 0 0
-        yla "u^x/u^t"
+        yla "u^x_{\rm gas}/u^t_{\rm gas}"
         #
         cd /data/jon/harmgit/koraltestcompare/run.radtube1
         grid3d gdump
@@ -615,12 +648,12 @@ panelplot3replot 0 #
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         #ctype default window 1 -$numpanels 1 $nm box 0 2 0 0
         #yla "\hat{E}"
-        yla "E"
+        yla "-R^t_t"
         #
         cd /data/jon/harmgit/koraltestcompare/run.radtube1
         grid3d gdump
         jrdprad2 dump0150
-        ltype 0 pl 0 r (prad0) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 0 pl 0 r (-U8/gdet) 0011 $myrin $myrout $lminy $lmaxy
         #
 		###################################
         #
@@ -726,7 +759,7 @@ panelplot4replot 0 #
         define nm ($numpanels-2)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         #ctype default window 1 -$numpanels 1 $nm box 0 2 0 0
-        yla "u^x/u^t"
+        yla "u^x_{\rm gas}/u^t_{\rm gas}"
         #
         cd /data/jon/harmgit/koraltestcompare/run.radtube41
         grid3d gdump
@@ -747,17 +780,17 @@ panelplot4replot 0 #
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         #ctype default window 1 -$numpanels 1 $nm box 0 2 0 0
         #yla "\hat{E}"
-        yla "E"
+        yla "-R^t_t"
         #
         cd /data/jon/harmgit/koraltestcompare/run.radtube41
         grid3d gdump
         jrdprad2 dump0150
-        ltype 2 pl 0 r (prad0) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 r (-U8/gdet) 0011 $myrin $myrout $lminy $lmaxy
         #
         cd /data/jon/harmgit/koraltestcompare/run.radtube4
         grid3d gdump
         jrdprad2 dump0150
-        ltype 0 pl 0 r (prad0) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 0 pl 0 r (-U8/gdet) 0011 $myrin $myrout $lminy $lmaxy
 		###################################
         #
         ticksize 0 0 0 0
@@ -856,7 +889,7 @@ panelplot5replot 0 #
         define nm ($numpanels-2)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         #ctype default window 1 -$numpanels 1 $nm box 0 2 0 0
-        yla "u^x/u^t"
+        yla "u^x_{\rm gas}/u^t_{\rm gas}"
         #
         cd /data/jon/harmgit/koraltestcompare/run.radtube5
         grid3d gdump
@@ -866,19 +899,19 @@ panelplot5replot 0 #
 		###################################
         #
         ticksize 0 0 0 0
-        define lminy (1.9)
-        define lmaxy (2.5)
+        define lminy (5.0)
+        define lmaxy (7.0)
         limits $myrin $myrout $lminy $lmaxy
         define nm ($numpanels-3)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         #ctype default window 1 -$numpanels 1 $nm box 0 2 0 0
         #yla "\hat{E}"
-        yla "E"
+        yla "-R^t_t"
         #
         cd /data/jon/harmgit/koraltestcompare/run.radtube5
         grid3d gdump
         jrdprad2 dump0013
-        ltype 0 pl 0 r (prad0) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 0 pl 0 r (-U8/gdet) 0011 $myrin $myrout $lminy $lmaxy
         #
 		###################################
         #
@@ -898,5 +931,260 @@ panelplot5replot 0 #
         jrdprad2 dump0013
         #ltype 0 pl 0 r (prad1ff) 0011 $myrin $myrout $lminy $lmaxy
         ltype 0 pl 0 r (uru1*sqrt(gv311)/uru0/sqrt(abs(gv300))) 0011 $myrin $myrout $lminy $lmaxy
+        #
+        #
+plotradpulse3da 1 #
+        #
+        #
+        #set filetype=1
+        #set skiptype=2
+        #cd /data/jon/harmgit/koraltestcompare/run.radpulse3d/
+        set filetype=2
+        set skiptype=4
+        cd /data/jon/harmgit/koraltestcompare/run.radpulse3d.50.50.50/
+        #
+        defaults
+        defaults
+        erase
+        define WHICHLEV ($nz/2)
+        define coord 1
+        define LOGTYPE 0
+        define UNITVECTOR 0
+        fdraft
+        ticksize 0 0 0 0
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+        #
+        grid3d gdump
+        if(filetype==1){ jrdprad dump0000 }
+        if(filetype==2){ jrdprad2 dump0000 }
+        define SKIPFACTOR 1
+        define PLOTERASE 1
+        plc 0 (-U8/gdet)
+        erase
+        if($1==1){\
+          device postencap testradpulse3da.eps
+        }
+        # 
+        #
+        define PLOTERASE 0
+        define POSCONTCOLOR red
+        define NEGCONTCOLOR default
+        if(filetype==1){ jrdprad dump0000 }
+        if(filetype==2){ jrdprad2 dump0000 }
+        define x2label "y"
+        define x1label "x"
+        limits x12 x22
+        define SKIPFACTOR 1
+        echo "before 1"
+        define cres 15
+        ctype default plc 0 (-U8/gdet) 010
+        box
+        labelaxes 0
+        echo "after 1"
+        print {lev}
+        #
+        #
+        define POSCONTCOLOR cyan
+        define NEGCONTCOLOR default
+        if(filetype==1){ jrdprad dump0041 }
+        if(filetype==2){ jrdprad2 dump0064 }
+        define SKIPFACTOR 1
+        echo "before 2"
+        define cres 15
+        ctype black plc 0 (-U8/gdet) 010
+        print {lev}
+        echo "after 2"
+        #set urx=prad1*sqrt(gv311)
+        #set ury=prad2*sqrt(gv322)
+        set urx=(1E32*U9/gdet)*sqrt(gv311)
+        set ury=(1E32*U10/gdet)*sqrt(gv322)
+        define SKIPFACTOR (skiptype)
+        ctype magenta vpl 0 ur .01 12 010
+        set time3=_t
+        if(1){\
+        set myr=sqrt(x12**2+x22**2) if(tk==$WHICHLEV)
+        set image[ix,iy]=myr
+        set lev=_t,_t+1E-9,2E-9
+        levels lev
+        ctype orange contour
+        }
+        #
+        #
+        define POSCONTCOLOR blue
+        define NEGCONTCOLOR default
+        if(filetype==1){ jrdprad dump0017 }
+        if(filetype==2){ jrdprad2 dump0027 }
+        define SKIPFACTOR 1
+        echo "before 3"
+        ctype black plc 0 (-U8/gdet) 010
+        print {lev}
+        echo "after 3"
+        #set urx=prad1*sqrt(gv311)
+        #set ury=prad2*sqrt(gv322)
+        set urx=(1E32*U9/gdet)*sqrt(gv311)
+        set ury=(1E32*U10/gdet)*sqrt(gv322)
+        define SKIPFACTOR (skiptype)
+        ctype green vpl 0 ur .01 12 010
+        set time2=_t
+        if(1){\
+        set myr=sqrt(x12**2+x22**2) if(tk==$WHICHLEV)
+        set image[ix,iy]=myr
+        set lev=_t,_t+1E-9,2E-9
+        levels lev
+        ctype orange contour
+        }
+        #
+        define SKIPFACTOR 1
+        #
+        print {time1 time2 time3}
+        #
+        #
+plotradpulse3db 0 #
+        #
+        #
+        #set filetype=1
+        #set skiptype=2
+        #cd /data/jon/harmgit/koraltestcompare/run.radpulse3d/
+        set filetype=2
+        set skiptype=4
+        cd /data/jon/harmgit/koraltestcompare/run.radpulse3d.50.50.50/
+        #
+        #
+        erase
+        defaults
+        defaults
+        define WHICHLEV ($nz/2)
+        define coord 1
+        define LOGTYPE 0
+        define UNITVECTOR 0
+        fdraft
+        ticksize 0 0 -1 0
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+        # 
+        grid3d gdump
+        #
+        #
+        ctype default
+        if(filetype==1){ jrdprad dump0000 }
+        if(filetype==2){ jrdprad2 dump0000 }
+        define x2label "-R^t_t"
+        define x1label "x"
+        set blobuse=(tk==$nz/2 && tj==$ny/2 ? 1 : 0)
+        set myprad0=(-U8/gdet) if(blobuse)
+        set myr=r if(blobuse)
+        limits myr (LG(myprad0))
+        box
+        labelaxes 0
+        ltype 0 pl 0 myr myprad0 0110
+        #
+        if(filetype==1){ jrdprad dump0017 }
+        if(filetype==2){ jrdprad2 dump0027 }
+        set myprad0=-U8/gdet if(blobuse)
+        ltype 2 pl 0 myr myprad0 0110
+        #
+        if(filetype==1){ jrdprad dump0041 }
+        if(filetype==2){ jrdprad2 dump0064 }
+        set myprad0=-U8/gdet if(blobuse)
+        ltype 3 pl 0 myr myprad0 0110
+        #
+        set blobuseana=(myr<-0.5 || myr>0.5 ? 1 : 0)
+        if(filetype==1){\
+         set drop=2.039E-32/(myr/1)**2
+        }
+        if(filetype==2){\
+         set drop=13.5E-32/(myr/1)**2
+        }
+        set drop=(blobuseana==1 ? drop : 1E30)
+        define missing_data (1E30)
+        ctype orange ltype 0 pl 0 myr drop 0110
+        #
+plotradpulseplanar 0 #
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radpulseplanar.pickbestnew/
+        #
+        erase
+        defaults
+        defaults
+        define WHICHLEV ($nz/2)
+        define coord 1
+        define LOGTYPE 0
+        define UNITVECTOR 0
+        fdraft
+        #ticksize 0 0 -1 0
+        ticksize 0 0 0 0
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+        # 
+        grid3d gdump
+        #
+        #
+        ctype default
+        jrdprad dump0000
+        define x2label "-R^t_t"
+        define x1label "x"
+        set blobuse=(U8*0+1)
+        set myprad0=(-U8/gdet) if(blobuse)
+        set myr=r if(blobuse)
+        #limits myr ((myprad0))
+        limits -20 20 -0.5E-32 6.5E-32
+        box
+        labelaxes 0
+        #
+        if(1){\
+        set dc=4.0
+        set t0=4800.0
+        set amp=6.49E-32
+        set ndim=1
+        }
+        #
+        if(0){\
+        set dc=1.0
+        set t0=10000.0
+        set amp=6.49E-32
+        set ndim=1
+        }
+        #
+        set Diff=rho/3/(kappa+kappaes)
+        set ana=amp*exp(-(myr+offset)**2/(dc*Diff*(_t+t0)))*((_t+t0)/t0)**(-ndim/2)
+        ctype default ltype 0 pl 0 myr ana 0010
+        ctype green ltype 0 pl 0 myr myprad0 0010
+        set time1=_t
+        #
+        jrdprad dump0007
+        set myprad0=-U8/gdet if(blobuse)
+        set Diff=rho/3/(kappa+kappaes)
+        set ana=amp*exp(-(myr+offset)**2/(dc*Diff*(_t+t0)))*((_t+t0)/t0)**(-ndim/2)
+        ctype default ltype 0 pl 0 myr ana 0010
+        ctype orange ltype 0 pl 0 myr myprad0 0010
+        set time2=_t
+        #
+        jrdprad dump0023
+        set myprad0=-U8/gdet if(blobuse)
+        set Diff=rho/3/(kappa+kappaes)
+        set ana=amp*exp(-(myr+offset)**2/(dc*Diff*(_t+t0)))*((_t+t0)/t0)**(-ndim/2)
+        ctype default ltype 0 pl 0 myr ana 0010
+        ctype blue ltype 0 pl 0 myr myprad0 0010
+        set time3=_t
+        #
+        jrdprad dump0065
+        set myprad0=-U8/gdet if(blobuse)
+        set Diff=rho/3/(kappa+kappaes)
+        set ana=amp*exp(-(myr+offset)**2/(dc*Diff*(_t+t0)))*((_t+t0)/t0)**(-ndim/2)
+        ctype default ltype 0 pl 0 myr ana 0010
+        ctype purple ltype 0 pl 0 myr myprad0 0010
+        set time4=_t
+        #
+        jrdprad dump0200
+        set myprad0=-U8/gdet if(blobuse)
+        set Diff=rho/3/(kappa+kappaes)
+        set ana=amp*exp(-(myr+offset)**2/(dc*Diff*(_t+t0)))*((_t+t0)/t0)**(-ndim/2)
+        ctype default ltype 0 pl 0 myr ana 0010
+        ctype red ltype 0 pl 0 myr myprad0 0010
+        set time5=_t
+        #
+        print '%g %g %g %g %g\n' {time1 time2 time3 time4 time5}
         #
         #
