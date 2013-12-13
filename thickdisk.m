@@ -405,7 +405,7 @@ rdvst 0 #
         #columns=21
         da datavst2.txt
         lines 1 1000000
-        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {tici ts  etabhEM etabhMAKE etabhRAD etabh etajEM etajMAKE etaj etamwinEM etamwinMAKE etamwin etamwoutEM etamwoutMAKE etamwout etawinEM etawinMAKE etawin etawoutEM etawoutMAKE etawout}
+        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {tici ts etabhEM etabhMAKE etabhRAD etabh etajEM etajMAKE etaj etamwinEM etamwinMAKE etamwin etamwoutEM etamwoutMAKE etamwout etawinEM etawinMAKE etawin etawoutEM etawoutMAKE etawout}
         #
         #columns=21
         da datavst3.txt
@@ -3139,7 +3139,8 @@ panelplot1eqreplot 0 #
         yla "-v_{r} v_{\rm rot}"
         #
         ltype 0 pl 0 (LG(r)) (LG(abs(-vus1rhosqeqvsr))) 0011 $myrin $myrout $lminy $lmaxy
-        ltype 2 pl 0 (LG(r)) (LG(abs(vusarotrhosqeqvsr))) 0011 $myrin $myrout $lminy $lmaxy
+        #ltype 2 pl 0 (LG(r)) (LG(abs(vusarotrhosqeqvsr))) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 (LG(r)) (LG(abs(vuasrotrhosqdcdenvsr))) 0011 $myrin $myrout $lminy $lmaxy
         #
 		###################################
         #

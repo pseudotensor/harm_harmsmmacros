@@ -11,6 +11,7 @@ mricalc 0               #
 		# number of wavelengths per zone
 		#
 		# after doing gammiegridnew2 gdump
+        # no, now after grid3d
 		#
 		#
 		set mydr=dxdxp1*$dx1

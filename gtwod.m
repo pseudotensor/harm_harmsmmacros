@@ -2431,12 +2431,14 @@ gcalcmore       0     #
 		#
 		#
 		# the below is only correct for defcoord==0 and KSCOORDS
-		set dxdxp1=(r-R0)
-		set dxdxp2=pi+(1-hslope)*pi*cos(2*pi*tx2)
-		set ksuu1=uu1*dxdxp1
-		set ksbu1=bu1*dxdxp1
-		set ksuu2=uu2*dxdxp2
-		set ksbu2=bu2*dxdxp2
+		#set dxdxp1=(r-R0)
+        set dxdxp1=dxdxp11
+		#set dxdxp2=pi+(1-hslope)*pi*cos(2*pi*tx2)
+        set dxdxp2=dxdxp22
+		set ksuu1=uu1*dxdxp11
+		set ksbu1=bu1*dxdxp11
+		set ksuu2=uu2*dxdxp22
+		set ksbu2=bu2*dxdxp22
 		# only for KS/KSP (given KS, computes in KS and returns in KSP)
 		#
                 #
@@ -3768,8 +3770,12 @@ agpl  18	# agpl 'dump' r fun 000 <0 0 0 0>
                   define filenamegdump (_fnamegdump)
 		  #jrdp2d $filename
 		  #
+          # pre-radiation, but with entropy, but no currents
+          #jrdp3duentropy $filename
           # with radiation
-                  jrdprad $filename
+          #jrdprad $filename
+          # with radiation but no currents but with entropy
+          jrdprad2 $filename
                   #jrdpraddump rad$filename
 		  # NEW
                   #jrdpall $ii
@@ -4168,6 +4174,25 @@ jrdprestart 1   #
 		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {rho u v1 v2 v3 B1 B2 B3 U0 U1 U2 U3 U4 U5 U6 U7} 
 		#
 		#
+jrdprestart2 1   #
+		#
+		da $1
+		lines 2 100000000
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {rrho ru rv1 rv2 rv3 \
+                            rB1 rB2 rB3 rprad0 rprad1 rprad2 rprad3 rsug rU0 rU1 rU2 rU3 rU4 rU5 rU6 rU7 rU8 rU9 rU10 rU11 rU12 rvpot0 rvpot1 rvpot2 rvpot3 rfaild0 \
+                            rfaild1 rfaild2 rfaild3 rfaild4 rfaild5 rfaild6 rfaild7 rfaild8 rfaild9 rfaild10 rfaild11 rfaild12} 
+		#
+		#
+diffrestart 0 #
+        #
+        set diffrho=((rho-rrho)/(abs(rho)+abs(rrho)))
+        set diffu=((u-ru)/(abs(u)+abs(ru)))
+        set diffv1=((v1-rv1)/(abs(v1)+abs(rv1)))
+        set diffv2=((v2-rv2)/(abs(v2)+abs(rv2)))
+        set diffv3=((v3-rv3)/(abs(v3)+abs(rv3)))
+        set diffB1=((B1-rB1)/(abs(B1)+abs(rB1)))
+        set diffB2=((B2-rB2)/(abs(B2)+abs(rB2)))
+        set diffB3=((B3-rB3)/(abs(B3)+abs(rB3)))
 		#
 jrdplogperf 1   # jrdplogperf 0_logperf.grmhd.out
 		#
