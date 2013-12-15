@@ -384,6 +384,17 @@ postencap|encap|postfile|encapsulated postscript, written to file $1:\
 	'%'%BoundingBox\: 18 144 592 718\n'%'%DocumentFonts\: Helvetica\n\
 	'%'%EndComments\n:\
 	:SY=mv $F $1:tc=postscript:
+postencapwide|encap|postfile|encapsulated postscriptwide, written to file $1:\
+	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
+	'%'%BoundingBox\: 18 144 592 431\n'%'%DocumentFonts\: Helvetica\n\
+	'%'%EndComments\n:\
+	:SY=mv $F $1:tc=postscript:
+postencapwider|encap|postfile|encapsulated postscriptwider, written to file $1:\
+	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
+	'%'%BoundingBox\: 18 100 1500 490\n'%'%DocumentFonts\: Helvetica\n\
+	'%'%EndComments\n:\
+	:yr#1400:xr#6000:\
+	:SY=mv $F $1:tc=postscript:
 postencap2|encap2|postfile2|encapsulated postscript2, written to file $1:\
 	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
 	'%'%BoundingBox\: 18 144 314 718\n'%'%DocumentFonts\: Helvetica\n\
