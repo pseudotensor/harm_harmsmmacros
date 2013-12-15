@@ -554,12 +554,13 @@ fdraft            #
 	          #location 7000 31000 3500 31000
                   #LOCATION $($gx1 + 1000) $gx2 $gy1 $gy2
                   #                  
-mypoints 2        #
+mypoints 3        #
 		  lweight $PLOTLWEIGHT
                   if(!($finaldraft)){\
                    #points $1 $2
                   }
-                  connect $1 $2
+                  if($3==1){ connect $1 $2 }
+                   if($3==0){ connect ($1) ($2) if(condconnect) }
 		  lweight $NORMLWEIGHT
 		  #
 defaults2     # stuff not yet outputted in code
@@ -614,6 +615,7 @@ defaults
 		  define BOXCOLOR default
 		  define POSCONTLTYPE 0
 		  define NEGCONTLTYPE 0
+          define DOCONNECT 1
 		  #
 defaultsold          # go back to defaults
 	          if($?npdone == 0){\

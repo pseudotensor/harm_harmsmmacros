@@ -231,6 +231,72 @@ velvsrad2 1 # velvsradpl <doscp=0,1>
          !scp testradpulse3da.eps testradpulse3da.pdf jon@physics-179.umd.edu:/data/jon/harm_harmrad/
         }
         #
+velvsrad3 1        
+        #
+        set doscp=$1
+        #
+        device X11
+        device X11
+        plotradbeamflata 1
+        device X11
+        if(doscp==1){\
+         !epstopdf testradbeamflata.eps 
+         !scp testradbeamflata.eps testradbeamflata.pdf jon@physics-179.umd.edu:/data/jon/harm_harmrad/
+        }
+        #
+        #
+velvsrad4 1        
+        #
+        set doscp=$1
+        #
+        plotradbeamflatb 1
+        device X11
+        if(doscp==1){\
+         !epstopdf testradbeamflatb.eps 
+         !scp testradbeamflatb.eps testradbeamflatb.pdf jon@physics-179.umd.edu:/data/jon/harm_harmrad/
+        }
+        #
+        #
+velvsrad5 1        
+        #
+        set doscp=$1
+        #
+        plotradshadowa 1
+        device X11
+        if(doscp==1){\
+         !epstopdf testradshadowa.eps 
+         !scp testradshadowa.eps testradshadowa.pdf jon@physics-179.umd.edu:/data/jon/harm_harmrad/
+        }
+        #
+        plotradshadowb 1
+        device X11
+        if(doscp==1){\
+         !epstopdf testradshadowb.eps 
+         !scp testradshadowb.eps testradshadowb.pdf jon@physics-179.umd.edu:/data/jon/harm_harmrad/
+        }
+        #
+        #
+        #
+velvsrad6 1        
+        #
+        set doscp=$1
+        #
+        plotraddblshadowa 1
+        device X11
+        if(doscp==1){\
+         !epstopdf testraddblshadowa.eps 
+         !scp testraddblshadowa.eps testraddblshadowa.pdf jon@physics-179.umd.edu:/data/jon/harm_harmrad/
+        }
+        #
+        plotraddblshadowb 1
+        device X11
+        if(doscp==1){\
+         !epstopdf testraddblshadowb.eps 
+         !scp testraddblshadowb.eps testraddblshadowb.pdf jon@physics-179.umd.edu:/data/jon/harm_harmrad/
+        }
+        #
+        #
+        #
 velvsrad1 1
         #
         set doscp=$1
@@ -275,8 +341,9 @@ velvsrad1 1
         if(doscp==1){\
          !epstopdf test25.eps 
          !scp test25.eps test25.pdf jon@physics-179.umd.edu:/data/jon/harm_harmrad/
+         }
         }
-        }
+        #
         if(1){\
         device postencap testradpulse3db.eps
         plotradpulse3db
@@ -284,9 +351,9 @@ velvsrad1 1
         if(doscp==1){\
          !epstopdf testradpulse3db.eps 
          !scp testradpulse3db.eps testradpulse3db.pdf jon@physics-179.umd.edu:/data/jon/harm_harmrad/
+         }
         }
-        }
-   #
+        #
         device postencap plot_p1d_0.eps
         plotradpulseplanar
         device X11
@@ -294,8 +361,53 @@ velvsrad1 1
          !epstopdf plot_p1d_0.eps 
          !scp plot_p1d_0.eps plot_p1d_0.pdf jon@physics-179.umd.edu:/data/jon/harm_harmrad/
         }
-   #
-   
+        # 
+        #
+velvsrad7 1 #
+        #
+        set doscp=$1
+        #
+        device postencap5 test84.eps
+        panelplotradatm
+        device X11
+        if(doscp==1){\
+         !epstopdf test84.eps 
+         !scp test84.eps test84.pdf jon@physics-179.umd.edu:/data/jon/harm_harmrad/
+        }
+        #
+velvsrad8 1 #
+        #
+        set doscp=$1
+        #
+        device postencap5 test60.eps
+        panelplotradbondi
+        device X11
+        if(doscp==1){\
+         !epstopdf test60.eps 
+         !scp test60.eps test60.pdf jon@physics-179.umd.edu:/data/jon/harm_harmrad/
+        }
+        #
+        device postencap5 test60conv.eps
+        panelplotradbondiconv
+        device X11
+        if(doscp==1){\
+         !epstopdf test60conv.eps 
+         !scp test60conv.eps test60conv.pdf jon@physics-179.umd.edu:/data/jon/harm_harmrad/
+        }
+        #
+velvsrad9 1 #
+        #
+        set doscp=$1
+        #
+        device postencap5 test60mag.eps
+        panelplotradmagbondi
+        device X11
+        if(doscp==1){\
+         !epstopdf test60mag.eps 
+         !scp test60mag.eps test60mag.pdf jon@physics-179.umd.edu:/data/jon/harm_harmrad/
+        }
+        #
+        #
 panelplot1   0 #
 		#
         #
@@ -601,6 +713,7 @@ panelplot3replot 0 #
         #
         #
         cd /data/jon/harmgit/koraltestcompare/run.radtube1
+        # run.radtube1.hll
         grid3d gdump
         jrdprad2 dump0150
         ltype 0 pl 0 r rho 0011 $myrin $myrout $lminy $lmaxy
@@ -940,13 +1053,12 @@ plotradpulse3da 1 #
         #set skiptype=2
         #cd /data/jon/harmgit/koraltestcompare/run.radpulse3d/
         set filetype=2
-        set skiptype=4
+        set skiptype=2
         cd /data/jon/harmgit/koraltestcompare/run.radpulse3d.50.50.50/
         #
         defaults
         defaults
         erase
-        define WHICHLEV ($nz/2)
         define coord 1
         define LOGTYPE 0
         define UNITVECTOR 0
@@ -958,10 +1070,14 @@ plotradpulse3da 1 #
         grid3d gdump
         if(filetype==1){ jrdprad dump0000 }
         if(filetype==2){ jrdprad2 dump0000 }
+        define WHICHLEV (INT($nz/2))
         define SKIPFACTOR 1
         define PLOTERASE 1
         plc 0 (-U8/gdet)
         erase
+        #defaults
+        #defaults
+        #defaults
         if($1==1){\
           device postencap testradpulse3da.eps
         }
@@ -972,6 +1088,7 @@ plotradpulse3da 1 #
         define NEGCONTCOLOR default
         if(filetype==1){ jrdprad dump0000 }
         if(filetype==2){ jrdprad2 dump0000 }
+        set time1=_t
         define x2label "y"
         define x1label "x"
         limits x12 x22
@@ -997,14 +1114,14 @@ plotradpulse3da 1 #
         echo "after 2"
         #set urx=prad1*sqrt(gv311)
         #set ury=prad2*sqrt(gv322)
-        set urx=(1E32*U9/gdet)*sqrt(gv311)
-        set ury=(1E32*U10/gdet)*sqrt(gv322)
+        set urx=(1E32*U9/gdet)*sqrt(gn311)
+        set ury=(1E32*U10/gdet)*sqrt(gn322)
         define SKIPFACTOR (skiptype)
         ctype magenta vpl 0 ur .01 12 010
         set time3=_t
         if(1){\
         set myr=sqrt(x12**2+x22**2) if(tk==$WHICHLEV)
-        set image[ix,iy]=myr
+        set image[ix,iy]=myr-0.0
         set lev=_t,_t+1E-9,2E-9
         levels lev
         ctype orange contour
@@ -1022,14 +1139,14 @@ plotradpulse3da 1 #
         echo "after 3"
         #set urx=prad1*sqrt(gv311)
         #set ury=prad2*sqrt(gv322)
-        set urx=(1E32*U9/gdet)*sqrt(gv311)
-        set ury=(1E32*U10/gdet)*sqrt(gv322)
+        set urx=(1E32*U9/gdet)*sqrt(gn311)
+        set ury=(1E32*U10/gdet)*sqrt(gn322)
         define SKIPFACTOR (skiptype)
         ctype green vpl 0 ur .01 12 010
         set time2=_t
         if(1){\
         set myr=sqrt(x12**2+x22**2) if(tk==$WHICHLEV)
-        set image[ix,iy]=myr
+        set image[ix,iy]=myr-0.0
         set lev=_t,_t+1E-9,2E-9
         levels lev
         ctype orange contour
@@ -1044,17 +1161,16 @@ plotradpulse3db 0 #
         #
         #
         #set filetype=1
-        #set skiptype=2
+        #set skiptype=1
         #cd /data/jon/harmgit/koraltestcompare/run.radpulse3d/
         set filetype=2
-        set skiptype=4
+        set skiptype=1
         cd /data/jon/harmgit/koraltestcompare/run.radpulse3d.50.50.50/
         #
         #
         erase
         defaults
         defaults
-        define WHICHLEV ($nz/2)
         define coord 1
         define LOGTYPE 0
         define UNITVECTOR 0
@@ -1069,9 +1185,10 @@ plotradpulse3db 0 #
         ctype default
         if(filetype==1){ jrdprad dump0000 }
         if(filetype==2){ jrdprad2 dump0000 }
+        define WHICHLEV (INT($nz/2))
         define x2label "-R^t_t"
         define x1label "x"
-        set blobuse=(tk==$nz/2 && tj==$ny/2 ? 1 : 0)
+        set blobuse=(tk==INT($nz/2) && tj==$ny/2 ? 1 : 0)
         set myprad0=(-U8/gdet) if(blobuse)
         set myr=r if(blobuse)
         limits myr (LG(myprad0))
@@ -1108,7 +1225,6 @@ plotradpulseplanar 0 #
         erase
         defaults
         defaults
-        define WHICHLEV ($nz/2)
         define coord 1
         define LOGTYPE 0
         define UNITVECTOR 0
@@ -1123,6 +1239,7 @@ plotradpulseplanar 0 #
         #
         ctype default
         jrdprad dump0000
+        define WHICHLEV (INT($nz/2))
         define x2label "-R^t_t"
         define x1label "x"
         set blobuse=(U8*0+1)
@@ -1148,7 +1265,7 @@ plotradpulseplanar 0 #
         }
         #
         set Diff=rho/3/(kappa+kappaes)
-        set ana=amp*exp(-(myr+offset)**2/(dc*Diff*(_t+t0)))*((_t+t0)/t0)**(-ndim/2)
+        set ana=amp*exp(-(myr)**2/(dc*Diff*(_t+t0)))*((_t+t0)/t0)**(-ndim/2)
         ctype default ltype 0 pl 0 myr ana 0010
         ctype green ltype 0 pl 0 myr myprad0 0010
         set time1=_t
@@ -1156,7 +1273,7 @@ plotradpulseplanar 0 #
         jrdprad dump0007
         set myprad0=-U8/gdet if(blobuse)
         set Diff=rho/3/(kappa+kappaes)
-        set ana=amp*exp(-(myr+offset)**2/(dc*Diff*(_t+t0)))*((_t+t0)/t0)**(-ndim/2)
+        set ana=amp*exp(-(myr)**2/(dc*Diff*(_t+t0)))*((_t+t0)/t0)**(-ndim/2)
         ctype default ltype 0 pl 0 myr ana 0010
         ctype orange ltype 0 pl 0 myr myprad0 0010
         set time2=_t
@@ -1164,7 +1281,7 @@ plotradpulseplanar 0 #
         jrdprad dump0023
         set myprad0=-U8/gdet if(blobuse)
         set Diff=rho/3/(kappa+kappaes)
-        set ana=amp*exp(-(myr+offset)**2/(dc*Diff*(_t+t0)))*((_t+t0)/t0)**(-ndim/2)
+        set ana=amp*exp(-(myr)**2/(dc*Diff*(_t+t0)))*((_t+t0)/t0)**(-ndim/2)
         ctype default ltype 0 pl 0 myr ana 0010
         ctype blue ltype 0 pl 0 myr myprad0 0010
         set time3=_t
@@ -1172,7 +1289,7 @@ plotradpulseplanar 0 #
         jrdprad dump0065
         set myprad0=-U8/gdet if(blobuse)
         set Diff=rho/3/(kappa+kappaes)
-        set ana=amp*exp(-(myr+offset)**2/(dc*Diff*(_t+t0)))*((_t+t0)/t0)**(-ndim/2)
+        set ana=amp*exp(-(myr)**2/(dc*Diff*(_t+t0)))*((_t+t0)/t0)**(-ndim/2)
         ctype default ltype 0 pl 0 myr ana 0010
         ctype purple ltype 0 pl 0 myr myprad0 0010
         set time4=_t
@@ -1180,11 +1297,1640 @@ plotradpulseplanar 0 #
         jrdprad dump0200
         set myprad0=-U8/gdet if(blobuse)
         set Diff=rho/3/(kappa+kappaes)
-        set ana=amp*exp(-(myr+offset)**2/(dc*Diff*(_t+t0)))*((_t+t0)/t0)**(-ndim/2)
+        set ana=amp*exp(-(myr)**2/(dc*Diff*(_t+t0)))*((_t+t0)/t0)**(-ndim/2)
         ctype default ltype 0 pl 0 myr ana 0010
         ctype red ltype 0 pl 0 myr myprad0 0010
         set time5=_t
         #
         print '%g %g %g %g %g\n' {time1 time2 time3 time4 time5}
+        #
+        #
+plotradbeamflata 1 #
+        #
+        #
+        #set filetype=1
+        #set skiptype=1
+        #cd /data/jon/harmgit/koraltestcompare/run.radbeamflat
+        set filetype=2
+        set skiptype=2
+        cd /data/jon/harmgit/koraltestcompare/run.radbeamflat0.999998.goodlimit
+        #
+        defaults
+        defaults
+        erase
+        define coord 1
+        define LOGTYPE 0
+        define UNITVECTOR 0
+        fdraft
+        ticksize 0 0 0 0
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+        #
+        grid3d gdump
+        if(filetype==1){ jrdprad dump0000 }
+        if(filetype==2){ jrdprad2 dump0000 }
+        define WHICHLEV (INT($nz/2))
+        define SKIPFACTOR 1
+        define PLOTERASE 1
+        plc 0 (-U8/gdet)
+        erase
+        #defaults
+        #defaults
+        #defaults
+        if($1==1){\
+          device postencap testradbeamflata.eps
+        }
+        # 
+        #
+        define PLOTERASE 0
+        define POSCONTCOLOR red
+        define NEGCONTCOLOR default
+        define x2label "y"
+        define x1label "x"
+        box
+        labelaxes 0
+        if(filetype==1){ jrdprad dump0005 }
+        if(filetype==2){ jrdprad2 dump0005 }
+        define SKIPFACTOR 1
+        echo "before 2"
+        define cres 15
+        ctype black plc 0 (-U8/gdet) 010
+        print {lev}
+        echo "after 2"
+        #set urx=prad1*sqrt(gv311)
+        #set ury=prad2*sqrt(gv322)
+        set urx=(1*U9/gdet)*sqrt(gn311)
+        set ury=(1*U10/gdet)*sqrt(gn322)
+        define SKIPFACTOR (skiptype)
+        ctype magenta vpl 0 ur 5E-8 12 010
+        set time3=_t
+        if(1){\
+        set myr=r if(tk==$WHICHLEV)
+        set image[ix,iy]=myr-0.0
+        set lev=_t,_t+1E-9,2E-9
+        levels lev
+        ctype orange contour
+        }
+        #
+        define SKIPFACTOR 1
+        #
+        #
+plotradbeamflatb 1 #
+        #
+        #
+        #set filetype=1
+        #set skiptype=1
+        #cd /data/jon/harmgit/koraltestcompare/run.radbeamflat
+        set filetype=2
+        set skiptype=2
+        cd /data/jon/harmgit/koraltestcompare/run.radbeamflat0.999998.goodlimit
+        #
+        defaults
+        defaults
+        erase
+        define coord 1
+        define LOGTYPE 0
+        define UNITVECTOR 0
+        fdraft
+        ticksize 0 0 0 0
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+        #
+        grid3d gdump
+        if(filetype==1){ jrdprad dump0000 }
+        if(filetype==2){ jrdprad2 dump0000 }
+        define WHICHLEV (INT($nz/2))
+        define SKIPFACTOR 1
+        define PLOTERASE 1
+        plc 0 (-U8/gdet)
+        erase
+        #defaults
+        #defaults
+        #defaults
+        if($1==1){\
+          device postencap testradbeamflatb.eps
+        }
+        # 
+        #
+        define PLOTERASE 0
+        define POSCONTCOLOR red
+        define NEGCONTCOLOR default
+        define x2label "y"
+        define x1label "x"
+        box
+        labelaxes 0
+        if(filetype==1){ jrdprad dump0100 }
+        if(filetype==2){ jrdprad2 dump0100 }
+        define SKIPFACTOR 1
+        echo "before 2"
+        define cres 15
+        ctype black plc 0 (-U8/gdet) 010
+        print {lev}
+        echo "after 2"
+        #set urx=prad1*sqrt(gv311)
+        #set ury=prad2*sqrt(gv322)
+        set urx=(1*U9/gdet)*sqrt(gn311)
+        set ury=(1*U10/gdet)*sqrt(gn322)
+        define SKIPFACTOR (skiptype)
+        ctype magenta vpl 0 ur 5E-8 12 010
+        set time3=_t
+        if(1){\
+        set myr=r if(tk==$WHICHLEV)
+        set image[ix,iy]=myr-0.0
+        set lev=_t,_t+1E-9,2E-9
+        levels lev
+        ctype orange contour
+        }
+        #
+        define SKIPFACTOR 1
+        #
+        #
+plotradshadowa 1 #
+        #
+        #
+        set filetype=1
+        set skiptype=4
+        cd /data/jon/harmgit/koraltestcompare/run.radshadow
+        #set filetype=2
+        #set skiptype=1
+        #cd /data/jon/harmgit/koraltestcompare/run.radshadow
+        #
+        defaults
+        defaults
+        erase
+        define coord 1
+        define LOGTYPE 0
+        define UNITVECTOR 0
+        fdraft
+        ticksize 0 0 0 0
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+        #
+        grid3d gdump
+        if(filetype==1){ jrdprad dump0000 }
+        if(filetype==2){ jrdprad2 dump0000 }
+        define WHICHLEV (INT($nz/2))
+        define SKIPFACTOR 1
+        define PLOTERASE 1
+        plc 0 (-U8/gdet)
+        erase
+        #defaults
+        #defaults
+        #defaults
+        if($1==1){\
+          device postencapwide testradshadowa.eps
+        }
+        # 
+        #
+        ctype default window 1 2 1:2 1
+        define PLOTERASE 0
+        define POSCONTCOLOR red
+        define NEGCONTCOLOR default
+        define x2label "y"
+        define x1label "x"
+        box
+        labelaxes 0
+        if(filetype==1){ jrdprad dump0005 }
+        if(filetype==2){ jrdprad2 dump0005 }
+        define SKIPFACTOR 1
+        echo "before 2"
+        define cres 15
+        ctype black plc 0 (-U8/gdet) 010
+        print {lev}
+        define POSCONTCOLOR cyan
+        define NEGCONTCOLOR cyan
+        ctype cyan plc 0 (rho) 010
+        print {lev}
+        echo "after 2"
+        #set urx=prad1*sqrt(gv311)
+        #set ury=prad2*sqrt(gv322)
+        set urx=(2E12*U9/gdet)*sqrt(gn311)
+        set ury=(2E12*U10/gdet)*sqrt(gn322)
+        define SKIPFACTOR (skiptype)
+        ctype magenta vpl 0 ur 1 12 010
+        set time1=_t
+        if(1){\
+        set myr=r if(tk==$WHICHLEV)
+        set image[ix,iy]=myr-(-1.0)
+        set lev=_t,_t+1E-9,2E-9
+        levels lev
+        ctype orange contour
+        }
+        #
+        print {time1}
+        define SKIPFACTOR 1
+        #
+        #
+plotradshadowb 1 #
+        #
+        #
+        set filetype=1
+        set skiptype=4
+        cd /data/jon/harmgit/koraltestcompare/run.radshadow
+        #set filetype=2
+        #set skiptype=1
+        #cd /data/jon/harmgit/koraltestcompare/run.radshadow
+        #
+        defaults
+        defaults
+        erase
+        define coord 1
+        define LOGTYPE 0
+        define UNITVECTOR 0
+        fdraft
+        ticksize 0 0 0 0
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+        #
+        grid3d gdump
+        if(filetype==1){ jrdprad dump0000 }
+        if(filetype==2){ jrdprad2 dump0000 }
+        define WHICHLEV (INT($nz/2))
+        define SKIPFACTOR 1
+        define PLOTERASE 1
+        plc 0 (-U8/gdet)
+        erase
+        #defaults
+        #defaults
+        #defaults
+        if($1==1){\
+          device postencapwide testradshadowb.eps
+        }
+        # 
+        #
+        ctype default window 1 2 1:2 1
+        define PLOTERASE 0
+        define POSCONTCOLOR red
+        define NEGCONTCOLOR default
+        define x2label "y"
+        define x1label "x"
+        box
+        labelaxes 0
+        if(filetype==1){ jrdprad dump0020 }
+        if(filetype==2){ jrdprad2 dump0020 }
+        define SKIPFACTOR 1
+        echo "before 2"
+        define cres 15
+        ctype black plc 0 (-U8/gdet) 010
+        print {lev}
+        define POSCONTCOLOR cyan
+        define NEGCONTCOLOR default
+        ctype cyan plc 0 (rho) 010
+        print {lev}
+        echo "after 2"
+        #set urx=prad1*sqrt(gv311)
+        #set ury=prad2*sqrt(gv322)
+        set urx=(2E12*U9/gdet)*sqrt(gn311)
+        set ury=(2E12*U10/gdet)*sqrt(gn322)
+        define SKIPFACTOR (skiptype)
+        ctype magenta vpl 0 ur 1 12 010
+        set time2=_t
+        if(1){\
+        set myr=r if(tk==$WHICHLEV)
+        set image[ix,iy]=myr-(-1.0)
+        set lev=_t,_t+1E-9,2E-9
+        levels lev
+        ctype orange contour
+        }
+        #
+        print {time2}
+        define SKIPFACTOR 1
+        #
+        #
+plotraddblshadowa 1 #
+        #
+        #
+        #set filetype=1
+        #set skiptype=4
+        #cd /data/jon/harmgit/koraltestcompare/run.raddblshadow.redo.0.99999
+        set filetype=2
+        set skiptype=4
+        #cd /data/jon/harmgit/koraltestcompare/run.raddblshadow.redo
+        #cd /data/jon/harmgit/koraltestcompare/run.raddblshadow.redo.0.99999.correctgammmaxrad
+        #cd /data/jon/harmgit/koraltestcompare/run.raddblshadow.redo.0.9999.correctgammmaxrad
+        cd /data/jon/harmgit/koraltestcompare/run.raddblshadow.redo.0.999.correctgammmaxrad
+        #cd /data/jon/harmgit/koraltestcompare/run.raddblshadow.redo.0.99999.correctgammmaxrad.hll
+        #
+        defaults
+        defaults
+        erase
+        define coord 1
+        define LOGTYPE 0
+        define UNITVECTOR 0
+        fdraft
+        ticksize 0 0 0 0
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+        #
+        grid3d gdump
+        if(filetype==1){ jrdprad dump0000 }
+        if(filetype==2){ jrdprad2 dump0000 }
+        define WHICHLEV (INT($nz/2))
+        define SKIPFACTOR 1
+        define PLOTERASE 1
+        plc 0 (-U8/gdet)
+        erase
+        #defaults
+        #defaults
+        #defaults
+        if($1==1){\
+          device postencapwider testraddblshadowa.eps
+        }
+        # 
+        #
+        #ctype default window 1 2 1:2 1
+        define PLOTERASE 0
+        define POSCONTCOLOR red
+        define NEGCONTCOLOR default
+        define x2label "y"
+        define x1label "x"
+        box
+        #labelaxes 0
+        aspect 1
+        relocate -1 -0.1
+        aspect (1/6)
+        putlabel 5 "x"
+        relocate -6.5 0.5
+        aspect (.2)
+        putlabel 5 "y"
+        aspect 1
+        if(filetype==1){ jrdprad dump0005 }
+        if(filetype==2){ jrdprad2 dump0005 }
+        define SKIPFACTOR 1
+        echo "before 2"
+        define cres 10
+        ctype black plc 0 (-U8/gdet) 010
+        print {lev}
+        define POSCONTCOLOR cyan
+        define NEGCONTCOLOR cyan
+        ctype cyan plc 0 (rho) 010
+        print {lev}
+        echo "after 2"
+        #set urx=prad1*sqrt(gv311)
+        #set ury=prad2*sqrt(gv322)
+        set urx=(2E5*U9/gdet)*sqrt(gn311)
+        set ury=(2E5*U10/gdet)*sqrt(gn322)
+        define SKIPFACTOR (skiptype)
+        ctype magenta vpl 0 ur 1 12 010
+        set time1=_t
+        if(1){\
+        set myr=r if(tk==$WHICHLEV)
+        set image[ix,iy]=myr-(-1.0)
+        set lev=_t,_t+1E-9,2E-9
+        levels lev
+        ctype orange contour
+        }
+        #
+        print {time1}
+        define SKIPFACTOR 1
+        #
+        #
+plotraddblshadowb 1 #
+        #
+        #
+        #set filetype=1
+        #set skiptype=4
+        #cd /data/jon/harmgit/koraltestcompare/run.raddblshadow.redo.0.99999
+        set filetype=2
+        set skiptype=4
+        #cd /data/jon/harmgit/koraltestcompare/run.raddblshadow.redo
+        #cd /data/jon/harmgit/koraltestcompare/run.raddblshadow.redo.0.99999.correctgammmaxrad
+        #cd /data/jon/harmgit/koraltestcompare/run.raddblshadow.redo.0.9999.correctgammmaxrad
+        cd /data/jon/harmgit/koraltestcompare/run.raddblshadow.redo.0.999.correctgammmaxrad
+        #cd /data/jon/harmgit/koraltestcompare/run.raddblshadow.redo.0.99999.correctgammmaxrad.hll
+        #
+        defaults
+        defaults
+        erase
+        define coord 1
+        define LOGTYPE 0
+        define UNITVECTOR 0
+        fdraft
+        ticksize 0 0 0 0
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+        #
+        grid3d gdump
+        if(filetype==1){ jrdprad dump0000 }
+        if(filetype==2){ jrdprad2 dump0000 }
+        define WHICHLEV (INT($nz/2))
+        define SKIPFACTOR 1
+        define PLOTERASE 1
+        plc 0 (-U8/gdet)
+        erase
+        #defaults
+        #defaults
+        #defaults
+        if($1==1){\
+          device postencapwider testraddblshadowb.eps
+        }
+        # 
+        #
+        #ctype default window 1 2 1:2 1
+        define PLOTERASE 0
+        define POSCONTCOLOR red
+        define NEGCONTCOLOR default
+        define x2label "y"
+        define x1label "x"
+        box
+        #labelaxes 0
+        aspect 1
+        relocate -1 -0.1
+        aspect (1/6)
+        putlabel 5 "x"
+        relocate -6.5 0.5
+        aspect (.2)
+        putlabel 5 "y"
+        aspect 1
+        if(filetype==1){ jrdprad dump0100 }
+        if(filetype==2){ jrdprad2 dump0100 }
+        define SKIPFACTOR 1
+        echo "before 2"
+        define cres 10
+        ctype black plc 0 (-U8/gdet) 010
+        print {lev}
+        define POSCONTCOLOR cyan
+        define NEGCONTCOLOR default
+        ctype cyan plc 0 (rho) 010
+        print {lev}
+        echo "after 2"
+        #set urx=prad1*sqrt(gv311)
+        #set ury=prad2*sqrt(gv322)
+        set urx=(2E5*U9/gdet)*sqrt(gn311)
+        set ury=(2E5*U10/gdet)*sqrt(gn322)
+        define SKIPFACTOR (skiptype)
+        ctype magenta vpl 0 ur 1 12 010
+        set time2=_t
+        if(1){\
+        set myr=r if(tk==$WHICHLEV)
+        set image[ix,iy]=myr-(-1.0)
+        set lev=_t,_t+1E-9,2E-9
+        levels lev
+        ctype orange contour
+        }
+        #
+        print {time2}
+        define SKIPFACTOR 1
+        #
+        #
+panelplotradatm   0 #
+		#
+        #
+   # gormhd
+   #
+   # physics-179.umd.edu:
+   #
+   #
+   #
+		#
+        define myrin ((1E6))
+        define myrout ((1.4E6))
+        #define myrin ((9E5))
+        #define myrout ((1.5E6))
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+        define numpanels 5
+        # 
+		panelplotradatmreplot
+		#
+        #
+panelplotradatmreplot 0 #		
+		###################################
+        define coord 3
+        #
+        #######################################################################
+        ticksize 0 0 0 0
+        define lminy (-2E-16)
+        define lmaxy (1.1E-15)
+        limits $myrin $myrout $lminy $lmaxy
+        ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
+        yla "\rho_0"
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.0.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        ctype red ltype 0 pl 0 r rho 0011 $myrin $myrout $lminy $lmaxy
+        #
+        jrdprad2 dump0000
+        ctype red ptype 4 0
+        points ((r)) ((rho))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.1.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        ctype orange ltype 0 pl 0 r rho 0011 $myrin $myrout $lminy $lmaxy
+        #
+        jrdprad2 dump0000
+        ctype orange ptype 4 0
+        points ((r)) ((rho))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.2.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        ctype magenta ltype 0 pl 0 r rho 0011 $myrin $myrout $lminy $lmaxy
+        #
+        jrdprad2 dump0000
+        ctype magenta ptype 4 0
+        points ((r)) ((rho))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.3.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        ctype green ltype 0 pl 0 r rho 0011 $myrin $myrout $lminy $lmaxy
+        #
+        jrdprad2 dump0000
+        ctype green ptype 4 0
+        points ((r)) ((rho))
+        #
+        ########################################################################
+        ticksize 0 0 0 0
+        define lminy (-2E-2)
+        define lmaxy (2E-2)
+        limits $myrin $myrout $lminy $lmaxy
+        define nm ($numpanels-1)
+        ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        yla "(\rho_0-\rho_{\rm a})/\rho_{\rm a}"
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.0.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        set myrho=rho
+        jrdprad2 dump0000
+        set myrho0=rho
+        ctype red ltype 0 pl 0 r ((myrho-myrho0)/myrho0) 0011 $myrin $myrout $lminy $lmaxy
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.1.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        set myrho=rho
+        jrdprad2 dump0000
+        set myrho0=rho
+        ctype orange ltype 0 pl 0 r ((myrho-myrho0)/myrho0) 0011 $myrin $myrout $lminy $lmaxy
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.2.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        set myrho=rho
+        jrdprad2 dump0000
+        set myrho0=rho
+        ctype magenta ltype 0 pl 0 r ((myrho-myrho0)/myrho0) 0011 $myrin $myrout $lminy $lmaxy
+        #
+        #cd /data/jon/harmgit/koraltestcompare/run.radatm.3
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.3.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        set myrho=rho
+        jrdprad2 dump0000
+        set myrho0=rho
+        ctype green ltype 0 pl 0 r ((myrho-myrho0)/myrho0) 0011 $myrin $myrout $lminy $lmaxy
+        #
+        #
+        #######################################################################
+        ticksize 0 0 -1 0
+        define lminy (LG(1.1E13))
+        define lmaxy (LG(0.9E15))
+        limits $myrin $myrout $lminy $lmaxy
+        define nm ($numpanels-2)
+        ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        yla "F"
+        #
+        # # this one won't show up because very small flux
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.0.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        ctype red ltype 0 pl 0 r (U9/gdet*sqrt(gn311)*ENBAR/LBAR/LBAR/TBAR) 0111 $myrin $myrout $lminy $lmaxy
+        #
+        jrdprad2 dump0000
+        ctype red ptype 4 0
+        points ((r)) (LG(U9/gdet*sqrt(gn311)*ENBAR/LBAR/LBAR/TBAR))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.1.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        ctype orange ltype 0 pl 0 r (U9/gdet*sqrt(gn311)*ENBAR/LBAR/LBAR/TBAR) 0111 $myrin $myrout $lminy $lmaxy
+        #
+        jrdprad2 dump0000
+        ctype orange ptype 4 0
+        points ((r)) (LG(U9/gdet*sqrt(gn311)*ENBAR/LBAR/LBAR/TBAR))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.2.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        ctype magenta ltype 0 pl 0 r (U9/gdet*sqrt(gn311)*ENBAR/LBAR/LBAR/TBAR) 0111 $myrin $myrout $lminy $lmaxy
+        #
+        jrdprad2 dump0000
+        ctype magenta ptype 4 0
+        points ((r)) (LG(U9/gdet*sqrt(gn311)*ENBAR/LBAR/LBAR/TBAR))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.3.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        ctype green ltype 0 pl 0 r (U9/gdet*sqrt(gn311)*ENBAR/LBAR/LBAR/TBAR) 0111 $myrin $myrout $lminy $lmaxy
+        #
+        jrdprad2 dump0000
+        ctype green ptype 4 0
+        points ((r)) (LG(U9/gdet*sqrt(gn311)*ENBAR/LBAR/LBAR/TBAR))
+        #
+        ########################################################################
+        ticksize 0 0 0 0
+        define lminy (-2E-2)
+        define lmaxy (2E-2)
+        limits $myrin $myrout $lminy $lmaxy
+        define nm ($numpanels-3)
+        ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        yla "(F-F_{\rm a})/F_{\rm a}"
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.0.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        set myflux=U9/gdet*sqrt(gn311)*ENBAR/LBAR/LBAR/TBAR
+        jrdprad2 dump0000
+        set myflux0=U9/gdet*sqrt(gn311)*ENBAR/LBAR/LBAR/TBAR
+        ctype red ltype 0 pl 0 r ((myflux-myflux0)/myflux0) 0011 $myrin $myrout $lminy $lmaxy
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.1.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        set myflux=U9/gdet*sqrt(gn311)*ENBAR/LBAR/LBAR/TBAR
+        jrdprad2 dump0000
+        set myflux0=U9/gdet*sqrt(gn311)*ENBAR/LBAR/LBAR/TBAR
+        ctype orange ltype 0 pl 0 r ((myflux-myflux0)/myflux0) 0011 $myrin $myrout $lminy $lmaxy
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.2.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        set myflux=U9/gdet*sqrt(gn311)*ENBAR/LBAR/LBAR/TBAR
+        jrdprad2 dump0000
+        set myflux0=U9/gdet*sqrt(gn311)*ENBAR/LBAR/LBAR/TBAR
+        ctype magenta ltype 0 pl 0 r ((myflux-myflux0)/myflux0) 0011 $myrin $myrout $lminy $lmaxy
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.3.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        set myflux=U9/gdet*sqrt(gn311)*ENBAR/LBAR/LBAR/TBAR
+        jrdprad2 dump0000
+        set myflux0=U9/gdet*sqrt(gn311)*ENBAR/LBAR/LBAR/TBAR
+        ctype green ltype 0 pl 0 r ((myflux-myflux0)/myflux0) 0011 $myrin $myrout $lminy $lmaxy
+        #
+        #
+        #
+        #
+        #
+        ########################################################################
+        ticksize 0 0 0 0
+        define lminy (-0.9E-5*1E6)
+        define lmaxy (0.9E-5*1E6)
+        limits $myrin $myrout $lminy $lmaxy
+        define nm ($numpanels-4)
+        ctype default window 8 -$numpanels 2:8 $nm box 1 2 0 0
+        yla "r v_r/c"
+        xla "r/r_g"
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.0.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        set myflux=uu1*sqrt(gv311)
+        jrdprad2 dump0000
+        set myflux0=1
+        ctype red ltype 0 pl 0 r (r*(myflux-0)/myflux0) 0011 $myrin $myrout $lminy $lmaxy
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.1.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        set myflux=uu1*sqrt(gv311)
+        jrdprad2 dump0000
+        set myflux0=1
+        ctype orange ltype 0 pl 0 r (r*(myflux-0)/myflux0) 0011 $myrin $myrout $lminy $lmaxy
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.2.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        set myflux=uu1*sqrt(gv311)
+        jrdprad2 dump0000
+        set myflux0=1
+        ctype magenta ltype 0 pl 0 r (r*(myflux-0)/myflux0) 0011 $myrin $myrout $lminy $lmaxy
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radatm.3.0.99999
+        grid3d gdump
+        jrdprad2 dump2000
+        set myflux=uu1*sqrt(gv311)
+        jrdprad2 dump0000
+        set myflux0=1
+        ctype green ltype 0 pl 0 r (r*(myflux-0)/myflux0) 0011 $myrin $myrout $lminy $lmaxy
+        #
+        #
+        #
+        #
+        #
+panelplotradbondi   0 #
+		#
+        #
+   # gormhd
+   #
+   # physics-179.umd.edu:
+   #
+   #
+   #
+		#
+        defaults
+        defaults
+        define myrin ((2))
+        #define myrout ((2E4))
+        define myrout ((1E4))
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+        define numpanels 4
+        # 
+		panelplotradbondireplot
+		#
+        #
+panelplotradbondireplot 0 #		
+		###################################
+        define coord 3
+        #
+        #######################################################################
+        ticksize -1 0 -1 0
+        define lminy ((1E-12*RHOBAR))
+        define lmaxy ((1E-3*RHOBAR))
+        define blob1 (LG($myrin))
+        define blob2 (LG($myrout))
+        define blob3 (LG($lminy))
+        define blob4 (LG($lmaxy))
+        limits $blob1 $blob2 $blob3 $blob4
+        ctype default window 8 -$numpanels 2:8 $numpanels
+        expand 1.1
+        box 0 2 0 0
+        expand 1.5
+        expand 1.1
+        yla "\rho_0[{\rm g}/{\rm cm}^3]"
+        expand 1.5
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test0/
+        grid3d gdump
+        jrdprad2 dump3130
+        ctype red ltype 0 pl 0 r (RHOBAR*rho) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype red ptype 4 0
+        #points (LG(r)) (LG((RHOBAR*rho)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test1.redo.evencloserR0_linearextrapforpradi/
+        grid3d gdump
+        jrdprad2 dump1674
+        ctype orange ltype 0 pl 0 r (RHOBAR*rho) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype orange ptype 4 0
+        #points (LG(r)) (LG((RHOBAR*rho)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test2/
+        grid3d gdump
+        jrdprad2 dump12101
+        ctype magenta ltype 0 pl 0 r (RHOBAR*rho) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype magenta ptype 4 0
+        #points (LG(r)) (LG((RHOBAR*rho)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3/
+        grid3d gdump
+        jrdprad2 dump14853
+        ctype green ltype 0 pl 0 r (RHOBAR*rho) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype green ptype 4 0
+        #points (LG(r)) (LG((RHOBAR*rho)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test4/
+        grid3d gdump
+        jrdprad2 dump13509
+        ctype blue ltype 0 pl 0 r (RHOBAR*rho) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype blue ptype 4 0
+        #points (LG(r)) (LG((RHOBAR*rho)))
+        #
+        ########################################################################
+        ticksize -1 0 -1 0
+        define lminy ((1.1E5))
+        define lmaxy ((0.9E11))
+        define blob1 (LG($myrin))
+        define blob2 (LG($myrout))
+        define blob3 (LG($lminy))
+        define blob4 (LG($lmaxy))
+        limits $blob1 $blob2 $blob3 $blob4
+        define nm ($numpanels-1)
+        ctype default window 8 -$numpanels 2:8 $nm
+        expand 1.1
+        box 0 2 0 0
+        expand 1.5
+        expand 1.1
+        yla "T_{\rm gas}[{\rm K}]"
+        expand 1.5
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test0/
+        grid3d gdump
+        jrdprad2 dump3130
+        ctype red ltype 0 pl 0 r (Tgas*TEMPBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype red ptype 4 0
+        #points (LG(r)) (LG((Tgas*TEMPBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test1.redo.evencloserR0_linearextrapforpradi/
+        grid3d gdump
+        jrdprad2 dump1674
+        ctype orange ltype 0 pl 0 r (Tgas*TEMPBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype orange ptype 4 0
+        #points (LG(r)) (LG((Tgas*TEMPBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test2/
+        grid3d gdump
+        jrdprad2 dump12101
+        ctype magenta ltype 0 pl 0 r (Tgas*TEMPBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype magenta ptype 4 0
+        #points (LG(r)) (LG((Tgas*TEMPBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3/
+        grid3d gdump
+        jrdprad2 dump14853
+        ctype green ltype 0 pl 0 r (Tgas*TEMPBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype green ptype 4 0
+        #points (LG(r)) (LG((Tgas*TEMPBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test4/
+        grid3d gdump
+        jrdprad2 dump13509
+        ctype blue ltype 0 pl 0 r (Tgas*TEMPBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype blue ptype 4 0
+        #points (LG(r)) (LG((Tgas*TEMPBAR)))
+        #
+        ########################################################################
+        ticksize -1 0 -1 0
+        define lminy ((1.1))
+        define lmaxy ((0.9E14))
+        define blob1 (LG($myrin))
+        define blob2 (LG($myrout))
+        define blob3 (LG($lminy))
+        define blob4 (LG($lmaxy))
+        limits $blob1 $blob2 $blob3 $blob4
+        define nm ($numpanels-2)
+        ctype default window 8 -$numpanels 2:8 $nm
+        expand 1.1
+        box 0 2 0 0
+        expand 1.5
+        expand 1.1
+        yla "\hat{E} [{\rm erg}/{\rm cm}^3]"
+        expand 1.5
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test0/
+        grid3d gdump
+        jrdprad2 dump3130
+        ctype red ltype 0 pl 0 r (prad0ff*UBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype red ptype 4 0
+        #points (LG(r)) (LG((prad0ff*UBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test1.redo.evencloserR0_linearextrapforpradi/
+        grid3d gdump
+        jrdprad2 dump1674
+        ctype orange ltype 0 pl 0 r (prad0ff*UBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype orange ptype 4 0
+        #points (LG(r)) (LG((prad0ff*UBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test2/
+        grid3d gdump
+        jrdprad2 dump12101
+        ctype magenta ltype 0 pl 0 r (prad0ff*UBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype magenta ptype 4 0
+        #points (LG(r)) (LG((prad0ff*UBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3/
+        grid3d gdump
+        jrdprad2 dump14853
+        ctype green ltype 0 pl 0 r (prad0ff*UBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype green ptype 4 0
+        #points (LG(r)) (LG((prad0ff*UBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test4/
+        grid3d gdump
+        jrdprad2 dump13509
+        ctype blue ltype 0 pl 0 r (prad0ff*UBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype blue ptype 4 0
+        #points (LG(r)) (LG((prad0ff*UBAR)))
+        #
+        #points (LG(r)) (LG((-U8/gdet*UBAR)))
+        ########################################################################
+        ticksize -1 0 -1 0
+        define lminy ((1E10))
+        define lmaxy ((0.9E22))
+        define blob1 (LG($myrin))
+        define blob2 (LG($myrout))
+        define blob3 (LG($lminy))
+        define blob4 (LG($lmaxy))
+        limits $blob1 $blob2 $blob3 $blob4
+        define nm ($numpanels-3)
+        ctype default window 8 -$numpanels 2:8 $nm
+        expand 1.1
+        box 0 2 0 0
+        expand 1.5
+        expand 1.1
+        yla "\hat{R}^r_t [{\rm erg}/{\rm cm}^2/{\rm s}]"
+        expand 1.5
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test0/
+        grid3d gdump
+        jrdprad2 dump3130
+        ctype red ltype 0 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype red ptype 4 0
+        #points (LG(r)) (LG((prad1ff*ENBAR/LBAR/LBAR/TBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test1.redo.evencloserR0_linearextrapforpradi/
+        grid3d gdump
+        jrdprad2 dump1674
+        ctype orange ltype 0 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype orange ptype 4 0
+        #points (LG(r)) (LG((prad1ff*ENBAR/LBAR/LBAR/TBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test2/
+        grid3d gdump
+        jrdprad2 dump12101
+        ctype magenta ltype 0 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype magenta ptype 4 0
+        #points (LG(r)) (LG((prad1ff*ENBAR/LBAR/LBAR/TBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3/
+        grid3d gdump
+        jrdprad2 dump14853
+        ctype green ltype 0 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype green ptype 4 0
+        #points (LG(r)) (LG((prad1ff*ENBAR/LBAR/LBAR/TBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test4/
+        grid3d gdump
+        jrdprad2 dump13509
+        ctype blue ltype 0 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype blue ptype 4 0
+        #points (LG(r)) (LG((prad1ff*ENBAR/LBAR/LBAR/TBAR)))
+        #
+        ########################################################################
+        #points (LG(r)) (LG((U9/gdet*sqrt(gn311)*ENBAR/LBAR/LBAR/TBAR)))
+        #
+        #
+        #
+        #
+        #
+        #
+panelplotradbondiconv   0 #
+		#
+        #
+   # gormhd
+   #
+   # physics-179.umd.edu:
+   #
+   #
+   #
+		#
+        defaults
+        defaults
+        define myrin ((2))
+        #define myrout ((2E4))
+        define myrout ((1E4))
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+        define numpanels 4
+        # 
+		panelplotradbondiconvreplot
+		#
+        #
+panelplotradbondiconvreplot 0 #		
+		###################################
+        define coord 3
+        #
+        #######################################################################
+        ticksize -1 0 -1 0
+        define lminy ((1E-12*RHOBAR))
+        define lmaxy ((1E-3*RHOBAR))
+        define blob1 (LG($myrin))
+        define blob2 (LG($myrout))
+        define blob3 (LG($lminy))
+        define blob4 (LG($lmaxy))
+        limits $blob1 $blob2 $blob3 $blob4
+        ctype default window 8 -$numpanels 2:8 $numpanels
+        expand 0.85
+        box 0 2 0 0
+        expand 1.5
+        expand 1.1
+        yla "\rho_0[{\rm g}/{\rm cm}^3]"
+        expand 1.5
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3/
+        grid3d gdump
+        jrdprad2 dump14903
+        #
+        #
+        ctype blue ltype 0 pl 0 r (RHOBAR*rho) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype blue ptype 4 0
+        #points (LG(r)) (LG((RHOBAR*rho)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3.256x1.forconv/
+        grid3d gdump
+        jrdprad2 dump135994
+        #
+        #
+        ctype orange ltype 0 pl 0 r (RHOBAR*rho) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype orange ptype 4 0
+        #points (LG(r)) (LG((RHOBAR*rho)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3.128x1.forconv/
+        grid3d gdump
+        jrdprad2 dump135994
+        #
+        #
+        ctype cyan ltype 0 pl 0 r (RHOBAR*rho) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype cyan ptype 4 0
+        #points (LG(r)) (LG((RHOBAR*rho)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3.64x1.forconv/
+        grid3d gdump
+        jrdprad2 dump135994
+        #
+        #
+        ctype red ltype 0 pl 0 r (RHOBAR*rho) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype red ptype 4 0
+        #points (LG(r)) (LG((RHOBAR*rho)))
+        #
+        #
+        ########################################################################
+        ticksize -1 0 -1 0
+        define lminy ((1.1E5))
+        define lmaxy ((0.9E11))
+        define blob1 (LG($myrin))
+        define blob2 (LG($myrout))
+        define blob3 (LG($lminy))
+        define blob4 (LG($lmaxy))
+        limits $blob1 $blob2 $blob3 $blob4
+        define nm ($numpanels-1)
+        ctype default window 8 -$numpanels 2:8 $nm
+        expand 0.85
+        box 0 2 0 0
+        expand 1.5
+        expand 1.01
+        yla "T_{\rm gas}[{\rm K}]"
+        expand 1.5
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3/
+        grid3d gdump
+        jrdprad2 dump14903
+        #
+        #
+        ctype blue ltype 0 pl 0 r (Tgas*TEMPBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype blue ptype 4 0
+        #points (LG(r)) (LG((Tgas*TEMPBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3.256x1.forconv/
+        grid3d gdump
+        jrdprad2 dump135994
+        #
+        #
+        ctype orange ltype 0 pl 0 r (Tgas*TEMPBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype orange ptype 4 0
+        #points (LG(r)) (LG((Tgas*TEMPBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3.128x1.forconv/
+        grid3d gdump
+        jrdprad2 dump135994
+        #
+        #
+        ctype cyan ltype 0 pl 0 r (Tgas*TEMPBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype cyan ptype 4 0
+        #points (LG(r)) (LG((Tgas*TEMPBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3.64x1.forconv/
+        grid3d gdump
+        jrdprad2 dump135994
+        #
+        #
+        ctype red ltype 0 pl 0 r (Tgas*TEMPBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype red ptype 4 0
+        #points (LG(r)) (LG((Tgas*TEMPBAR)))
+        #
+        #
+        ########################################################################
+        ticksize -1 0 -1 0
+        define lminy ((1.1))
+        define lmaxy ((0.9E14))
+        define blob1 (LG($myrin))
+        define blob2 (LG($myrout))
+        define blob3 (LG($lminy))
+        define blob4 (LG($lmaxy))
+        limits $blob1 $blob2 $blob3 $blob4
+        define nm ($numpanels-2)
+        ctype default window 8 -$numpanels 2:8 $nm
+        expand 0.85
+        box 0 2 0 0
+        expand 1.5
+        expand 1.01
+        yla "\hat{E} [{\rm erg}/{\rm cm}^3]"
+        expand 1.5
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3/
+        grid3d gdump
+        jrdprad2 dump14903
+        #
+        #
+        ctype blue ltype 0 pl 0 r (prad0ff*UBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype blue ptype 4 0
+        #points (LG(r)) (LG((prad0ff*UBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3.256x1.forconv/
+        grid3d gdump
+        jrdprad2 dump135994
+        #
+        #
+        ctype orange ltype 0 pl 0 r (prad0ff*UBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype orange ptype 4 0
+        #points (LG(r)) (LG((prad0ff*UBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3.128x1.forconv/
+        grid3d gdump
+        jrdprad2 dump135994
+        #
+        #
+        ctype cyan ltype 0 pl 0 r (prad0ff*UBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype cyan ptype 4 0
+        #points (LG(r)) (LG((prad0ff*UBAR)))
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3.64x1.forconv/
+        grid3d gdump
+        jrdprad2 dump135994
+        #
+        #
+        ctype red ltype 0 pl 0 r (prad0ff*UBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype red ptype 4 0
+        #points (LG(r)) (LG((prad0ff*UBAR)))
+        #
+        #
+        #points (LG(r)) (LG((-U8/gdet*UBAR)))
+        ########################################################################
+        ticksize -1 0 -1 0
+        define lminy ((1E10))
+        define lmaxy ((0.9E22))
+        define blob1 (LG($myrin))
+        define blob2 (LG($myrout))
+        define blob3 (LG($lminy))
+        define blob4 (LG($lmaxy))
+        limits $blob1 $blob2 $blob3 $blob4
+        define nm ($numpanels-3)
+        ctype default window 8 -$numpanels 2:8 $nm
+        expand 0.85
+        box 1 2 0 0
+        expand 1.5
+        expand 1.01
+        yla "\hat{R}^r_t [{\rm erg}/{\rm cm}^2/{\rm s}]"
+        expand 1.5
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3/
+        grid3d gdump
+        jrdprad2 dump14903
+        #
+        #
+        ctype blue ltype 0 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype blue ptype 4 0
+        #points (LG(r)) (LG((prad1ff*ENBAR/LBAR/LBAR/TBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3.256x1.forconv/
+        grid3d gdump
+        jrdprad2 dump135994
+        #
+        #
+        ctype orange ltype 0 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype orange ptype 4 0
+        #points (LG(r)) (LG((prad1ff*ENBAR/LBAR/LBAR/TBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3.128x1.forconv/
+        grid3d gdump
+        jrdprad2 dump135994
+        #
+        #
+        ctype cyan ltype 0 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype cyan ptype 4 0
+        #points (LG(r)) (LG((prad1ff*ENBAR/LBAR/LBAR/TBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbondi.2000dumps.test3.64x1.forconv/
+        grid3d gdump
+        jrdprad2 dump135994
+        #
+        #
+        ctype red ltype 0 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype red ptype 4 0
+        #points (LG(r)) (LG((prad1ff*ENBAR/LBAR/LBAR/TBAR)))
+        #
+        #
+        #
+        #
+        #
+panelplotradmagbondi   0 #
+		#
+        #
+   # gormhd
+   #
+   # physics-179.umd.edu:
+   #
+   #
+   #
+		#
+        defaults
+        defaults
+        define myrin ((2))
+        #define myrout ((2E4))
+        define myrout ((1E4))
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+        define numpanels 5
+        # 
+		panelplotradmagbondireplot
+		#
+        #
+panelplotradmagbondireplot 0 #		
+		###################################
+        define coord 3
+        #
+        #######################################################################
+        ticksize -1 0 -1 0
+        define lminy ((1E-12*RHOBAR))
+        define lmaxy ((1E-3*RHOBAR))
+        define blob1 (LG($myrin))
+        define blob2 (LG($myrout))
+        define blob3 (LG($lminy))
+        define blob4 (LG($lmaxy))
+        limits $blob1 $blob2 $blob3 $blob4
+        ctype default window 8 -$numpanels 2:8 $numpanels
+        expand 0.85
+        box 0 2 0 0
+        expand 1.5
+        expand 1.1
+        yla "\rho_0[{\rm g}/{\rm cm}^3]"
+        expand 1.5
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radmagbondi.good/
+        grid3d gdump
+        jrdprad2 dump1936
+        define DOCONNECT 0
+        set condconnect=(r<1E4 ? 1 : 0)
+        ctype blue ltype 0 pl 0 r (RHOBAR*rho) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype blue ptype 4 0
+        #points (LG(r)) (LG((RHOBAR*rho)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radmagbondi.good.256x16_forconv/
+        grid3d gdump
+        jrdprad2 dump2064
+        define DOCONNECT 0
+        set condconnect=(r<1E4 ? 1 : 0)
+        ctype orange ltype 0 pl 0 r (RHOBAR*rho) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype orange ptype 4 0
+        #points (LG(r)) (LG((RHOBAR*rho)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radmagbondi.good.128x16_forconv/
+        grid3d gdump
+        jrdprad2 dump3031
+        define DOCONNECT 0
+        set condconnect=(r<1E4 ? 1 : 0)
+        ctype red ltype 0 pl 0 r (RHOBAR*rho) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype red ptype 4 0
+        #points (LG(r)) (LG((RHOBAR*rho)))
+        #
+        #
+        ########################################################################
+        ticksize -1 0 -1 0
+        define lminy ((1.1E5))
+        define lmaxy ((0.9E11))
+        define blob1 (LG($myrin))
+        define blob2 (LG($myrout))
+        define blob3 (LG($lminy))
+        define blob4 (LG($lmaxy))
+        limits $blob1 $blob2 $blob3 $blob4
+        define nm ($numpanels-1)
+        ctype default window 8 -$numpanels 2:8 $nm
+        expand 0.85
+        box 0 2 0 0
+        expand 1.5
+        expand 1.01
+        yla "T_{\rm gas}[{\rm K}]"
+        expand 1.5
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radmagbondi.good/
+        grid3d gdump
+        jrdprad2 dump1936
+        define DOCONNECT 0
+        set condconnect=(r<1E4 ? 1 : 0)
+        ctype blue ltype 0 pl 0 r (Tgas*TEMPBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype blue ptype 4 0
+        #points (LG(r)) (LG((Tgas*TEMPBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radmagbondi.good.256x16_forconv/
+        grid3d gdump
+        jrdprad2 dump2064
+        define DOCONNECT 0
+        set condconnect=(r<1E4 ? 1 : 0)
+        ctype orange ltype 0 pl 0 r (Tgas*TEMPBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype orange ptype 4 0
+        #points (LG(r)) (LG((Tgas*TEMPBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radmagbondi.good.128x16_forconv/
+        grid3d gdump
+        jrdprad2 dump3031
+        define DOCONNECT 0
+        set condconnect=(r<1E4 ? 1 : 0)
+        ctype red ltype 0 pl 0 r (Tgas*TEMPBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype red ptype 4 0
+        #points (LG(r)) (LG((Tgas*TEMPBAR)))
+        #
+        #
+        ########################################################################
+        ticksize -1 0 -1 0
+        define lminy ((1.1))
+        define lmaxy ((0.9E14))
+        define blob1 (LG($myrin))
+        define blob2 (LG($myrout))
+        define blob3 (LG($lminy))
+        define blob4 (LG($lmaxy))
+        limits $blob1 $blob2 $blob3 $blob4
+        define nm ($numpanels-2)
+        ctype default window 8 -$numpanels 2:8 $nm
+        expand 0.85
+        box 0 2 0 0
+        expand 1.5
+        expand 1.01
+        yla "\hat{E} [{\rm erg}/{\rm cm}^3]"
+        expand 1.5
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radmagbondi.good/
+        grid3d gdump
+        jrdprad2 dump1936
+        define DOCONNECT 0
+        set condconnect=(r<1E4 ? 1 : 0)
+        ctype blue ltype 0 pl 0 r (prad0ff*UBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype blue ptype 4 0
+        #points (LG(r)) (LG((prad0ff*UBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radmagbondi.good.256x16_forconv/
+        grid3d gdump
+        jrdprad2 dump2064
+        define DOCONNECT 0
+        set condconnect=(r<1E4 ? 1 : 0)
+        ctype orange ltype 0 pl 0 r (prad0ff*UBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype orange ptype 4 0
+        #points (LG(r)) (LG((prad0ff*UBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radmagbondi.good.128x16_forconv/
+        grid3d gdump
+        jrdprad2 dump3031
+        define DOCONNECT 0
+        set condconnect=(r<1E4 ? 1 : 0)
+        ctype red ltype 0 pl 0 r (prad0ff*UBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype red ptype 4 0
+        #points (LG(r)) (LG((prad0ff*UBAR)))
+        #
+        #
+        #points (LG(r)) (LG((-U8/gdet*UBAR)))
+        ########################################################################
+        ticksize -1 0 -1 0
+        define lminy ((1E10))
+        define lmaxy ((0.9E22))
+        define blob1 (LG($myrin))
+        define blob2 (LG($myrout))
+        define blob3 (LG($lminy))
+        define blob4 (LG($lmaxy))
+        limits $blob1 $blob2 $blob3 $blob4
+        define nm ($numpanels-3)
+        ctype default window 8 -$numpanels 2:8 $nm
+        expand 0.85
+        box 0 2 0 0
+        expand 1.5
+        expand 1.01
+        yla "\hat{R}^r_t [{\rm erg}/{\rm cm}^2/{\rm s}]"
+        expand 1.5
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radmagbondi.good/
+        grid3d gdump
+        jrdprad2 dump1936
+        define DOCONNECT 0
+        set condconnect=(r<1E4 ? 1 : 0)
+        ctype blue ltype 0 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype blue ptype 4 0
+        #points (LG(r)) (LG((prad1ff*ENBAR/LBAR/LBAR/TBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radmagbondi.good.256x16_forconv/
+        grid3d gdump
+        jrdprad2 dump2064
+        define DOCONNECT 0
+        set condconnect=(r<1E4 ? 1 : 0)
+        ctype orange ltype 0 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype orange ptype 4 0
+        #points (LG(r)) (LG((prad1ff*ENBAR/LBAR/LBAR/TBAR)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radmagbondi.good.128x16_forconv/
+        grid3d gdump
+        jrdprad2 dump3031
+        define DOCONNECT 0
+        set condconnect=(r<1E4 ? 1 : 0)
+        ctype red ltype 0 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype red ptype 4 0
+        #points (LG(r)) (LG((prad1ff*ENBAR/LBAR/LBAR/TBAR)))
+        #
+        ########################################################################
+        ticksize -1 0 -1 0
+        define lminy ((1E-10))
+        define lmaxy ((0.9E2))
+        define blob1 (LG($myrin))
+        define blob2 (LG($myrout))
+        define blob3 (LG($lminy))
+        define blob4 (LG($lmaxy))
+        limits $blob1 $blob2 $blob3 $blob4
+        define nm ($numpanels-4)
+        ctype default window 8 -$numpanels 2:8 $nm
+        expand 0.85
+        box 1 2 0 0
+        expand 1.5
+        expand 1.01
+        yla "b^2/(\rho_0 c^2)"
+        expand 1.5
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radmagbondi.good/
+        grid3d gdump
+        jrdprad2 dump1936
+        define DOCONNECT 0
+        set condconnect=(r<1E4 ? 1 : 0)
+        ctype blue ltype 0 pl 0 r (bsq/rho) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype blue ptype 4 0
+        #points (LG(r)) (LG((bsq/rho)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radmagbondi.good.256x16_forconv/
+        grid3d gdump
+        jrdprad2 dump2064
+        define DOCONNECT 0
+        set condconnect=(r<1E4 ? 1 : 0)
+        ctype orange ltype 0 pl 0 r (bsq/rho) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype orange ptype 4 0
+        #points (LG(r)) (LG((bsq/rho)))
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radmagbondi.good.128x16_forconv/
+        grid3d gdump
+        jrdprad2 dump3031
+        define DOCONNECT 0
+        set condconnect=(r<1E4 ? 1 : 0)
+        ctype red ltype 0 pl 0 r (bsq/rho) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #jrdprad2 dump0000
+        #ctype red ptype 4 0
+        #points (LG(r)) (LG((bsq/rho)))
+        #
+        ########################################################################
+        define DOCONNECT 1
+        #
+        #
         #
         #

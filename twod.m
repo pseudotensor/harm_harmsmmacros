@@ -34,7 +34,7 @@ plc    17	# plc <file> <function> <type of plot=100,000,overlay=010,000,limits=0
                    define tyh ($yh)
                 }
                 #
-                setupplc1
+                setupplc1 0 0
                 #
                 setupplc2
                 #
@@ -232,8 +232,8 @@ plc    17	# plc <file> <function> <type of plot=100,000,overlay=010,000,limits=0
                 #device X11
                 #
                 #
-setupplc1 0     #
-		#
+setupplc1 2      # setupplc1 1 v  or setupplc1 0 blah
+		          #
                   #
                   #
                   #
@@ -277,9 +277,10 @@ setupplc1 0     #
 		   set reallyx=x12 if(k==$WHICHLEV)
                    set reallyy=x22 if(k==$WHICHLEV)
                    #
-		   #set newfunx=$2x if(k==$WHICHLEV)   
-                   #set newfuny=$2y if(k==$WHICHLEV)   
-		}
+		   if($1 == 1) { set newfunx=$2x if(k==$WHICHLEV) }
+		   if($1 == 1) { set newfuny=$2y if(k==$WHICHLEV) }
+		   
+		  }
 		   #
 		 }
 		 if($PLANE==2) {
@@ -311,8 +312,10 @@ setupplc1 0     #
 		   set reallyx=x12 if(j==$WHICHLEV)
                    set reallyy=x32 if(j==$WHICHLEV)
                    #
-                   #set newfunx=$2x if(j==$WHICHLEV)   
-                   #set newfuny=$2z if(j==$WHICHLEV)   
+		   if($1==1){\
+		          set newfunx=$2x if(j==$WHICHLEV)   
+                  set newfuny=$2z if(j==$WHICHLEV)
+		    }
 		}
 		 }
 		 if($PLANE==1) {
@@ -343,8 +346,10 @@ setupplc1 0     #
 		   set reallyx=x22 if(i==$WHICHLEV)   
                    set reallyy=x32 if(i==$WHICHLEV)
                    #
-                   #set newfunx=$2y if(i==$WHICHLEV)   
-                   #set newfuny=$2z if(i==$WHICHLEV)   
+		   if($1==1){\
+                   set newfunx=$2y if(i==$WHICHLEV)   
+                   set newfuny=$2z if(i==$WHICHLEV)
+		   }
 		}
 	   	   #
 		 }
@@ -386,6 +391,9 @@ setupplc2 0     #
 		 set iix = ii%$rnx+1
 		 set iiy = int(ii/$rnx)+1
 		 set use = (int(iiy/$SKIPFACTOR) - iiy/$SKIPFACTOR == 0 && int(iix/$SKIPFACTOR) - iix/$SKIPFACTOR == 0  ) ? 1 : 0
+		 echo "use setupplc2"
+		 pdimen use
+		 #
 		 set temptempnx=int($rnx/$SKIPFACTOR)
 		 set temptempny=int($rny/$SKIPFACTOR)
 		 define rnx (temptempnx)
@@ -1283,9 +1291,9 @@ vplold	19	# eg. vpl dump0001.dat v  1 12 010  <0 0 0 0>
 setupvpl 0      # 		
 		#
         #
-        set use=(tk==$nz/2 ? 1 : 0)
+        #set use=(tk==INT($WHICHLEV) ? 1 : 0)
 		#
-                if(thebits & 0x001){\
+        if(thebits & 0x001){\
 		  shrink3 newfunx reallyx reallyy $6 $7 $8 $9
 		  shrink3 newfuny reallyx reallyy $6 $7 $8 $9
 		  #
@@ -1300,9 +1308,9 @@ setupvpl 0      #
 		  }
                   #image ($nx,$ny) $xl $xh $yl $yh
                   #image ($rnx,$rny)
-                }\
-                else{\
-                   define xl ($Sx)
+         }\
+         else{\
+           define xl ($Sx)
 	   	   define xh ($Sx+$Lx)
 		   define yl ($Sy)
 		   define yh ($Sy+$Ly)
@@ -1334,7 +1342,7 @@ setupvpl 0      #
                    #set reallyy=x2
 		   #set reallyx=reallyx
                    #set reallyy=reallyy
-                }
+         }
                 #limits $rxl $rxh $ryl $ryh
                 #device ppm file1.ppm
                 # default(0) to not overlay
@@ -1371,23 +1379,30 @@ vpl	19	# eg. vpl dump0001.dat v  1 12 010  <0 0 0 0>
                  set thebits=0x$tobebits
 		}
 		#
-                setupplc1
+        #define rnx ($nx)
+        #define rny ($ny)
+                setupplc1 1 $2
                 #
                 setupplc2
                 #
-        set newfunx=$2x
-        set newfuny=$2y
-        set reallyx=x12
-        set reallyy=x22
+        #set newfunx=$2x
+        #set newfuny=$2y
+        #set reallyx=x12
+        #set reallyy=x22
         #
 		setupvpl
 		#
 		set realx=reallyx if(use)
+          pdimen realx
 		set realy=reallyy if(use)
+          pdimen realy
+          pdimen use
 		#
 		# for non-interpolated plots
-		set unix=$2x if(use)
-		set uniy=$2y if(use)
+		#set unix=$2x if(use)
+		#set uniy=$2y if(use)
+		set unix=newfunx if(use)
+		set uniy=newfuny if(use)
 		#
 		set VVx = newfunx if(use)
 		set VVy = newfuny if(use)
@@ -1528,7 +1543,7 @@ pl	18	# pl <file> <dir> <function> <logx=1000,0000,logy=0100,0000,overlay=0010,0
 		 labeltime
                 }
 		#
-                mypoints rlx rly
+		mypoints rlx rly $DOCONNECT
                 if(thebits & 0x0010){\
                   define temptemptemp (0)
                 }\
