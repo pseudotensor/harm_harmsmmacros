@@ -2287,6 +2287,12 @@ panelplotradbondireplot 0 #
         jrdprad2 dump3130
         ctype red ltype 0 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
         #
+        # U9/gdet = R^t_r not R^r_t
+        set myRrt=(prad0/3)*(4*uru1*urd0)
+        # U9*gn311*gv300
+        set preint0=(1.0/Ledd)*myRrt*gdet*$dx2*$dx3*ENBAR/TBAR if(ti==INT($nx*10/11))
+        set int0=SUM(preint0)
+        #
         #jrdprad2 dump0000
         #ctype red ptype 4 0
         #points (LG(r)) (LG((prad1ff*ENBAR/LBAR/LBAR/TBAR)))
@@ -2295,6 +2301,12 @@ panelplotradbondireplot 0 #
         grid3d gdump
         jrdprad2 dump1674
         ctype orange ltype 0 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        # U9/gdet = R^t_r not R^r_t
+        set myRrt=(prad0/3)*(4*uru1*urd0)
+        # U9*gn311*gv300
+        set preint1=(1.0/Ledd)*myRrt*gdet*$dx2*$dx3*ENBAR/TBAR if(ti==INT($nx*10/11))
+        set int1=SUM(preint1)
         #
         #jrdprad2 dump0000
         #ctype orange ptype 4 0
@@ -2305,6 +2317,12 @@ panelplotradbondireplot 0 #
         jrdprad2 dump12101
         ctype magenta ltype 0 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
         #
+        # U9/gdet = R^t_r not R^r_t
+        set myRrt=(prad0/3)*(4*uru1*urd0)
+        # U9*gn311*gv300
+        set preint2=(1.0/Ledd)*myRrt*gdet*$dx2*$dx3*ENBAR/TBAR if(ti==INT($nx*10/11))
+        set int2=SUM(preint2)
+        #
         #jrdprad2 dump0000
         #ctype magenta ptype 4 0
         #points (LG(r)) (LG((prad1ff*ENBAR/LBAR/LBAR/TBAR)))
@@ -2313,6 +2331,13 @@ panelplotradbondireplot 0 #
         grid3d gdump
         jrdprad2 dump14853
         ctype green ltype 0 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #
+        # U9/gdet = R^t_r not R^r_t
+        set myRrt=(prad0/3)*(4*uru1*urd0)
+        # U9*gn311*gv300
+        set preint3=(1.0/Ledd)*myRrt*gdet*$dx2*$dx3*ENBAR/TBAR if(ti==INT($nx*10/11))
+        set int3=SUM(preint3)
         #
         #jrdprad2 dump0000
         #ctype green ptype 4 0
@@ -2323,6 +2348,13 @@ panelplotradbondireplot 0 #
         jrdprad2 dump13509
         ctype blue ltype 0 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
         #
+        # U9/gdet = R^t_r not R^r_t
+        set myRrt=(prad0/3)*(4*uru1*urd0)
+        # U9*gn311*gv300
+        set preint4=(1.0/Ledd)*myRrt*gdet*$dx2*$dx3*ENBAR/TBAR if(ti==INT($nx*10/11))
+        set int4=SUM(preint4)
+        #
+        #
         #jrdprad2 dump0000
         #ctype blue ptype 4 0
         #points (LG(r)) (LG((prad1ff*ENBAR/LBAR/LBAR/TBAR)))
@@ -2331,6 +2363,7 @@ panelplotradbondireplot 0 #
         #points (LG(r)) (LG((U9/gdet*sqrt(gn311)*ENBAR/LBAR/LBAR/TBAR)))
         #
         #
+        print {int0 int1 int2 int3 int4}
         #
         #
         #
@@ -2644,7 +2677,8 @@ panelplotradmagbondi   0 #
         defaults
         define myrin ((2))
         #define myrout ((2E4))
-        define myrout ((1E4))
+        #define myrout ((1E4))
+        define myrout ((300))
 		#
 		fdraft
 		ctype default window 1 1 1 1
@@ -2930,6 +2964,75 @@ panelplotradmagbondireplot 0 #
         #
         ########################################################################
         define DOCONNECT 1
+        #
+        #
+        #
+        #
+panelplotradbeam2d   0 #
+		#
+        #
+   # gormhd
+   #
+   # physics-179.umd.edu:
+   #
+   #
+   #
+		#
+        defaults
+        defaults
+        define myrin ((2))
+        #define myrout ((2E4))
+        define myrout ((1E4))
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+        define numpanels 5
+        # 
+		panelplotradbeam2dreplot
+		#
+        #
+panelplotradbeam2dreplot 0 #		
+		###################################
+        define coord 3
+        define PLANE 2
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbeam2d.blcoords
+        #
+        grid3d gdump
+        jrdprad dump0200
+        #
+        plc 0 (-U8/gdet)
+        #
+        # cd /data/jon/harmgit/koraltestcompare/
+        # make superclean ;make prepiinterp ; make iinterp
+        # !cp /data/jon/harmgit/koraltestcompare/iinterp .
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbeam2d.kscoords.1.30x60
+        #
+        #!cp /data/jon/harmgit/koraltestcompare/iinterp .
+        #jrdprad2 dump0200
+        #plc 0 (-U8/gdet)
+        #
+        # use python:
+        #  run ~/py/mread/__init__.py
+        #  harmradplot1()
+        #
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbeam2d.kscoords.2.30x60
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbeam2d.kscoords.3.30x60
+        #
+        cd /data/jon/harmgit/koraltestcompare/run.radbeam2d.kscoords.4.30x60
+        #
         #
         #
         #
