@@ -3804,6 +3804,130 @@ agpl  18	# agpl 'dump' r fun 000 <0 0 0 0>
                     if($numsend==4){ pl  0 $2 $3 $4 $5 $6 $7 $8}
                    }
                   }
+                  
+		  #
+		  #jrdp3du ../../run.laxf/dumps/$filename
+		  #faraday
+		  #set hor=sqrt(cs2)/(r*omega3)
+		  #stresscalc 1
+		  #lweight 3
+		  #ctype red
+                  #if($numsend==2){ pl  0 $2 $3}\
+                  #else{\
+                  # if($numsend==3){  pl  0 $2 $3 $4}\
+                  # else{\
+                  #  if($numsend==4){ pl  0 $2 $3 $4 $5 $6 $7 $8}
+                  # }
+                  #}
+		  #
+		  #
+		  #lweight 5
+		  #points $2 $3
+		  #lweight 3
+		  #
+                  #
+                  # ctype red
+                  #plo 0 $2 fail0
+                  #
+		  #set god=$3
+		  #set myfit=2.0*god[0]*(r/r[0])**(-5/4)
+		  #set myfit=0.1*(r/r[0])**(-5/4)
+		  #ctype red pl 0 $2 myfit 1110
+		  #ctype default
+		  #lweight 5 points $2 $3
+                  #delay loop
+		  #set jj=0
+		  #while {jj<10000} {set jj=jj+1}
+		  #!sleep .5s
+		}
+		#
+		# animate pls in HARM
+agplbob  18	# agpl 'dump' r fun 000 <0 0 0 0>
+                if($?4 == 0) { define numsend (2) }\
+                else{\
+                  if($?5 == 1) { define numsend (4) } else { define numsend 3 }
+                }
+                #defaults
+		define PLANE (3)
+		define WHICHLEV (0)
+                set h1=$1
+		set h1gdump='gdump'
+		set h1debug='debug'
+		set h1eosdump='eosdump'
+		#
+                do ii=startanim,endanim,$ANIMSKIP {
+		   set h2=sprintf('%04d',$ii)
+		   set _fname=h1+h2
+		   set _fnamedebug=h1debug+h2
+		   set _fnamegdump=h1gdump+h2
+		   set _fnameeosdump=h1eosdump+h2
+                  define filename (_fname)
+                  define filenameeosdump (_fnameeosdump)
+                  define filenamedebug (_fnamedebug)
+                  define filenamegdump (_fnamegdump)
+		  #jrdp2d $filename
+		  #
+          # pre-radiation, but with entropy, but no currents
+          #jrdp3duentropy $filename
+          # with radiation
+          #jrdprad $filename
+          # with radiation but no currents but with entropy
+                    
+                    
+                    #
+          jrdprad2 $filename
+                  #jrdpraddump rad$filename
+		  # NEW
+                  #jrdpall $ii
+                  #jrdp3du $filename
+                  #define arg (h2)
+                  #jrdpallgrb $arg
+		  #
+		  # OLD
+		  #jrdp3duold $filename
+		  #
+		  # GENERAL
+		  #grid3d $filenamegdump
+                  #
+		  #set dphidt = c000*gv300 + c100*gv301 + c200*gv302 + c300*gv303
+		  #
+                  #jrdpdebug $filenamedebug
+                  #faraday
+		  ctype default
+		  #set hor=sqrt(cs2)/(r*omega3)
+		  #stresscalc 1
+		  #lweight 3 
+                  if($numsend==2){ pl  0 $2 $3}\
+                  else{\
+                   if($numsend==3){  pl  0 $2 $3 $4}\
+                   else{\
+                    if($numsend==4){ pl  0 $2 $3 $4 $5 $6 $7 $8}
+                   }
+                  }
+                  #
+                  if(1==1){\
+                           #  agplbob 'dump' r (1E1*(rho-1)) 0001 -0.1 1.1 (-1.1E-5) (+1.1E-5)
+                  lweight 5
+                    ctype green
+                    pl  0 ($2-0.25) (2.78E5*(prad0ff-0.00182741116751269)) 0011 $5 $6 $7 $8
+                    #
+                    #
+                  jrdprad2 dump0000
+                  ctype red
+                    pl  0 $2 (1E1*(rho-1)) 0011 $5 $6 $7 $8
+                    ctype default
+                   }
+                  if(1==0){\
+                  lweight 5
+                    ctype green
+                    pl  0 ($2-0.25) (2.6E5*(prad1-0.00182741116751269)) 0011 $5 $6 $7 $8
+                    #
+                    #
+                  jrdprad2 dump0000
+                  ctype red
+                    pl  0 $2 (1E1*(rho-1)) 0011 $5 $6 $7 $8
+                    ctype default
+                   }
 		  #
 		  #jrdp3du ../../run.laxf/dumps/$filename
 		  #faraday
