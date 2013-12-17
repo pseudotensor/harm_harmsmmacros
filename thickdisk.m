@@ -288,51 +288,74 @@ rdvsr 0 #
         # datavsr4.txt: rho,u,v,B over 2.0*hoverr3d non-jet
         #
         ################################################
-        # 23
+        rdvsr1
+        rdvsr2
+        rdvsr3
+        rdvsr4
+        rdvsr5
+        rdvsr6
+        rdvsr7
+        rdvsrprocess
+        #
+        #
+        #
+rdvsr1  0        
+        # 24
         da datavsr1.txt
         lines 1 1000000
-        read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii r rhosrhosqvsr ugsrhosqvsr uu0rhosqvsr vus1rhosqvsr vuas1rhosqvsr vus3rhosqvsr vuas3rhosqvsr vuasrotrhosqvsr Bs1rhosqvsr Bas1rhosqvsr Bs2rhosqvsr Bas2rhosqvsr Bs3rhosqvsr Bas3rhosqvsr bs1rhosqvsr bas1rhosqvsr bs2rhosqvsr bas2rhosqvsr bs3rhosqvsr bas3rhosqvsr bsqrhosqvsr}
+        read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+        {ii r rhosrhosqvsr ugsrhosqvsr uu0rhosqvsr vus1rhosqvsr vuas1rhosqvsr vus3rhosqvsr vuas3rhosqvsr vuasrotrhosqvsr Bs1rhosqvsr Bas1rhosqvsr Bs2rhosqvsr Bas2rhosqvsr Bs3rhosqvsr Bas3rhosqvsr bs1rhosqvsr bas1rhosqvsr bs2rhosqvsr bas2rhosqvsr bs3rhosqvsr bas3rhosqvsr bsqrhosqvsr uradsrhosqvsr}
         #
-        # 23
+rdvsr2  0        
+        # 24
         da datavsr1b.txt
         lines 1 1000000
-        read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii r rhosrhosqdcvsr ugsrhosqdcvsr uu0rhosqdcvsr vus1rhosqdcvsr vuas1rhosqdcvsr vus3rhosqdcvsr vuas3rhosqdcvsr vuasrotrhosqdcvsr Bs1rhosqdcvsr Bas1rhosqdcvsr Bs2rhosqdcvsr Bas2rhosqdcvsr Bs3rhosqdcvsr Bas3rhosqdcvsr bs1rhosqdcvsr bas1rhosqdcvsr bs2rhosqdcvsr bas2rhosqdcvsr bs3rhosqdcvsr bas3rhosqdcvsr bsqrhosqdcvsr}
+        read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+        {ii r rhosrhosqdcvsr ugsrhosqdcvsr uu0rhosqdcvsr vus1rhosqdcvsr vuas1rhosqdcvsr vus3rhosqdcvsr vuas3rhosqdcvsr vuasrotrhosqdcvsr Bs1rhosqdcvsr Bas1rhosqdcvsr Bs2rhosqdcvsr Bas2rhosqdcvsr Bs3rhosqdcvsr Bas3rhosqdcvsr bs1rhosqdcvsr bas1rhosqdcvsr bs2rhosqdcvsr bas2rhosqdcvsr bs3rhosqdcvsr bas3rhosqdcvsr bsqrhosqdcvsr uradsrhosqdcvsr}
         #
-        # 23
+rdvsr3  0        
+        # 24
         da datavsr1c.txt
         lines 1 1000000
-        read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii r rhosrhosqdcdenvsr ugsrhosqdcdenvsr uu0rhosqdcdenvsr vus1rhosqdcdenvsr vuas1rhosqdcdenvsr vus3rhosqdcdenvsr vuas3rhosqdcdenvsr vuasrotrhosqdcdenvsr Bs1rhosqdcdenvsr Bas1rhosqdcdenvsr Bs2rhosqdcdenvsr Bas2rhosqdcdenvsr Bs3rhosqdcdenvsr Bas3rhosqdcdenvsr bs1rhosqdcdenvsr bas1rhosqdcdenvsr bs2rhosqdcdenvsr bas2rhosqdcdenvsr bs3rhosqdcdenvsr bas3rhosqdcdenvsr bsqrhosqdcdenvsr}
+        read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+        {ii r rhosrhosqdcdenvsr ugsrhosqdcdenvsr uu0rhosqdcdenvsr vus1rhosqdcdenvsr vuas1rhosqdcdenvsr vus3rhosqdcdenvsr vuas3rhosqdcdenvsr vuasrotrhosqdcdenvsr Bs1rhosqdcdenvsr Bas1rhosqdcdenvsr Bs2rhosqdcdenvsr Bas2rhosqdcdenvsr Bs3rhosqdcdenvsr Bas3rhosqdcdenvsr bs1rhosqdcdenvsr bas1rhosqdcdenvsr bs2rhosqdcdenvsr bas2rhosqdcdenvsr bs3rhosqdcdenvsr bas3rhosqdcdenvsr bsqrhosqdcdenvsr uradsrhosqdcdenvsr}
         #
-        # 23
+rdvsr4  0        
+        # 24
         da datavsr2.txt
         lines 1 1000000
-        read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {ii r rhosrhosqeqvsr ugsrhosqeqvsr uu0rhosqeqvsr vus1rhosqeqvsr vuas1rhosqeqvsr vus3rhosqeqvsr vuas3rhosqeqvsr vuasrotrhosqeqvsr Bs1rhosqeqvsr Bas1rhosqeqvsr Bs2rhosqeqvsr Bas2rhosqeqvsr Bs3rhosqeqvsr Bas3rhosqeqvsr bs1rhosqeqvsr bas1rhosqeqvsr bs2rhosqeqvsr bas2rhosqeqvsr bs3rhosqeqvsr bas3rhosqeqvsr bsqrhosqeqvsr}
+        read '%d %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+        {ii r rhosrhosqeqvsr ugsrhosqeqvsr uu0rhosqeqvsr vus1rhosqeqvsr vuas1rhosqeqvsr vus3rhosqeqvsr vuas3rhosqeqvsr vuasrotrhosqeqvsr Bs1rhosqeqvsr Bas1rhosqeqvsr Bs2rhosqeqvsr Bas2rhosqeqvsr Bs3rhosqeqvsr Bas3rhosqeqvsr bs1rhosqeqvsr bas1rhosqeqvsr bs2rhosqeqvsr bas2rhosqeqvsr bs3rhosqeqvsr bas3rhosqeqvsr bsqrhosqeqvsr uradsrhosqeqvsr}
         #
-        # 23
+rdvsr5  0        
+        # 24
         da datavsr3.txt
         lines 1 0000000
-        read '%d %g   %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-        {ii r rhosrhosqhorpickvsr ugsrhosqhorpickvsr uu0rhosqhorpickvsr vus1rhosqhorpickvsr vuas1rhosqhorpickvsr vus3rhosqhorpickvsr vuas3rhosqhorpickvsr vuasrotrhosqhorpickvsr Bs1rhosqhorpickvsr Bas1rhosqhorpickvsr Bs2rhosqhorpickvsr Bas2rhosqhorpickvsr Bs3rhosqhorpickvsr Bas3rhosqhorpickvsr bs1rhosqhorpickvsr bas1rhosqhorpickvsr bs2rhosqhorpickvsr bas2rhosqhorpickvsr bs3rhosqhorpickvsr bas3rhosqhorpickvsr bsqrhosqhorpickvsr}
+        read '%d %g   %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+        {ii r rhosrhosqhorpickvsr ugsrhosqhorpickvsr uu0rhosqhorpickvsr vus1rhosqhorpickvsr vuas1rhosqhorpickvsr vus3rhosqhorpickvsr vuas3rhosqhorpickvsr vuasrotrhosqhorpickvsr Bs1rhosqhorpickvsr Bas1rhosqhorpickvsr Bs2rhosqhorpickvsr Bas2rhosqhorpickvsr Bs3rhosqhorpickvsr Bas3rhosqhorpickvsr bs1rhosqhorpickvsr bas1rhosqhorpickvsr bs2rhosqhorpickvsr bas2rhosqhorpickvsr bs3rhosqhorpickvsr bas3rhosqhorpickvsr bsqrhosqhorpickvsr uradsrhosqhorpickvsr}
         #
+rdvsr6  0        
         # 26
         da datavsr4.txt
         lines 1 1000000
-        read '%d %g   %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
-        {ii r rhoshorvsr ugshorvsr bsqshorvsr bsqorhoshorvsr bsqougshorvsr uu0horvsr vus1horvsr vuas1horvsr vus3horvsr vuas3horvsr vuasrothorvsr Bs1horvsr Bas1horvsr Bs2horvsr Bas2horvsr Bs3horvsr Bas3horvsr bs1horvsr bas1horvsr bs2horvsr bas2horvsr bs3horvsr bas3horvsr bsqhorvsr}
+        read '%d %g   %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+        {ii r rhoshorvsr ugshorvsr bsqshorvsr bsqorhoshorvsr bsqougshorvsr uu0horvsr vus1horvsr vuas1horvsr vus3horvsr vuas3horvsr vuasrothorvsr Bs1horvsr Bas1horvsr Bs2horvsr Bas2horvsr Bs3horvsr Bas3horvsr bs1horvsr bas1horvsr bs2horvsr bas2horvsr bs3horvsr bas3horvsr bsqhorvsr uradshorvsr}
         set gam=4.0/3.0
         set pg=(gam-1.0)*ugshorvsr
         set beta=pg/bsqshorvsr
         #
+rdvsr7  0        
         # (was 44, now 51 with alphamag4 and alphareynolds stuff)
         !sed 's/nan/0/g' datavsr5.txt > datavsr5n.txt
         !sed 's/inf/0/g' datavsr5n.txt > datavsr5nn.txt
         da datavsr5nn.txt
         lines 1 1000000
-        read '%d %g   %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+        read '%d %g   %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
         {ii r mdotfinavgvsr mdotfinavgvsr5 mdotfinavgvsr10 mdotfinavgvsr30 edemvsr edmavsr edmvsr ldemvsr ldmavsr ldmvsr phiabsjmu1vsr pjemfinavgvsr pjmakefinavgvsr pjkefinavgvsr ljemfinavgvsr ljmakefinavgvsr ljkefinavgvsr mdinvsr mdjetvsr mdmwindvsr mdwindvsr alphamag1vsr alphamag2vsr alphamag3vsr alphamag4vsr alphareynoldsa2vsr alphareynoldsb2vsr \
         alphareynoldsc2vsr alphareynoldsa3vsr alphareynoldsb3vsr alphareynoldsc3vsr fstotvsr fsinvsr feqtotvsr fsmaxtotvsr fsuphalfvsr upsilonvsr etajEMvsr etajMAKEvsr etamwEMvsr etamwMAKEvsr etawEMvsr etawMAKEvsr letajEMvsr letajMAKEvsr letamwEMvsr letamwMAKEvsr letawEMvsr letawMAKEvsr \
-        edradvsr ldradvsr}
+        edradvsr ldradvsr ldradthinvsr}
         #
+rdvsrprocess 0 #        
         #
         set betamagplus1=(alphamag4vsr>0 && alphamag3vsr>0 ? alphamag4vsr/alphamag3vsr : 0)
         #
@@ -395,22 +418,33 @@ rdvsh 0 #
         #
         ################################################
 rdvst 0 #
+        rdvst1
+        rdvst2
+        rdvst3
+        rdvst4
+        rdvst5
+        rdvst6
+        rdvst7
+        rdvst8
         #
+rdvst1 0 #
         #columns=12
         da datavst1.txt
         lines 1 1000000
-        read '%d %g %g %g %g %g %g %g %g %g %g %g' {tici ts mdtotihor md10ihor md30ihor mdinrdiskin mdinrdiskout mdjetrjetout mdmwindrjetin mdmwindrjetout mdwindrdiskin mdwindrdiskout}
+        read '%d %g %g %g %g %g %g %g %g %g %g %g %g' {tici ts mdtotihor md10ihor md30ihor mdinrdiskin mdinrdiskout mdjetrjetout mdmwindrjetin mdmwindrjetout mdwindrdiskin mdwindrdiskout ldradthin}
         set mdothor=mdtotihor-md30ihor
         #
+rdvst2 0 #
         #columns=21
         da datavst2.txt
         lines 1 1000000
-        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {tici ts etabhEM etabhMAKE etabhRAD etabh etajEM etajMAKE etaj etamwinEM etamwinMAKE etamwin etamwoutEM etamwoutMAKE etamwout etawinEM etawinMAKE etawin etawoutEM etawoutMAKE etawout}
+        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {tici ts etabhEM etabhMAKE etabhRAD etabh etajEM etajMAKE etaj etamwinEM etamwinMAKE etamwin etamwoutEM etamwoutMAKE etamwout etawinEM etawinMAKE etawin etawoutEM etawoutMAKE etawout etaoutRAD}
         #
+rdvst3 0 #
         #columns=21
         da datavst3.txt
         lines 1 1000000
-        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {tici ts  letabhEM letabhMAKE letabhRAD letabh letajEM letajMAKE letaj letamwinEM letamwinMAKE letamwin letamwoutEM letamwoutMAKE letamwout letawinEM letawinMAKE letawin letawoutEM letawoutMAKE letawout}
+        read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {tici ts  letabhEM letabhMAKE letabhRAD letabh letajEM letajMAKE letaj letamwinEM letamwinMAKE letamwin letamwoutEM letamwoutMAKE letamwout letawinEM letawinMAKE letawin letawoutEM letawoutMAKE letawout letaoutRAD}
         #
         # in case needed to fix using original data, but no longer need this.
         #da /data2/jmckinne/thickdisk7/fromorange_movie8/datavst2.txt
@@ -421,11 +455,13 @@ rdvst 0 #
         #lines 1 1000000
         #read {ticialt 1 tsalt 2  letabhEMalt 3 letabhMAKEalt 4}
         #
+rdvst4 0 #
         #columns=20
         da datavst4.txt
         lines 1 1000000
         read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {tici ts  hoverrhor hoverr2 hoverr5 hoverr10 hoverr20 hoverr100 hoverrcoronahor hoverrcorona2 hoverrcorona5 hoverrcorona10 hoverrcorona20 hoverrcorona100 hoverrjethor hoverrjet2 hoverrjet5 hoverrjet10 hoverrjet20 hoverrjet100}
         #
+rdvst5 0 #
         # columns=32
         !sed 's/nan/0/g' datavst5.txt > datavst5n.txt
         !sed 's/inf/0/g' datavst5n.txt > datavst5nn.txt
@@ -437,6 +473,7 @@ rdvst 0 #
         set alphatot210=alphareynoldsa210+alphareynoldsb210+alphareynoldsc210+alphamag210
         set alphatot310=alphareynoldsa310+alphareynoldsb310+alphareynoldsc310+alphamag310
         #
+rdvst6 0 #
         # columns=20
         !sed 's/nan/0/g' datavst6.txt > datavst6n.txt
         da datavst6n.txt
@@ -444,6 +481,7 @@ rdvst 0 #
         # below 10,20,100 are really now rfitin2,rfitout2,rfitout6
         read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {tici ts qmridisk10 qmridisk20 qmridisk100 q3mridisk10 q3mridisk20 q3mridisk100 iq2mridisk10 iq2mridisk20 iq2mridisk100 qmridiskweak10 qmridiskweak20 qmridiskweak100 q3mridiskweak10 q3mridiskweak20 q3mridiskweak100 iq2mridiskweak10 iq2mridiskweak20 iq2mridiskweak100}
         #
+rdvst7 0 #
         # columns=30
         !sed 's/nan/0/g' datavst7.txt > datavst7n.txt
         !sed 's/inf/0/g' datavst7n.txt > datavst7nn.txt
@@ -451,6 +489,7 @@ rdvst 0 #
         lines 1 1000000
         read '%d %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' {tici ts  phibh phirdiskin phirdiskout phij phimwin phimwout phiwin phiwout phijn phijs fstotihor fsmaxtotihor fsuphalfihor fmaxvst rifmaxvst reqstagvst feqstag feqstagnearfin fstotnormA0 fstotnormA1 fstotnormA2 fstotnormC fstotnormC2 fstotnormBwhichfirstlimited fstotnormD fstotnormE fstotnormE2 fstotnormF}
         #
+rdvst8 0 #
         da datavsrrm1.txt
         lines 1 1000000
         read '%d %g %g' {tici ts rm1vstorig}
@@ -2220,7 +2259,9 @@ visctheory 0 #
         #
         set alphahorsq=(myalpha*myhor**2) if (r>risco)
         set alphahorsqvel=(myalpha*myhor**2*vuasrotrhosqdcdenvsr) if (r>risco)
-        set alphahorsqvelalt=(0.1*vuasrotrhosqdcdenvsr) if (r>risco)
+        #set alphahorsqvelalt=(0.1*vuasrotrhosqdcdenvsr) if (r>risco)
+        set alphahorconst=0.003
+        set alphahorsqvelalt=(alphahorconst*vuasrotrhosqdcdenvsr) if (r>risco)
         #
         # Page & Thorne (1974) eq14,15
         set xx=sqrt(rcut2)
@@ -2317,6 +2358,7 @@ velvsradpl 1 # velvsradpl <doscp=0,1>
         #
         #device postencap5 othersvsr.eps
         device  postencap4 othersvsr.eps
+        #device  postencap othersvsr.eps
         panelplot3
         device X11
         if(doscp==1){\
@@ -3018,13 +3060,14 @@ panelplot1replot 0 #
         limits $xin $xout $lminy $lmaxy
         #ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
         ctype default window 1 -$numpanels 1 $numpanels box 0 2 0 0
-        yla "\rho_0 u_g u_b [Edd]"
+        yla "\rho_0 u_g u_b u_r [Edd]"
         #
         #
         #rhoshorvsr
         ltype 0 pl 0 (LG(r)) (LG(rhosrhosqdcdenvsr/rhoeddcode)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 2 pl 0 (LG(r)) (LG(ugsrhosqdcdenvsr/ueddcode)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 1 pl 0 (LG(r)) (LG(bsqrhosqdcdenvsr*0.5/ueddcode)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 3 pl 0 (LG(r)) (LG(uradsrhosqdcdenvsr/ueddcode)) 0011 $myrin $myrout $lminy $lmaxy
         #
         lweight 5
         ltype 0 ctype red vertline (LG(risco))
@@ -3038,7 +3081,7 @@ panelplot1replot 0 #
         #
         ticksize -1 0 -1 0
         define lminy (-3.9)
-        define lmaxy (0.1)
+        define lmaxy (0.5)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-1)
         #ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3067,7 +3110,7 @@ panelplot1replot 0 #
         #
         ticksize -1 0 -1 0
         define lminy (-2.9-1)
-        define lmaxy (1.1-1)
+        define lmaxy (1.1)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-2)
         #ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3272,7 +3315,7 @@ panelplot2replot 0 #
         limits $xin $xout $lminy $lmaxy
         ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
         expand $expandlow
-        yla "\dot{M}/M_{\rm Edd}"
+        yla "\dot{M}/\dot{M}_{\rm Edd}"
         expand $expanddefault
         #
         pl 0 (LG(r)) ((mdotfinavgvsr30/Mdoteddcode)) 0011 $myrin $myrout $lminy $lmaxy
@@ -3374,8 +3417,8 @@ panelplot2replot 0 #
 		###################################
         #
         ticksize -1 0 -1 0
-        define lminy (LG(0.0011))
-        define lmaxy (LG(4.9))
+        define lminy (LG(0.011))
+        define lmaxy (LG(0.8))
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-6)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3391,9 +3434,9 @@ panelplot2replot 0 #
         ###################################
         #
         ticksize -1 0 0 0
-        define lminy (-19)
+        define lminy (-8)
         #define lmaxy (1999)
-        define lmaxy (19)
+        define lmaxy (2)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-7)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3408,9 +3451,9 @@ panelplot2replot 0 #
         ##########################
         #
         ticksize -1 0 0 0
-        define lminy (-20)
+        define lminy (-1.9)
         #define lmaxy (1999)
-        define lmaxy (20)
+        define lmaxy (9.9)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-8)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3429,7 +3472,7 @@ panelplot2replot 0 #
         #define lminy (-0.5) # for sasham9
         #define lmaxy (0.5) # for sasham9
         define lminy (0)
-        define lmaxy (0.6)
+        define lmaxy (0.59)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-9)
         ctype default window 8 -$numpanels 2:8 $nm box 1 2 0 0
@@ -3522,7 +3565,8 @@ panelplot3   0 #
 		notation -3 3 -3 3
 		erase
 		#
-        define numpanels 8
+        #define numpanels 8
+        define numpanels 6
         #
 		panelplot3replot
 		#
@@ -3531,7 +3575,7 @@ panelplot3replot 0 #
         #
         ticksize -1 0 0 0
         define lminy (-0.3)
-        define lmaxy (pi/2)
+        define lmaxy (0.6)
         limits $xin $xout $lminy $lmaxy
         ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
         yla "\theta^{\rm d, t}"
@@ -3544,7 +3588,7 @@ panelplot3replot 0 #
         #
         ticksize -1 0 0 0
         define lminy (-0.2)
-        define lmaxy (pi/2)
+        define lmaxy (1.4)
         limits $xin $xout $lminy $lmaxy
         define nm1 ($numpanels-1)
         ctype default window 8 -$numpanels 2:8 $nm1 box 0 2 0 0
@@ -3559,14 +3603,15 @@ panelplot3replot 0 #
         #
         ticksize -1 0 0 0
         define lminy (0.0)
-        define lmaxy (15.0)
+        define lmaxy (14.0)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-2)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         yla "Q_{\theta,\rm MRI}"
         #
-        ltype 0 pl 0 (LG(r)) ((qmridiskvsr)) 0011 $myrin $myrout $lminy $lmaxy
-        ltype 2 pl 0 (LG(r)) ((qmridiskweakvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        # TEMP TILL NEW SIMULATION PUT IN
+        ltype 0 pl 0 (LG(r)) ((2*qmridiskvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 (LG(r)) ((2*qmridiskweakvsr)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 1 pl 0 (LG(r)) ((6+0*qmridiskvsr)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 0
         #
@@ -3574,7 +3619,7 @@ panelplot3replot 0 #
         #
         ticksize -1 0 0 0
         define lminy (0.0)
-        define lmaxy (15.0)
+        define lmaxy (14.9)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-3)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3589,7 +3634,7 @@ panelplot3replot 0 #
         #
         ticksize -1 0 0 0
         define lminy (0.0)
-        define lmaxy (35.0)
+        define lmaxy (10.0)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-4)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3608,13 +3653,15 @@ panelplot3replot 0 #
         define lmaxy (LG(9.0))
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-5)
-        ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        #ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        ctype default window 8 -$numpanels 2:8 $nm box 1 2 0 0
         yla "\alpha_b \alpha_{b,\rm eff}"
         #
         ltype 0 pl 0 (LG(r)) (LG(alphatot3vsr)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 2 pl 0 (LG(rcut2)) (LG(alphaeffvsr)) 0011 $myrin $myrout $lminy $lmaxy
         #
 		##########################
+        if(0==1){\
         #
         ticksize -1 0 -1 0
         define lminy (1.9-4)
@@ -3639,6 +3686,7 @@ panelplot3replot 0 #
         #
         ltype 0 pl 0 (LG(r)) (LG(abs(feqtotvsr))) 0011 $myrin $myrout $lminy $lmaxy
         #
+        }
 		##########################
 		#
 panelplot4   0 #
@@ -3710,7 +3758,9 @@ panelplot4replot 0 #
         define lmaxy (1.8)
         limits $myhin $myhout $lminy $lmaxy
         ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
+        expand 1.1
         yla "\rho_0/\rho_{\rm Edd}"
+        expand 1.2
         #
         set avgrhoclean=(avgbsq/avgrho<maxbsqorho ? avgrho : 0)
         set rhosrhosqrad4vshclean=(bsqrhosqrad4vsh/rhosrhosqrad4vsh<maxbsqorho ? rhosrhosqrad4vsh : 0)
@@ -3730,7 +3780,9 @@ panelplot4replot 0 #
         limits $myhin $myhout $lminy $lmaxy
         define nm1 ($numpanels-1)
         ctype default window 8 -$numpanels 2:8 $nm1 box 0 2 0 0
+        expand 1.1
         yla "u_g/u_{\rm Edd}"
+        expand 1.2
         #
         set avgugclean=(avgbsq/avgrho<maxbsqorho ? avgug : 0)
         set ugsrhosqrad4vshclean=(bsqrhosqrad4vsh/rhosrhosqrad4vsh<maxbsqorho ? ugsrhosqrad4vsh : 0)
@@ -3750,7 +3802,9 @@ panelplot4replot 0 #
         limits $myhin $myhout $lminy $lmaxy
         define nm1 ($numpanels-2)
         ctype default window 8 -$numpanels 2:8 $nm1 box 0 2 0 0
+        expand 1.1
         yla "\bar{E}/u_{\rm Edd}"
+        expand 1.2
         #
         ltype 0 pl 0 ((avgh)) (LG(avgurad/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 2 pl 0 ((hinnx4)) (LG(uradsrhosqrad4vsh/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
@@ -3765,7 +3819,9 @@ panelplot4replot 0 #
         limits $myhin $myhout $lminy $lmaxy
         define nm ($numpanels-3)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        expand 1.1
         yla "u_b/u_{\rm Edd}"
+        expand 1.2
         #
         ltype 0 pl 0 ((avgh)) (LG(0.5*avgbsq/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 2 pl 0 ((hinnx4)) (LG((0.5*bsqrhosqrad4vsh/ueddcode))) 0011 $myhin $myhout $lminy $lmaxy
@@ -3776,17 +3832,19 @@ panelplot4replot 0 #
         #
         ticksize 0 0 -1 0
         define lminy (-1.9-2)
-        define lmaxy (3.1-2)
+        define lmaxy (3.1-2+0.5)
         limits $myhin $myhout $lminy $lmaxy
         define nm ($numpanels-4)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        expand 1.1
         yla "p_{\rm tot}/u_{\rm Edd}"
+        expand 1.2
         #
         set gam=(5.0/3.0)
         set pradhor=(gam-1.0)*avgugclean+(4.0/3.0-1.0)*avgurad
-        set prad4=(gam-1.0)*ugsrhosqrad4vshclean+(4.0/3.0-1.0)*uradsrhosqrad4vshclean
-        set prad8=(gam-1.0)*ugsrhosqrad8vshclean+(4.0/3.0-1.0)*uradsrhosqrad8vshclean
-        set prad30=(gam-1.0)*ugsrhosqrad30vshclean+(4.0/3.0-1.0)*uradsrhosqrad30vshclean
+        set prad4=(gam-1.0)*ugsrhosqrad4vshclean+(4.0/3.0-1.0)*uradsrhosqrad4vsh
+        set prad8=(gam-1.0)*ugsrhosqrad8vshclean+(4.0/3.0-1.0)*uradsrhosqrad8vsh
+        set prad30=(gam-1.0)*ugsrhosqrad30vshclean+(4.0/3.0-1.0)*uradsrhosqrad30vsh
         ltype 0 pl 0 ((avgh)) (LG((0.5*avgbsq+pradhor)/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 2 pl 0 ((hinnx4)) (LG((0.5*bsqrhosqrad4vsh+prad4)/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 1 pl 0 ((hinnx8)) (LG((0.5*bsqrhosqrad8vsh+prad8)/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
@@ -3800,7 +3858,9 @@ panelplot4replot 0 #
         limits $myhin $myhout $lminy $lmaxy
         define nm ($numpanels-5)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        expand 1.1
         yla "|v_r|"
+        expand 1.2
         #
         ltype 0 pl 0 ((avgh)) (LG(abs(avguur))) 0011 $myhin $myhout $lminy $lmaxy
         ltype 2 pl 0 ((hinnx4)) (LG(vuas1rhosqrad4vsh)) 0011 $myhin $myhout $lminy $lmaxy
@@ -3815,7 +3875,9 @@ panelplot4replot 0 #
         limits $myhin $myhout $lminy $lmaxy
         define nm ($numpanels-6)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        expand 1.1
         yla "v_{\rm rot}"
+        expand 1.2
         #
         ltype 0 pl 0 ((avgh)) (LG(abs(avguup))) 0011 $myhin $myhout $lminy $lmaxy
         ltype 2 pl 0 ((hinnx4)) (LG(vuasrotrhosqrad4vsh)) 0011 $myhin $myhout $lminy $lmaxy
@@ -3830,7 +3892,9 @@ panelplot4replot 0 #
         limits $myhin $myhout $lminy $lmaxy
         define nm ($numpanels-7)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        expand 1.1
         yla "|b_r|/b_{\rm Edd}"
+        expand 1.2
         #
         ltype 0 pl 0 ((avgh)) (LG(abs(avgabsbur)/sqrt(ueddcode))) 0011 $myhin $myhout $lminy $lmaxy
         ltype 2 pl 0 ((hinnx4)) (LG(bas1rhosqrad4vsh/sqrt(ueddcode))) 0011 $myhin $myhout $lminy $lmaxy
@@ -3845,7 +3909,9 @@ panelplot4replot 0 #
         limits $myhin $myhout $lminy $lmaxy
         define nm ($numpanels-8)
         ctype default window 8 -$numpanels 2:8 $nm box 1 2 0 0
+        expand 1.1
         yla "|b_\theta|/b_{\rm Edd}"
+        expand 1.2
 		xla "\theta"
         #
         ltype 0 pl 0 ((avgh)) (LG(abs(avgabsbuh/sqrt(ueddcode)))) 0011 $myhin $myhout $lminy $lmaxy
@@ -3889,7 +3955,7 @@ panelplot5replot 0 #
         define lmaxy (3)
         limits $mytin $mytout $lminy $lmaxy
         ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
-        yla "\dot{M}_{\rm out}/M_{\rm Edd}"
+        yla "\dot{M}_{\rm out}/\dot{M}_{\rm Edd}"
         #
         # already showing mdot in another plot, so can skip for clarity
         #ltype 0 pl 0 ((ts)) (LG(mdothor/Mdoteddcode)) 0011 $mytin $mytout $lminy $lmaxy
@@ -3901,8 +3967,8 @@ panelplot5replot 0 #
 		###################################
         #
         ticksize 0 0 0 0
-        define lminy (-1)
-        define lmaxy (1.0)
+        define lminy (-0.5)
+        define lmaxy (0.5)
         limits $mytin $mytout $lminy $lmaxy
         define nm ($numpanels-1)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3929,8 +3995,8 @@ panelplot5replot 0 #
 		###################################
         #
         ticksize 0 0 0 0
-        define lminy (-10)
-        define lmaxy (10)
+        define lminy (-4)
+        define lmaxy (4)
         limits $mytin $mytout $lminy $lmaxy
         define nm ($numpanels-2)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
@@ -3971,6 +4037,7 @@ panelplot5replot 0 #
         #
 		###################################
         #
+        if(1==0){\
         ticksize 0 0 0 0
         define lminy (0)
         define lmaxy (10)
@@ -3983,8 +4050,21 @@ panelplot5replot 0 #
         #ltype 2 pl 0 ((ts)) ((phij)) 0011 $mytin $mytout $lminy $lmaxy
         #ltype 1 pl 0 ((ts)) ((phirdiskin)) 0011 $mytin $mytout $lminy $lmaxy
         ltype 2 pl 0 ((ts)) ((phirdiskout)) 0011 $mytin $mytout $lminy $lmaxy
-        #
         #  phimwin phimwout phiwin phiwout 
+        }
+        #
+        if(1==1){\
+        ticksize 0 0 0 0
+        define lminy (0)
+        define lmaxy (3.9)
+        limits $mytin $mytout $lminy $lmaxy
+        define nm ($numpanels-5)
+        ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        yla "L_{\rm rad}/L_{\rm Edd}"
+        #
+        ltype 0 pl 0 ((ts)) ((ldradthin/Leddcode)) 0011 $mytin $mytout $lminy $lmaxy
+        }
+        #
 		###################################
         #
         ticksize 0 0 -1 0
@@ -4033,6 +4113,9 @@ panelplot5replot 0 #
         expand 0.9
         #yla "\frac{\Phi_{\rm H}}{\Psi_{\rm tH}}"
         yla "\Psi_{\rm tH}/\Phi_{\rm H}"
+        #
+        #######
+        if(0==1){\
         expand 0.7
 		#xla "t [r_g/c]"
         expand 0.9
@@ -4045,6 +4128,30 @@ panelplot5replot 0 #
         relocate 15000 -1.6
         putlabel 5 "t [r_g/c]"
         expand 1.1
+        }
+        #######
+        if(1==1){\
+        expand 0.7
+		#xla "t [r_g/c]"
+        expand 0.7
+        # SM acting stupid and not putting down consistent ticks (depends upon box 1 2 0 0 vs. box 0 2 0 0)
+        # so put in tick labels manually
+        relocate 0 -1.5
+        putlabel 5 "0"
+        relocate 1000 -1.5
+        putlabel 5 "10^3"
+        relocate 2000 -1.5
+        putlabel 5 "2\times 10^3"
+        relocate 3000 -1.5
+        putlabel 5 "3\times 10^3"
+        relocate 4000 -1.5
+        putlabel 5 "4\times 10^3"
+        relocate 5000 -1.5
+        putlabel 5 "5\times 10^3"
+        relocate -800 -1.5
+        putlabel 5 "t [r_g/c]"
+        expand 1.1
+        }
         #
         ltype 0 pl 0 ((ts)) ((1.0/fstotnormD)) 0011 $mytin $mytout $lminy $lmaxy
         #
@@ -4128,8 +4235,8 @@ panelplot6replot 0 #
 		###################################
         #
         ticksize 0 0 0 0
-        define lminy (-0.5)
-        define lmaxy (0.5)
+        define lminy (-0.2)
+        define lmaxy (0.2)
         if($sashaplot==1){\
             define lminy (-0.1)
             define lmaxy (1.3)
@@ -4168,7 +4275,7 @@ panelplot6replot 0 #
         #
         ticksize 0 0 0 0
         define lminy (-2)
-        define lmaxy (2)
+        define lmaxy (1.5)
         if($sashaplot==1){\
             define lminy (-5)
             define lmaxy (15)
@@ -4206,7 +4313,7 @@ panelplot6replot 0 #
         #
         ticksize 0 0 0 0
         define lminy (0)
-        define lmaxy (5)
+        define lmaxy (3.9)
         if($sashaplot==1){\
             define lminy (0)
             define lmaxy (14)
