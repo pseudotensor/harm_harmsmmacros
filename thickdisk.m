@@ -2366,7 +2366,8 @@ velvsradpl 1 # velvsradpl <doscp=0,1>
         }
         #
         #device postencap4 rhovelvsh.eps
-        device postencap5 rhovelvsh.eps
+        #device postencap5 rhovelvsh.eps
+        device postencap6 rhovelvsh.eps
         panelplot4
         device X11
         if(doscp==1){\
@@ -3315,7 +3316,7 @@ panelplot2replot 0 #
         limits $xin $xout $lminy $lmaxy
         ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
         expand $expandlow
-        yla "\dot{M}/\dot{M}_{\rm Edd}"
+        yla "\dot{M}_0/\dot{M}_{\rm Edd}"
         expand $expanddefault
         #
         pl 0 (LG(r)) ((mdotfinavgvsr30/Mdoteddcode)) 0011 $myrin $myrout $lminy $lmaxy
@@ -3656,6 +3657,7 @@ panelplot3replot 0 #
         #ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         ctype default window 8 -$numpanels 2:8 $nm box 1 2 0 0
         yla "\alpha_b \alpha_{b,\rm eff}"
+		xla "r [r_g]"
         #
         ltype 0 pl 0 (LG(r)) (LG(alphatot3vsr)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 2 pl 0 (LG(rcut2)) (LG(alphaeffvsr)) 0011 $myrin $myrout $lminy $lmaxy
@@ -3698,12 +3700,12 @@ panelplot4   0 #
 		#
 		fdraft
 		ctype default window 1 1 1 1
-		notation -4 4 -4 4
+		notation -3 3 -3 3
 		erase
 		#
 		fdraft
 		ctype default window 1 1 1 1
-		notation -4 4 -4 4
+		notation -3 3 -3 3
 		erase
 		#
         define numpanels 9
@@ -3941,7 +3943,9 @@ panelplot5   0 #
 		#
         define numpanels 9
         #
-        expand 0.9
+        define expanddef (0.9)
+        lweight 2.0
+        expand $expanddef
 		panelplot5replot
         expand 1.5
 		#
@@ -4110,7 +4114,7 @@ panelplot5replot 0 #
         limits $mytin $mytout $lminy $lmaxy
         define nm ($numpanels-8)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
-        expand 0.9
+        expand $expanddef
         #yla "\frac{\Phi_{\rm H}}{\Psi_{\rm tH}}"
         yla "\Psi_{\rm tH}/\Phi_{\rm H}"
         #
@@ -4118,7 +4122,7 @@ panelplot5replot 0 #
         if(0==1){\
         expand 0.7
 		#xla "t [r_g/c]"
-        expand 0.9
+        expand $expanddef
         # SM acting stupid and not putting down consistent ticks (depends upon box 1 2 0 0 vs. box 0 2 0 0)
         # so put in tick labels manually
         relocate 0 -1.5
