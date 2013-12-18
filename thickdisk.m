@@ -201,7 +201,12 @@ velvsrad 1 #
         #
         set doscp=$1
         #
+        rddataavg
+        computewindfromavg1
+        #
         velvsradrd
+        #
+        #
         velvsradpl $1
         #
 velvsradrd 0 #
@@ -3418,18 +3423,19 @@ panelplot2replot 0 #
 		###################################
         #
         ticksize -1 0 -1 0
-        define lminy (LG(0.011))
-        define lmaxy (LG(0.8))
+        define lminy (LG(0.0011))
+        define lmaxy (LG(0.5))
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-6)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         expand $expandlow
-        yla "\eta_{\rm j,mw,w}"
+        yla "\eta_{\rm j,mw,w,wunbtavg}"
         expand $expanddefault
         #
         ltype 0 pl 0 (LG(r)) (LG(etajtotvsr/100.0)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 2 pl 0 (LG(r)) (LG(etamwtotvsr/100.0)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 1 pl 0 (LG(r)) (LG(etawtotvsr/100.0)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 3 pl 0 (LG(newr)) (LG(etawunbtavgvsr/100.0)) 0011 $myrin $myrout $lminy $lmaxy
         #
         #
         ###################################
@@ -3449,6 +3455,7 @@ panelplot2replot 0 #
         #pl 0 (LG(r)) ((lomdot)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 0 pl 0 (LG(r)) ((ldottotvsr/mdotfinavgvsr30[ihor])) 0011 $myrin $myrout $lminy $lmaxy
         #
+        if(1==0){\
         ##########################
         #
         ticksize -1 0 0 0
@@ -3466,6 +3473,29 @@ panelplot2replot 0 #
         ltype 0 pl 0 (LG(r)) ((upsilonvsrnorm)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 2 pl 0 (LG(r)) ((upsiloninnorm)) 0011 $myrin $myrout $lminy $lmaxy
         #
+        }
+        if(1==1){\
+        ##########################
+        #
+        ticksize -1 0 -1 0
+        define lminy (-3)
+        define lmaxy (0)
+        limits $xin $xout $lminy $lmaxy
+        define nm ($numpanels-8)
+        ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        expand $expandlow
+        expand 0.7
+        yla "\dot{M}_{\rm{}w,unb,tavg}/\dot{M}_{\rm Edd}"
+        expand $expanddefault
+        #
+        #
+        set toplot=Mdotvsrperedd
+        ltype 0 pl 0 (LG(newr)) (LG(toplot)) 0011 $myrin $myrout $lminy $lmaxy
+        set tofit=toplot[whichi]*(newr/newr[whichi])**1
+        ltype 2 pl 0 (LG(newr)) (LG(tofit)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 0
+        #
+        }
 		##########################
         #
         expand $expanddefault
@@ -5162,3 +5192,125 @@ mdotvst 0 #
         ctype default pl 0 ts mdtotihor
         ctype red pl 0 ts smdtotihor 0010
         #
+rddataavg 0 #
+        #
+        #! head -16385 dumps/gdump.lowres > dumps/gdump.lowres.2d
+        # then edit resolution to be 256 64 1
+        grid3d gdump.lowres.2d
+        set tx1=x1
+        set tx2=x2
+        set tx3=x3
+        gsetup
+        gammienew
+        #
+        !sed 's/nan/0/g' dataavg1.txt > dataavg1n.txt
+        !sed 's/inf/0/g' dataavg1n.txt > dataavg1nn.txt
+        da dataavg1nn.txt
+        lines 1 1000000
+        # head -3 dataavg1.txt|tail -1 |wc
+        # 309
+        #
+        read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+            {avgjj avgh avgOrho avgOug avgObsq avgOunb \
+             avgOuu0 avgOuu1 avgOuu2 avgOuu3 avgObu0 avgObu1 avgObu2 avgObu3 avgOud0 avgOud1 avgOud2 avgOud3 avgObd0 avgObd1 avgObd2 avgObd3 \
+             avgOB1 avgOB2 avgOB3 avgOgdetB1 avgOgdetB2 avgOgdetB3 \
+             avgOomegaf2 avgOomegaf2b avgOomegaf1 avgOomegaf1b \
+             avgOrhouu0 avgOrhouu1 avgOrhouu2 avgOrhouu3 avgOrhobu0 avgOrhobu1 avgOrhobu2 avgOrhobu3 avgOrhoud0 avgOrhoud1 avgOrhoud2 avgOrhoud3 avgOrhobd0 avgOrhobd1 avgOrhobd2 avgOrhobd3 \
+             avgOuguu0 avgOuguu1 avgOuguu2 avgOuguu3 avgOugud0 avgOugud1 avgOugud2 avgOugud3 \
+             avgOTud00 avgOTud10 avgOTud20 avgOTud30 avgOTud01 avgOTud11 avgOTud21 avgOTud31 avgOTud02 avgOTud12 avgOTud22 avgOTud32 avgOTud03 avgOTud13 avgOTud23 avgOTud33 \
+             avgOavgOfdd00 avgOavgOfdd10 avgOavgOfdd20 avgOavgOfdd30 avgOavgOfdd01 avgOavgOfdd11 avgOavgOfdd21 avgOavgOfdd31 avgOavgOfdd02 avgOavgOfdd12 avgOavgOfdd22 avgOavgOfdd32 avgOavgOfdd03 avgOavgOfdd13 avgOavgOfdd23 avgOavgOfdd33 \
+             avgOrhouuud00 avgOrhouuud10 avgOrhouuud20 avgOrhouuud30 avgOrhouuud01 avgOrhouuud11 avgOrhouuud21 avgOrhouuud31 avgOrhouuud02 avgOrhouuud12 avgOrhouuud22 avgOrhouuud32 avgOrhouuud03 avgOrhouuud13 avgOrhouuud23 avgOrhouuud33 \
+             avgOuguuud00 avgOuguuud10 avgOuguuud20 avgOuguuud30 avgOuguuud01 avgOuguuud11 avgOuguuud21 avgOuguuud31 avgOuguuud02 avgOuguuud12 avgOuguuud22 avgOuguuud32 avgOuguuud03 avgOuguuud13 avgOuguuud23 avgOuguuud33 \
+             avgObsquuud00 avgObsquuud10 avgObsquuud20 avgObsquuud30 avgObsquuud01 avgObsquuud11 avgObsquuud21 avgObsquuud31 avgObsquuud02 avgObsquuud12 avgObsquuud22 avgObsquuud32 avgObsquuud03 avgObsquuud13 avgObsquuud23 avgObsquuud33 \
+             avgObubd00 avgObubd10 avgObubd20 avgObubd30 avgObubd01 avgObubd11 avgObubd21 avgObubd31 avgObubd02 avgObubd12 avgObubd22 avgObubd32 avgObubd03 avgObubd13 avgObubd23 avgObubd33 \
+             avgOuuud00 avgOuuud10 avgOuuud20 avgOuuud30 avgOuuud01 avgOuuud11 avgOuuud21 avgOuuud31 avgOuuud02 avgOuuud12 avgOuuud22 avgOuuud32 avgOuuud03 avgOuuud13 avgOuuud23 avgOuuud33 \
+             avgOTudEM00 avgOTudEM10 avgOTudEM20 avgOTudEM30 avgOTudEM01 avgOTudEM11 avgOTudEM21 avgOTudEM31 avgOTudEM02 avgOTudEM12 avgOTudEM22 avgOTudEM32 avgOTudEM03 avgOTudEM13 avgOTudEM23 avgOTudEM33 \
+             avgOTudMA00 avgOTudMA10 avgOTudMA20 avgOTudMA30 avgOTudMA01 avgOTudMA11 avgOTudMA21 avgOTudMA31 avgOTudMA02 avgOTudMA12 avgOTudMA22 avgOTudMA32 avgOTudMA03 avgOTudMA13 avgOTudMA23 avgOTudMA33 \
+             avgOTudPA00 avgOTudPA10 avgOTudPA20 avgOTudPA30 avgOTudPA01 avgOTudPA11 avgOTudPA21 avgOTudPA31 avgOTudPA02 avgOTudPA12 avgOTudPA22 avgOTudPA32 avgOTudPA03 avgOTudPA13 avgOTudPA23 avgOTudPA33 \
+             avgOTudEN00 avgOTudEN10 avgOTudEN20 avgOTudEN30 avgOTudEN01 avgOTudEN11 avgOTudEN21 avgOTudEN31 avgOTudEN02 avgOTudEN12 avgOTudEN22 avgOTudEN32 avgOTudEN03 avgOTudEN13 avgOTudEN23 avgOTudEN33 \
+             avgOmu  avgOsigma  avgObsqorho \
+             avgOabsB1 avgOabsB2 avgOabsB3 avgOabsgdetB1 avgOabsgdetB2 avgOabsgdetB3 \
+             avgOpsisq avgOgamma \
+             avgOgdet avgOdxdxp11 avgOdxdxp22 avgOdxdxp12 avgOdxdxp21 avgOdxdxp33 \
+             avgOabsuu0 avgOabsuu1 avgOabsuu2 avgOabsuu3 avgOabsbu0 avgOabsbu1 avgOabsbu2 avgOabsbu3 avgOabsud0 avgOabsud1 avgOabsud2 avgOabsud3 avgOabsbd0 avgOabsbd1 avgOabsbd2 avgOabsbd3 \
+             avgOabsomegaf2 avgOabsomegaf2b avgOabsomegaf1 avgOabsomegaf1b \
+             avgOabsrhouu0 avgOabsrhouu1 avgOabsrhouu2 avgOabsrhouu3 \
+             avgOabsfdd00 avgOabsfdd10 avgOabsfdd20 avgOabsfdd30 avgOabsfdd01 avgOabsfdd11 avgOabsfdd21 avgOabsfdd31 avgOabsfdd02 avgOabsfdd12 avgOabsfdd22 avgOabsfdd32 avgOabsfdd03 avgOabsfdd13 avgOabsfdd23 avgOabsfdd33 \
+             avgOTudRAD00 avgOTudRAD10 avgOTudRAD20 avgOTudRAD30 avgOTudRAD01 avgOTudRAD11 avgOTudRAD21 avgOTudRAD31 avgOTudRAD02 avgOTudRAD12 avgOTudRAD22 avgOTudRAD32 avgOTudRAD03 avgOTudRAD13 avgOTudRAD23 avgOTudRAD33 \
+             avgOKAPPAUSER avgOKAPPAESUSER avgOtauradintegrated avgOurad}
+        #
+        #
+        #
+        #
+computewindfromavg1  0 #
+        #
+        set MdotH=24*Mdoteddcode
+        set prefactor=100
+        #
+        set myti=82 # r=9.931~10 # rjetin and rdiskin
+        set useMdot=(avgOunb<-1 && ti==myti)
+        set death=(useMdot==1 ? 1 : 0)
+        set dMdot=gdet*$dx2*$dx3*(avgOrhouu1*death)  # if(useMdot)
+        set Mdotinner=sum(dMdot)/Mdoteddcode
+        print {Mdotinner}
+        #
+        set myti=139 # r=50.61~50 # rjetout and rdiskout
+        set useMdot=(avgOunb<-1 && ti==myti)
+        set dMdot=gdet*$dx2*$dx3*(avgOrhouu1*death)# if(useMdot)
+        set Mdotouter=sum(dMdot)/Mdoteddcode
+        print {Mdotouter}
+        #
+        set myti=139 # r=50.61~50 # rjetout and rdiskout
+        set useEdot=(avgOunb<-1 && ti==myti)
+        # EM+PA+EN only (free gas energy)
+        set dEflux=(-avgOTudEM10-avgOTudPA10-avgOTudEN10)
+        set dEdot=gdet*$dx2*$dx3*dEflux*death # if(useEdot)
+        set Edotouter=sum(dEdot)/MdotH*prefactor
+        print {Edotouter}
+        #
+        set myti=139 # r=50.61~50 # rjetout and rdiskout
+        set useLdot=(avgOunb<-1 && ti==myti)
+        # EM+PA+EN only (free gas energy)
+        set dLflux=(avgOTudEM13+avgOTudPA13+avgOTudEN13)
+        set dLdot=gdet*$dx2*$dx3*dLflux*death # if(useEdot)
+        set Ldotouter=sum(dLdot)/MdotH
+        print {Ldotouter}
+        set unitys=0
+        set swunbout=(-Ldotouter)  - 2.0*a*(unitys-Edotouter/prefactor)
+        print {swunbout}
+        #
+        #########################
+        define angle (pi/2)
+        set area=$dx2*$dx3
+        set useMdot=(avgOunb<-1)
+        set death=(useMdot==1 ? 1 : 0)
+        #
+        set fun=avgOrhouu1*death
+        gcalc2 3 0 $angle fun Mdotvsr
+        set Mdotvsrperedd=Mdotvsr/Mdoteddcode
+        # pl 0 newr Mdotvsrperedd 1101 1 50 1E-2 1
+        #
+        set funE=dEflux*death
+        gcalc2 3 0 $angle funE Edotvsr
+        set etawunbtavgvsr=Edotvsr/MdotH*prefactor
+        # pl 0 newr etawunbtavgvsr 1101 1 50 1E-2 10
+        #
+        set funL=dLflux*death
+        gcalc2 3 0 $angle funL Ldotvsr
+        set swunbtavgvsr=(-Ldotvsr)  - 2.0*a*(unitys-Edotvsr/prefactor)
+        # pl 0 newr swunbtavgvsr 1101 1 50 1E-2 10
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        #
+        
