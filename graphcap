@@ -384,101 +384,113 @@ postencap|encap|postfile|encapsulated postscript, written to file $1:\
 	'%'%BoundingBox\: 18 144 592 718\n'%'%DocumentFonts\: Helvetica\n\
 	'%'%EndComments\n:\
 	:SY=mv $F $1:tc=postscript:
-postencapwide|encap|postfile|encapsulated postscriptwide, written to file $1:\
+postencapwide|encap|postfile|encapsulated postscript, written to file $1:\
 	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
 	'%'%BoundingBox\: 18 144 592 431\n'%'%DocumentFonts\: Helvetica\n\
 	'%'%EndComments\n:\
 	:SY=mv $F $1:tc=postscript:
-postencapwider|encap|postfile|encapsulated postscriptwider, written to file $1:\
+postencapwider|encap|postfile|encapsulated postscript, written to file $1:\
 	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
 	'%'%BoundingBox\: 18 100 1500 490\n'%'%DocumentFonts\: Helvetica\n\
 	'%'%EndComments\n:\
 	:yr#1400:xr#6000:\
 	:SY=mv $F $1:tc=postscript:
-postencap2|encap2|postfile2|encapsulated postscript2, written to file $1:\
+postencap2|encap2|postfile2|encapsulated postscript, written to file $1:\
 	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
 	'%'%BoundingBox\: 18 144 314 718\n'%'%DocumentFonts\: Helvetica\n\
 	'%'%EndComments\n:\
 	:SY=mv $F $1:tc=postscript:
 # for 7 vertical panels using 2:8 for window for x so labels fit
-postencap3|encap3|postfile3|encapsulated postscript3, written to file $1:\
+postencap3|encap3|postfile3|encapsulated postscript, written to file $1:\
 	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
 	'%'%BoundingBox\: 40 144 520 900\n'%'%DocumentFonts\: Helvetica\n\
 	'%'%EndComments\n:\
 	:yr#3200:xr#2090:\
 	:SY=mv $F $1:tc=postscript:
 # for 8 vertical panels using 2:8 for window for x so labels fit
-postencap4|encap4|postfile4|encapsulated postscript4, written to file $1:\
+postencap4|encap4|postfile4|encapsulated postscript, written to file $1:\
 	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
 	'%'%BoundingBox\: 40 144 540 1030\n'%'%DocumentFonts\: Helvetica\n\
 	'%'%EndComments\n:\
 	:yr#3800:xr#2090:\
 	:SY=mv $F $1:tc=postscript:
+#postencap|encap|postfile|encapsulated postscript, written to file $1:\
+#	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
+#	'%'%BoundingBox\: 18 144 592 718\n'%'%DocumentFonts\: Helvetica\n\
+#	'%'%EndComments\n:\
+#	:SY=mv $F $1:tc=postscript:
 # for 5 vertical panels using 2:8 for window for x so labels fit
-postencap5|encap5|postfile5|encapsulated postscript5, written to file $1:\
+postencap5|encap5|postfile5|encapsulated postscript, written to file $1:\
 	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
 	'%'%BoundingBox\: 40 144 540 800\n'%'%DocumentFonts\: Helvetica\n\
 	'%'%EndComments\n:\
 	:yr#2800:xr#2090:\
 	:SY=mv $F $1:tc=postscript:
+# for 5 vertical panels using 2:8 for window for x so labels fit
+postencap5alt|encap5|postfile5|encapsulated postscript, written to file $1:\
+	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
+	'%'%BoundingBox\: 40 144 540 800\n'%'%DocumentFonts\: Helvetica\n\
+	'%'%EndComments\n:\
+	:yr#3000:xr#2090:\
+	:SY=mv $F $1:tc=postscript:
 # for 8ish vertical panels using 2:8 for window for x so labels fit
-postencap6|encap6|postfile6|encapsulated postscript6, written to file $1:\
+postencap6|encap6|postfile6|encapsulated postscript, written to file $1:\
 	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
 	'%'%BoundingBox\: 30 144 540 1200\n'%'%DocumentFonts\: Helvetica\n\
 	'%'%EndComments\n:\
 	:yr#4500:xr#2090:\
 	:SY=mv $F $1:tc=postscript:
 # for 9 vertical panels using 2:8 for window for x so labels fit
-postencap6b|encap6b|postfile6b|encapsulated postscript6b, written to file $1:\
+postencap6b|encap6b|postfile6b|encapsulated postscript, written to file $1:\
 	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
 	'%'%BoundingBox\: 20 210 520 1420\n'%'%DocumentFonts\: Helvetica\n\
 	'%'%EndComments\n:\
 	:yr#5500:xr#2090:\
 	:SY=mv $F $1:tc=postscript:
 # for 9 vertical panels using 2:8 for window for x so labels fit
-postencap6b2|encap6b2|postfile6b2|encapsulated postscript6b2, written to file $1:\
+postencap6b2|encap6b2|postfile6b2|encapsulated postscript, written to file $1:\
 	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
 	'%'%BoundingBox\: 20 230 510 1300\n'%'%DocumentFonts\: Helvetica\n\
 	'%'%EndComments\n:\
 	:yr#5000:xr#2090:\
 	:SY=mv $F $1:tc=postscript:
 # for 10 vertical panels using 2:8 for window for x so labels fit
-postencap6c|encap6c|postfile6c|encapsulated postscript6c, written to file $1:\
+postencap6c|encap6c|postfile6c|encapsulated postscript, written to file $1:\
 	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
 	'%'%BoundingBox\: 20 180 540 1450\n'%'%DocumentFonts\: Helvetica\n\
 	'%'%EndComments\n:\
 	:yr#5600:xr#2090:\
 	:SY=mv $F $1:tc=postscript:
 # for 6 vertical panels using 2:8 for window for x so labels fit
-postencap6c2|encap6c2|postfile6c2|encapsulated postscript6c2, written to file $1:\
+postencap6c2|encap6c2|postfile6c2|encapsulated postscript, written to file $1:\
 	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
 	'%'%BoundingBox\: 40 180 530 1250\n'%'%DocumentFonts\: Helvetica\n\
 	'%'%EndComments\n:\
 	:yr#4800:xr#2090:\
 	:SY=mv $F $1:tc=postscript:
 # for 6 vertical panels using 2:8 for window for x so labels fit
-postencap7|encap7|postfile7|encapsulated postscript7, written to file $1:\
+postencap7|encap7|postfile7|encapsulated postscript, written to file $1:\
 	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
 	'%'%BoundingBox\: 20 144 530 900\n'%'%DocumentFonts\: Helvetica\n\
 	'%'%EndComments\n:\
 	:yr#3200:xr#2090:\
 	:SY=mv $F $1:tc=postscript:
 # for 4 *tall* vertical panels using 3:8 for window for x so labels fit
-postencap4t|encap4t|postfile4t|encapsulated postscript4t, written to file $1:\
+postencap4t|encap4t|postfile4t|encapsulated postscript, written to file $1:\
 	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
 	'%'%BoundingBox\: 110 144 500 1030\n'%'%DocumentFonts\: Helvetica\n\
 	'%'%EndComments\n:\
 	:yr#3800:xr#2090:\
 	:SY=mv $F $1:tc=postscript:
 # for 2 *tall* vertical panels using 3:8 for window for x so labels fit
-postencap2t|encap2t|postfile2t|encapsulated postscript2t, written to file $1:\
+postencap2t|encap2t|postfile2t|encapsulated postscript, written to file $1:\
 	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
 	'%'%BoundingBox\: 150 144 510 660\n'%'%DocumentFonts\: Helvetica\n\
 	'%'%EndComments\n:\
 	:yr#2200:xr#2090:\
 	:SY=mv $F $1:tc=postscript:
 # for 5 *tall* vertical panels using 3:8 for window for x so labels fit
-postencap5t|encap5t|postfile5t|encapsulated postscript5t, written to file $1:\
+postencap5t|encap5t|postfile5t|encapsulated postscript, written to file $1:\
 	:OW='%!PS-Adobe-2.0 EPSF-2.0\n'%'%Creator\: SM\n\
 	'%'%BoundingBox\: 110 164 500 1060\n'%'%DocumentFonts\: Helvetica\n\
 	'%'%EndComments\n:\
