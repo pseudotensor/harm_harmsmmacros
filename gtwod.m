@@ -2463,9 +2463,12 @@ gcalcmore       0     #
 		set lu = lg(u)
 		set lv2 = lg(abs(v2) + 1.e-20)
 		set ldivb = lg(abs(divb) + 1.e-20)
-		set ibeta = 0.5*bsq/p
-        set ibetatot = (0.5*bsq/(($gam-1)*u+prad0ff))
+        set ptot = p + prad0/3
+		set ibeta = 0.5*bsq/ptot
 		set libeta = lg(abs(ibeta) + 1.e-20)
+        #
+        set ibetatot = (0.5*bsq/(($gam-1)*u+prad0ff))
+		set libetatot = lg(abs(ibetatot) + 1.e-20)
 		#
 		set brel = 0.5*bsq/rho
 		set lbrel = lg(abs(brel)+1.e-20)

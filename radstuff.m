@@ -2490,7 +2490,7 @@ panelplotradbondiconvreplot 0 #
         jrdprad2 dump14903
         #
         #
-        ctype blue ltype 0 pl 0 r (RHOBAR*rho) 1111 $myrin $myrout $lminy $lmaxy
+        #ctype blue ltype 0 pl 0 r (RHOBAR*rho) 1111 $myrin $myrout $lminy $lmaxy
         #
         #jrdprad2 dump0000
         #ctype blue ptype 4 0
@@ -2776,7 +2776,7 @@ panelplotradbondiconv2replot 0 #
         box 0 2 0 0
         expand 1.5
         expand 1.1
-        yla "\rho_0[{\rm g}/{\rm cm}^3]"
+        yla "\delta \rho_0[{\rm g}/{\rm cm}^3]"
         expand 1.5
         #
         #
@@ -2787,7 +2787,8 @@ panelplotradbondiconv2replot 0 #
         set tiref=ti
         #
         #
-        ctype blue ltype 0 pl 0 r (RHOBAR*(rho-0)) 1111 $myrin $myrout $lminy $lmaxy
+        ctype default lweight 1.2 ltype 1 pl 0 r (RHOBAR*(rho-0)) 1111 $myrin $myrout $lminy $lmaxy
+        lweight 3
         #
         #jrdprad2 dump0000
         #ctype blue ptype 4 0
@@ -2848,7 +2849,7 @@ panelplotradbondiconv2replot 0 #
         box 0 2 0 0
         expand 1.5
         expand 1.01
-        yla "T_{\rm gas}[{\rm K}]"
+        yla "\delta T_{\rm gas}[{\rm K}]"
         expand 1.5
         #
         #
@@ -2860,7 +2861,8 @@ panelplotradbondiconv2replot 0 #
         #
         #
         set fun0=(Tgas*TEMPBAR)
-        ctype blue ltype 0 pl 0 r fun0 1111 $myrin $myrout $lminy $lmaxy
+        ctype default lweight 1.2 ltype 1 pl 0 r fun0 1111 $myrin $myrout $lminy $lmaxy
+        lweight 3
         #
         #jrdprad2 dump0000
         #ctype blue ptype 4 0
@@ -2932,7 +2934,7 @@ panelplotradbondiconv2replot 0 #
         box 0 2 0 0
         expand 1.5
         expand 1.01
-        yla "\hat{E} [{\rm erg}/{\rm cm}^3]"
+        yla "\delta \hat{E} [{\rm erg}/{\rm cm}^3]"
         expand 1.5
         #
         #
@@ -2943,7 +2945,8 @@ panelplotradbondiconv2replot 0 #
         set tiref=ti
         #
         #
-        ctype blue ltype 0 pl 0 r (prad0ff*UBAR) 1111 $myrin $myrout $lminy $lmaxy
+        ctype default lweight 1.2 ltype 1 pl 0 r (prad0ff*UBAR) 1111 $myrin $myrout $lminy $lmaxy
+        lweight 3
         #
         #jrdprad2 dump0000
         #ctype blue ptype 4 0
@@ -3006,7 +3009,7 @@ panelplotradbondiconv2replot 0 #
         box 1 2 0 0
         expand 1.5
         expand 1.01
-        yla "\hat{R}^r_t [{\rm erg}/{\rm cm}^2/{\rm s}]"
+        yla "\delta \hat{R}^r_t [{\rm erg}/{\rm cm}^2/{\rm s}]"
         xla "r/r_g"
         expand 1.5
         #
@@ -3018,7 +3021,8 @@ panelplotradbondiconv2replot 0 #
         set tiref=ti
         #
         #
-        ctype blue ltype 0 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
+        ctype default lweight 1.2 ltype 1 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
+        lweight 3
         #
         #jrdprad2 dump0000
         #ctype blue ptype 4 0
@@ -3117,7 +3121,7 @@ panelplotradmagbondireplot 0 #
         box 0 2 0 0
         expand 1.5
         expand 1.1
-        yla "\rho_0[{\rm g}/{\rm cm}^3]"
+        yla "\delta \rho_0[{\rm g}/{\rm cm}^3]"
         expand 1.5
         #
         #
@@ -3125,8 +3129,11 @@ panelplotradmagbondireplot 0 #
         grid3d gdump
         jrdprad2 dump1936
         define DOCONNECT 0
-        set condconnect=(r<1E4 ? 1 : 0)
-        ctype blue ltype 0 pl 0 r (RHOBAR*rho) 1111 $myrin $myrout $lminy $lmaxy
+        set myr=r if(tj==0)
+        set condconnect=(myr<1E4 ? 1 : 0)
+        set toplot=RHOBAR*rho if(tj==0)
+        ctype default lweight 1.2 ltype 1 pl 0 r (toplot) 1111 $myrin $myrout $lminy $lmaxy
+        lweight 3
         set rhoref=rho
         set tiref=ti
         #
@@ -3177,7 +3184,7 @@ panelplotradmagbondireplot 0 #
         box 0 2 0 0
         expand 1.5
         expand 1.01
-        yla "T_{\rm gas}[{\rm K}]"
+        yla "\delta T_{\rm gas}[{\rm K}]"
         expand 1.5
         #
         #
@@ -3185,9 +3192,11 @@ panelplotradmagbondireplot 0 #
         grid3d gdump
         jrdprad2 dump1936
         define DOCONNECT 0
-        set condconnect=(r<1E4 ? 1 : 0)
-        set fun0=(Tgas*TEMPBAR)
-        ctype blue ltype 0 pl 0 r fun0 1111 $myrin $myrout $lminy $lmaxy
+        set myr=r if(tj==0)
+        set condconnect=(myr<1E4 ? 1 : 0)
+        set fun0=(Tgas*TEMPBAR) if(tj==0)
+        ctype default lweight 1.2 ltype 1 pl 0 r fun0 1111 $myrin $myrout $lminy $lmaxy
+        lweight 3
         set Tgasref=Tgas
         set tiref=ti
         #
@@ -3244,7 +3253,7 @@ panelplotradmagbondireplot 0 #
         box 0 2 0 0
         expand 1.5
         expand 1.01
-        yla "\hat{E} [{\rm erg}/{\rm cm}^3]"
+        yla "\delta \hat{E} [{\rm erg}/{\rm cm}^3]"
         expand 1.5
         #
         #
@@ -3252,8 +3261,11 @@ panelplotradmagbondireplot 0 #
         grid3d gdump
         jrdprad2 dump1936
         define DOCONNECT 0
-        set condconnect=(r<1E4 ? 1 : 0)
-        ctype blue ltype 0 pl 0 r (prad0ff*UBAR) 1111 $myrin $myrout $lminy $lmaxy
+        set myr=r if(tj==0)
+        set condconnect=(myr<1E4 ? 1 : 0)
+        set toplot=prad0ff*UBAR if(tj==0)
+        ctype default lweight 1.2 ltype 1 pl 0 r (toplot) 1111 $myrin $myrout $lminy $lmaxy
+        lweight 3
         set prad0ffref=prad0ff
         set tiref=ti
         #
@@ -3304,7 +3316,7 @@ panelplotradmagbondireplot 0 #
         box 0 2 0 0
         expand 1.5
         expand 1.01
-        yla "\hat{R}^r_t [{\rm erg}/{\rm cm}^2/{\rm s}]"
+        yla "\delta \hat{R}^r_t [{\rm erg}/{\rm cm}^2/{\rm s}]"
         expand 1.5
         #
         #
@@ -3312,8 +3324,11 @@ panelplotradmagbondireplot 0 #
         grid3d gdump
         jrdprad2 dump1936
         define DOCONNECT 0
+        set myr=r if(tj==0)
         set condconnect=(r<1E4 ? 1 : 0)
-        ctype blue ltype 0 pl 0 r (prad1ff*ENBAR/LBAR/LBAR/TBAR) 1111 $myrin $myrout $lminy $lmaxy
+        set toplot=prad1ff*ENBAR/LBAR/LBAR/TBAR if(tj==0)
+        ctype default lweight 1.2 ltype 1 pl 0 r (toplot) 1111 $myrin $myrout $lminy $lmaxy
+        lweight 3
         set prad1ffref=prad1ff
         set tiref=ti
         #
@@ -3362,7 +3377,7 @@ panelplotradmagbondireplot 0 #
         box 1 2 0 0
         expand 1.5
         expand 1.01
-        yla "b^2/(\rho_0 c^2)"
+        yla "\delta b^2/(\rho_0 c^2)"
         expand 1.5
         #
         #
@@ -3370,8 +3385,11 @@ panelplotradmagbondireplot 0 #
         grid3d gdump
         jrdprad2 dump1936
         define DOCONNECT 0
+        set myr=r if(tj==0)
         set condconnect=(r<1E4 ? 1 : 0)
-        ctype blue ltype 0 pl 0 r (bsq/rho) 1111 $myrin $myrout $lminy $lmaxy
+        set toplot=bsq/rho if(tj==0)
+        ctype default lweight 1.2 ltype 1 pl 0 r (toplot) 1111 $myrin $myrout $lminy $lmaxy
+        lweight 3
         set bsqorhoref=bsq/rho
         set tiref=ti
         #

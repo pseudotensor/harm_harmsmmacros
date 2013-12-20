@@ -3478,18 +3478,20 @@ panelplot2replot 0 #
         ##########################
         #
         ticksize -1 0 -1 0
-        define lminy (-3)
-        define lmaxy (0)
+        define lminy (-4)
+        define lmaxy (-2)
         limits $xin $xout $lminy $lmaxy
         define nm ($numpanels-8)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         expand $expandlow
         expand 0.7
-        yla "\dot{M}_{\rm{}w,unb,tavg}/\dot{M}_{\rm Edd}"
+        #yla "\dot{M}_{\rm{}w,unb,tavg}/\dot{M}_{\rm Edd}"
+        yla "\dot{M}_{\rm{}w,unb,tavg}/\dot{M}_{\rm H}"
         expand $expanddefault
         #
         #
-        set toplot=Mdotvsrperedd
+        #set toplot=Mdotvsrperedd
+        set toplot=MdotvsrperMdotH
         ltype 0 pl 0 (LG(newr)) (LG(toplot)) 0011 $myrin $myrout $lminy $lmaxy
         set tofit=toplot[whichi]*(newr/newr[whichi])**1
         ltype 2 pl 0 (LG(newr)) (LG(tofit)) 0011 $myrin $myrout $lminy $lmaxy
@@ -5288,6 +5290,7 @@ computewindfromavg1  0 #
         set fun=avgOrhouu1*death
         gcalc2 3 0 $angle fun Mdotvsr
         set Mdotvsrperedd=Mdotvsr/Mdoteddcode
+        set MdotvsrperMdotH=Mdotvsr/MdotH
         # pl 0 newr Mdotvsrperedd 1101 1 50 1E-2 1
         #
         set funE=dEflux*death
