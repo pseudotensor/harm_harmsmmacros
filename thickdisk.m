@@ -4096,7 +4096,7 @@ panelplot5replot 0 #
         limits $mytin $mytout $lminy $lmaxy
         define nm ($numpanels-5)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
-        yla "L_{\rm rad}/L_{\rm Edd}"
+        yla "L_{\rm rad,o}/L_{\rm Edd}"
         #
         ltype 0 pl 0 ((ts)) ((ldradthin/Leddcode)) 0011 $mytin $mytout $lminy $lmaxy
         }
