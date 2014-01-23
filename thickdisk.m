@@ -201,8 +201,12 @@ velvsrad 1 #
         #
         set doscp=$1
         #
+        # cd /data/jon/harm_harmrad/smstuff/
+        # grid3d gdump.lowres
+        # jrdprad2 dump0000
         rddataavg
         computewindfromavg1
+        computewindfromavg2
         #
         velvsradrd
         #
@@ -2869,6 +2873,7 @@ trygammies 0 #
 		define magpar ($1)
 		define bhspin (a)
 		define numpoints ($2)
+        define numpoints (20)
         #
 		!./inf_const $magpar $bhspin $numpoints > ./gammiesol1.txt
         !wc -l ./gammiesol1.txt | awk '{print \\$1}' > wcit.txt
@@ -2876,7 +2881,8 @@ trygammies 0 #
         lines 1 1
         read {numlines 1}
         if(numlines==0){\
-         define numpoints 1000
+         #define numpoints 1000
+         define numpoints 20
  		 !./inf_const $magpar $bhspin $numpoints > ./gammiesol1.txt
         }
         #
@@ -2893,7 +2899,9 @@ trygammies 0 #
 		#		define size (dimen(newr))
 		define size ($3)
 		!./inf_solv $magpar $bhspin $gammieFL $gammieFE $size > gammiesolve1.txt
-		da gammiesolve1.txt
+        !sed 's/nan/0/g' gammiesolve1.txt > gammiesolve1n.txt
+        !sed 's/inf/0/g' gammiesolve1n.txt > gammiesolve1nn.txt
+		da gammiesolve1nn.txt
 		lines 1 10000
 		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {gr guu0 guu1 guu2 guu3 gl grho gE gfdd02 gfdd12 gMaf ged gB1 gB3}
@@ -3066,7 +3074,7 @@ panelplot1replot 0 #
         limits $xin $xout $lminy $lmaxy
         #ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
         ctype default window 1 -$numpanels 1 $numpanels box 0 2 0 0
-        yla "\rho_0 u_g u_b u_r [Edd]"
+        yla "\rho_0 e_g e_b e_r [Edd]"
         #
         #
         #rhoshorvsr
@@ -3168,7 +3176,7 @@ panelplot1eqreplot 0 #
         limits $xin $xout $lminy $lmaxy
         #ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
         ctype default window 1 -$numpanels 1 $numpanels box 0 2 0 0
-        yla "\rho_0 u_g u_b"
+        yla "\rho_0 e_g e_b"
         #
         #rhoshorvsr
         ltype 0 pl 0 (LG(r)) (LG(rhosrhosqeqvsr)) 0011 $myrin $myrout $lminy $lmaxy
@@ -3240,7 +3248,7 @@ panelplot1horreplot 0 #
         limits $xin $xout $lminy $lmaxy
         #ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
         ctype default window 1 -$numpanels 1 $numpanels box 0 2 0 0
-        yla "\rho_0 u_g u_b"
+        yla "\rho_0 e_g e_b"
         #
         #rhoshorvsr
         ltype 0 pl 0 (LG(r)) (LG(rhoshorvsr)) 0011 $myrin $myrout $lminy $lmaxy
@@ -3642,9 +3650,8 @@ panelplot3replot 0 #
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         yla "Q_{\theta,\rm MRI}"
         #
-        # TEMP TILL NEW SIMULATION PUT IN
-        ltype 0 pl 0 (LG(r)) ((2*qmridiskvsr)) 0011 $myrin $myrout $lminy $lmaxy
-        ltype 2 pl 0 (LG(r)) ((2*qmridiskweakvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 0 pl 0 (LG(r)) ((qmridiskvsr)) 0011 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 (LG(r)) ((qmridiskweakvsr)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 1 pl 0 (LG(r)) ((6+0*qmridiskvsr)) 0011 $myrin $myrout $lminy $lmaxy
         ltype 0
         #
@@ -3815,7 +3822,7 @@ panelplot4replot 0 #
         define nm1 ($numpanels-1)
         ctype default window 8 -$numpanels 2:8 $nm1 box 0 2 0 0
         expand 1.1
-        yla "u_g/u_{\rm Edd}"
+        yla "e_g/e_{\rm Edd}"
         expand 1.2
         #
         set avgugclean=(avgbsq/avgrho<maxbsqorho ? avgug : 0)
@@ -3837,13 +3844,18 @@ panelplot4replot 0 #
         define nm1 ($numpanels-2)
         ctype default window 8 -$numpanels 2:8 $nm1 box 0 2 0 0
         expand 1.1
-        yla "\bar{E}/u_{\rm Edd}"
+        yla "\bar{E}/e_{\rm Edd}"
         expand 1.2
         #
         ltype 0 pl 0 ((avgh)) (LG(avgurad/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 2 pl 0 ((hinnx4)) (LG(uradsrhosqrad4vsh/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 1 pl 0 ((hinnx8)) (LG(uradsrhosqrad8vsh/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
         ltype 3 pl 0 ((hinnx30)) (LG(uradsrhosqrad30vsh/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
+        #
+        set pradOpg1=(4.0/3.0-1.0)*avgurad/(($gam-1)*avgugclean)
+        set pradOpg2=(4.0/3.0-1.0)*uradsrhosqrad4vsh/(($gam-1)*ugsrhosqrad4vshclean)
+        set pradOpg3=(4.0/3.0-1.0)*uradsrhosqrad8vsh/(($gam-1)*ugsrhosqrad8vshclean)
+        set pradOpg4=(4.0/3.0-1.0)*uradsrhosqrad30vsh/(($gam-1)*ugsrhosqrad30vshclean)
         #
         ###################################
         #
@@ -3854,7 +3866,7 @@ panelplot4replot 0 #
         define nm ($numpanels-3)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         expand 1.1
-        yla "u_b/u_{\rm Edd}"
+        yla "e_b/e_{\rm Edd}"
         expand 1.2
         #
         ltype 0 pl 0 ((avgh)) (LG(0.5*avgbsq/ueddcode)) 0011 $myhin $myhout $lminy $lmaxy
@@ -3871,7 +3883,7 @@ panelplot4replot 0 #
         define nm ($numpanels-4)
         ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
         expand 1.1
-        yla "p_{\rm tot}/u_{\rm Edd}"
+        yla "p_{\rm tot}/e_{\rm Edd}"
         expand 1.2
         #
         set gam=(5.0/3.0)
@@ -4772,7 +4784,7 @@ gammieplot 0    #
                 #
                 ctype default window 2 2 1 1 box 1 2 0 0
                 xla "r [r_g]"
-                yla "\rho_0 u_g u_b"
+                yla "\rho_0 e_g e_b"
                 set lbcog=LG(bcog*(FMvsrg))
                 ctype green ltype 0 plo 0 xsim lbcog
                 set lrhovsrg=LG(rhovsrg*(FMvsrg))
@@ -5263,6 +5275,18 @@ computewindfromavg1  0 #
         print {Mdotouter}
         #
         set myti=139 # r=50.61~50 # rjetout and rdiskout
+        set useMdot=(avgOrhouu1>0.0 && avgOunb<-1 && ti==myti)
+        set dMdot=gdet*$dx2*$dx3*(avgOrhouu1*death)# if(useMdot)
+        set Mdotouteralt=sum(dMdot)/Mdoteddcode
+        print {Mdotouteralt}
+        #
+        set myti=139 # r=50.61~50 # rjetout and rdiskout
+        set useMdot=(avgOrhouu1>0.0 && avgOunb<-1 && ti==myti)
+        set dMdot=gdet*$dx2*$dx3*(avgOrhouu1*avgOuu1*sqrt(gv311)*death)# if(useMdot)
+        set Mdotouteralt2=sum(dMdot)/Mdoteddcode
+        print {Mdotouteralt2}
+        #
+        set myti=139 # r=50.61~50 # rjetout and rdiskout
         set useEdot=(avgOunb<-1 && ti==myti)
         # EM+PA+EN only (free gas energy)
         set dEflux=(-avgOTudEM10-avgOTudPA10-avgOTudEN10)
@@ -5271,15 +5295,44 @@ computewindfromavg1  0 #
         print {Edotouter}
         #
         set myti=139 # r=50.61~50 # rjetout and rdiskout
+        set useEdot=(avgOrhouu1>0.0 && avgOunb<-1 && ti==myti)
+        # EM+PA+EN only (free gas energy)
+        set dEflux=(-avgOTudEM10-avgOTudPA10-avgOTudEN10)
+        set dEdot=gdet*$dx2*$dx3*dEflux*death # if(useEdot)
+        set Edotouteralt=sum(dEdot)/MdotH*prefactor
+        print {Edotouteralt}
+        #
+        set myti=139 # r=50.61~50 # rjetout and rdiskout
         set useLdot=(avgOunb<-1 && ti==myti)
         # EM+PA+EN only (free gas energy)
         set dLflux=(avgOTudEM13+avgOTudPA13+avgOTudEN13)
         set dLdot=gdet*$dx2*$dx3*dLflux*death # if(useEdot)
         set Ldotouter=sum(dLdot)/MdotH
         print {Ldotouter}
+        #
         set unitys=0
         set swunbout=(-Ldotouter)  - 2.0*a*(unitys-Edotouter/prefactor)
         print {swunbout}
+        #
+        set myti=139 # r=50.61~50 # rjetout and rdiskout
+        set useLdot=(avgOrhouu1>0.0 && avgOunb<-1 && ti==myti)
+        # EM+PA+EN only (free gas energy)
+        set dLflux=(avgOTudEM13+avgOTudPA13+avgOTudEN13)
+        set dLdot=gdet*$dx2*$dx3*dLflux*death # if(useEdot)
+        set Ldotouteralt=sum(dLdot)/MdotH
+        print {Ldotouteralt}
+        #
+        set unitys=0
+        set swunboutalt=(-Ldotouteralt)  - 2.0*a*(unitys-Edotouteralt/prefactor)
+        print {swunboutalt}
+        #
+        #
+        print {Mdotouter Mdotouteralt Mdotouteralt2}
+        print {Edotouter Edotouteralt}
+        print {Ldotouter Ldotouteralt}
+        print {swunbout swunboutalt}
+        #
+computewindfromavg2  0 #
         #
         #########################
         define angle (pi/2)
@@ -5303,6 +5356,27 @@ computewindfromavg1  0 #
         set swunbtavgvsr=(-Ldotvsr)  - 2.0*a*(unitys-Edotvsr/prefactor)
         # pl 0 newr swunbtavgvsr 1101 1 50 1E-2 10
         #
+        #########################
+        define angle (pi/2)
+        set area=$dx2*$dx3
+        set useMdot=(avgOrhouu1>0.0 && avgOunb<-1)
+        set death=(useMdot==1 ? 1 : 0)
+        #
+        set fun=avgOrhouu1*death
+        gcalc2 3 0 $angle fun Mdotvsralt
+        set Mdotvsrpereddalt=Mdotvsralt/Mdoteddcode
+        set MdotvsrperMdotHalt=Mdotvsralt/MdotH
+        # pl 0 newr Mdotvsrpereddalt 1101 1 50 1E-2 1
+        #
+        set funE=dEflux*death
+        gcalc2 3 0 $angle funE Edotvsralt
+        set etawunbtavgvsralt=Edotvsralt/MdotH*prefactor
+        # pl 0 newr etawunbtavgvsralt 1101 1 50 1E-2 10
+        #
+        set funL=dLflux*death
+        gcalc2 3 0 $angle funL Ldotvsralt
+        set swunbtavgvsralt=(-Ldotvsralt)  - 2.0*a*(unitys-Edotvsralt/prefactor)
+        # pl 0 newr swunbtavgvsralt 1101 1 50 1E-2 10
         #
         #
         #
@@ -5316,4 +5390,21 @@ computewindfromavg1  0 #
         #
         #
         #
-        
+calcLvsr 0 #
+        #jrdprad2 dump5935
+        #
+        define x2label "r/M"
+        define x2label "L/Ledd"
+        #
+        set myRrt=-(prad0/3*(4*uru1*urd0))*(tautotmax<1 ? 1 : 0)
+        set area=$dx2*$dx3
+        define angle (pi/2)
+        gcalc2 3 0 $angle myRrt Edotvsr
+        #
+        #
+        pl 0 newr (Edotvsr/Leddcode) 1100
+        #device postencap Edotvsrthin.eps
+        #pl 0 newr (Edotvsr/Leddcode) 1100
+        #device X11
+        #!cp Edotvsrthin.eps ~/
+        #
