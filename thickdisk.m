@@ -5208,9 +5208,13 @@ mdotvst 0 #
         #
 rddataavg 0 #
         #
+        # try normal dump in case already 2D simulation
+        grid3d gdump
+        #
         #! head -16385 dumps/gdump.lowres > dumps/gdump.lowres.2d
         # then edit resolution to be 256 64 1
         grid3d gdump.lowres.2d
+        #
         set tx1=x1
         set tx2=x2
         set tx3=x3
@@ -5222,7 +5226,6 @@ rddataavg 0 #
         da dataavg1nn.txt
         lines 1 1000000
         # head -3 dataavg1.txt|tail -1 |wc
-        # 309
         #
         read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
             {avgjj avgh avgOrho avgOug avgObsq avgOunb \
@@ -5253,6 +5256,22 @@ rddataavg 0 #
              avgOTudRAD00 avgOTudRAD10 avgOTudRAD20 avgOTudRAD30 avgOTudRAD01 avgOTudRAD11 avgOTudRAD21 avgOTudRAD31 avgOTudRAD02 avgOTudRAD12 avgOTudRAD22 avgOTudRAD32 avgOTudRAD03 avgOTudRAD13 avgOTudRAD23 avgOTudRAD33 \
              avgOKAPPAUSER avgOKAPPAESUSER avgOtauradintegrated avgOurad}
         #
+        # more:
+        rddataavg2
+        #
+rddataavg2 0 #
+        #
+        #
+        !sed 's/nan/0/g' dataavg2.txt > dataavg2n.txt
+        !sed 's/inf/0/g' dataavg2n.txt > dataavg2nn.txt
+        da dataavg2nn.txt
+        lines 1 1000000
+        # head -3 dataavg2.txt|tail -1 |wc
+        # 
+        #
+        read '%g %g %g %g %g %g %g %g %g %g %g %g' \
+            {avgjj avgh KAPPAUSERavg KAPPAESUSERavg taurad1integratedavg taurad1flipintegratedavg taurad2integratedavg taurad2flipintegratedavg tauradintegratedavg \
+             ravg havg phavg}
         #
         #
         #
@@ -5402,7 +5421,8 @@ calcLvsr 0 #
         gcalc2 3 0 $angle myRrt Edotvsr
         #
         #
-        pl 0 newr (Edotvsr/Leddcode) 1100
+        ctype default pl 0 newr (Edotvsr/Leddcode) 1100
+        ctype red pl 0 newr (.7*ln(newr/1)) 1110
         #device postencap Edotvsrthin.eps
         #pl 0 newr (Edotvsr/Leddcode) 1100
         #device X11
