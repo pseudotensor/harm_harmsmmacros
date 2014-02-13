@@ -486,6 +486,7 @@ jrdprad2 1	# for reading file with full set of stuff with radiation
  set myRty=(prad0/3)*(4*uur0ortho*uur2ortho-0)
  set myRtz=(prad0/3)*(4*uur0ortho*uur3ortho-0)
  #
+ 
  #
 jrdpraddims 0
           da dimensions.txt
@@ -1407,7 +1408,17 @@ jrdpraddump	1	#
               vrmin2 vrmax2 vrmin22 vrmax22 \
               vrmin3 vrmax3 vrmin23 vrmax23 \
             }
-	        #            
+	        #        
+            set dR=$dx1*dxdxp11
+            set dH=r*$dx2*dxdxp22
+            set dP=r*sin(h)*$dx3*dxdxp33
+            set taueff1=sqrt(kappa*(kappa+kappaes))*dR
+            set taueff2=sqrt(kappa*(kappa+kappaes))*dH
+            set taueff3=sqrt(kappa*(kappa+kappaes))*dP
+            #
+            set taueffmax=(taueff1>taueff2 ? taueff1 : taueff2)
+            set taueffmax=(taueff2>taueffmax ? taueff2 : taueffmax)
+            #
 jrdpvpot 1	#
 		#
 		jrdpheader3d dumps/$1
@@ -2388,7 +2399,9 @@ gcalcbasic      0 # physics stuff
 		  # below probably not right
 		  set K = Sden
 		}
-		#
+        set cs2rad=(4.0/3.0)*(4.0/3.0-1.0)*prad0/(rho+u+prad0+p+(4.0/3.0-1.0)*prad0)
+        set cs2tot=cs2rad+cs2
+        #
 gcalcheader 0   #                
 		#set _rhor = 1+sqrt(1-a**2)
 		set _rhor = _MBH + sqrt(_MBH**2 - _a**2)
@@ -2408,7 +2421,7 @@ gcalcheader 0   #
 		#
 		#
 gcalcmore       0     #              
-		set omega3=uu3/uu0
+		set omega3=uu3*dxdxp33/uu0
 		set omegak=1/(r**(3/2)+a)
 		set omega3ok=omega3/omegak
 		set einf=-ud0
@@ -2421,7 +2434,8 @@ gcalcmore       0     #
 		set bsq1 = bu1*bd1
 		set bsq2 = bu2*bd2
 		set bsq3 = bu3*bd3
-		set ptot = p + 0.5*bsq
+        set prad=(4.0-1.0)*prad0
+		set ptot = p + 0.5*bsq + prad
 		#
 		set WW = rho + u + p
 		set EF = bsq + WW
@@ -2463,11 +2477,11 @@ gcalcmore       0     #
 		set lu = lg(u)
 		set lv2 = lg(abs(v2) + 1.e-20)
 		set ldivb = lg(abs(divb) + 1.e-20)
-        set ptot = p + prad0/3
+        set ptot = p + (4.0/3.0-1.0)*prad0
 		set ibeta = 0.5*bsq/ptot
 		set libeta = lg(abs(ibeta) + 1.e-20)
         #
-        set ibetatot = (0.5*bsq/(($gam-1)*u+prad0ff))
+        set ibetatot = (0.5*bsq/(($gam-1)*u + (4.0/3.0-1.0)*prad0))
 		set libetatot = lg(abs(ibetatot) + 1.e-20)
 		#
 		set brel = 0.5*bsq/rho

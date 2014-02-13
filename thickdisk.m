@@ -5268,9 +5268,12 @@ rddataavg2 0 #
         lines 1 1000000
         # head -3 dataavg2.txt|tail -1 |wc
         # 
+        # 4 + 2*5  + 3 = 17
         #
-        read '%g %g %g %g %g %g %g %g %g %g %g %g' \
-            {avgjj avgh KAPPAUSERavg KAPPAESUSERavg taurad1integratedavg taurad1flipintegratedavg taurad2integratedavg taurad2flipintegratedavg tauradintegratedavg \
+        read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+            {avgjj avgh KAPPAUSERavg KAPPAESUSERavg \
+             taurad1integratedavg taurad1flipintegratedavg taurad2integratedavg taurad2flipintegratedavg tauradintegratedavg \
+             tauradeff1integratedavg tauradeff1flipintegratedavg tauradeff2integratedavg tauradeff2flipintegratedavg tauradeffintegratedavg \
              ravg havg phavg}
         #
         #
@@ -5428,3 +5431,78 @@ calcLvsr 0 #
         #device X11
         #!cp Edotvsrthin.eps ~/
         #
+        set myRrt2=myRrt*area*gdet if(ti==80)
+        set  myh=h if(ti==80)
+        intalt myh myRrt2 newh intmyRrt
+        #
+        #
+        defaults
+        ctype default
+        fdraft
+        define x1label "\theta"
+        define x2label "L/Ledd"
+        device postencap plot.eps
+        pl 0 newh (intmyRrt/Leddcode) 
+        device X11
+        !convert plot.eps plot.png
+        #!cp plot.png ~/
+        #
+intalt  4      # (e.g. integrate td min1d t min1)
+		# running integration, not true
+                  set _length=dimen($1)
+                  define length (_length)
+                  set $3=0,$length-1,1
+                  set $4=0,$length-1,1
+		  set $3=$3*0
+		  set $4=$4*0
+                  do ii=1,$length-1,1 {
+                     set $3[$ii]=0.5*($1[$ii-1]+$1[$ii]) 
+		     #set $4[$ii]=$4[$ii-1]+0.5*($2[$ii]+$2[$ii-1])
+             set $4[$ii]=$4[$ii-1]+$2[$ii-1]
+  		  }
+                  # hack to allow derivative same size as function, should really linearly interpolate function to get this
+		  set $3[0]=$1[0]
+                  set $4[0]=$2[0]*0.5
+                  #
+calctaueff 0 #
+             #
+             set mydr=dxdxp1*$dx1
+             set mydH=r*dxdxp2*$dx2
+             set mydP=r*sin(h)*dxdxp33*$dx3
+             #
+             set taueff1=sqrt(kappa*(kappa+kappaes))*mydr
+             set taueff2=sqrt(kappa*(kappa+kappaes))*mydH
+             set taueff3=sqrt(kappa*(kappa+kappaes))*mydP
+             #
+             set taueffmax=(taueff1>taueff2 ? taueff1 : taueff2)
+             set taueffmax=(taueff3>taueffmax ? taueff3 : taueffmax)
+             #
+             set Gammaco=-4*kappaes*(Tgas-Trad)*prad0ff
+             #
+             set taucc=u/Gammaco
+             #
+nphoton 0    #
+             cd /data/jon/harmgit/testthindisk/run.radpulse.normal/
+             grid3d gdump
+             jrdprad2 dump0000
+             set Nrad0=SUM(Trad**3*gdet*$dx1)
+             #
+             jrdprad2 dump0050
+             set Nrad1=SUM(Trad**3*gdet*$dx1)
+             #
+             jrdprad2 dump0170
+             set Nrad2=SUM(Trad**3*gdet*$dx1)
+             #
+             cd /data/jon/harmgit/testthindisk/run.radpulse.neg/
+             grid3d gdump
+             jrdprad2 dump0000
+             set Nrad0b=SUM(Trad**3*gdet*$dx1)
+             #
+             jrdprad2 dump0050
+             set Nrad1b=SUM(Trad**3*gdet*$dx1)
+             #
+             jrdprad2 dump0170
+             set Nrad2b=SUM(Trad**3*gdet*$dx1)
+             #
+             print {Nrad0 Nrad1 Nrad2 Nrad0b Nrad1b Nrad2b}
+             #

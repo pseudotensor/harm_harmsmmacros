@@ -17,8 +17,8 @@ mricalc 0               #
 		set mydr=dxdxp1*$dx1
 		set mydH=r*dxdxp2*$dx2
 		set mydP=r*sin(h)*dxdxp33*$dx3
-		set dxrat=mydr/mydH
-		set dxrat=mydr/mydP
+		set dxrat1=mydr/mydH
+		set dxrat2=mydr/mydP
 		#
                 set omegarot=uu3/uu0*dxdxp33
                 # gammie, but may not be good:
@@ -50,7 +50,8 @@ mricalc 0               #
                 # so in the end, with new version get:
                 # idx2mri = lambda2max/mydH = valh*2*pi/omegarot
                 # idx2mri = lambda2max/mydH = sqrt(val22)*2*pi/omegarot/mydH 
-        set idx2mrialt = sqrt(val22)*2*pi/omegarot/mydH
+        set idx2mrialt = sqrt(val22)*2*pi/abs(omegarot)/abs(mydH)
+        set idx2mrialt = abs(idx2mrialt)
         set idx2mrialtcut = (idx2mrialt>30 ? 30 : idx2mrialt)
         #
 		set idx2mri=1/dx2mri
