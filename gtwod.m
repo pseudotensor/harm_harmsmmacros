@@ -296,6 +296,55 @@ jrdpcf3duentropy 1	# for reading file with current (jcon/jcov) and faraday (fcon
                   gammienew
                 }
  		#
+jrdpwald 1      #
+		            define ii ($1)
+         		    set h2=sprintf('%04d',$ii)
+                    set h1='dump' set _fname=h1+h2
+                    define filename (_fname)
+                    #
+                    set h1='fluxdump' set _fname=h1+h2
+                    define filenameflux (_fname)
+                    #
+                    #
+                    set h1='debug' set _fname=h1+h2
+                    define filenamedebug (_fname)
+                    #
+                    set h1='vpotdump' set _fname=h1+h2
+                    define filenamevpot (_fname)
+                    #
+                    jrdprad $filename
+                    #jrdpcf3duentropy $filename
+                    jrdpdebug $filenamedebug
+                    jrdpvpot $filenamevpot
+                    #
+                    faraday
+                    stresscalc 1
+                    set omegah=a/(2*(1+sqrt(1-a**2)))
+		            set v3nonhat=uu3/uu0
+		            set B3nonhat=B3
+		            set v1hat=uu1*sqrt(gv311)/uu0
+          		    set v2hat=uu2*sqrt(gv322)/uu0
+		            set B1hat=B1*sqrt(gv311)
+		            set B2hat=B2*sqrt(gv322)
+		            set omegaf1b=v3nonhat - B3nonhat*(v1hat*B1hat+v2hat*B2hat)/(B1hat**2+B2hat**2)
+		            set omegafoh=omegaf1b*dxdxp33/omegah
+                    #
+                    set Bd3fake=gv330*0+gv331*B1+gv332*B2+gv333*B3
+                    set Bd3=gdet*fuu12
+		            #
+           		    set z=r*cos(h)
+				    set R=r*sin(h)
+				    #
+				    set Bd3fake=gv330*0+gv331*B1+gv332*B2+gv333*B3
+				    set Bd3=gdet*fuu12
+				    #
+				    #set chopuse=(z<10 && z>0 && r>$rhor && R<1 ? 1 : 0)
+                    set chopuse=(r>10 && r<11 ? 1 : 0)
+				    set myAd3=Ad3 if(chopuse)
+				    set myBd3=Bd3 if(chopuse)
+				    set myomegafoh=omegafoh if(chopuse)
+				    #
+                    #
                 #
 jrdprad 1	# for reading file with full set of stuff with radiation
 		jrdpheader3d dumps/$1
@@ -1418,6 +1467,28 @@ jrdpraddump	1	#
             #
             set taueffmax=(taueff1>taueff2 ? taueff1 : taueff2)
             set taueffmax=(taueff2>taueffmax ? taueff2 : taueffmax)
+            #
+            set Rud00=(4.0/3.0)*prad0*uru0*urd0 + (1.0/3.0)*prad0
+            set Rud01=(4.0/3.0)*prad0*uru0*urd1
+            set Rud02=(4.0/3.0)*prad0*uru0*urd2
+            set Rud03=(4.0/3.0)*prad0*uru0*urd3
+            #
+            set Rud10=(4.0/3.0)*prad0*uru1*urd0
+            set Rud11=(4.0/3.0)*prad0*uru1*urd1 + (1.0/3.0)*prad0
+            set Rud12=(4.0/3.0)*prad0*uru1*urd2
+            set Rud13=(4.0/3.0)*prad0*uru1*urd3
+            #
+            set Rud20=(4.0/3.0)*prad0*uru2*urd0
+            set Rud21=(4.0/3.0)*prad0*uru2*urd1
+            set Rud22=(4.0/3.0)*prad0*uru2*urd2 + (1.0/3.0)*prad0
+            set Rud23=(4.0/3.0)*prad0*uru2*urd3
+            #
+            set Rud30=(4.0/3.0)*prad0*uru3*urd0
+            set Rud31=(4.0/3.0)*prad0*uru3*urd1
+            set Rud32=(4.0/3.0)*prad0*uru3*urd2
+            set Rud33=(4.0/3.0)*prad0*uru3*urd3 + (1.0/3.0)*prad0
+            #
+            set Begen1 = -1-(Tud10+Rud10)/(rho*uu1)
             #
 jrdpvpot 1	#
 		#
@@ -3128,6 +3199,7 @@ Tcalcud      3 # Tcalc name dir comp
 		set $1part5=(bsq*0.5)*deltas    # EM
 		set $1part6=-bu$dir*bd$comp     # EM
 		#
+        #
 Tcalcuu      3 # Tcalcuu name comp dir
 		# T^{dir comp}
 		define comp ($2)
@@ -3634,6 +3706,7 @@ plc0 17      # as with plc
 		levels lev
 		ctype blue
 		contour
+        ctype default
 		#
 		# animate plc in HARM
 agplc 17	# animplc 'dump' r 000 <0 0 0 0>
@@ -3679,8 +3752,16 @@ agplc 17	# animplc 'dump' r 000 <0 0 0 0>
                     #jrdpvpot $filenamevpot
                     #
                     #
-                    #jrdprad $filename
-                    jrdprad2 $filename
+                    if(0){\
+                     jrdprad $filename
+                     #jrdprad2 $filename
+                     faraday
+                     stresscalc 1
+                     set omegah=a/(2*(1+sqrt(1-a**2)))
+                     jrdpvpot $filenamevpot
+                    }
+                    #
+                    jrdpwald $ii
                     #
                     if(0){\
                      define POSCONTCOLOR "cyan"
@@ -3792,7 +3873,7 @@ agpl  18	# agpl 'dump' r fun 000 <0 0 0 0>
           # with radiation
           #jrdprad $filename
           # with radiation but no currents but with entropy
-          jrdprad2 $filename
+          #jrdprad2 $filename
                   #jrdpraddump rad$filename
 		  # NEW
                   #jrdpall $ii
@@ -3800,6 +3881,7 @@ agpl  18	# agpl 'dump' r fun 000 <0 0 0 0>
                   #define arg (h2)
                   #jrdpallgrb $arg
 		  #
+          jrdpwald $ii
 		  # OLD
 		  #jrdp3duold $filename
 		  #

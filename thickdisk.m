@@ -5256,9 +5256,23 @@ rddataavg 0 #
              avgOTudRAD00 avgOTudRAD10 avgOTudRAD20 avgOTudRAD30 avgOTudRAD01 avgOTudRAD11 avgOTudRAD21 avgOTudRAD31 avgOTudRAD02 avgOTudRAD12 avgOTudRAD22 avgOTudRAD32 avgOTudRAD03 avgOTudRAD13 avgOTudRAD23 avgOTudRAD33 \
              avgOKAPPAUSER avgOKAPPAESUSER avgOtauradintegrated avgOurad}
         #
+        #
+        set Be1= (-1+avgOmu)
         # more:
         rddataavg2
         #
+plotBe 0 #
+         #
+         set Be1s=Be1 if(tj==$ny/2)
+         set rs=r if(tj==$ny/2)
+         pl 0 rs Be1s 1101 1 1E2 1E-6 10
+         set dV=$dx1*$dx2*$dx3
+         set Be1rho=Be1*(avgObsqorho<10 && (abs(h-pi/2)<0.3) && abs(Be1)<10 ? 1 : 0)
+         gcalc2 3 2 pi/2 Be1 Be1vsr
+         gcalc2 3 2 pi/2 Be1rho Be1rhovsr
+         gcalc2 3 2 pi/2 avgOrho rhovsr
+         pl 0 newr (Be1rhovsr) 1101 1 1E2 1E-6 10
+         #
 rddataavg2 0 #
         #
         #
