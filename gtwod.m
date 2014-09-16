@@ -344,7 +344,99 @@ jrdpwald 1      #
 				    set myBd3=Bd3 if(chopuse)
 				    set myomegafoh=omegafoh if(chopuse)
 				    #
-                    #
+                    
+        # simplistic versions, not really x,y,z
+        set vx=uu1*sqrt(gv311)*sin(h)*cos(ph) + uu2*sqrt(gv322)*cos(h)*cos(ph) + uu3*sqrt(gv333)*(-sin(ph))
+        set vy=uu1*sqrt(gv311)*sin(h)*sin(ph) + uu2*sqrt(gv322)*cos(h)*sin(ph) + uu3*sqrt(gv333)*(cos(ph))
+        set vz=uu1*sqrt(gv311)*cos(h) + uu2*sqrt(gv322)*(-sin(h))
+        #
+        set Bx=B1*sqrt(gv311)*sin(h)*cos(ph) + B2*sqrt(gv322)*cos(h)*cos(ph) + B3*sqrt(gv333)*(-sin(ph))
+        set By=B1*sqrt(gv311)*sin(h)*sin(ph) + B2*sqrt(gv322)*cos(h)*sin(ph) + B3*sqrt(gv333)*(cos(ph))
+        set Bz=B1*sqrt(gv311)*cos(h) + B2*sqrt(gv322)*(-sin(h))
+                    
+                    
+        # use dxdxp's properly        
+        set Br=B1*dxdxp11 + B2*dxdxp12
+        set Bh=B1*dxdxp21 + B2*dxdxp22
+        set Bp=B3*dxdxp33
+        #
+        set vr=uu1/uu0*dxdxp11 + uu2/uu0*dxdxp12
+        set vh=uu2/uu0*dxdxp21 + uu2/uu0*dxdxp22
+        set vp=uu3/uu0*dxdxp33
+        #
+        set gv3tr=(dxdxp22*gv301 - dxdxp21*gv302)/(-(dxdxp12*dxdxp21) + dxdxp11*dxdxp22)
+        set gv3th=(dxdxp12*gv301 - dxdxp11*gv302)/(dxdxp12*dxdxp21 - dxdxp11*dxdxp22)
+        set gv3tp=gv303/dxdxp33
+        set gv3rr= (dxdxp22**2*gv311 - (dxdxp12 + dxdxp21)*dxdxp22*gv312 + dxdxp12*dxdxp21*gv322)/(dxdxp12*dxdxp21 - dxdxp11*dxdxp22)**2
+        set gv3rh=(dxdxp12**2*gv312 + dxdxp11*dxdxp22*gv312 - dxdxp12*(dxdxp22*gv311 + dxdxp11*gv322))/(dxdxp12*dxdxp21 - dxdxp11*dxdxp22)**2
+        set gv3rp= -((dxdxp22*gv313 - dxdxp12*gv323)/(dxdxp12*dxdxp21*dxdxp33 - dxdxp11*dxdxp22*dxdxp33))
+        set gv3hh= (dxdxp12*dxdxp21*gv311 - dxdxp11*dxdxp12*gv312 - dxdxp11*dxdxp21*gv312 + dxdxp11**2*gv322)/(dxdxp12*dxdxp21 - dxdxp11*dxdxp22)**2
+        set gv3hp= (dxdxp21*gv313 - dxdxp11*gv323)/(dxdxp12*dxdxp21*dxdxp33 - dxdxp11*dxdxp22*dxdxp33)
+        set gv3pp=gv333/dxdxp33**2
+        #
+        set x=r*sin(h)*cos(ph)
+        set y=r*sin(h)*sin(ph)
+        set z=r*cos(h)
+        #     
+        set vx=vr*sqrt(gv3rr)*sin(h)*cos(ph) + vh*sqrt(gv3hh)*cos(h)*cos(ph) + vp*sqrt(gv3pp)*(-sin(ph))
+        set vy=vr*sqrt(gv3rr)*sin(h)*sin(ph) + vh*sqrt(gv3hh)*cos(h)*sin(ph) + vp*sqrt(gv3pp)*(cos(ph))
+        set vz=vr*sqrt(gv3rr)*cos(h)         + vh*sqrt(gv3hh)*(-sin(h))
+        #
+        set Bx=Br*sqrt(gv3rr)*sin(h)*cos(ph) + Bh*sqrt(gv3hh)*cos(h)*cos(ph) + Bp*sqrt(gv3pp)*(-sin(ph))
+        set By=Br*sqrt(gv3rr)*sin(h)*sin(ph) + Bh*sqrt(gv3hh)*cos(h)*sin(ph) + Bp*sqrt(gv3pp)*(cos(ph))
+        set Bz=Br*sqrt(gv3rr)*cos(h)         + Bh*sqrt(gv3hh)*(-sin(h))
+        #
+        set idxdxp11=dxdxp22/(dxdxp22*dxdxp11-dxdxp21*dxdxp12)
+        set idxdxp12=dxdxp12/(dxdxp21*dxdxp12-dxdxp22*dxdxp11)
+        set idxdxp21=dxdxp21/(dxdxp21*dxdxp12-dxdxp22*dxdxp11)
+        set idxdxp22=dxdxp11/(dxdxp22*dxdxp11-dxdxp21*dxdxp12)
+        set idxdxp33=1/dxdxp33
+        #
+        set Tud1t=Tud10EM
+        set Tud1r=Tud11EM*idxdxp11 + Tud12EM*idxdxp21
+        set Tud1h=Tud11EM*idxdxp12 + Tud12EM*idxdxp22
+        set Tud1p=Tud13EM*idxdxp33
+        set Tud1rhat=Tud1r/sqrt(gv3rr)
+        set Tud1hhat=Tud1h/sqrt(gv3hh)
+        set Tud1phat=Tud1p/sqrt(gv3pp)
+        #
+        set Tud1x=Tud1rhat*sin(h)*cos(ph) + Tud1hhat*cos(h)*cos(ph) + Tud1phat*(-sin(ph))
+        set Tud1y=Tud1rhat*sin(h)*sin(ph) + Tud1hhat*cos(h)*sin(ph) + Tud1phat*(cos(ph))
+        set Tud1z=Tud1rhat*cos(h)         + Tud1hhat*(-sin(h))
+        #
+        set Bznorm=sqrt(bsq[$nx-1])
+        #
+        set whichi=$nx/2
+        set area=$dx2*$dx3
+        #
+        set EfluxIntegrand=Tud1t/Bznorm**2
+        set dEflux=EfluxIntegrand*gdet*area if(ti==whichi)
+        set Eflux=SUM(dEflux) print {Eflux}
+        #
+        set PxfluxIntegrand=-1*Tud1x/Bznorm**2
+        set PyfluxIntegrand=-1*Tud1y/Bznorm**2
+        set PzfluxIntegrand=-1*Tud1z/Bznorm**2
+        set dPxflux=PxfluxIntegrand*gdet*area if(ti==whichi)
+        set dPyflux=PyfluxIntegrand*gdet*area if(ti==whichi)
+        set dPzflux=PzfluxIntegrand*gdet*area if(ti==whichi)
+        set Pxflux=SUM(dPxflux) print {Pxflux}
+        set Pyflux=SUM(dPyflux) print {Pyflux}
+        set Pzflux=SUM(dPzflux) print {Pzflux}
+        #
+        set LxfluxIntegrand=(Tud1y*z-Tud1z*y)/Bznorm**2
+        set LyfluxIntegrand=(Tud1z*x-Tud1x*z)/Bznorm**2
+        set LzfluxIntegrand=(Tud1x*y-Tud1y*x)/Bznorm**2
+        set dLxflux=LxfluxIntegrand*gdet*area if(ti==whichi)
+        set dLyflux=LyfluxIntegrand*gdet*area if(ti==whichi)
+        set dLzflux=LzfluxIntegrand*gdet*area if(ti==whichi)
+        set Lxflux=SUM(dLxflux) print {Lxflux}
+        set Lyflux=SUM(dLyflux) print {Lyflux}
+        set Lzflux=SUM(dLzflux) print {Lzflux}
+        #
+        print {Eflux Pxflux Pyflux Pzflux Lxflux Lyflux Lzflux}
+        #
+        #  gcalc2 3 0 pi/2 LxfluxIntegrand Lxfluxvsr
+        #
                 #
 jrdprad 1	# for reading file with full set of stuff with radiation
 		jrdpheader3d dumps/$1
@@ -3762,6 +3854,98 @@ agplc 17	# animplc 'dump' r 000 <0 0 0 0>
                     }
                     #
                     jrdpwald $ii
+                    #
+                    if(0){\
+                     define POSCONTCOLOR "cyan"
+                     define NEGCONTCOLOR "cyan"
+                     plc 0 nsin 001 3 10 0.8 2.3
+		     define POSCONTCOLOR "red"
+		     define NEGCONTCOLOR "default"
+                    }
+                  #
+                  #
+                    #fieldcalc 0 aphi
+		  #jre mode2.m
+		  #alfvenvp
+		  #interpsingle aphi 128 128 -2.5 2.5 -2.5 2.5
+		  #readinterp aphi
+		  #define CONSTLEVELS 1
+                    #faraday
+		  #device postencap $filename.$ii
+                  if($numsend==2){ plc0  0 $2 $3}\
+                  else{\
+                   if($numsend==3){  plc0  0 $2 $3}\
+                   else{\
+                    if($numsend==4){ plc0  0 $2 $3 $4 $5 $6 $7}
+                   }
+                  }
+		  #
+		  #device X11
+		  # show zero contours
+		  #if(1){\
+		  #       set lev=-1E-15,1E-15,2E-15
+		  #       levels lev
+		  #       ctype blue contour
+		  #    }
+                  #delay loop
+                  #set jj=0
+                  #while {jj<1} {set jj=jj+1}
+		}
+		#
+		# animate pls in HARM
+agplcold 17	# animplc 'dump' r 000 <0 0 0 0>
+                if($?3 == 0) { define numsend (2) }\
+                else{\
+                  if($?4 == 1) { define numsend (4) } else { define numsend 3 }
+                }
+                #defaults
+		#define PLANE (3)
+		#define WHICHLEV (0)
+		#set constlevelshit=0
+		#
+                do ii=startanim,endanim,$ANIMSKIP {
+                  set h1=$1
+		  set h2=sprintf('%04d',$ii) set _fname=h1+h2
+                  define filename (_fname)
+                    #
+                    set h1='fluxdump' set _fname=h1+h2
+                    define filenameflux (_fname)
+                    #
+		  set h1='debug' set _fname=h1+h2
+                  define filenamedebug (_fname)
+                    #
+		  set h1='vpotdump' set _fname=h1+h2
+                  define filenamevpot (_fname)
+                    #
+                    #
+		  #jrdp2d $filename
+		  #define coord 1
+                  #jrdpcf3duold $filename
+		  #
+		  #jrdppenna $filename
+		  #
+		  # GRB STUFF
+		  #echo $filename $filenameflux $filenamedebug
+                  jrdpcf3duentropy $filename
+                  #jrdpflux $filenameflux
+                  #jrdpdebug $filenamedebug
+                    #
+                    #jrdpcf3duentropy $filename
+                    #jrdpflux $filenameflux
+                    #jrdpdebug $filenamedebug
+                    #jrdpvpot $filenamevpot
+                    #
+                    #
+                    if(0){\
+                     jrdprad $filename
+                     #jrdprad2 $filename
+                     faraday
+                     stresscalc 1
+                     set omegah=a/(2*(1+sqrt(1-a**2)))
+                     jrdpvpot $filenamevpot
+                    }
+                    #
+                    #jrdpwald $ii
                     #
                     if(0){\
                      define POSCONTCOLOR "cyan"
