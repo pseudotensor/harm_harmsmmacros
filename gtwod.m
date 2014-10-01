@@ -346,13 +346,13 @@ jrdpwald 1      #
 				    #
                     
         # simplistic versions, not really x,y,z
-        set vx=uu1*sqrt(gv311)*sin(h)*cos(ph) + uu2*sqrt(gv322)*cos(h)*cos(ph) + uu3*sqrt(gv333)*(-sin(ph))
-        set vy=uu1*sqrt(gv311)*sin(h)*sin(ph) + uu2*sqrt(gv322)*cos(h)*sin(ph) + uu3*sqrt(gv333)*(cos(ph))
-        set vz=uu1*sqrt(gv311)*cos(h) + uu2*sqrt(gv322)*(-sin(h))
+        set vxs=uu1*sqrt(gv311)*sin(h)*cos(ph) + uu2*sqrt(gv322)*cos(h)*cos(ph) + uu3*sqrt(gv333)*(-sin(ph))
+        set vys=uu1*sqrt(gv311)*sin(h)*sin(ph) + uu2*sqrt(gv322)*cos(h)*sin(ph) + uu3*sqrt(gv333)*(cos(ph))
+        set vzs=uu1*sqrt(gv311)*cos(h) + uu2*sqrt(gv322)*(-sin(h))
         #
-        set Bx=B1*sqrt(gv311)*sin(h)*cos(ph) + B2*sqrt(gv322)*cos(h)*cos(ph) + B3*sqrt(gv333)*(-sin(ph))
-        set By=B1*sqrt(gv311)*sin(h)*sin(ph) + B2*sqrt(gv322)*cos(h)*sin(ph) + B3*sqrt(gv333)*(cos(ph))
-        set Bz=B1*sqrt(gv311)*cos(h) + B2*sqrt(gv322)*(-sin(h))
+        set Bxs=B1*sqrt(gv311)*sin(h)*cos(ph) + B2*sqrt(gv322)*cos(h)*cos(ph) + B3*sqrt(gv333)*(-sin(ph))
+        set Bys=B1*sqrt(gv311)*sin(h)*sin(ph) + B2*sqrt(gv322)*cos(h)*sin(ph) + B3*sqrt(gv333)*(cos(ph))
+        set Bzs=B1*sqrt(gv311)*cos(h) + B2*sqrt(gv322)*(-sin(h))
                     
                     
         # use dxdxp's properly        
@@ -433,7 +433,8 @@ jrdpwald 1      #
         set Lyflux=SUM(dLyflux) print {Lyflux}
         set Lzflux=SUM(dLzflux) print {Lzflux}
         #
-        print {Eflux Pxflux Pyflux Pzflux Lxflux Lyflux Lzflux}
+        print '%15.6g %15.6g %15.6g %15.6g %15.6g %15.6g %15.6g\n' \
+         {Eflux Pxflux Pyflux Pzflux Lxflux Lyflux Lzflux}
         #
         #  gcalc2 3 0 pi/2 LxfluxIntegrand Lxfluxvsr
         #
@@ -578,6 +579,8 @@ jrdprad2 1	# for reading file with full set of stuff with radiation
                 jrdpraddump rad$1
                 jrdpdissmeasure dissmeasure$1
                 jrdpraddims
+                jrdpfailfloordu failfloordu$1
+                jrdpdebug debug$1
                 #
  #
  set qsqrad=gv311*prad1*prad1+gv312*prad1*prad2+gv313*prad1*prad3\
@@ -1985,6 +1988,29 @@ jrdpfluxfull	1	# for fluxdump in harm when using jrdpcf3duentropy
 		    }
 	        #
  		#
+jrdph2d	1	#
+		jrdpheaderh2d $1
+		da dumps/$1
+		lines 2 10000000
+		#
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		    {x1 x2 r h rho u v1 v2 v3 \
+		      B1 B2 B3 divb \
+		      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
+		      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
+		      v1m v1p v2m v2p gdet}
+	        #
+            set ti=x1
+            set tj=x2
+		set tx1=x1
+		set tx2=x2
+                gsetup
+		if($DOGCALC) { gcalc }
+		# gcalc
+		abscompute
+		#
+		gammienew2d
+ 		#
 jrdp2d	1	#
 		jrdpheader2d $1
 		da dumps/$1
@@ -2116,6 +2142,12 @@ jrdpheader2d 1    #
 		    #
                     gsetupfromheader
                     gcalcheader
+		    #
+jrdpheaderh2d 1    #
+		da dumps/$1
+		lines 1 1
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		    {_t _n1 _n2 _startx1 _startx2 _dx1 _dx2 _tf _realnstep _a _gam _cour _DTd _DTl _DTi _DTr _dumpc _imagec _rdumpc _dt _lim _failed _Rin _Rout _hslope _R0}
 		    #
 jrdp1col 2	#
 		echo "jrdp1col"
@@ -3826,6 +3858,7 @@ agplc 17	# animplc 'dump' r 000 <0 0 0 0>
                   define filenamevpot (_fname)
                     #
                     #
+                    jrdprad2 $filename
 		  #jrdp2d $filename
 		  #define coord 1
                   #jrdpcf3duold $filename
@@ -3853,7 +3886,7 @@ agplc 17	# animplc 'dump' r 000 <0 0 0 0>
                      jrdpvpot $filenamevpot
                     }
                     #
-                    jrdpwald $ii
+                    #jrdpwald $ii
                     #
                     if(0){\
                      define POSCONTCOLOR "cyan"
@@ -4057,7 +4090,7 @@ agpl  18	# agpl 'dump' r fun 000 <0 0 0 0>
           # with radiation
           #jrdprad $filename
           # with radiation but no currents but with entropy
-          #jrdprad2 $filename
+          jrdprad2 $filename
                   #jrdpraddump rad$filename
 		  # NEW
                   #jrdpall $ii
@@ -4065,7 +4098,7 @@ agpl  18	# agpl 'dump' r fun 000 <0 0 0 0>
                   #define arg (h2)
                   #jrdpallgrb $arg
 		  #
-          jrdpwald $ii
+          #jrdpwald $ii
 		  # OLD
 		  #jrdp3duold $filename
 		  #
@@ -4076,6 +4109,79 @@ agpl  18	# agpl 'dump' r fun 000 <0 0 0 0>
 		  #
                   #jrdpdebug $filenamedebug
                   #faraday
+		  ctype default
+		  #set hor=sqrt(cs2)/(r*omega3)
+		  #stresscalc 1
+		  #lweight 3 
+                  if($numsend==2){ pl  0 $2 $3}\
+                  else{\
+                   if($numsend==3){  pl  0 $2 $3 $4}\
+                   else{\
+                    if($numsend==4){ pl  0 $2 $3 $4 $5 $6 $7 $8}
+                   }
+                  }
+                  
+		  #
+		  #jrdp3du ../../run.laxf/dumps/$filename
+		  #faraday
+		  #set hor=sqrt(cs2)/(r*omega3)
+		  #stresscalc 1
+		  #lweight 3
+		  #ctype red
+                  #if($numsend==2){ pl  0 $2 $3}\
+                  #else{\
+                  # if($numsend==3){  pl  0 $2 $3 $4}\
+                  # else{\
+                  #  if($numsend==4){ pl  0 $2 $3 $4 $5 $6 $7 $8}
+                  # }
+                  #}
+		  #
+		  #
+		  #lweight 5
+		  #points $2 $3
+		  #lweight 3
+		  #
+                  #
+                  # ctype red
+                  #plo 0 $2 fail0
+                  #
+		  #set god=$3
+		  #set myfit=2.0*god[0]*(r/r[0])**(-5/4)
+		  #set myfit=0.1*(r/r[0])**(-5/4)
+		  #ctype red pl 0 $2 myfit 1110
+		  #ctype default
+		  #lweight 5 points $2 $3
+                  #delay loop
+		  #set jj=0
+		  #while {jj<10000} {set jj=jj+1}
+		  #!sleep .5s
+		}
+		#
+		# animate pls in HARM
+agplh  18	# agpl 'dump' r fun 000 <0 0 0 0>
+                if($?4 == 0) { define numsend (2) }\
+                else{\
+                  if($?5 == 1) { define numsend (4) } else { define numsend 3 }
+                }
+                #defaults
+		define PLANE (3)
+		define WHICHLEV (0)
+                set h1=$1
+		set h1gdump='gdump'
+		set h1debug='debug'
+		set h1eosdump='eosdump'
+		#
+                do ii=startanim,endanim,$ANIMSKIP {
+		   set h2=sprintf('%03d',$ii)
+		   set _fname=h1+h2
+		   set _fnamedebug=h1debug+h2
+		   set _fnamegdump=h1gdump+h2
+		   set _fnameeosdump=h1eosdump+h2
+                  define filename (_fname)
+                  define filenameeosdump (_fnameeosdump)
+                  define filenamedebug (_fnamedebug)
+                  define filenamegdump (_fnamegdump)
+		  jrdph2d $filename
 		  ctype default
 		  #set hor=sqrt(cs2)/(r*omega3)
 		  #stresscalc 1
