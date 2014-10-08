@@ -110,8 +110,10 @@ radcomp1 0 #
    # for 128x64 models, below chooses r\sim 81M as in python stripct at r=80M
    #set whichti=int($nx*4.0/5.0)
    # below is like r\sim 97M
-   set whichti=int($nx*5.0/6.0)
-   set myuse=(ti==whichti && tautotmax<=1.0)
+   set whichti=int($nx*4.0/6.0)
+   set myr=r[whichti]
+   print {myr}
+   set myuse=(ti==whichti && tautot2<=0.1)
    #set myuse=(ti==50)
    set dh=$dx2*dxdxp22
    set dphi=$dx3*dxdxp33
