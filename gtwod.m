@@ -406,7 +406,9 @@ jrdpwald 1      #
         #
         set Bznorm=sqrt(bsq[$nx-1])
         #
-        set whichi=$nx/2
+        #set whichi=$nx/2
+        #set whichi=57 # Sam's choice for N_r=128
+        set whichi=100 # Sam's choice for N_r=128
         set area=$dx2*$dx3
         #
         set EfluxIntegrand=Tud1t/Bznorm**2
@@ -436,9 +438,74 @@ jrdpwald 1      #
         print '%15.6g %15.6g %15.6g %15.6g %15.6g %15.6g %15.6g\n' \
          {Eflux Pxflux Pyflux Pzflux Lxflux Lyflux Lzflux}
         #
-        #  gcalc2 3 0 pi/2 LxfluxIntegrand Lxfluxvsr
+wald1 1 #
+        jrdpwald 0
+        set Bznorm=sqrt(bsq[$nx-1])
+        jrdpwald $1
+        #gcalc2 3 0 pi/2 LxfluxIntegrand Lxfluxvsr
+        set myTud10EM=-Tud10EM
+        gcalc2 3 0 pi/2 myTud10EM EdotEMvsr1
+        ctype default pl 0 newr (EdotEMvsr1/Bznorm**2) 1100 
         #
-                #
+        set myuse=(-Tud10EM>0 ? 1 : 0)
+        set myTud10EM=-Tud10EM*myuse
+        gcalc2 3 0 pi/2 myTud10EM EdotEMvsr2
+        ctype red pl 0 newr (EdotEMvsr2/Bznorm**2) 1110 
+        #
+        set myuse=(-Tud10EM>0 && abs(h-pi/2)>0.2 ? 1 : 0)
+        set myTud10EM=-Tud10EM*myuse
+        gcalc2 3 0 pi/2 myTud10EM EdotEMvsr3
+        ctype blue pl 0 newr (EdotEMvsr3/Bznorm**2) 1110 
+        #
+        ctype yellow vertline (LG($rhor))
+        #
+wald0  2 # wald0 14 55
+        # !scp jon@physics-179.umd.edu:sm/gtwod.m ~/sm/
+        # jre gtwod.m
+        #
+        jrdpwald 0
+        set Bznorm=sqrt(bsq[$nx-1])
+        jrdpwald $1
+        #
+		#
+        set iii=0,$nx*$ny*$nz-1,1
+        set indexi=INT(iii%$nx)
+        set indexj=INT((iii%($nx*$ny))/$nx)
+        set indexk=INT(iii/($nx*$ny))
+        #
+		set intfromeq=-1
+		set wedgef=1.0
+		#
+		set intEvsh=0,$ny-1
+        set picki=$2
+		#
+		do jj=0,$ny-1,1 {
+		 #
+		 if(intfromeq==-1){\
+            set myuse=indexj<=$jj
+         }
+         if(intfromeq==1){\
+            set rhs=(abs($jj-$ny/2))
+            set myuse=(abs(indexj-$ny/2))<rhs
+         }
+         if(intfromeq==0){\
+            set rhs=(abs($jj+0.5-$ny/2))
+            set myuse=(abs(indexj+0.5-$ny/2))>=rhs
+         }
+         #
+         set preint=gdet*(-Tud10)*$dx2*$dx3 if(myuse && ti==picki)
+         set intEvsh[$jj]=SUM(preint)
+        }
+		#
+        set theh=h if(ti==picki && tk==0)
+        set thetj=tj  if(ti==picki && tk==0)
+		#
+        #        pl 0 theh (intEvsh/Bznorm**2)
+        pl 0 thetj (intEvsh/Bznorm**2)
+		#
+		#
+		#
+        #       #
 jrdprad 1	# for reading file with full set of stuff with radiation
 		jrdpheader3d dumps/$1
 		da dumps/$1
