@@ -299,6 +299,7 @@ jrdpcf3duentropy 1	# for reading file with current (jcon/jcov) and faraday (fcon
 jrdpwald 1      #
 		            define ii ($1)
          		    set h2=sprintf('%04d',$ii)
+                    define h2def (h2)
                     set h1='dump' set _fname=h1+h2
                     define filename (_fname)
                     #
@@ -316,6 +317,13 @@ jrdpwald 1      #
                     #jrdpcf3duentropy $filename
                     jrdpdebug $filenamedebug
                     jrdpvpot $filenamevpot
+                #
+                jrdpraddims
+                jrdpraddump raddump$h2def
+                jrdpdissmeasure dissmeasuredump$h2def
+                jrdpfailfloordu failfloordudump$h2def
+                jrdpdebugnew debug$h2def
+                #
                     #
                     faraday
                     stresscalc 1
@@ -438,10 +446,13 @@ jrdpwald 1      #
         print '%15.6g %15.6g %15.6g %15.6g %15.6g %15.6g %15.6g\n' \
          {Eflux Pxflux Pyflux Pzflux Lxflux Lyflux Lzflux}
         #
-wald1 1 #
+wald1 1 # 
         jrdpwald 0
         set Bznorm=sqrt(bsq[$nx-1])
         jrdpwald $1
+        wald1b
+wald1b 0 #
+        #        
         #gcalc2 3 0 pi/2 LxfluxIntegrand Lxfluxvsr
         set myTud10EM=-Tud10EM
         gcalc2 3 0 pi/2 myTud10EM EdotEMvsr1
@@ -467,6 +478,9 @@ wald0  2 # wald0 14 55
         set Bznorm=sqrt(bsq[$nx-1])
         jrdpwald $1
         #
+        wald0b $1 $2
+        #
+wald0b  2 # wald0b 14 55
 		#
         set iii=0,$nx*$ny*$nz-1,1
         set indexi=INT(iii%$nx)
@@ -551,7 +565,7 @@ jrdprad 1	# for reading file with full set of stuff with radiation
                 }
                 #
                 jrdpraddump rad$1
-                jrdpdissmeasure dissmeasure$1
+                #jrdpdissmeasure dissmeasure$1
                 jrdpraddims
                 #
  #
@@ -697,7 +711,13 @@ jrdprad2 1	# for reading file with full set of stuff with radiation
  set myRty=(prad0/3)*(4*uur0ortho*uur2ortho-0)
  set myRtz=(prad0/3)*(4*uur0ortho*uur3ortho-0)
  #
- 
+ #  !scp jon@physics-179.umd.edu:~/sm/gtwod.m ~/sm/
+ # gogrmhd
+  set mytaus=tautot2 if(tk==0 && ti==50)
+  set mytau2tot=SUM(mytaus)
+  set mytaueff=taueff2 if(tk==0 && ti==50)
+  set mytauefftot=SUM(mytaueff)
+  print {mytau2tot mytauefftot}
  #
 jrdpraddims 0
           da dimensions.txt
@@ -1758,6 +1778,103 @@ setupcolstring 1 # setupcolstring $numcol
 		define colstring (mystring)
 		#
 		#
+jrdpdebugnew 1 # reads-in debug???? files into numbered names
+                # 2 sections correspond to (1) (e.g. fail0) original full counter (2) (e.g. fsfail0)
+                #
+                # rows shown below in formatted way are TSCALE:
+		# ALLTS 0
+		# ENERTS 1
+		# IMAGETS 2
+		# DEBUGTS 3
+                #
+            #
+                # columns are as in global.nondepnmemonics.h:
+			# define COUNTUTOPRIMFAILCONV 0 // if failed to converge
+			# define COUNTFLOORACT 1 // if floor activated
+			# define COUNTLIMITGAMMAACT 2 // if Gamma limiter activated
+			# define COUNTINFLOWACT 3 // if inflow check activated
+			# define COUNTUTOPRIMFAILRHONEG 4
+			# define COUNTUTOPRIMFAILUNEG 5
+			# define COUNTUTOPRIMFAILRHOUNEG 6
+			# define COUNTGAMMAPERC 7 // see fixup_checksolution()
+			# define COUNTUPERC 8 // see fixup_checksolution()
+			# define COUNTFFDE 9
+			# define COUNTCOLD 10
+			# define COUNTENTROPY 11
+			# define COUNTHOT 12
+			# define COUNTEOSLOOKUPFAIL 13
+			# define COUNTBOUND1 14 // see bounds.tools.c (used when boundary code actually affects active zone values)
+			# define COUNTBOUND2 15
+
+            #// IMPLICITs count normal and issues separately from utoprim failure because not a normal 1-step inversion
+			# define COUNTIMPLICITNORMAL 16
+			# define COUNTEXPLICITNORMAL 17
+			# define COUNTIMPLICITBAD 18
+			# define COUNTEXPLICITBAD 19
+			# define COUNTIMPLICITENERGY 20
+			# define COUNTIMPLICITENTROPY 21
+			# define COUNTIMPLICITCOLDMHD 22
+			# define COUNTIMPLICITFAILED 23
+			# define COUNTIMPLICITPMHD 24
+			# define COUNTIMPLICITUMHD 25
+			# define COUNTIMPLICITPRAD 26
+			# define COUNTIMPLICITURAD 27
+			# define COUNTIMPLICITENTROPYUMHD 28
+			# define COUNTIMPLICITENTROPYPMHD 29
+			# define COUNTIMPLICITMODENORMAL 30
+			# define COUNTIMPLICITMODESTAGES 31
+			# define COUNTIMPLICITMODECOLD 32
+            #
+            # e.g. 
+            #
+    	jrdpheader3d dumps/$1
+                #
+                gsetupfromheader
+                #
+		da dumps/$1
+		lines 2 10000000
+		#
+        set NUMTSCALES=4
+        set NUMFAILFLOORFLAGS=33
+        set NUMSTEPS=2
+		set totalcolumns=NUMTSCALES*NUMFAILFLOORFLAGS*NUMSTEPS
+                if(totalcolumns!=_numcolumns){\
+                 echo "Wrong format"
+                 print {totalcolumns _numcolumns}
+                }\
+                else{\
+                     define numcol (totalcolumns)
+                     setupcolstring $numcol
+                     #
+		     # had to make below submacro or else SM messes up and doesn't create colstring correctly
+		     #
+		     subfailfloordd
+                     #
+                }
+                #
+                #
+subfailfloordd 0 #
+		echo "Getting ddgen columns: $!!colstring"
+		read {ddgen $!!colstring}
+		#
+		# SM sucks, fails to setup colstring
+		if(dimen(ddgen)!=$numcol*$nx*$ny*$nz){
+		   read {ddgen $!!colstring}
+		}
+		#
+		set iii = 0,($numcol*$nx*$ny*$nz-1)
+		set indexdu=INT((iii%$($numcol))/1)
+		set indexi =INT((iii%($numcol*$nx))/$numcol)
+		set indexj =INT((iii%($numcol*$nx*$ny))/($numcol*$nx))
+		set indexk =INT((iii%($numcol*$nx*$ny*$nz))/($numcol*$nx*$ny))
+		#
+		do iii=0,$numcol-1,1 {\
+	         set dd$iii = ddgen if(indexdu==$iii)
+                }  
+		#  
+		echo "Created $numcol versions of dd? variables (e.g. dd0)."
+		#
+		#
 jrdp3duentropy	1	# with NPRDUMP=8 even if doing entropy since entropy primitive not really used
 		jrdpheader3d dumps/$1
 		da dumps/$1
@@ -2403,23 +2520,24 @@ jrdpdebuggen 1  #
 		# IMAGETS 2
 		# DEBUGTS 3
                 #
-   #
                 # columns are as in global.nondepnmemonics.h:
-                #define COUNTUTOPRIMFAILCONV 0 // if failed to converge
-                #define COUNTFLOORACT 1 // if floor activated
-                #define COUNTLIMITGAMMAACT 2 // if Gamma limiter activated
-                #define COUNTINFLOWACT 3 // if inflow check activated
-                #define COUNTUTOPRIMFAILRHONEG 4
-                #define COUNTUTOPRIMFAILUNEG 5
-                #define COUNTUTOPRIMFAILRHOUNEG 6
-                #define COUNTGAMMAPERC 7 // see fixup_checksolution()
-                #define COUNTUPERC 8 // see fixup_checksolution()
-                #define COUNTENTROPY 9
-                #define COUNTCOLD 10
-                #define COUNTEOSLOOKUPFAIL 11
-                #define COUNTBOUND1 12 // see bounds.tools.c (used when boundary code actually affects active zone values)
-                #define COUNTBOUND2 13
-                #define COUNTONESTEP 14
+			# define COUNTUTOPRIMFAILCONV 0 // if failed to converge
+			# define COUNTFLOORACT 1 // if floor activated
+			# define COUNTLIMITGAMMAACT 2 // if Gamma limiter activated
+			# define COUNTINFLOWACT 3 // if inflow check activated
+			# define COUNTUTOPRIMFAILRHONEG 4
+			# define COUNTUTOPRIMFAILUNEG 5
+			# define COUNTUTOPRIMFAILRHOUNEG 6
+			# define COUNTGAMMAPERC 7 // see fixup_checksolution()
+			# define COUNTUPERC 8 // see fixup_checksolution()
+			# define COUNTENTROPY 9
+			# define COUNTHOT 10
+			# define COUNTCOLD 11
+			# define COUNTEOSLOOKUPFAIL 12
+			# define COUNTBOUND1 13 // see bounds.tools.c (used when boundary code actually affects active zone values)
+			# define COUNTBOUND2 14
+            #
+   #
 		#
 		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {\
