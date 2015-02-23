@@ -323,6 +323,7 @@ jrdpwald 1      #
                 jrdpdissmeasure dissmeasuredump$h2def
                 jrdpfailfloordu failfloordudump$h2def
                 jrdpdebugnew debug$h2def
+                debugenernew
                 #
                     #
                     faraday
@@ -382,9 +383,9 @@ jrdpwald 1      #
         set gv3hp= (dxdxp21*gv313 - dxdxp11*gv323)/(dxdxp12*dxdxp21*dxdxp33 - dxdxp11*dxdxp22*dxdxp33)
         set gv3pp=gv333/dxdxp33**2
         #
-        set x=r*sin(h)*cos(ph)
-        set y=r*sin(h)*sin(ph)
-        set z=r*cos(h)
+        set xx=r*sin(h)*cos(ph)
+        set yy=r*sin(h)*sin(ph)
+        set zz=r*cos(h)
         #     
         set vx=vr*sqrt(gv3rr)*sin(h)*cos(ph) + vh*sqrt(gv3hh)*cos(h)*cos(ph) + vp*sqrt(gv3pp)*(-sin(ph))
         set vy=vr*sqrt(gv3rr)*sin(h)*sin(ph) + vh*sqrt(gv3hh)*cos(h)*sin(ph) + vp*sqrt(gv3pp)*(cos(ph))
@@ -412,11 +413,18 @@ jrdpwald 1      #
         set Tud1y=Tud1rhat*sin(h)*sin(ph) + Tud1hhat*cos(h)*sin(ph) + Tud1phat*(cos(ph))
         set Tud1z=Tud1rhat*cos(h)         + Tud1hhat*(-sin(h))
         #
-        set Bznorm=sqrt(bsq[$nx-1])
+        define nxout ($nx-1)
+        define whichi (100)
+        define whichi ($whichi > $nx*3/4 ? $nx*3/4 : $whichi)
+        jrdpwaldcalc $nxout $whichi
+        #
+jrdpwaldcalc 2 # jrdpwaldcalc $picknormijk $picki
+        set Bznorm=sqrt(bsq[$1])
         #
         #set whichi=$nx/2
         #set whichi=57 # Sam's choice for N_r=128
-        set whichi=100 # Sam's choice for N_r=128
+        #set whichi=100 # Sam's choice for N_r=128
+        set whichi=$2 # Sam's choice for N_r=128
         set area=$dx2*$dx3
         #
         set EfluxIntegrand=Tud1t/Bznorm**2
@@ -433,9 +441,9 @@ jrdpwald 1      #
         set Pyflux=SUM(dPyflux) print {Pyflux}
         set Pzflux=SUM(dPzflux) print {Pzflux}
         #
-        set LxfluxIntegrand=(Tud1y*z-Tud1z*y)/Bznorm**2
-        set LyfluxIntegrand=(Tud1z*x-Tud1x*z)/Bznorm**2
-        set LzfluxIntegrand=(Tud1x*y-Tud1y*x)/Bznorm**2
+        set LxfluxIntegrand=(Tud1y*zz-Tud1z*yy)/Bznorm**2
+        set LyfluxIntegrand=(Tud1z*xx-Tud1x*zz)/Bznorm**2
+        set LzfluxIntegrand=(Tud1x*yy-Tud1y*xx)/Bznorm**2
         set dLxflux=LxfluxIntegrand*gdet*area if(ti==whichi)
         set dLyflux=LyfluxIntegrand*gdet*area if(ti==whichi)
         set dLzflux=LzfluxIntegrand*gdet*area if(ti==whichi)
@@ -451,6 +459,37 @@ wald1 1 #
         set Bznorm=sqrt(bsq[$nx-1])
         jrdpwald $1
         wald1b
+        #
+Gxplot1 0 # Gxplot1 
+		#
+        set iii=0,$nx*$ny*$nz-1,1
+        set indexi=INT(iii%$nx)
+        set indexj=INT((iii%($nx*$ny))/$nx)
+        set indexk=INT(iii/($nx*$ny))
+        #
+		set wedgef=1.0
+		#
+		set intLxvsr=0,$nx-1
+		set intLyvsr=0,$nx-1
+		set intLzvsr=0,$nx-1
+        #
+		#
+		do ii=0,$nx-1,1 {
+		 #
+         jrdpwaldcalc 0 $ii
+         set intLxvsr[$ii]=Lxflux
+         set intLyvsr[$ii]=Lyflux
+         set intLzvsr[$ii]=Lzflux
+        }
+		#
+        set ther=r if(tj==$ny-1 && tk==0)
+        set theti=ti  if(tj==$ny-1 && tk==0)
+		#
+        ctype default
+        pl 0 ther (intLxvsr/Bznorm**2)
+        #pl 0 theti (intLxvsr/Bznorm**2)
+        #
+        #
 wald1b 0 #
         #        
         #gcalc2 3 0 pi/2 LxfluxIntegrand Lxfluxvsr
@@ -661,7 +700,9 @@ jrdprad2 1	# for reading file with full set of stuff with radiation
                 jrdpdissmeasure dissmeasure$1
                 jrdpraddims
                 jrdpfailfloordu failfloordu$1
-                jrdpdebug debug$1
+                #jrdpdebug debug$1
+                jrdpdebugnew debug$1
+                debugenernew
                 #
  #
  set qsqrad=gv311*prad1*prad1+gv312*prad1*prad2+gv313*prad1*prad3\
@@ -1788,42 +1829,53 @@ jrdpdebugnew 1 # reads-in debug???? files into numbered names
 		# DEBUGTS 3
                 #
             #
+ #see failfloorcount counter
                 # columns are as in global.nondepnmemonics.h:
-			# define COUNTUTOPRIMFAILCONV 0 // if failed to converge
-			# define COUNTFLOORACT 1 // if floor activated
-			# define COUNTLIMITGAMMAACT 2 // if Gamma limiter activated
-			# define COUNTINFLOWACT 3 // if inflow check activated
-			# define COUNTUTOPRIMFAILRHONEG 4
-			# define COUNTUTOPRIMFAILUNEG 5
-			# define COUNTUTOPRIMFAILRHOUNEG 6
-			# define COUNTGAMMAPERC 7 // see fixup_checksolution()
-			# define COUNTUPERC 8 // see fixup_checksolution()
-			# define COUNTFFDE 9
-			# define COUNTCOLD 10
-			# define COUNTENTROPY 11
-			# define COUNTHOT 12
-			# define COUNTEOSLOOKUPFAIL 13
-			# define COUNTBOUND1 14 // see bounds.tools.c (used when boundary code actually affects active zone values)
-			# define COUNTBOUND2 15
+	#define COUNTNOTHING -2
+	#define COUNTONESTEP -1 # used as control label, not counted
+	#define COUNTREALSTART 0 # marks when real counters begin
+	#define NUMFAILFLOORFLAGS 36
+	#/  mnemonics
+	#define COUNTUTOPRIMFAILCONV 0 # if failed to converge
+	#define COUNTFLOORACT 1 # if floor activated
+	#define COUNTLIMITGAMMAACT 2 # if Gamma limiter activated
+	#define COUNTINFLOWACT 3 # if inflow check activated
+	#define COUNTUTOPRIMFAILRHONEG 4
+	#define COUNTUTOPRIMFAILUNEG 5
+	#define COUNTUTOPRIMFAILRHOUNEG 6
+	#define COUNTGAMMAPERC 7 # see fixup_checksolution()
+	#define COUNTUPERC 8 # see fixup_checksolution()
+	#define COUNTFFDE 9 # if originally MHD or ENTROPY, this is always referring to EOMFFDE2 or whatever set in utoprimgen.c
+	#define COUNTCOLD 10
+	#define COUNTENTROPY 11
+	#define COUNTHOT 12
+	#define COUNTEOSLOOKUPFAIL 13
+	#define COUNTBOUND1 14 # see bounds.tools.c (used when boundary code actually affects active zone values)
+	#define COUNTBOUND2 15
 
-            #// IMPLICITs count normal and issues separately from utoprim failure because not a normal 1-step inversion
-			# define COUNTIMPLICITNORMAL 16
-			# define COUNTEXPLICITNORMAL 17
-			# define COUNTIMPLICITBAD 18
-			# define COUNTEXPLICITBAD 19
-			# define COUNTIMPLICITENERGY 20
-			# define COUNTIMPLICITENTROPY 21
-			# define COUNTIMPLICITCOLDMHD 22
-			# define COUNTIMPLICITFAILED 23
-			# define COUNTIMPLICITPMHD 24
-			# define COUNTIMPLICITUMHD 25
-			# define COUNTIMPLICITPRAD 26
-			# define COUNTIMPLICITURAD 27
-			# define COUNTIMPLICITENTROPYUMHD 28
-			# define COUNTIMPLICITENTROPYPMHD 29
-			# define COUNTIMPLICITMODENORMAL 30
-			# define COUNTIMPLICITMODESTAGES 31
-			# define COUNTIMPLICITMODECOLD 32
+	# IMPLICITs count normal and issues separately from utoprim failure because not a normal 1-step inversion
+	#define COUNTIMPLICITITERS 16
+	#define COUNTIMPLICITMHDSTEPS 17
+	#define COUNTIMPLICITERRORS 18
+	#define COUNTIMPLICITNORMAL 19
+	#define COUNTEXPLICITNORMAL 20
+	#define COUNTIMPLICITBAD 21
+	#define COUNTEXPLICITBAD 22
+	#define COUNTIMPLICITENERGY 23
+	#define COUNTIMPLICITENTROPY 24
+	#define COUNTIMPLICITCOLDMHD 25
+	#define COUNTIMPLICITFAILED 26
+	#define COUNTIMPLICITPMHD 27
+	#define COUNTIMPLICITUMHD 28
+	#define COUNTIMPLICITPRAD 29
+	#define COUNTIMPLICITURAD 30
+	#define COUNTIMPLICITENTROPYUMHD 31
+	#define COUNTIMPLICITENTROPYPMHD 32
+	#define COUNTIMPLICITMODENORMAL 33
+	#define COUNTIMPLICITMODESTAGES 34
+	#define COUNTIMPLICITMODECOLD 35
+
+
             #
             # e.g. 
             #
@@ -1835,7 +1887,7 @@ jrdpdebugnew 1 # reads-in debug???? files into numbered names
 		lines 2 10000000
 		#
         set NUMTSCALES=4
-        set NUMFAILFLOORFLAGS=33
+        set NUMFAILFLOORFLAGS=36
         set NUMSTEPS=2
 		set totalcolumns=NUMTSCALES*NUMFAILFLOORFLAGS*NUMSTEPS
                 if(totalcolumns!=_numcolumns){\
@@ -1852,6 +1904,8 @@ jrdpdebugnew 1 # reads-in debug???? files into numbered names
                      #
                 }
                 #
+                # e.g. (dd16/_realnstep/3) is number of implicit iterations on average for each cell
+                # 
                 #
 subfailfloordd 0 #
 		echo "Getting ddgen columns: $!!colstring"
@@ -4043,7 +4097,8 @@ agplc 17	# animplc 'dump' r 000 <0 0 0 0>
                   define filenamevpot (_fname)
                     #
                     #
-                    jrdprad2 $filename
+                    #jrdprad2 $filename
+                    jrdprad $filename
 		  #jrdp2d $filename
 		  #define coord 1
                   #jrdpcf3duold $filename
