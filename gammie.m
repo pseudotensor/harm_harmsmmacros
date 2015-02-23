@@ -2759,6 +2759,64 @@ picksd 2        # picksd 0 wc # to pick wc=0
 		#
 		#
 		    #
+debugenernew 0	#
+		#
+		#
+		da debug.out
+		#
+		#
+                # See jrdpdebuggen for more descriptions/details
+		#
+        #
+		lines 1 10000000
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		    {  t nstep \
+                       dt strokes \
+                       wavedt sourcedt gravitydt \
+                       wavedti1 wavedtj1 wavedtk1 \
+                       wavedti2 wavedtj2 wavedtk2 \
+                       wavedti3 wavedtj3 wavedtk3 \
+                       horizoni horizoncpupos1 }
+		    #
+        set NUMTSCALES=4
+        set NUMFAILFLOORFLAGS=36
+        set NUMSTEPS=2
+		set totalcolumns=NUMTSCALES*NUMFAILFLOORFLAGS*NUMSTEPS
+        set totalcolumns=totalcolumns+18
+        define numcol (totalcolumns)
+        setupcolstring $numcol
+        define numtimes (dimen(wavedt))
+        subfailfloorddd $numtimes
+        #
+        #
+subfailfloorddd 1 #
+        define numtimes ($1)
+		echo "Getting dddgen columns: $!!colstring"
+		read {dddgen $!!colstring}
+		#
+		# SM sucks, fails to setup colstring
+		if(dimen(dddgen)!=$numcol*$nx*$ny*$nz){
+		   read {dddgen $!!colstring}
+		}
+		#
+        set numtimes = 10
+		set iii = 0,($numcol*$numtimes-1)
+		set indexdu=INT((iii%$($numcol))/1)
+		set indextime =INT((iii%($numcol*$numtimes))/$numcol)
+		#
+		do iii=0,$numcol-1,1 {\
+	         set ddd$iii = dddgen if(indexdu==$iii)
+                }  
+		#  
+		echo "Created $numcol versions of ddd? variables (e.g. ddd0)."
+		echo "dddx=dd(x-18)"
+		#
+        # dd0 = dd18 = fail
+        # dd9 = dd27 = used ffde
+        # dd16 = implicitnormal
+		#
+		    #
+		    #
 debugener 0	#
 		#
 		#
@@ -2767,6 +2825,7 @@ debugener 0	#
 		#
                 # See jrdpdebuggen for more descriptions/details
 		#
+        #
 		lines 1 10000000
 		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
 		    {  t nstep \
