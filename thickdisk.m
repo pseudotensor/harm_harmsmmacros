@@ -354,7 +354,7 @@ rdvsr6  0
         set beta=pg/bsqshorvsr
         #
 rdvsr7  0        
-        # (was 44, now 51 with alphamag4 and alphareynolds stuff)
+        # (was 44, now 51 with alphamag4 and alphareynolds stuff, now 54)
         !sed 's/nan/0/g' datavsr5.txt > datavsr5n.txt
         !sed 's/inf/0/g' datavsr5n.txt > datavsr5nn.txt
         da datavsr5nn.txt

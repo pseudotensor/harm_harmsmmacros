@@ -2,6 +2,8 @@ jrdp3dener      0 #
 		jrdp3denergen ener.out -1E30 1E30 # already assumes ener.out
 jrdpgrbener   0 #
 		energrbgen ener.out -1E30 1E30 # already assumes ener.out
+jrdpradener   0 #
+		enerradgen ener.out -1E30 1E30 # already assumes ener.out
 jrdpener0      0 #
 		jrdpener 0 1E30 # already assumes ener.out
 jrdpener1      0 #
@@ -25,6 +27,24 @@ jrdpener 2              #
 		#
 jrdpmetricparms 0 #
 		metricparmsener metricparms.out
+		#
+enerradgen 3	#
+		# jrdpener ener.out 0 2000
+		# jrdpener jetener0.out 0 2000
+		# jrdpener jetener1.out 0 2000
+		# generalized ener.out reader
+		set notdone=1
+		set divbavg=-1
+		set bx3dot=-1000
+		set dl=-1000
+		#
+		enerrad3d $1
+		# no checks yet, first macro
+		#
+		# now find average of useful quantities
+		#enersettime $2 $3
+		#eneraverages
+		enererrorsrad
 		#
 energrbgen 3	#
 		# jrdpener ener.out 0 2000
@@ -180,6 +200,11 @@ enererrors 0    # error analysis of conservative quantities
 		    set u5tdel=u5-u5fl-u5src-(u5cum1+u5cum3)+(u5cum0+u5cum2)-u5[0]
 		    set u6tdel=u6-u6fl-u6src-(u6cum1+u6cum3)+(u6cum0+u6cum2)-u6[0]	
 		    set u7tdel=u7-u7fl-u7src-(u7cum1+u7cum3)+(u7cum0+u7cum2)-u7[0]
+		    set u8tdel=u8-u8fl-u8src-(u8cum1+u8cum3)+(u8cum0+u8cum2)-u8[0]
+		    set u9tdel=u9-u9fl-u9src-(u9cum1+u9cum3)+(u9cum0+u9cum2)-u9[0]
+		    set u10tdel=u10-u10fl-u10src-(u10cum1+u10cum3)+(u10cum0+u10cum2)-u10[0]
+		    set u11tdel=u11-u11fl-u11src-(u11cum1+u11cum3)+(u11cum0+u11cum2)-u11[0]
+		    set u12tdel=u12-u12fl-u12src-(u12cum1+u12cum3)+(u12cum0+u12cum2)-u12[0]
 		    #
 		    # total percent difference (doesn't make sense for those quantities starting off small)
 		    set u0tdiff=u0tdel/u0[0]
@@ -190,6 +215,11 @@ enererrors 0    # error analysis of conservative quantities
 		    set u5tdiff=u5tdel/u5[0]
 		    set u6tdiff=u6tdel/u6[0]
 		    set u7tdiff=u7tdel/u7[0]
+		    set u8tdiff=u8tdel/u8[0]
+		    set u9tdiff=u9tdel/u9[0]
+		    set u10tdiff=u10tdel/u10[0]
+		    set u11tdiff=u11tdel/u11[0]
+		    set u12tdiff=u12tdel/u12[0]
 		    #
 		    # average difference
 		    set u0tdelavg=SUM(u0tdel)/dimen(u0tdel)
@@ -200,6 +230,11 @@ enererrors 0    # error analysis of conservative quantities
 		    set u5tdelavg=SUM(u5tdel)/dimen(u5tdel)
 		    set u6tdelavg=SUM(u6tdel)/dimen(u6tdel)
 		    set u7tdelavg=SUM(u7tdel)/dimen(u7tdel)
+		    set u8tdelavg=SUM(u8tdel)/dimen(u8tdel)
+		    set u9tdelavg=SUM(u9tdel)/dimen(u9tdel)
+		    set u10tdelavg=SUM(u10tdel)/dimen(u10tdel)
+		    set u11tdelavg=SUM(u11tdel)/dimen(u11tdel)
+		    set u12tdelavg=SUM(u12tdel)/dimen(u12tdel)
 		    #
 		    # sigma of difference
 		    set u0tdelsigma=sqrt(SUM(u0tdel**2)/dimen(u0tdel)-u0tdelavg**2)
@@ -210,6 +245,11 @@ enererrors 0    # error analysis of conservative quantities
 		    set u5tdelsigma=sqrt(SUM(u5tdel**2)/dimen(u5tdel)-u5tdelavg**2)
 		    set u6tdelsigma=sqrt(SUM(u6tdel**2)/dimen(u6tdel)-u6tdelavg**2)
 		    set u7tdelsigma=sqrt(SUM(u7tdel**2)/dimen(u7tdel)-u7tdelavg**2)
+		    set u8tdelsigma=sqrt(SUM(u8tdel**2)/dimen(u8tdel)-u8tdelavg**2)
+		    set u9tdelsigma=sqrt(SUM(u9tdel**2)/dimen(u9tdel)-u9tdelavg**2)
+		    set u10tdelsigma=sqrt(SUM(u10tdel**2)/dimen(u10tdel)-u10tdelavg**2)
+		    set u11tdelsigma=sqrt(SUM(u11tdel**2)/dimen(u11tdel)-u11tdelavg**2)
+		    set u12tdelsigma=sqrt(SUM(u12tdel**2)/dimen(u12tdel)-u12tdelavg**2)
 		    #
 		    # absolute average+error difference
 		    set u0tdeloff=ABS(u0tdelavg)+u0tdelsigma
@@ -220,8 +260,13 @@ enererrors 0    # error analysis of conservative quantities
 		    set u5tdeloff=ABS(u5tdelavg)+u5tdelsigma
 		    set u6tdeloff=ABS(u6tdelavg)+u6tdelsigma
 		    set u7tdeloff=ABS(u7tdelavg)+u7tdelsigma
+		    set u8tdeloff=ABS(u8tdelavg)+u8tdelsigma
+		    set u9tdeloff=ABS(u9tdelavg)+u9tdelsigma
+		    set u10tdeloff=ABS(u10tdelavg)+u10tdelsigma
+		    set u11tdeloff=ABS(u11tdelavg)+u11tdelsigma
+		    set u12tdeloff=ABS(u12tdelavg)+u12tdelsigma
 		    #
-		    print {u0tdeloff u1tdeloff u2tdeloff u3tdeloff u4tdeloff u5tdeloff u6tdeloff u7tdeloff}
+		    print {u0tdeloff u1tdeloff u2tdeloff u3tdeloff u4tdeloff u5tdeloff u6tdeloff u7tdeloff u8tdeloff u9tdeloff u10tdeloff u11tdeloff u12tdeloff}
 		    #
 		    # real total average
 		    set u0avg=SUM(u0)/dimen(u0)
@@ -232,6 +277,11 @@ enererrors 0    # error analysis of conservative quantities
 		    set u5avg=SUM(u5)/dimen(u5)
 		    set u6avg=SUM(u6)/dimen(u6)
 		    set u7avg=SUM(u7)/dimen(u7)
+		    set u8avg=SUM(u8)/dimen(u8)
+		    set u9avg=SUM(u9)/dimen(u9)
+		    set u10avg=SUM(u10)/dimen(u10)
+		    set u11avg=SUM(u11)/dimen(u11)
+		    set u12avg=SUM(u12)/dimen(u12)
 		    #
 		    # percent average+error difference
 		    set u0tdiffa=(u0tdeloff)/u0avg
@@ -242,8 +292,13 @@ enererrors 0    # error analysis of conservative quantities
 		    set u5tdiffa=(u5tdeloff)/u5avg
 		    set u6tdiffa=(u6tdeloff)/u6avg
 		    set u7tdiffa=(u7tdeloff)/u7avg
+		    set u8tdiffa=(u8tdeloff)/u8avg
+		    set u9tdiffa=(u9tdeloff)/u9avg
+		    set u10tdiffa=(u10tdeloff)/u10avg
+		    set u11tdiffa=(u11tdeloff)/u11avg
+		    set u12tdiffa=(u12tdeloff)/u12avg
 		    #
-		    print {u0tdiffa u1tdiffa u2tdiffa u3tdiffa u4tdiffa u5tdiffa u6tdiffa u7tdiffa}
+		    print {u0tdiffa u1tdiffa u2tdiffa u3tdiffa u4tdiffa u5tdiffa u6tdiffa u7tdiffa u8tdiffa u9tdiffa u10tdiffa u11tdiffa u12tdiffa}
 		    #
 		    # below assumes vel/b have correlated components (typically true)
 		    set sumv=(SUM(u2)+SUM(u3)+SUM(u4))/3
@@ -254,8 +309,164 @@ enererrors 0    # error analysis of conservative quantities
 		    set u5tdiffb=SUM(u5tdel)/sumb
 		    set u6tdiffb=SUM(u6tdel)/sumb
 		    set u7tdiffb=SUM(u7tdel)/sumb
+		    set u8tdiffb=SUM(u8tdel)/sumb
+		    set u9tdiffb=SUM(u9tdel)/sumb
+		    set u10tdiffb=SUM(u10tdel)/sumb
+		    set u11tdiffb=SUM(u11tdel)/sumb
+		    set u12tdiffb=SUM(u12tdel)/sumb
 		    #
-		    print {u0tdiffa u1tdiffa u2tdiffb u3tdiffb u4tdiffb u5tdiffb u6tdiffb u7tdiffb}
+		    print {u0tdiffa u1tdiffa u2tdiffb u3tdiffb u4tdiffb u5tdiffb u6tdiffb u7tdiffb u8tdiffb u9tdiffb u10tdiffb u11tdiffb u12tdiffb}
+		    #
+		    #
+enererrorsrad 0    # error analysis of conservative quantities
+		#
+		    # total difference
+		    set u0tdel=u0-u0fl-u0src-(u0cum1+u0cum3+u0cum5)+(u0cum0+u0cum2+u0cum4)-u0[0]
+		    set u1tdel=u1-u1fl-u1src-(u1cum1+u1cum3+u1cum5)+(u1cum0+u1cum2+u1cum4)-u1[0]
+		    set u2tdel=u2-u2fl-u2src-(u2cum1+u2cum3+u2cum5)+(u2cum0+u2cum2+u2cum4)-u2[0]
+		    set u3tdel=u3-u3fl-u3src-(u3cum1+u3cum3+u3cum5)+(u3cum0+u3cum2+u3cum4)-u3[0]
+		    set u4tdel=u4-u4fl-u4src-(u4cum1+u4cum3+u4cum5)+(u4cum0+u4cum2+u4cum4)-u4[0]
+		    set u5tdel=u5-u5fl-u5src-(u5cum1+u5cum3+u5cum5)+(u5cum0+u5cum2+u5cum4)-u5[0]
+		    set u6tdel=u6-u6fl-u6src-(u6cum1+u6cum3+u6cum5)+(u6cum0+u6cum2+u6cum4)-u6[0]	
+		    set u7tdel=u7-u7fl-u7src-(u7cum1+u7cum3+u7cum5)+(u7cum0+u7cum2+u7cum4)-u7[0]
+		    set u8tdel=u1tdel + u8-u8fl-u8src-(u8cum1+u8cum3+u8cum5)+(u8cum0+u8cum2+u8cum4)-u8[0]
+		    set u9tdel=u2tdel + u9-u9fl-u9src-(u9cum1+u9cum3+u9cum5)+(u9cum0+u9cum2+u9cum4)-u9[0]
+		    set u10tdel=u3tdel + u10-u10fl-u10src-(u10cum1+u10cum3+u10cum5)+(u10cum0+u10cum2+u10cum4)-u10[0]
+		    set u11tdel=u4tdel + u11-u11fl-u11src-(u11cum1+u11cum3+u11cum5)+(u11cum0+u11cum2+u11cum4)-u11[0]
+		    set u12tdel=u12-u12fl-u12src-(u12cum1+u12cum3+u12cum5)+(u12cum0+u12cum2+u12cum4)-u12[0]
+		    #
+		    # total percent difference (doesn't make sense for those quantities starting off small)
+		    set u0tdiff=u0tdel/u0[0]
+		    set u1tdiff=u1tdel/u1[0]
+		    set u2tdiff=u2tdel/u2[0]
+		    set u3tdiff=u3tdel/u3[0]
+		    set u4tdiff=u4tdel/u4[0]
+		    set u5tdiff=u5tdel/u5[0]
+		    set u6tdiff=u6tdel/u6[0]
+		    set u7tdiff=u7tdel/u7[0]
+		    set u8tdiff=u8tdel/(u1[0]+u8[0])
+		    set u9tdiff=u9tdel/(u2[0]+u9[0])
+		    set u10tdiff=u10tdel/(u3[0]+u10[0])
+		    set u11tdiff=u11tdel/(u4[0]+u11[0])
+		    set u12tdiff=u12tdel/u12[0]
+		    #
+		    # average difference
+		    set u0tdelavg=SUM(u0tdel)/dimen(u0tdel)
+		    set u1tdelavg=SUM(u1tdel)/dimen(u1tdel)
+		    set u2tdelavg=SUM(u2tdel)/dimen(u2tdel)
+		    set u3tdelavg=SUM(u3tdel)/dimen(u3tdel)
+		    set u4tdelavg=SUM(u4tdel)/dimen(u4tdel)
+		    set u5tdelavg=SUM(u5tdel)/dimen(u5tdel)
+		    set u6tdelavg=SUM(u6tdel)/dimen(u6tdel)
+		    set u7tdelavg=SUM(u7tdel)/dimen(u7tdel)
+		    set u8tdelavg=SUM(u8tdel)/dimen(u8tdel)
+		    set u9tdelavg=SUM(u9tdel)/dimen(u9tdel)
+		    set u10tdelavg=SUM(u10tdel)/dimen(u10tdel)
+		    set u11tdelavg=SUM(u11tdel)/dimen(u11tdel)
+		    set u12tdelavg=SUM(u12tdel)/dimen(u12tdel)
+		    #
+		    # sigma of difference
+		    set u0tdelsigma=sqrt(SUM(u0tdel**2)/dimen(u0tdel)-u0tdelavg**2)
+		    set u1tdelsigma=sqrt(SUM(u1tdel**2)/dimen(u1tdel)-u1tdelavg**2)
+		    set u2tdelsigma=sqrt(SUM(u2tdel**2)/dimen(u2tdel)-u2tdelavg**2)
+		    set u3tdelsigma=sqrt(SUM(u3tdel**2)/dimen(u3tdel)-u3tdelavg**2)
+		    set u4tdelsigma=sqrt(SUM(u4tdel**2)/dimen(u4tdel)-u4tdelavg**2)
+		    set u5tdelsigma=sqrt(SUM(u5tdel**2)/dimen(u5tdel)-u5tdelavg**2)
+		    set u6tdelsigma=sqrt(SUM(u6tdel**2)/dimen(u6tdel)-u6tdelavg**2)
+		    set u7tdelsigma=sqrt(SUM(u7tdel**2)/dimen(u7tdel)-u7tdelavg**2)
+		    set u8tdelsigma=sqrt(SUM(u8tdel**2)/dimen(u8tdel)-u8tdelavg**2)
+		    set u9tdelsigma=sqrt(SUM(u9tdel**2)/dimen(u9tdel)-u9tdelavg**2)
+		    set u10tdelsigma=sqrt(SUM(u10tdel**2)/dimen(u10tdel)-u10tdelavg**2)
+		    set u11tdelsigma=sqrt(SUM(u11tdel**2)/dimen(u11tdel)-u11tdelavg**2)
+		    set u12tdelsigma=sqrt(SUM(u12tdel**2)/dimen(u12tdel)-u12tdelavg**2)
+		    #
+		    # absolute average+error difference
+		    set u0tdeloff=ABS(u0tdelavg)+u0tdelsigma
+		    set u1tdeloff=ABS(u1tdelavg)+u1tdelsigma
+		    set u2tdeloff=ABS(u2tdelavg)+u2tdelsigma
+		    set u3tdeloff=ABS(u3tdelavg)+u3tdelsigma
+		    set u4tdeloff=ABS(u4tdelavg)+u4tdelsigma
+		    set u5tdeloff=ABS(u5tdelavg)+u5tdelsigma
+		    set u6tdeloff=ABS(u6tdelavg)+u6tdelsigma
+		    set u7tdeloff=ABS(u7tdelavg)+u7tdelsigma
+		    set u8tdeloff=ABS(u8tdelavg)+u8tdelsigma
+		    set u9tdeloff=ABS(u9tdelavg)+u9tdelsigma
+		    set u10tdeloff=ABS(u10tdelavg)+u10tdelsigma
+		    set u11tdeloff=ABS(u11tdelavg)+u11tdelsigma
+		    set u12tdeloff=ABS(u12tdelavg)+u12tdelsigma
+		    #
+		    print {u0tdeloff u1tdeloff u2tdeloff u3tdeloff u4tdeloff u5tdeloff u6tdeloff u7tdeloff u8tdeloff u9tdeloff u10tdeloff u11tdeloff u12tdeloff}
+		    #
+		    # real total average
+		    set u0avg=SUM(u0)/dimen(u0)
+		    set u1avg=SUM(u1)/dimen(u1)
+		    set u2avg=SUM(u2)/dimen(u2)
+		    set u3avg=SUM(u3)/dimen(u3)
+		    set u4avg=SUM(u4)/dimen(u4)
+		    set u5avg=SUM(u5)/dimen(u5)
+		    set u6avg=SUM(u6)/dimen(u6)
+		    set u7avg=SUM(u7)/dimen(u7)
+		    set u8avg=SUM(u1+u8)/dimen(u1+u8)
+		    set u9avg=SUM(u2+u9)/dimen(u2+u9)
+		    set u10avg=SUM(u3+u10)/dimen(u3+u10)
+		    set u11avg=SUM(u4+u11)/dimen(u4+u11)
+		    set u12avg=SUM(u12)/dimen(u12)
+            #
+		    # total average of absolute value
+		    set u0absavg=SUM(abs(u0))/dimen(u0)
+		    set u1absavg=SUM(abs(u1))/dimen(u1)
+		    set u2absavg=SUM(abs(u2))/dimen(u2)
+		    set u3absavg=SUM(abs(u3))/dimen(u3)
+		    set u4absavg=SUM(abs(u4))/dimen(u4)
+		    set u5absavg=SUM(abs(u5))/dimen(u5)
+		    set u6absavg=SUM(abs(u6))/dimen(u6)
+		    set u7absavg=SUM(abs(u7))/dimen(u7)
+		    set u8absavg=SUM(abs(u1+u8))/dimen(u1+u8)
+		    set u9absavg=SUM(abs(u2+u9))/dimen(u2+u9)
+		    set u10absavg=SUM(abs(u3+u10))/dimen(u3+u10)
+		    set u11absavg=SUM(abs(u4+u11))/dimen(u4+u11)
+		    set u12absavg=SUM(abs(u12))/dimen(u12)
+		    #
+		    # percent average+error difference
+		    set u0tdiffa=(u0tdeloff)/u0absavg
+		    set u1tdiffa=(u1tdeloff)/u1absavg
+		    set u2tdiffa=(u2tdeloff)/u2absavg
+		    set u3tdiffa=(u3tdeloff)/u3absavg
+		    set u4tdiffa=(u4tdeloff)/u4absavg
+		    set u5tdiffa=(u5tdeloff)/u5absavg
+		    set u6tdiffa=(u6tdeloff)/u6absavg
+		    set u7tdiffa=(u7tdeloff)/u7absavg
+		    set u8tdiffa=(u8tdeloff)/u8absavg
+		    set u9tdiffa=(u9tdeloff)/u9absavg
+		    set u10tdiffa=(u10tdeloff)/u10absavg
+		    set u11tdiffa=(u11tdeloff)/u11absavg
+		    set u12tdiffa=(u12tdeloff)/u12absavg
+		    #
+		    print {u0tdiffa u1tdiffa u2tdiffa u3tdiffa u4tdiffa u5tdiffa u6tdiffa u7tdiffa u8tdiffa u9tdiffa u10tdiffa u11tdiffa u12tdiffa}
+		    #
+		    # below assumes vel/b have correlated components (typically true)
+            # also assumes all quantities with different components are same dimensions (e.g. energy added, momentum added) accounting already for area or volume
+            set sumv=(u2absavg+u3absavg+u4absavg)/3
+		    set sumb=(u5absavg+u6absavg+u7absavg)/3
+		    set sume=(u9absavg+u10absavg+u11absavg)/3
+		    #
+            set u0tdiffb=(u0tdeloff)/u0absavg
+            set u1tdiffb=(u1tdeloff)/u1absavg
+            set u2tdiffb=(u2tdeloff)/sumv
+		    set u3tdiffb=(u3tdeloff)/sumv
+		    set u4tdiffb=(u4tdeloff)/sumv
+            #
+            set u5tdiffb=(u5tdeloff)/sumb
+		    set u6tdiffb=(u6tdeloff)/sumb
+		    set u7tdiffb=(u7tdeloff)/sumb
+		    #
+            set u8tdiffb=(u8tdeloff)/u8absavg
+		    set u9tdiffb=(u9tdeloff)/sume
+		    set u10tdiffb=(u10tdeloff)/sume
+		    set u11tdiffb=(u11tdeloff)/sume
+		    #
+		    print {u0tdiffb u1tdiffb u2tdiffb u3tdiffb u4tdiffb u5tdiffb u6tdiffb u7tdiffb u8tdiffb u9tdiffb u10tdiffb u11tdiffb u12tdiffb}
+		    #
 		    #
 		    #
 enerdefs1 0          #
@@ -320,6 +531,39 @@ energrb3d 1	# more directions to consider in general
 		    u0cum5 u1cum5 u2cum5 u3cum5 u4cum5 u5cum5 u6cum5 u7cum5 u8cum5 u9cum5 u10cum5 \
 		    u0fl u1fl u2fl u3fl u4fl u5fl u6fl u7fl u8fl u9fl u10fl \
 		    u0src u1src u2src u3src u4src u5src u6src u7src u8src u9src u10src \
+		    divbmax divbavg \
+		    diss0 diss1 diss2 diss3 diss4 diss5 diss6 diss7 \
+		    diss8 diss9 diss10 diss11 diss12 diss13 diss14 diss15 \
+                    diss16 diss17 }
+		    #
+		    enerdefs1
+		    #
+enerrad3d 1	# more directions to consider in general
+                set NPR=13
+                # below always 18 so consistent format
+                set NUMDISSVERSIONS=18
+		set totalcol= 2 + NPR + 2*NPR*6 + NPR*2 + 2 + NUMDISSVERSIONS
+                print {totalcol}
+		#
+		da $1
+		lines 1 10000000
+		read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		    {  t nstep \
+		       u0 u1 u2 u3 u4 u5 u6 u7 u8 u9 u10 u11 u12 \
+		    u0dot0 u1dot0 u2dot0 u3dot0 u4dot0 u5dot0 u6dot0 u7dot0 u8dot0 u9dot0 u10dot0 u11dot0 u12dot0 \
+		    u0dot1 u1dot1 u2dot1 u3dot1 u4dot1 u5dot1 u6dot1 u7dot1 u8dot1 u9dot1 u10dot1 u11dot1 u12dot1 \
+		    u0dot2 u1dot2 u2dot2 u3dot2 u4dot2 u5dot2 u6dot2 u7dot2 u8dot2 u9dot2 u10dot2 u11dot2 u12dot2  \
+		    u0dot3 u1dot3 u2dot3 u3dot3 u4dot3 u5dot3 u6dot3 u7dot3 u8dot3 u9dot3 u10dot3 u11dot3 u12dot3  \
+		    u0dot4 u1dot4 u2dot4 u3dot4 u4dot4 u5dot4 u6dot4 u7dot4 u8dot4 u9dot4 u10dot4 u11dot4 u12dot4  \
+		    u0dot5 u1dot5 u2dot5 u3dot5 u4dot5 u5dot5 u6dot5 u7dot5 u8dot5 u9dot5 u10dot5 u11dot5 u12dot5  \
+		    u0cum0 u1cum0 u2cum0 u3cum0 u4cum0 u5cum0 u6cum0 u7cum0 u8cum0 u9cum0 u10cum0 u11cum0 u12cum0  \
+		    u0cum1 u1cum1 u2cum1 u3cum1 u4cum1 u5cum1 u6cum1 u7cum1 u8cum1 u9cum1 u10cum1 u11cum1 u12cum1  \
+		    u0cum2 u1cum2 u2cum2 u3cum2 u4cum2 u5cum2 u6cum2 u7cum2 u8cum2 u9cum2 u10cum2 u11cum2 u12cum2  \
+		    u0cum3 u1cum3 u2cum3 u3cum3 u4cum3 u5cum3 u6cum3 u7cum3 u8cum3 u9cum3 u10cum3 u11cum3 u12cum3  \
+		    u0cum4 u1cum4 u2cum4 u3cum4 u4cum4 u5cum4 u6cum4 u7cum4 u8cum4 u9cum4 u10cum4 u11cum4 u12cum4  \
+		    u0cum5 u1cum5 u2cum5 u3cum5 u4cum5 u5cum5 u6cum5 u7cum5 u8cum5 u9cum5 u10cum5 u11cum5 u12cum5  \
+		    u0fl u1fl u2fl u3fl u4fl u5fl u6fl u7fl u8fl u9fl u10fl u11fl u12fl  \
+		    u0src u1src u2src u3src u4src u5src u6src u7src u8src u9src u10src u11src u12src  \
 		    divbmax divbavg \
 		    diss0 diss1 diss2 diss3 diss4 diss5 diss6 diss7 \
 		    diss8 diss9 diss10 diss11 diss12 diss13 diss14 diss15 \
