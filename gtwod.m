@@ -704,6 +704,109 @@ jrdprad2 1	# for reading file with full set of stuff with radiation
                 jrdpdebugnew debug$1
                 debugenernew
                 #
+                jrdpradother
+                #
+jrdprad3 1	# for reading file with full set of stuff with radiation
+		jrdpheader3d dumps/$1
+		da dumps/$1
+		lines 2 10000000
+		#
+                # 81
+        set NPR=13
+        set NPRDUMP=12
+        set nprend=12
+        set NDIM=4
+		set totalcolumns=3*3 + NPRDUMP + 3 + (nprend+1) + 1 + 4 * NDIM + 6 + 1
+                #
+                if(totalcolumns!=_numcolumns || dimen(nprdumplist)!=12 || dimen(nprlist)!=13){\
+                 echo "Wrong format"
+                 print {totalcolumns _numcolumns}
+                 print {nprdumplist}
+                 print {nprlist}
+                }\
+                else{\
+                     read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+                     {ti tj tk x1 x2 x3 r h ph \
+                      rho u v1 v2 v3 B1 B2 B3 prad0 prad1 prad2 prad3 \
+		      p cs2 Sden \
+		      U0 U1 U2 U3 U4  U5 U6 U7  U8 U9 U10 U11  U12 \
+		      divb \
+		      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
+		      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
+                      v1m v1p v2m v2p v3m v3p gdet }
+                     #
+                     set tx1=x1
+                     set tx2=x2
+                     set tx3=x3
+                     gsetup
+                     if($DOGCALC) { gcalc }
+                  # gcalc
+                  abscompute
+                  #
+                  gammienew
+                }
+                #
+                jrdpraddump rad$1
+                jrdpdissmeasure dissmeasure$1
+                jrdpraddims
+                jrdpfailfloordu failfloordu$1
+                #jrdpdebug debug$1
+                jrdpdebugnew2 debug$1
+                debugenernew2
+                #
+                jrdpradother
+                #
+jrdprad4 1	# for reading file with full set of stuff with radiation
+		jrdpheader3d dumps/$1
+		da dumps/$1
+		lines 2 10000000
+		#
+                # 81
+        set NPR=13
+        set NPRDUMP=12
+        set nprend=12
+        set NDIM=4
+		set totalcolumns=3*3 + NPRDUMP + 3 + (nprend+1) + 1 + 4 * NDIM + 6 + 1
+                #
+                if(totalcolumns!=_numcolumns || dimen(nprdumplist)!=12 || dimen(nprlist)!=13){\
+                 echo "Wrong format"
+                 print {totalcolumns _numcolumns}
+                 print {nprdumplist}
+                 print {nprlist}
+                }\
+                else{\
+                     read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+                     {ti tj tk x1 x2 x3 r h ph \
+                      rho u v1 v2 v3 B1 B2 B3 prad0 prad1 prad2 prad3 \
+		      p cs2 Sden \
+		      U0 U1 U2 U3 U4  U5 U6 U7  U8 U9 U10 U11  U12 \
+		      divb \
+		      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
+		      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
+                      v1m v1p v2m v2p v3m v3p gdet }
+                     #
+                     set tx1=x1
+                     set tx2=x2
+                     set tx3=x3
+                     gsetup
+                     if($DOGCALC) { gcalc }
+                  # gcalc
+                  abscompute
+                  #
+                  gammienew
+                }
+                #
+                jrdpraddumpnew rad$1
+                jrdpdissmeasure dissmeasure$1
+                jrdpraddims
+                jrdpfailfloordu failfloordu$1
+                #jrdpdebug debug$1
+                jrdpdebugnew2 debug$1
+                debugenernew2
+                #
+                jrdpradother
+                #
+jrdpradother 0 #                
  #
  set qsqrad=gv311*prad1*prad1+gv312*prad1*prad2+gv313*prad1*prad3\
             +gv321*prad2*prad1+gv322*prad2*prad2+gv323*prad2*prad3\
@@ -1680,7 +1783,32 @@ jrdpraddump	1	#
               vrmin2 vrmax2 vrmin22 vrmax22 \
               vrmin3 vrmax3 vrmin23 vrmax23 \
             }
-	        #        
+            jrdpraddumpadd
+#        
+jrdpraddumpnew	1	#
+		#
+		jrdpheader3d dumps/$1
+		da dumps/$1
+		lines 2 10000000
+		#
+		# 51
+		#
+		 read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		    { uru0 uru1 uru2 uru3 urd0 urd1 urd2 urd3 \
+              prad0ff prad1ff prad2ff prad3ff \
+              Gd0 Gd1 Gd2 Gd3 \
+              Gdabs0 Gdabs1 Gdabs2 Gdabs3 \
+              Tgas Tradlte Tradff Trad \
+              Ruu Erf \
+              nradff kappa kappan kappaemit kappanemit kappaes lambda nlambda \
+              tautot0 tautot1 tautot2 tautot3 tautotmax \
+              vrmin1 vrmax1 vrmin21 vrmax21 \
+              vrmin2 vrmax2 vrmin22 vrmax22 \
+              vrmin3 vrmax3 vrmin23 vrmax23 \
+            }
+            jrdpraddumpadd
+#        
+jrdpraddumpadd 0 #
             set dR=$dx1*dxdxp11
             set dH=r*$dx2*dxdxp22
             set dP=r*sin(h)*$dx3*dxdxp33
@@ -1711,6 +1839,7 @@ jrdpraddump	1	#
             set Rud32=(4.0/3.0)*prad0*uru3*urd2
             set Rud33=(4.0/3.0)*prad0*uru3*urd3 + (1.0/3.0)*prad0
             #
+            stresscalc 1
             set Begen1 = -1-(Tud10+Rud10)/(rho*uu1)
             #
 jrdpvpot 1	#
@@ -1856,24 +1985,25 @@ jrdpdebugnew 1 # reads-in debug???? files into numbered names
 	# IMPLICITs count normal and issues separately from utoprim failure because not a normal 1-step inversion
 	#define COUNTIMPLICITITERS 16
 	#define COUNTIMPLICITMHDSTEPS 17
-	#define COUNTIMPLICITERRORS 18
-	#define COUNTIMPLICITNORMAL 19
-	#define COUNTEXPLICITNORMAL 20
-	#define COUNTIMPLICITBAD 21
-	#define COUNTEXPLICITBAD 22
-	#define COUNTIMPLICITENERGY 23
-	#define COUNTIMPLICITENTROPY 24
-	#define COUNTIMPLICITCOLDMHD 25
-	#define COUNTIMPLICITFAILED 26
-	#define COUNTIMPLICITPMHD 27
-	#define COUNTIMPLICITUMHD 28
-	#define COUNTIMPLICITPRAD 29
-	#define COUNTIMPLICITURAD 30
-	#define COUNTIMPLICITENTROPYUMHD 31
-	#define COUNTIMPLICITENTROPYPMHD 32
-	#define COUNTIMPLICITMODENORMAL 33
-	#define COUNTIMPLICITMODESTAGES 34
-	#define COUNTIMPLICITMODECOLD 35
+	#define COUNTIMPLICITERRORS0 18
+	#define COUNTIMPLICITERRORS1 19
+	#define COUNTIMPLICITNORMAL 20
+	#define COUNTEXPLICITNORMAL 21
+	#define COUNTIMPLICITBAD 22
+	#define COUNTEXPLICITBAD 23
+	#define COUNTIMPLICITENERGY 24
+	#define COUNTIMPLICITENTROPY 25
+	#define COUNTIMPLICITCOLDMHD 26
+	#define COUNTIMPLICITFAILED 27
+	#define COUNTIMPLICITPMHD 28
+	#define COUNTIMPLICITUMHD 29
+	#define COUNTIMPLICITPRAD 30
+	#define COUNTIMPLICITURAD 31
+	#define COUNTIMPLICITENTROPYUMHD 32
+	#define COUNTIMPLICITENTROPYPMHD 33
+	#define COUNTIMPLICITMODENORMAL 34
+	#define COUNTIMPLICITMODESTAGES 35
+	#define COUNTIMPLICITMODECOLD 36
 
 
             #
@@ -1888,6 +2018,92 @@ jrdpdebugnew 1 # reads-in debug???? files into numbered names
 		#
         set NUMTSCALES=4
         set NUMFAILFLOORFLAGS=36
+        set NUMSTEPS=2
+		set totalcolumns=NUMTSCALES*NUMFAILFLOORFLAGS*NUMSTEPS
+                if(totalcolumns!=_numcolumns){\
+                 echo "Wrong format"
+                 print {totalcolumns _numcolumns}
+                }\
+                else{\
+                     define numcol (totalcolumns)
+                     setupcolstring $numcol
+                     #
+		     # had to make below submacro or else SM messes up and doesn't create colstring correctly
+		     #
+		     subfailfloordd
+                     #
+                }
+                #
+                # e.g. (dd16/_realnstep/3) is number of implicit iterations on average for each cell
+                # 
+                #
+jrdpdebugnew2 1 # reads-in debug???? files into numbered names
+                # 2 sections correspond to (1) (e.g. fail0) original full counter (2) (e.g. fsfail0)
+                #
+                # rows shown below in formatted way are TSCALE:
+		# ALLTS 0
+		# ENERTS 1
+		# IMAGETS 2
+		# DEBUGTS 3
+                #
+            #
+	# see failfloorcount counter
+	#define COUNTNOTHING -2
+	#define COUNTONESTEP -1 // used as control label, not counted
+	#define COUNTREALSTART 0 // marks when real counters begin
+	#define NUMFAILFLOORFLAGS 37
+	#  mnemonics
+	#define COUNTUTOPRIMFAILCONV 0 // if failed to converge
+	#define COUNTFLOORACT 1 // if floor activated
+	#define COUNTLIMITGAMMAACT 2 // if Gamma limiter activated
+	#define COUNTINFLOWACT 3 // if inflow check activated
+	#define COUNTUTOPRIMFAILRHONEG 4
+	#define COUNTUTOPRIMFAILUNEG 5
+	#define COUNTUTOPRIMFAILRHOUNEG 6
+	#define COUNTGAMMAPERC 7 // see fixup_checksolution()
+	#define COUNTUPERC 8 // see fixup_checksolution()
+	#define COUNTFFDE 9 // if originally MHD or ENTROPY, this is always referring to EOMFFDE2 or whatever set in utoprimgen.c
+	#define COUNTCOLD 10
+	#define COUNTENTROPY 11
+	#define COUNTHOT 12
+	#define COUNTEOSLOOKUPFAIL 13
+	#define COUNTBOUND1 14 // see bounds.tools.c (used when boundary code actually affects active zone values)
+	#define COUNTBOUND2 15
+	#
+	# IMPLICITs count normal and issues separately from utoprim failure because not a normal 1-step inversion
+	#define COUNTIMPLICITITERS 16
+	#define COUNTIMPLICITMHDSTEPS 17
+	#define COUNTIMPLICITERRORS0 18
+	#define COUNTIMPLICITERRORS1 19
+	#define COUNTIMPLICITNORMAL 20
+	#define COUNTEXPLICITNORMAL 21
+	#define COUNTIMPLICITBAD 22
+	#define COUNTEXPLICITBAD 23
+	#define COUNTIMPLICITENERGY 24
+	#define COUNTIMPLICITENTROPY 25
+	#define COUNTIMPLICITCOLDMHD 26
+	#define COUNTIMPLICITFAILED 27
+	#define COUNTIMPLICITPMHD 28
+	#define COUNTIMPLICITUMHD 29
+	#define COUNTIMPLICITPRAD 30
+	#define COUNTIMPLICITURAD 31
+	#define COUNTIMPLICITENTROPYUMHD 32
+	#define COUNTIMPLICITENTROPYPMHD 33
+	#define COUNTIMPLICITMODENORMAL 34
+	#define COUNTIMPLICITMODESTAGES 35
+	#define COUNTIMPLICITMODECOLD 36
+    #
+            # e.g. 
+            #
+    	jrdpheader3d dumps/$1
+                #
+                gsetupfromheader
+                #
+		da dumps/$1
+		lines 2 10000000
+		#
+        set NUMTSCALES=4
+        set NUMFAILFLOORFLAGS=37
         set NUMSTEPS=2
 		set totalcolumns=NUMTSCALES*NUMFAILFLOORFLAGS*NUMSTEPS
                 if(totalcolumns!=_numcolumns){\
