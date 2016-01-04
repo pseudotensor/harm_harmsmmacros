@@ -616,6 +616,7 @@ defaults
 		  define POSCONTLTYPE 0
 		  define NEGCONTLTYPE 0
           define DOCONNECT 1
+          define print_noheader (0)
 		  #
 defaultsold          # go back to defaults
 	          if($?npdone == 0){\

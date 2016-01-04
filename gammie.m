@@ -329,10 +329,14 @@ enererrorsrad 0    # error analysis of conservative quantities
 		    set u5tdel=u5-u5fl-u5src-(u5cum1+u5cum3+u5cum5)+(u5cum0+u5cum2+u5cum4)-u5[0]
 		    set u6tdel=u6-u6fl-u6src-(u6cum1+u6cum3+u6cum5)+(u6cum0+u6cum2+u6cum4)-u6[0]	
 		    set u7tdel=u7-u7fl-u7src-(u7cum1+u7cum3+u7cum5)+(u7cum0+u7cum2+u7cum4)-u7[0]
-		    set u8tdel=u1tdel + u8-u8fl-u8src-(u8cum1+u8cum3+u8cum5)+(u8cum0+u8cum2+u8cum4)-u8[0]
-		    set u9tdel=u2tdel + u9-u9fl-u9src-(u9cum1+u9cum3+u9cum5)+(u9cum0+u9cum2+u9cum4)-u9[0]
-		    set u10tdel=u3tdel + u10-u10fl-u10src-(u10cum1+u10cum3+u10cum5)+(u10cum0+u10cum2+u10cum4)-u10[0]
-		    set u11tdel=u4tdel + u11-u11fl-u11src-(u11cum1+u11cum3+u11cum5)+(u11cum0+u11cum2+u11cum4)-u11[0]
+		    set u8tdel=u8-u8fl-u8src-(u8cum1+u8cum3+u8cum5)+(u8cum0+u8cum2+u8cum4)-u8[0]
+            set u8tdel=u1tdel + u8tdel
+		    set u9tdel=u9-u9fl-u9src-(u9cum1+u9cum3+u9cum5)+(u9cum0+u9cum2+u9cum4)-u9[0]
+            set u9tdel=u2tdel + u9tdel
+		    set u10tdel=u10-u10fl-u10src-(u10cum1+u10cum3+u10cum5)+(u10cum0+u10cum2+u10cum4)-u10[0]
+            set u10tdel=u3tdel + u10tdel
+		    set u11tdel=u11-u11fl-u11src-(u11cum1+u11cum3+u11cum5)+(u11cum0+u11cum2+u11cum4)-u11[0]
+            set u11tdel=u4tdel + u11tdel
 		    set u12tdel=u12-u12fl-u12src-(u12cum1+u12cum3+u12cum5)+(u12cum0+u12cum2+u12cum4)-u12[0]
 		    #
 		    # total percent difference (doesn't make sense for those quantities starting off small)
@@ -395,7 +399,7 @@ enererrorsrad 0    # error analysis of conservative quantities
 		    set u11tdeloff=ABS(u11tdelavg)+u11tdelsigma
 		    set u12tdeloff=ABS(u12tdelavg)+u12tdelsigma
 		    #
-		    print {u0tdeloff u1tdeloff u2tdeloff u3tdeloff u4tdeloff u5tdeloff u6tdeloff u7tdeloff u8tdeloff u9tdeloff u10tdeloff u11tdeloff u12tdeloff}
+            #print {u0tdeloff u1tdeloff u2tdeloff u3tdeloff u4tdeloff u5tdeloff u6tdeloff u7tdeloff u8tdeloff u9tdeloff u10tdeloff u11tdeloff u12tdeloff}
 		    #
 		    # real total average
 		    set u0avg=SUM(u0)/dimen(u0)
@@ -446,26 +450,78 @@ enererrorsrad 0    # error analysis of conservative quantities
 		    #
 		    # below assumes vel/b have correlated components (typically true)
             # also assumes all quantities with different components are same dimensions (e.g. energy added, momentum added) accounting already for area or volume
-            set sumv=(u2absavg+u3absavg+u4absavg)/3
+            set sumenergy=0.5*(u1absavg+u8absavg)
+            set sumv0=(u2absavg+u3absavg+u4absavg)/3
 		    set sumb=(u5absavg+u6absavg+u7absavg)/3
-		    set sume=(u9absavg+u10absavg+u11absavg)/3
+		    set sume0=(u9absavg+u10absavg+u11absavg)/3
+            set sumv=0.5*(sumv0+sume0)
+            set sume=sumv
 		    #
-            set u0tdiffb=(u0tdeloff)/u0absavg
-            set u1tdiffb=(u1tdeloff)/u1absavg
-            set u2tdiffb=(u2tdeloff)/sumv
-		    set u3tdiffb=(u3tdeloff)/sumv
-		    set u4tdiffb=(u4tdeloff)/sumv
+            set u0tdiffvb=(u0tdel)/u0absavg
+            set u1tdiffvb=(u1tdel)/sumenergy
+            set u2tdiffvb=(u2tdel)/sumv
+		    set u3tdiffvb=(u3tdel)/sumv
+		    set u4tdiffvb=(u4tdel)/sumv
             #
-            set u5tdiffb=(u5tdeloff)/sumb
-		    set u6tdiffb=(u6tdeloff)/sumb
-		    set u7tdiffb=(u7tdeloff)/sumb
+            set u5tdiffvb=(u5tdel)/sumb
+		    set u6tdiffvb=(u6tdel)/sumb
+		    set u7tdiffvb=(u7tdel)/sumb
 		    #
-            set u8tdiffb=(u8tdeloff)/u8absavg
-		    set u9tdiffb=(u9tdeloff)/sume
-		    set u10tdiffb=(u10tdeloff)/sume
-		    set u11tdiffb=(u11tdeloff)/sume
+            set u8tdiffvb=(u8tdel)/sumenergy
+		    set u9tdiffvb=(u9tdel)/sume
+		    set u10tdiffvb=(u10tdel)/sume
+		    set u11tdiffvb=(u11tdel)/sume
+            #
+		    set u12tdiffvb=(u12tdel)/u12absavg
+            #
+            #
+		    # average
+		    set u0tdiffvbavg=SUM(u0tdiffvb)/dimen(u0tdiffvb)
+		    set u1tdiffvbavg=SUM(u1tdiffvb)/dimen(u1tdiffvb)
+		    set u2tdiffvbavg=SUM(u2tdiffvb)/dimen(u2tdiffvb)
+		    set u3tdiffvbavg=SUM(u3tdiffvb)/dimen(u3tdiffvb)
+		    set u4tdiffvbavg=SUM(u4tdiffvb)/dimen(u4tdiffvb)
+		    set u5tdiffvbavg=SUM(u5tdiffvb)/dimen(u5tdiffvb)
+		    set u6tdiffvbavg=SUM(u6tdiffvb)/dimen(u6tdiffvb)
+		    set u7tdiffvbavg=SUM(u7tdiffvb)/dimen(u7tdiffvb)
+		    set u8tdiffvbavg=SUM(u8tdiffvb)/dimen(u8tdiffvb)
+		    set u9tdiffvbavg=SUM(u9tdiffvb)/dimen(u9tdiffvb)
+		    set u10tdiffvbavg=SUM(u10tdiffvb)/dimen(u10tdiffvb)
+		    set u11tdiffvbavg=SUM(u11tdiffvb)/dimen(u11tdiffvb)
+		    set u12tdiffvbavg=SUM(u12tdiffvb)/dimen(u12tdiffvb)
 		    #
-		    print {u0tdiffb u1tdiffb u2tdiffb u3tdiffb u4tdiffb u5tdiffb u6tdiffb u7tdiffb u8tdiffb u9tdiffb u10tdiffb u11tdiffb u12tdiffb}
+		    # sigma
+		    set u0tdiffvbsigma=sqrt(SUM(u0tdiffvb**2)/dimen(u0tdiffvb)-u0tdiffvbavg**2)
+		    set u1tdiffvbsigma=sqrt(SUM(u1tdiffvb**2)/dimen(u1tdiffvb)-u1tdiffvbavg**2)
+		    set u2tdiffvbsigma=sqrt(SUM(u2tdiffvb**2)/dimen(u2tdiffvb)-u2tdiffvbavg**2)
+		    set u3tdiffvbsigma=sqrt(SUM(u3tdiffvb**2)/dimen(u3tdiffvb)-u3tdiffvbavg**2)
+		    set u4tdiffvbsigma=sqrt(SUM(u4tdiffvb**2)/dimen(u4tdiffvb)-u4tdiffvbavg**2)
+		    set u5tdiffvbsigma=sqrt(SUM(u5tdiffvb**2)/dimen(u5tdiffvb)-u5tdiffvbavg**2)
+		    set u6tdiffvbsigma=sqrt(SUM(u6tdiffvb**2)/dimen(u6tdiffvb)-u6tdiffvbavg**2)
+		    set u7tdiffvbsigma=sqrt(SUM(u7tdiffvb**2)/dimen(u7tdiffvb)-u7tdiffvbavg**2)
+		    set u8tdiffvbsigma=sqrt(SUM(u8tdiffvb**2)/dimen(u8tdiffvb)-u8tdiffvbavg**2)
+		    set u9tdiffvbsigma=sqrt(SUM(u9tdiffvb**2)/dimen(u9tdiffvb)-u9tdiffvbavg**2)
+		    set u10tdiffvbsigma=sqrt(SUM(u10tdiffvb**2)/dimen(u10tdiffvb)-u10tdiffvbavg**2)
+		    set u11tdiffvbsigma=sqrt(SUM(u11tdiffvb**2)/dimen(u11tdiffvb)-u11tdiffvbavg**2)
+		    set u12tdiffvbsigma=sqrt(SUM(u12tdiffvb**2)/dimen(u12tdiffvb)-u12tdiffvbavg**2)
+		    #
+		    # absolute average+error difference
+		    set u0tdiffvboff=ABS(u0tdiffvbavg)+u0tdiffvbsigma
+		    set u1tdiffvboff=ABS(u1tdiffvbavg)+u1tdiffvbsigma
+		    set u2tdiffvboff=ABS(u2tdiffvbavg)+u2tdiffvbsigma
+		    set u3tdiffvboff=ABS(u3tdiffvbavg)+u3tdiffvbsigma
+		    set u4tdiffvboff=ABS(u4tdiffvbavg)+u4tdiffvbsigma
+		    set u5tdiffvboff=ABS(u5tdiffvbavg)+u5tdiffvbsigma
+		    set u6tdiffvboff=ABS(u6tdiffvbavg)+u6tdiffvbsigma
+		    set u7tdiffvboff=ABS(u7tdiffvbavg)+u7tdiffvbsigma
+		    set u8tdiffvboff=ABS(u8tdiffvbavg)+u8tdiffvbsigma
+		    set u9tdiffvboff=ABS(u9tdiffvbavg)+u9tdiffvbsigma
+		    set u10tdiffvboff=ABS(u10tdiffvbavg)+u10tdiffvbsigma
+		    set u11tdiffvboff=ABS(u11tdiffvbavg)+u11tdiffvbsigma
+		    set u12tdiffvboff=ABS(u12tdiffvbavg)+u12tdiffvbsigma
+		    #
+		    #
+		    print {u0tdiffvboff u1tdiffvboff u2tdiffvboff u3tdiffvboff u4tdiffvboff u5tdiffvboff u6tdiffvboff u7tdiffvboff u8tdiffvboff u9tdiffvboff u10tdiffvboff u11tdiffvboff u12tdiffvboff}
 		    #
 		    #
 		    #
@@ -570,7 +626,213 @@ enerrad3d 1	# more directions to consider in general
                     diss16 diss17 }
 		    #
 		    enerdefs1
+            #
+            #da flener.out
+            #lines 1 10000000
+            ## floor is after 2+6*NPR*7 = 2+6*13*7=548
+            ##read {tp 1 realnstepp 2 u0flpart0 549 u0flpart1 550}
+            #read {tp 1 realnstepp 2}
+            #
+enerrad3dmore 0	# more directions to consider in general
+            # goes on from 549 through an additional NUMFAILFLOORFLAGS*NPR = 36*13 = 468 , so up through 1016 inclusive
+            !tr -s ' ' < flener.out | sed 's/^ *//' | cut -d ' ' -f1-2,549-1016 > flenercut.out
+            da flenercut.out
+            lines 1 10000000
+            read '%g %g  %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+		{ tp realnstep \
+            u0fl0 u0fl1 u0fl2 u0fl3 u0fl4 u0fl5 u0fl6 u0fl7 u0fl8 u0fl9 \
+             u0fl10 u0fl11 u0fl12 u0fl13 u0fl14 u0fl15 \
+             u0fl16 u0fl17 u0fl18 u0fl19 u0fl20 u0fl21 u0fl22 u0fl23 u0fl24 \
+             u0fl25 u0fl26 u0fl27 u0fl28 u0fl29 u0fl30 u0fl31 u0fl32 u0fl33 u0fl34 u0fl35 \
+             u1fl0 u1fl1 u1fl2 u1fl3 u1fl4 u1fl5 u1fl6 u1fl7 u1fl8 u1fl9 \
+             u1fl10 u1fl11 u1fl12 u1fl13 u1fl14 u1fl15 \
+             u1fl16 u1fl17 u1fl18 u1fl19 u1fl20 u1fl21 u1fl22 u1fl23 u1fl24 \
+             u1fl25 u1fl26 u1fl27 u1fl28 u1fl29 u1fl30 u1fl31 u1fl32 u1fl33 u1fl34 u1fl35 \
+             u2fl0 u2fl1 u2fl2 u2fl3 u2fl4 u2fl5 u2fl6 u2fl7 u2fl8 u2fl9 \
+             u2fl10 u2fl11 u2fl12 u2fl13 u2fl14 u2fl15 \
+             u2fl16 u2fl17 u2fl18 u2fl19 u2fl20 u2fl21 u2fl22 u2fl23 u2fl24 \
+             u2fl25 u2fl26 u2fl27 u2fl28 u2fl29 u2fl30 u2fl31 u2fl32 u2fl33 u2fl34 u2fl35 \
+             u3fl0 u3fl1 u3fl2 u3fl3 u3fl4 u3fl5 u3fl6 u3fl7 u3fl8 u3fl9 \
+             u3fl10 u3fl11 u3fl12 u3fl13 u3fl14 u3fl15 \
+             u3fl16 u3fl17 u3fl18 u3fl19 u3fl20 u3fl21 u3fl22 u3fl23 u3fl24 \
+             u3fl25 u3fl26 u3fl27 u3fl28 u3fl29 u3fl30 u3fl31 u3fl32 u3fl33 u3fl34 u3fl35 \
+             u4fl0 u4fl1 u4fl2 u4fl3 u4fl4 u4fl5 u4fl6 u4fl7 u4fl8 u4fl9 \
+             u4fl10 u4fl11 u4fl12 u4fl13 u4fl14 u4fl15 \
+             u4fl16 u4fl17 u4fl18 u4fl19 u4fl20 u4fl21 u4fl22 u4fl23 u4fl24 \
+             u4fl25 u4fl26 u4fl27 u4fl28 u4fl29 u4fl30 u4fl31 u4fl32 u4fl33 u4fl34 u4fl35 \
+             u5fl0 u5fl1 u5fl2 u5fl3 u5fl4 u5fl5 u5fl6 u5fl7 u5fl8 u5fl9 \
+             u5fl10 u5fl11 u5fl12 u5fl13 u5fl14 u5fl15 \
+             u5fl16 u5fl17 u5fl18 u5fl19 u5fl20 u5fl21 u5fl22 u5fl23 u5fl24 \
+             u5fl25 u5fl26 u5fl27 u5fl28 u5fl29 u5fl30 u5fl31 u5fl32 u5fl33 u5fl34 u5fl35 \
+             u6fl0 u6fl1 u6fl2 u6fl3 u6fl4 u6fl5 u6fl6 u6fl7 u6fl8 u6fl9 \
+             u6fl10 u6fl11 u6fl12 u6fl13 u6fl14 u6fl15 \
+             u6fl16 u6fl17 u6fl18 u6fl19 u6fl20 u6fl21 u6fl22 u6fl23 u6fl24 \
+             u6fl25 u6fl26 u6fl27 u6fl28 u6fl29 u6fl30 u6fl31 u6fl32 u6fl33 u6fl34 u6fl35 \
+             u7fl0 u7fl1 u7fl2 u7fl3 u7fl4 u7fl5 u7fl6 u7fl7 u7fl8 u7fl9 \
+             u7fl10 u7fl11 u7fl12 u7fl13 u7fl14 u7fl15 \
+             u7fl16 u7fl17 u7fl18 u7fl19 u7fl20 u7fl21 u7fl22 u7fl23 u7fl24 \
+             u7fl25 u7fl26 u7fl27 u7fl28 u7fl29 u7fl30 u7fl31 u7fl32 u7fl33 u7fl34 u7fl35 \
+             u8fl0 u8fl1 u8fl2 u8fl3 u8fl4 u8fl5 u8fl6 u8fl7 u8fl8 u8fl9 \
+             u8fl10 u8fl11 u8fl12 u8fl13 u8fl14 u8fl15 \
+             u8fl16 u8fl17 u8fl18 u8fl19 u8fl20 u8fl21 u8fl22 u8fl23 u8fl24 \
+             u8fl25 u8fl26 u8fl27 u8fl28 u8fl29 u8fl30 u8fl31 u8fl32 u8fl33 u8fl34 u8fl35 \
+             u9fl0 u9fl1 u9fl2 u9fl3 u9fl4 u9fl5 u9fl6 u9fl7 u9fl8 u9fl9 \
+             u9fl10 u9fl11 u9fl12 u9fl13 u9fl14 u9fl15 \
+             u9fl16 u9fl17 u9fl18 u9fl19 u9fl20 u9fl21 u9fl22 u9fl23 u9fl24 \
+             u9fl25 u9fl26 u9fl27 u9fl28 u9fl29 u9fl30 u9fl31 u9fl32 u9fl33 u9fl34 u9fl35 \
+             u10fl0 u10fl1 u10fl2 u10fl3 u10fl4 u10fl5 u10fl6 u10fl7 u10fl8 u10fl9 \
+             u10fl10 u10fl11 u10fl12 u10fl13 u10fl14 u10fl15 \
+             u10fl16 u10fl17 u10fl18 u10fl19 u10fl20 u10fl21 u10fl22 u10fl23 u10fl24 \
+             u10fl25 u10fl26 u10fl27 u10fl28 u10fl29 u10fl30 u10fl31 u10fl32 u10fl33 u10fl34 u10fl35 \
+             u11fl0 u11fl1 u11fl2 u11fl3 u11fl4 u11fl5 u11fl6 u11fl7 u11fl8 u11fl9 \
+             u11fl10 u11fl11 u11fl12 u11fl13 u11fl14 u11fl15 \
+             u11fl16 u11fl17 u11fl18 u11fl19 u11fl20 u11fl21 u11fl22 u11fl23 u11fl24 \
+             u11fl25 u11fl26 u11fl27 u11fl28 u11fl29 u11fl30 u11fl31 u11fl32 u11fl33 u11fl34 u11fl35 \
+             u12fl0 u12fl1 u12fl2 u12fl3 u12fl4 u12fl5 u12fl6 u12fl7 u12fl8 u12fl9 \
+             u12fl10 u12fl11 u12fl12 u12fl13 u12fl14 u12fl15 \
+             u12fl16 u12fl17 u12fl18 u12fl19 u12fl20 u12fl21 u12fl22 u12fl23 u12fl24 \
+             u12fl25 u12fl26 u12fl27 u12fl28 u12fl29 u12fl30 u12fl31 u12fl32 u12fl33 u12fl34 u12fl35 \
+            }
+            #
 		    #
+showterms0  0 #
+		#
+		#
+		ctype default pl 0 t (u0fl-u0fl[0])
+		ctype red plo 0 tp u0fl0
+		ctype blue plo 0 tp (u0fl1+u0fl2+u0fl3+u0fl4+u0fl5+u0fl6+u0fl7+u0fl8+u0fl9+u0fl14+u0fl16+u0fl19+u0fl20+u0fl21+u0fl22+u0fl23+u0fl24+u0fl25)
+		ctype cyan plo 0 tp u0fl14
+		ctype yellow plo 0 tp u0fl16
+		ctype magenta plo 0 tp ((u0fl1+u0fl2+u0fl3+u0fl4+u0fl5+u0fl6+u0fl7+u0fl8+u0fl9+u0fl14+u0fl16+u0fl19+u0fl20+u0fl21+u0fl22+u0fl23+u0fl24+u0fl25)-u0fl0)
+		#
+showterms1 0 #		
+		#
+ 		define t0 (t[0])
+		define tf (t[dimen(t)-1])
+		# #  0001 $t0 $tf -.2 .2
+		ltype 0 ctype default pl 0 t (u1fl-u1fl[0])
+		ctype red plo 0 tp u1fl0
+		ctype blue plo 0 tp (u1fl1+u1fl2+u1fl3+u1fl4+u1fl5+u1fl6+u1fl7+u1fl8+u1fl9+u1fl14+u1fl16+u1fl19+u1fl20+u1fl21+u1fl22+u1fl23+u1fl24+u1fl25)
+		ltype 1 ctype cyan plo 0 tp u1fl14
+		ltype 0 ctype yellow plo 0 tp u1fl16
+        # dominant term
+		ltype 1 ctype red plo 0 tp u1fl1
+   	    # floor -- contributes 
+		ltype 0 ctype cyan plo 0 tp u1fl2
+		ltype 2 ctype cyan plo 0 tp u1fl3
+		ltype 2 ctype yellow plo 0 tp u1fl4
+		ltype 3 ctype red plo 0 tp u1fl5
+		ltype 3 ctype blue plo 0 tp u1fl6
+		ltype 3 ctype cyan plo 0 tp u1fl7
+		ltype 3 ctype yellow plo 0 tp u1fl8
+		ltype 4 ctype red plo 0 tp u1fl9
+		ltype 4 ctype red plo 0 tp u1fl19
+		# new dominant term when replacing how fails, so no longer u1fl1
+		ltype 4 ctype yellow plo 0 tp u1fl20
+		ltype 4 ctype red plo 0 tp u1fl21
+		ltype 4 ctype red plo 0 tp u1fl22
+		ltype 4 ctype cyan plo 0 tp u1fl23
+		ltype 4 ctype red plo 0 tp u1fl24
+		ltype 4 ctype red plo 0 tp u1fl25
+		ctype magenta plo 0 tp ((u1fl1+u1fl2+u1fl3+u1fl4+u1fl5+u1fl6+u1fl7+u1fl8+u1fl9+u1fl14+u1fl16+u1fl20+u1fl21+u1fl22+u1fl23+u1fl24+u1fl25)-u1fl0)
+		#
+showterms2 0 #		
+		ctype default pl 0 t (u2fl-u2fl[0])
+		ctype red plo 0 tp u2fl0
+		ctype blue plo 0 tp (u2fl1+u2fl2+u2fl3+u2fl4+u2fl5+u2fl6+u2fl7+u2fl8+u2fl9+u2fl14+u2fl16+u2fl19+u2fl20+u2fl21+u2fl22+u2fl23+u2fl24+u2fl25)
+		ctype cyan plo 0 tp u2fl14
+		ctype yellow plo 0 tp u2fl16
+		ctype magenta plo 0 tp ((u2fl1+u2fl2+u2fl3+u2fl4+u2fl5+u2fl6+u2fl7+u2fl8+u2fl9+u2fl14+u2fl16+u2fl19+u2fl20+u2fl21+u2fl22+u2fl23+u2fl24+u2fl25)-u2fl0)
+		#
+showterms3 0 #		
+		ctype default pl 0 t (u3fl-u3fl[0])
+		ctype red plo 0 tp u3fl0
+		ctype blue plo 0 tp (u3fl1+u3fl2+u3fl3+u3fl4+u3fl5+u3fl6+u3fl7+u3fl8+u3fl9+u3fl14)
+		ctype cyan plo 0 tp u3fl14
+		ctype yellow plo 0 tp u3fl16
+		ctype magenta plo 0 tp ((u3fl1+u3fl2+u3fl3+u3fl4+u3fl5+u3fl6+u3fl7+u3fl8+u3fl9+u3fl14+u3fl16)-u3fl0)
+		#
+showterms4 0 #		
+		ctype default pl 0 t (u4fl-u4fl[0])
+		ctype red plo 0 tp u4fl0
+		ctype blue plo 0 tp (u4fl1+u4fl2+u4fl3+u4fl4+u4fl5+u4fl6+u4fl7+u4fl8+u4fl9+u4fl14)
+		ctype cyan plo 0 tp u4fl14
+		ctype yellow plo 0 tp u4fl16
+		ctype magenta plo 0 tp ((u4fl1+u4fl2+u4fl3+u4fl4+u4fl5+u4fl6+u4fl7+u4fl8+u4fl9+u4fl14+u4fl16)-u4fl0)
+		#
+		#
+showterms5 0 #		
+		ctype default pl 0 t (u5fl-u5fl[0])
+		ctype red plo 0 tp u5fl0
+		ctype blue plo 0 tp (u5fl1+u5fl2+u5fl3+u5fl4+u5fl5+u5fl6+u5fl7+u5fl8+u5fl9+u5fl14)
+		ctype cyan plo 0 tp u5fl14
+		ctype yellow plo 0 tp u5fl16
+		#
+showterms6 0 #		
+		ctype default pl 0 t (u6fl-u6fl[0])
+		ctype red plo 0 tp u6fl0
+		ctype blue plo 0 tp (u6fl1+u6fl2+u6fl3+u6fl4+u6fl5+u6fl6+u6fl7+u6fl8+u6fl9+u6fl14)
+		ctype cyan plo 0 tp u6fl14
+		ctype yellow plo 0 tp u6fl16
+		#
+showterms7 0 #		
+		ctype default pl 0 t (u7fl-u7fl[0])
+		ctype red plo 0 tp u7fl0
+		ctype blue plo 0 tp (u7fl1+u7fl2+u7fl3+u7fl4+u7fl5+u7fl6+u7fl7+u7fl8+u7fl9+u7fl14)
+		ctype cyan plo 0 tp u7fl14
+		ctype yellow plo 0 tp u7fl16
+		#
+		#
+showterms8 0 #		
+		ltype 0 ctype default pl 0 t (u8fl-u8fl[0])
+		ctype red plo 0 tp u8fl0
+		ctype blue plo 0 tp (u8fl1+u8fl2+u8fl3+u8fl4+u8fl5+u8fl6+u8fl7+u8fl8+u8fl9+u8fl14+u8fl16+u8fl19+u8fl20+u8fl21+u8fl22+u8fl23+u8fl24+u8fl25)
+		ctype cyan plo 0 tp u8fl14 # important term
+		ctype yellow plo 0 tp u8fl16
+		ltype 1 ctype red plo 0 tp u8fl1 # dominant term
+		ltype 1 ctype blue plo 0 tp u8fl2
+		ltype 2 ctype cyan plo 0 tp u8fl3
+		ltype 2 ctype yellow plo 0 tp u8fl4
+		ltype 3 ctype red plo 0 tp u8fl5
+		ltype 3 ctype blue plo 0 tp u8fl6
+		ltype 3 ctype cyan plo 0 tp u8fl7
+		ltype 3 ctype yellow plo 0 tp u8fl8
+		ltype 4 ctype red plo 0 tp u8fl9
+		ltype 4 ctype red plo 0 tp u8fl19
+		ltype 4 ctype red plo 0 tp u8fl20
+		ltype 4 ctype red plo 0 tp u8fl21
+		ltype 4 ctype red plo 0 tp u8fl22
+		# # contributes a bit sometimes
+		ltype 4 ctype cyan plo 0 tp u8fl23
+		ltype 4 ctype red plo 0 tp u8fl24
+		ltype 4 ctype red plo 0 tp u8fl25
+		ctype magenta plo 0 tp ((u8fl1+u8fl2+u8fl3+u8fl4+u8fl5+u8fl6+u8fl7+u8fl8+u8fl9+u8fl14+u8fl16+u8fl19+u8fl20+u8fl21+u8fl22+u8fl23+u8fl24+u8fl25)-u8fl0)
+		#
+showterms9 0 #		
+		ctype default pl 0 t (u9fl-u9fl[0])
+		ctype red plo 0 tp u9fl0
+		ctype blue plo 0 tp (u9fl1+u9fl2+u9fl3+u9fl4+u9fl5+u9fl6+u9fl7+u9fl8+u9fl9+u9fl14+u9fl16+u9fl19+u9fl20+u9fl21+u9fl22+u9fl23+u9fl24+u9fl25)
+		ctype cyan plo 0 tp u9fl14
+		ctype yellow plo 0 tp u9fl16
+		ctype magenta plo 0 tp ((u9fl1+u9fl2+u9fl3+u9fl4+u9fl5+u9fl6+u9fl7+u9fl8+u9fl9+u9fl14+u9fl16+u9fl19+u9fl20+u9fl21+u9fl22+u9fl23+u9fl24+u9fl25)-u9fl0)
+		#
+showterms10 0 #		
+		ctype default pl 0 t (u10fl-u10fl[0])
+		ctype red plo 0 tp u10fl0
+		ctype blue plo 0 tp (u10fl1+u10fl2+u10fl3+u10fl4+u10fl5+u10fl6+u10fl7+u10fl8+u10fl9+u10fl14+u10fl16+u10fl19+u10fl20+u10fl21+u10fl22+u10fl23+u10fl24+u10fl25)
+		ctype cyan plo 0 tp u10fl14
+		ctype yellow plo 0 tp u10fl16
+		ctype magenta plo 0 tp ((u10fl1+u10fl2+u10fl3+u10fl4+u10fl5+u10fl6+u10fl7+u10fl8+u10fl9+u10fl14+u10fl16+u10fl19+u10fl20+u10fl21+u10fl22+u10fl23+u10fl24+u10fl25)-u10fl0)
+		#
+showterms11 0 #		
+		ctype default pl 0 t (u11fl-u11fl[0])
+		ctype red plo 0 tp u11fl0
+		ctype blue plo 0 tp (u11fl1+u11fl2+u11fl3+u11fl4+u11fl5+u11fl6+u11fl7+u11fl8+u11fl9+u11fl14+u11fl16+u11fl19+u11fl20+u11fl21+u11fl22+u11fl23+u11fl24+u11fl25)
+		ctype cyan plo 0 tp u11fl14
+		ctype yellow plo 0 tp u11fl16
+		ctype magenta plo 0 tp (u11fl1+u11fl2+u11fl3+u11fl4+u11fl5+u11fl6+u11fl7+u11fl8+u11fl9+u11fl14+u11fl16+u11fl19+u11fl20+u11fl21+u11fl22+u11fl23+u11fl24+u11fl25-u11fl0)
+		#
+		
 gammieener3d 1	# more directions to consider in general
 		# below 9 is normal 8 with ENTROPY (on regardles of dissipation on/off)
                 set NPR=9

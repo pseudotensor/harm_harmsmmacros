@@ -511,7 +511,9 @@ rdavgvsh 0
         # only read some of the data that's required for the BZ comparison plot
         rdheaderstuff
         #
-        da dataavgvsh1.txt
+        !sed 's/nan/0/g' dataavgvsh1.txt > dataavgvsh1n.txt
+        !sed 's/inf/0/g' dataavgvsh1n.txt > dataavgvsh1nn.txt
+        da dataavgvsh1nn.txt
         lines 2 1000000
         read {avgjj 1 avgh 2 avgrho 3 avgug 4 avgbsq 5 avgunb 6}
         read {avguu0 7 avguu1 8 avguu2 9 avguu3 10}
@@ -5209,11 +5211,17 @@ mdotvst 0 #
 rddataavg 0 #
         #
         # try normal dump in case already 2D simulation
-        grid3d gdump
+        #grid3d gdump
         #
         #! head -16385 dumps/gdump.lowres > dumps/gdump.lowres.2d
+        #! head -16385 dumps/gdump > dumps/gdump.2d
+        # ! head -32769 dumps/gdump > dumps/gdump.2d
         # then edit resolution to be 256 64 1
-        grid3d gdump.lowres.2d
+		# !emacs dumps/gdump.2d
+        grid3d gdump.2d
+		set avgOr=r
+		set avgOh=h
+		set avgOgv311=gv311
         #
         set tx1=x1
         set tx2=x2
@@ -5255,6 +5263,13 @@ rddataavg 0 #
              avgOabsfdd00 avgOabsfdd10 avgOabsfdd20 avgOabsfdd30 avgOabsfdd01 avgOabsfdd11 avgOabsfdd21 avgOabsfdd31 avgOabsfdd02 avgOabsfdd12 avgOabsfdd22 avgOabsfdd32 avgOabsfdd03 avgOabsfdd13 avgOabsfdd23 avgOabsfdd33 \
              avgOTudRAD00 avgOTudRAD10 avgOTudRAD20 avgOTudRAD30 avgOTudRAD01 avgOTudRAD11 avgOTudRAD21 avgOTudRAD31 avgOTudRAD02 avgOTudRAD12 avgOTudRAD22 avgOTudRAD32 avgOTudRAD03 avgOTudRAD13 avgOTudRAD23 avgOTudRAD33 \
              avgOKAPPAUSER avgOKAPPAESUSER avgOtauradintegrated avgOurad}
+        #
+		#set ti=avgjj 
+        #
+		#do iii=0,$nx*$ny-1,1 {
+        #set indexi=INT($iii%$nx)
+        #set indexj=INT(($iii%($nx*$ny))/$nx)
+        #set indexk=INT($iii/($nx*$ny))
         #
         #
         set Be1= (-1+avgOmu)
@@ -5300,25 +5315,28 @@ computewindfromavg1  0 #
         set myti=82 # r=9.931~10 # rjetin and rdiskin
         set useMdot=(avgOunb<-1 && ti==myti)
         set death=(useMdot==1 ? 1 : 0)
-        set dMdot=gdet*$dx2*$dx3*(avgOrhouu1*death)  # if(useMdot)
+        set dMdot=avgOgdet*$dx2*$dx3*(avgOrhouu1*death)  # if(useMdot)
         set Mdotinner=sum(dMdot)/Mdoteddcode
         print {Mdotinner}
         #
         set myti=139 # r=50.61~50 # rjetout and rdiskout
         set useMdot=(avgOunb<-1 && ti==myti)
-        set dMdot=gdet*$dx2*$dx3*(avgOrhouu1*death)# if(useMdot)
+        set dMdot=avgOgdet*$dx2*$dx3*(avgOrhouu1*death)# if(useMdot)
         set Mdotouter=sum(dMdot)/Mdoteddcode
         print {Mdotouter}
         #
         set myti=139 # r=50.61~50 # rjetout and rdiskout
         set useMdot=(avgOrhouu1>0.0 && avgOunb<-1 && ti==myti)
-        set dMdot=gdet*$dx2*$dx3*(avgOrhouu1*death)# if(useMdot)
+        set dMdot=avgOgdet*$dx2*$dx3*(avgOrhouu1*death)# if(useMdot)
         set Mdotouteralt=sum(dMdot)/Mdoteddcode
         print {Mdotouteralt}
         #
         set myti=139 # r=50.61~50 # rjetout and rdiskout
         set useMdot=(avgOrhouu1>0.0 && avgOunb<-1 && ti==myti)
-        set dMdot=gdet*$dx2*$dx3*(avgOrhouu1*avgOuu1*sqrt(gv311)*death)# if(useMdot)
+        # gvrr = gv311 = g_{11} : gv_{11} *dx^1 dx^1 = gv_{rr} dr dr ->
+        # gv_11 = g_{rr} * dr/dx1 * dr/dx1 ~ r**2 * dxdxp11**2
+		#set gv311approx = r**2*avgOdxdxp11**2
+        set dMdot=avgOgdet*$dx2*$dx3*(avgOrhouu1*avgOuu1*sqrt(avgOgv311)*death)# if(useMdot)
         set Mdotouteralt2=sum(dMdot)/Mdoteddcode
         print {Mdotouteralt2}
         #
@@ -5326,7 +5344,7 @@ computewindfromavg1  0 #
         set useEdot=(avgOunb<-1 && ti==myti)
         # EM+PA+EN only (free gas energy)
         set dEflux=(-avgOTudEM10-avgOTudPA10-avgOTudEN10)
-        set dEdot=gdet*$dx2*$dx3*dEflux*death # if(useEdot)
+        set dEdot=avgOgdet*$dx2*$dx3*dEflux*death # if(useEdot)
         set Edotouter=sum(dEdot)/MdotH*prefactor
         print {Edotouter}
         #
@@ -5334,7 +5352,7 @@ computewindfromavg1  0 #
         set useEdot=(avgOrhouu1>0.0 && avgOunb<-1 && ti==myti)
         # EM+PA+EN only (free gas energy)
         set dEflux=(-avgOTudEM10-avgOTudPA10-avgOTudEN10)
-        set dEdot=gdet*$dx2*$dx3*dEflux*death # if(useEdot)
+        set dEdot=avgOgdet*$dx2*$dx3*dEflux*death # if(useEdot)
         set Edotouteralt=sum(dEdot)/MdotH*prefactor
         print {Edotouteralt}
         #
@@ -5342,7 +5360,7 @@ computewindfromavg1  0 #
         set useLdot=(avgOunb<-1 && ti==myti)
         # EM+PA+EN only (free gas energy)
         set dLflux=(avgOTudEM13+avgOTudPA13+avgOTudEN13)
-        set dLdot=gdet*$dx2*$dx3*dLflux*death # if(useEdot)
+        set dLdot=avgOgdet*$dx2*$dx3*dLflux*death # if(useEdot)
         set Ldotouter=sum(dLdot)/MdotH
         print {Ldotouter}
         #
@@ -5354,7 +5372,7 @@ computewindfromavg1  0 #
         set useLdot=(avgOrhouu1>0.0 && avgOunb<-1 && ti==myti)
         # EM+PA+EN only (free gas energy)
         set dLflux=(avgOTudEM13+avgOTudPA13+avgOTudEN13)
-        set dLdot=gdet*$dx2*$dx3*dLflux*death # if(useEdot)
+        set dLdot=avgOgdet*$dx2*$dx3*dLflux*death # if(useEdot)
         set Ldotouteralt=sum(dLdot)/MdotH
         print {Ldotouteralt}
         #
@@ -5370,6 +5388,11 @@ computewindfromavg1  0 #
         #
 computewindfromavg2  0 #
         #
+		set oldr=r
+		set oldh=r
+		set r=avgOr
+		set h=avgOh
+		#
         #########################
         define angle (pi/2)
         set area=$dx2*$dx3
@@ -5418,6 +5441,8 @@ computewindfromavg2  0 #
         #
         #
         #
+		set r=oldr
+		set h=oldh
         #
         #
         #
@@ -5520,3 +5545,339 @@ nphoton 0    #
              #
              print {Nrad0 Nrad1 Nrad2 Nrad0b Nrad1b Nrad2b}
              #
+		    #
+otherplot 0 #             
+            #
+            ctype default splitpl 0 r (mdotfinavgvsr30) 1101 1 2E2 1E-5 1E2
+            #
+            ctype default splitpl 0 r ((edottotvsr+mdotfinavgvsr30)/mdotfinavgvsr30) 1101 1 4E2 1E-3 1E2
+            ctype red splitpl 0 r (edemvsr/mdotfinavgvsr30) 1111 1 4E2 1E-3 1E2
+            ctype cyan splitpl 0 r ((edmavsr+mdotfinavgvsr30)/mdotfinavgvsr30) 1111 1 4E2 1E-3 1E2
+            ctype blue splitpl 0 r (edradvsr/mdotfinavgvsr30) 1111 1 4E2 1E-3 1E2
+            set fixededradvsr = edottotvsr[70] - (edemvsr+edmavsr)
+            ctype magenta splitpl 0 r (fixededradvsr/mdotfinavgvsr30) 1111 1 4E2 1E-3 1E2
+            ctype default
+            #
+            #
+            ctype default splitpl 0 r (ldottotvsr/mdotfinavgvsr30) 1101 1 4E2 1E-3 1E2
+            ctype red splitpl 0 r (ldemvsr/mdotfinavgvsr30) 1111 1 4E2 1E-3 1E2
+            ctype cyan splitpl 0 r (-ldmavsr/mdotfinavgvsr30) 1111 1 4E2 1E-3 1E2
+            ctype blue splitpl 0 r (ldradvsr/mdotfinavgvsr30) 1111 1 4E2 1E-3 1E2
+            ctype default
+            #
+splitpl 18  #   
+            set var1=$3
+            set var1pos=var1 if (var1>0)
+            set rpos=$2 if (var1>0)
+            set var1neg=var1 if(var1<0)
+            set rneg=$2 if (var1<0)
+            ltype 0 pl 0 rpos var1pos $4 $5 $6 $7 $8
+            ltype 2 pl 0 rneg var1neg 1111 $5 $6 $7 $8
+            #
+floor0 1    #
+		#
+		jrdpradener
+ 		define t0 (t[0])
+		define tf (t[dimen(t)-1])
+        define tf $1
+        #
+        set sumu18fl=u1fl+u8fl # should be zero if perfect conservation in code
+        ctype default ltype 0  pl 0 t (sumu18fl/(u1[0]+u8[0]))
+		#
+		der t u1fl td u1fld
+		der t u8fl td u8fld
+        der t sumu18fl td sumu18fld
+        #
+		ctype default pl 0 td u1fld 0001 $t0 $tf -1E-1 1E-1
+		ctype red pl 0 td u8fld 0011 $t0 $tf -1E-1 1E-1
+		ctype yellow pl 0 td sumu18fld 0011 $t0 $tf -1E-1 1E-1
+		ctype blue pl 0 td u1dot1 0011 $t0 $tf -1E-1 1E-1
+		ctype cyan pl 0 td u8dot1 0011 $t0 $tf -1E-1 1E-1
+		#
+		ctype default pl 0 td u1fld
+		ctype red plo 0 td u8fld
+		ctype yellow plo 0 td sumu18fld
+		ctype blue plo 0 t u1dot1
+		ctype cyan plo 0 t u8dot1
+		#
+		ctype default splitpl 0 (td+1) u1fld 1101 $t0 $tf 1E-8 1E6
+		ctype red splitpl 0 (td+1) u8fld 1111 $t0 $tf 1E-8 1E6
+		ctype yellow splitpl 0 (td+1) sumu18fld 1111 $t0 $tf 1E-8 1E6
+		ctype blue splitpl 0 (t+1) u1dot1 1111 $t0 $tf 1E-8 1E6
+		ctype cyan splitpl 0 (t+1) u8dot1 1111 $t0 $tf 1E-8 1E6
+		#
+        smooth u1fld u1flds 100
+        smooth u8fld u8flds 100
+        smooth sumu18fld sumu18flds 100
+        smooth u1dot1 u1dot1s 100
+        smooth u8dot1 u8dot1s 100
+        #
+		ctype default splitpl 0 (td+1) u1flds 1101 $t0 $tf 1E-8 1E6
+		ctype red splitpl 0 (td+1) u8flds 1111 $t0 $tf 1E-8 1E6
+		ctype yellow splitpl 0 (td+1) sumu18flds 1111 $t0 $tf 1E-8 1E6
+		ctype blue splitpl 0 (t+1) u1dot1s 1111 $t0 $tf 1E-8 1E6
+		ctype cyan splitpl 0 (t+1) u8dot1s 1111 $t0 $tf 1E-8 1E6
+		#
+floorrho0 1    #
+		#
+		jrdpradener
+ 		define t0 (t[0])
+		define tf (t[dimen(t)-1])
+        define tf $1
+        #
+		der t u0fl td u0fld
+        #
+		ctype default pl 0 td u0fld 0001 $t0 $tf -1E-1 1E-1
+		ctype blue pl 0 td u0dot1 0011 $t0 $tf -1E-1 1E-1
+		#
+		ctype default pl 0 td u0fld
+		ctype blue plo 0 t u0dot1
+		#
+		ctype default splitpl 0 (td+1) u0fld 1101 $t0 $tf 1E-8 1E6
+		ctype blue splitpl 0 (t+1) u0dot1 1111 $t0 $tf 1E-8 1E6
+		#
+        smooth u0fld u0flds 100
+        smooth u0dot1 u0dot1s 100
+        #
+		ctype default splitpl 0 (td+1) u0flds 1101 $t0 $tf 1E-8 1E6
+		ctype blue splitpl 0 (t+1) u0dot1s 1111 $t0 $tf 1E-8 1E6
+		#
+
+comparedd 0 #
+		jrdprad2basic dump0306
+		jrdpdebugnew debugdump0306
+		#
+		set o11=dd11
+		set o22=dd22
+		set o23=dd23
+		set o24=dd24
+		set ons=_realnstep
+		#
+		jrdprad2basic dump0305
+		jrdpdebugnew debugdump0305
+		#
+		set n11=dd11
+		set n22=dd22
+		set n23=dd23
+		set n24=dd24
+		set nns=_realnstep
+		#
+		plc 0 ((o24-n24)/(ons-nns)/2)
+		#
+supermad1 0 # 
+            #
+            set rhor=1+sqrt(1-a**2)        
+            #
+            set freeedotvsr=(edottotvsr+mdotfinavgvsr30)
+            ctype default splitpl 0 r (freeedotvsr/mdotfinavgvsr30[0]) 1101 rhor 4E2 1E-3 1E2
+            ctype red splitpl 0 r (edemvsr/mdotfinavgvsr30[0]) 1111 rhor 4E2 1E-3 1E2
+            ctype cyan splitpl 0 r ((edmavsr+mdotfinavgvsr30)/mdotfinavgvsr30[0]) 1111 rhor 4E2 1E-3 1E2
+            ctype blue splitpl 0 r (edradvsr/mdotfinavgvsr30[0]) 1111 rhor 4E2 1E-3 1E2
+		    #ctype yellow splitpl 0 r (mdotfinavgvsr30) 1111 rhor 4E2 1E-4 1E2
+            #
+            set myi=170
+            set fixedfreeedotvsr=freeedotvsr[myi] + r*0
+		    set freerat=fixedfreeedotvsr/mdotfinavgvsr30[0]
+            ltype 2 ctype default splitpl 0 r (freerat) 1111 rhor 4E2 1E-3 1E2
+            #
+            set fixededradvsr = freeedotvsr[myi] - (edemvsr+edmavsr+mdotfinavgvsr30)
+            ctype magenta splitpl 0 r (fixededradvsr/mdotfinavgvsr30[0]) 1111 rhor 4E2 1E-3 1E2
+            ctype default
+            #
+supermad2 0 # 
+            #
+            set rhor=1+sqrt(1-a**2)        
+            #
+            set freeldotvsr=(ldottotvsr)
+            ctype default splitpl 0 r (freeldotvsr/mdotfinavgvsr30[0]) 1101 rhor 4E2 1E-3 1E2
+            ctype red splitpl 0 r (ldemvsr/mdotfinavgvsr30[0]) 1111 rhor 4E2 1E-3 1E2
+            ctype cyan splitpl 0 r ((-ldmavsr)/mdotfinavgvsr30[0]) 1111 rhor 4E2 1E-3 1E2
+            ctype blue splitpl 0 r (ldradvsr/mdotfinavgvsr30[0]) 1111 rhor 4E2 1E-3 1E2
+		    #ctype yellow splitpl 0 r (mdotfinavgvsr30) 1111 rhor 4E2 1E-4 1E2
+            #
+            set myi=35
+            set fixedfreeldotvsr=freeldotvsr[myi] + r*0
+		    set freerat=fixedfreeldotvsr/mdotfinavgvsr30[0]
+            ltype 2 ctype default splitpl 0 r (freerat) 1111 rhor 4E2 1E-3 1E2
+            #
+            set fixedldradvsr = freeldotvsr[myi] - (ldemvsr+ldmavsr)
+            ctype magenta splitpl 0 r (fixedldradvsr/mdotfinavgvsr30[0]) 1111 rhor 4E2 1E-3 1E2
+            ctype default
+            #
+panelplot1n   0 #
+		#
+		#
+        define myrin ((rhor))
+		define myrout ((5E2))
+        define xin (LG($myrin))
+        define xout (LG($myrout))
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+		fdraft
+		ctype default window 1 1 1 1
+		notation -4 4 -4 4
+		erase
+		#
+        define numpanels 5
+        #
+		panelplot1nreplot
+		#
+panelplot1nreplot 0 #		
+		###################################
+        #
+        ticksize -1 0 -1 0
+        define lminy (0)
+        define lmaxy (2)
+        limits $xin $xout $lminy $lmaxy
+        #ctype default window 8 -$numpanels 2:8 $numpanels box 0 2 0 0
+        ctype default window 1 -$numpanels 1 $numpanels box 0 2 0 0
+		yla "\dot{M}_0/\dot{M}_{\rm Edd}"
+        #
+        #
+		set rcut=23
+		set mdotrat=(mdotfinavgvsr30/Mdoteddcode)
+		set myr=r if(mdotrat>0 && r<rcut)
+		set mymdotrat=mdotrat if(mdotrat>0 && r<rcut)
+		ltype 0 pl 0 myr mymdotrat 1111 $myrin $myrout $lminy $lmaxy
+        #
+        #
+        ###################################
+        #
+        ticksize -1 0 -1 0
+        define lminy (-1.8)
+        define lmaxy (0)
+        limits $xin $xout $lminy $lmaxy
+        define nm ($numpanels-1)
+        #ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        ctype default window 1 -$numpanels 1 $nm box 0 2 0 0
+        yla "\eta"
+        #
+		set freeedotvsr=(edottotvsr+mdotfinavgvsr30)
+		set myi=170
+		set fixedfreeedotvsr=freeedotvsr[myi] + r*0
+		set fixededradvsr = freeedotvsr[myi] - (edemvsr+edmavsr+mdotfinavgvsr30)
+		define ii (0)
+		while { $ii<$nx } {\
+  		     if($ii>myi){ set fixededradvsr[$ii]=edradvsr[$ii] }
+  		     if($ii>myi){ set fixedfreeedotvsr[$ii]=freeedotvsr[$ii] }
+		     define ii ($ii+1)
+		}
+		#
+		set rat1e=fixedfreeedotvsr/mdotfinavgvsr30[0]
+		set rat2e=edemvsr/mdotfinavgvsr30[0]
+		set rat3e=(edmavsr+mdotfinavgvsr30)/mdotfinavgvsr30[0]
+		set rat4e=fixededradvsr/mdotfinavgvsr30[0]
+		set testrat1e=rat2e+rat3e+rat4e
+		set rat5e=ldradthinvsr/mdotfinavgvsr30[0]
+		#
+        ltype 0 pl 0 r ((rat1e)) 1111 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 r ((rat2e)) 1111 $myrin $myrout $lminy $lmaxy
+        ltype 1 pl 0 r ((rat3e)) 1111 $myrin $myrout $lminy $lmaxy
+        ltype 3 pl 0 r ((rat4e)) 1111 $myrin $myrout $lminy $lmaxy
+        ltype 4 pl 0 r ((rat5e)) 1111 $myrin $myrout $lminy $lmaxy
+        #
+        ticksize -1 0 -1 0
+        define lminy (-.9)
+        define lmaxy (1.5)
+        limits $xin $xout $lminy $lmaxy
+        define nm ($numpanels-2)
+        #ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        ctype default window 1 -$numpanels 1 $nm box 0 2 0 0
+        yla "j"
+        #xla "r [r_g]"
+        #
+		set freeldotvsr=(ldottotvsr)
+		set myi=35
+		set myicut=108
+		set fixedfreeldotvsr=freeldotvsr[myi] + r*0
+		set fixedldradvsr = freeldotvsr[myi] - (ldemvsr+ldmavsr)
+		define ii (0)
+		while { $ii<$nx } {\
+  		     if($ii>myicut){ set fixedldradvsr[$ii]=ldradvsr[$ii] }
+		     define ii ($ii+1)
+		}
+		#
+		set rat1=fixedfreeldotvsr/mdotfinavgvsr30[0]
+		set rat2=ldemvsr/mdotfinavgvsr30[0]
+		set rat3=(-ldmavsr)/mdotfinavgvsr30[0]
+		set rat4=fixedldradvsr/mdotfinavgvsr30[0]
+		#
+		set ti1d=0,dimen(r)-1,1
+		set myr=r if(ti1d<=myicut)
+		set rat1s=rat1 if(ti1d<=myicut)
+		set rat2s=rat2 if(ti1d<=myicut)
+		set rat3s=rat3 if(ti1d<=myicut)
+		set rat4s=rat4 if(ti1d<=myicut)
+		#
+        ltype 0 pl 0 myr ((rat1s)) 1111 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 myr ((rat2s)) 1111 $myrin $myrout $lminy $lmaxy
+        ltype 1 pl 0 myr ((rat3s)) 1111 $myrin $myrout $lminy $lmaxy
+        ltype 3 pl 0 myr ((rat4s)) 1111 $myrin $myrout $lminy $lmaxy
+		#
+        #
+        #
+        ticksize -1 0 -1 0
+        define lminy (-1.3)
+        define lmaxy (-.3)
+        limits $xin $xout $lminy $lmaxy
+        define nm ($numpanels-3)
+        #ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        ctype default window 1 -$numpanels 1 $nm box 0 2 0 0
+        yla "H/R"
+        #xla "r [r_g]"
+        #
+		set myicut=200
+		set ti1d=0,dimen(r)-1,1
+		set myr=r if(ti1d<=myicut)
+		set hoverrvsrs=hoverrvsr if(ti1d<=myicut)
+		set hoverrvsrt0=(hoverrvsrs*0+0.2)
+		#
+		set myitrans=81
+		define ii (0)
+		while { $ii<$nx } {\
+  		     if($ii<myitrans){ set hoverrvsrt0[$ii]=hoverrvsrt0[$ii]*(myr[$ii]/10)**0.5 }
+		     define ii ($ii+1)
+		}
+		#
+		#
+        ltype 0 pl 0 myr ((hoverrvsrs)) 1111 $myrin $myrout $lminy $lmaxy
+        ltype 2 pl 0 myr ((hoverrvsrt0)) 1111 $myrin $myrout $lminy $lmaxy
+		#
+		#
+        ticksize -1 0 -1 0
+        define lminy (-1.3)
+        define lmaxy (2)
+        limits $xin $xout $lminy $lmaxy
+        define nm ($numpanels-4)
+        #ctype default window 8 -$numpanels 2:8 $nm box 0 2 0 0
+        ctype default window 1 -$numpanels 1 $nm box 1 2 0 0
+        yla "\Upsilon"
+        xla "r [r_g]"
+        #
+		#
+		set ihor=15
+		#set upsilonvsr=feqtotvsr/(2.0)*((0.2*sqrt(4.0*pi))/mdotfinavgvsr30[0]**0.5)
+		set upsilondiskvsr=(feqtotvsr)/(2.0)*((0.2*sqrt(4.0*pi))/mdotfinavgvsr30[0]**0.5)
+		#
+        ltype 0 pl 0 r ((upsilonvsr)) 1111 $myrin $myrout $lminy $lmaxy
+		ltype 2 pl 0 r ((upsilondiskvsr)) 1111 $myrin $myrout $lminy $lmaxy
+		#
+        #
+
+plotnew 0 #
+		device postencap fluxesvsr.eps
+		panelplot1n
+		device X11
+		!scp fluxesvsr.eps jon@physics-179.umd.edu:/data/jon/harm_supermad/
+		#
+
+		
+
+
+
+
+
