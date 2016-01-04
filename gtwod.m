@@ -657,6 +657,19 @@ jrdprad 1	# for reading file with full set of stuff with radiation
  #
  #
 jrdprad2 1	# for reading file with full set of stuff with radiation
+                jrdprad2basic $1
+                #
+                jrdpraddump rad$1
+                jrdpdissmeasure dissmeasure$1
+                jrdpraddims
+                jrdpfailfloordu failfloordu$1
+                #jrdpdebug debug$1
+                jrdpdebugnew debug$1
+                debugenernew
+                #
+                jrdpradother
+                #
+jrdprad2basic 1 #
 		jrdpheader3d dumps/$1
 		da dumps/$1
 		lines 2 10000000
@@ -695,17 +708,6 @@ jrdprad2 1	# for reading file with full set of stuff with radiation
                   #
                   gammienew
                 }
-                #
-                jrdpraddump rad$1
-                jrdpdissmeasure dissmeasure$1
-                jrdpraddims
-                jrdpfailfloordu failfloordu$1
-                #jrdpdebug debug$1
-                jrdpdebugnew debug$1
-                debugenernew
-                #
-                jrdpradother
-                #
 jrdprad3 1	# for reading file with full set of stuff with radiation
 		jrdpheader3d dumps/$1
 		da dumps/$1
@@ -756,7 +758,7 @@ jrdprad3 1	# for reading file with full set of stuff with radiation
                 #
                 jrdpradother
                 #
-jrdprad4 1	# for reading file with full set of stuff with radiation
+jrdprad4basic 1	# for reading file with full set of stuff with radiation
 		jrdpheader3d dumps/$1
 		da dumps/$1
 		lines 2 10000000
@@ -796,13 +798,65 @@ jrdprad4 1	# for reading file with full set of stuff with radiation
                   gammienew
                 }
                 #
+jrdprad4 1 #
+                jrdprad4basic $1
                 jrdpraddumpnew rad$1
-                jrdpdissmeasure dissmeasure$1
+                #jrdpdissmeasure dissmeasure$1
                 jrdpraddims
-                jrdpfailfloordu failfloordu$1
+                #jrdpfailfloordu failfloordu$1
                 #jrdpdebug debug$1
                 jrdpdebugnew2 debug$1
-                debugenernew2
+                #debugenernew2
+                #
+                jrdpradother
+                #
+jrdprad5 1	# for reading file with full set of stuff with radiation
+		jrdpheader3d dumps/$1
+		da dumps/$1
+		lines 2 10000000
+		#
+                # 81
+        set NPR=13+5
+        set NPRDUMP=12+5
+        set nprend=12+5
+        set NDIM=4
+		set totalcolumns=3*3 + NPRDUMP + 3 + (nprend+1) + 1 + 4 * NDIM + 6 + 1
+                #
+                if(totalcolumns!=_numcolumns || dimen(nprdumplist)!=17 || dimen(nprlist)!=18){\
+                 echo "Wrong format"
+                 print {totalcolumns _numcolumns}
+                 print {nprdumplist}
+                 print {nprlist}
+                }\
+                else{\
+                     read '%g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g %g' \
+                     {ti tj tk x1 x2 x3 r h ph \
+                      rho u v1 v2 v3 B1 B2 B3 prad0 prad1 prad2 prad3 yfl1 yfl2 yfl3 yfl4 yfl5 \
+		      p cs2 Sden \
+		      U0 U1 U2 U3 U4  U5 U6 U7  U8 U9 U10 U11  U12  U13 U14 U15 U16 U17 \
+		      divb \
+		      uu0 uu1 uu2 uu3 ud0 ud1 ud2 ud3 \
+		      bu0 bu1 bu2 bu3 bd0 bd1 bd2 bd3 \
+                      v1m v1p v2m v2p v3m v3p gdet }
+                     #
+                     set tx1=x1
+                     set tx2=x2
+                     set tx3=x3
+                     gsetup
+                     if($DOGCALC) { gcalc }
+                  # gcalc
+                  abscompute
+                  #
+                  gammienew
+                }
+                #
+                jrdpraddumpnew rad$1
+                #jrdpdissmeasure dissmeasure$1
+                jrdpraddims
+                #jrdpfailfloordu failfloordu$1
+                #jrdpdebug debug$1
+                #jrdpdebugnew2 debug$1
+                #debugenernew2
                 #
                 jrdpradother
                 #
@@ -1958,54 +2012,51 @@ jrdpdebugnew 1 # reads-in debug???? files into numbered names
 		# DEBUGTS 3
                 #
             #
- #see failfloorcount counter
-                # columns are as in global.nondepnmemonics.h:
+            #
+	# see failfloorcount counter
 	#define COUNTNOTHING -2
-	#define COUNTONESTEP -1 # used as control label, not counted
-	#define COUNTREALSTART 0 # marks when real counters begin
+	#define COUNTONESTEP -1 // used as control label, not counted
+	#define COUNTREALSTART 0 // marks when real counters begin
 	#define NUMFAILFLOORFLAGS 36
-	#/  mnemonics
-	#define COUNTUTOPRIMFAILCONV 0 # if failed to converge
-	#define COUNTFLOORACT 1 # if floor activated
-	#define COUNTLIMITGAMMAACT 2 # if Gamma limiter activated
-	#define COUNTINFLOWACT 3 # if inflow check activated
+	#  mnemonics
+	#define COUNTUTOPRIMFAILCONV 0 // if failed to converge
+	#define COUNTFLOORACT 1 // if floor activated
+	#define COUNTLIMITGAMMAACT 2 // if Gamma limiter activated
+	#define COUNTINFLOWACT 3 // if inflow check activated
 	#define COUNTUTOPRIMFAILRHONEG 4
 	#define COUNTUTOPRIMFAILUNEG 5
 	#define COUNTUTOPRIMFAILRHOUNEG 6
-	#define COUNTGAMMAPERC 7 # see fixup_checksolution()
-	#define COUNTUPERC 8 # see fixup_checksolution()
-	#define COUNTFFDE 9 # if originally MHD or ENTROPY, this is always referring to EOMFFDE2 or whatever set in utoprimgen.c
+	#define COUNTGAMMAPERC 7 // see fixup_checksolution()
+	#define COUNTUPERC 8 // see fixup_checksolution()
+	#define COUNTFFDE 9 // if originally MHD or ENTROPY, this is always referring to EOMFFDE2 or whatever set in utoprimgen.c
 	#define COUNTCOLD 10
 	#define COUNTENTROPY 11
 	#define COUNTHOT 12
 	#define COUNTEOSLOOKUPFAIL 13
-	#define COUNTBOUND1 14 # see bounds.tools.c (used when boundary code actually affects active zone values)
+	#define COUNTBOUND1 14 // see bounds.tools.c (used when boundary code actually affects active zone values)
 	#define COUNTBOUND2 15
-
-	# IMPLICITs count normal and issues separately from utoprim failure because not a normal 1-step inversion
+	#// IMPLICITs count normal and issues separately from utoprim failure because not a normal 1-step inversion
 	#define COUNTIMPLICITITERS 16
 	#define COUNTIMPLICITMHDSTEPS 17
-	#define COUNTIMPLICITERRORS0 18
-	#define COUNTIMPLICITERRORS1 19
-	#define COUNTIMPLICITNORMAL 20
-	#define COUNTEXPLICITNORMAL 21
-	#define COUNTIMPLICITBAD 22
-	#define COUNTEXPLICITBAD 23
-	#define COUNTIMPLICITENERGY 24
-	#define COUNTIMPLICITENTROPY 25
-	#define COUNTIMPLICITCOLDMHD 26
-	#define COUNTIMPLICITFAILED 27
-	#define COUNTIMPLICITPMHD 28
-	#define COUNTIMPLICITUMHD 29
-	#define COUNTIMPLICITPRAD 30
-	#define COUNTIMPLICITURAD 31
-	#define COUNTIMPLICITENTROPYUMHD 32
-	#define COUNTIMPLICITENTROPYPMHD 33
-	#define COUNTIMPLICITMODENORMAL 34
-	#define COUNTIMPLICITMODESTAGES 35
-	#define COUNTIMPLICITMODECOLD 36
-
-
+	#define COUNTIMPLICITERRORS 18
+	#define COUNTIMPLICITNORMAL 19
+	#define COUNTEXPLICITNORMAL 20
+	#define COUNTIMPLICITBAD 21
+	#define COUNTEXPLICITBAD 22
+	#define COUNTIMPLICITENERGY 23
+	#define COUNTIMPLICITENTROPY 24
+	#define COUNTIMPLICITCOLDMHD 25
+	#define COUNTIMPLICITFAILED 26
+	#define COUNTIMPLICITPMHD 27
+	#define COUNTIMPLICITUMHD 28
+	#define COUNTIMPLICITPRAD 29
+	#define COUNTIMPLICITURAD 30
+	#define COUNTIMPLICITENTROPYUMHD 31
+	#define COUNTIMPLICITENTROPYPMHD 32
+	#define COUNTIMPLICITMODENORMAL 33
+	#define COUNTIMPLICITMODESTAGES 34
+	#define COUNTIMPLICITMODECOLD 35
+	#
             #
             # e.g. 
             #
@@ -2103,7 +2154,7 @@ jrdpdebugnew2 1 # reads-in debug???? files into numbered names
 		lines 2 10000000
 		#
         set NUMTSCALES=4
-        set NUMFAILFLOORFLAGS=37
+        set NUMFAILFLOORFLAGS=38
         set NUMSTEPS=2
 		set totalcolumns=NUMTSCALES*NUMFAILFLOORFLAGS*NUMSTEPS
                 if(totalcolumns!=_numcolumns){\
@@ -4314,7 +4365,7 @@ agplc 17	# animplc 'dump' r 000 <0 0 0 0>
                     #
                     #
                     #jrdprad2 $filename
-                    jrdprad $filename
+                    jrdprad4basic $filename
 		  #jrdp2d $filename
 		  #define coord 1
                   #jrdpcf3duold $filename
@@ -4522,6 +4573,11 @@ agpl  18	# agpl 'dump' r fun 000 <0 0 0 0>
                   if($?5 == 1) { define numsend (4) } else { define numsend 3 }
                 }
                 #defaults
+          #ctype default
+          #jrdprad4 dump0000
+          #ltype 0 ctype red
+          #pl 0 $2 $3
+          #
 		define PLANE (3)
 		define WHICHLEV (0)
                 set h1=$1
@@ -4546,7 +4602,9 @@ agpl  18	# agpl 'dump' r fun 000 <0 0 0 0>
           # with radiation
           #jrdprad $filename
           # with radiation but no currents but with entropy
-          jrdprad2 $filename
+          #jrdprad2 $filename
+          #jrdprad4 $filename
+          jrdprad4 $filename
                   #jrdpraddump rad$filename
 		  # NEW
                   #jrdpall $ii
@@ -4607,6 +4665,8 @@ agpl  18	# agpl 'dump' r fun 000 <0 0 0 0>
 		  #ctype red pl 0 $2 myfit 1110
 		  #ctype default
 		  #lweight 5 points $2 $3
+          #
+          #
                   #delay loop
 		  #set jj=0
 		  #while {jj<10000} {set jj=jj+1}
