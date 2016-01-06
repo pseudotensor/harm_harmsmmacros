@@ -754,7 +754,7 @@ jrdprad3 1	# for reading file with full set of stuff with radiation
                 jrdpfailfloordu failfloordu$1
                 #jrdpdebug debug$1
                 jrdpdebugnew2 debug$1
-                debugenernew2
+                debugenernew
                 #
                 jrdpradother
                 #
@@ -815,7 +815,7 @@ jrdprad5 1	# for reading file with full set of stuff with radiation
 		da dumps/$1
 		lines 2 10000000
 		#
-                # 81
+                # 71
         set NPR=13+5
         set NPRDUMP=12+5
         set nprend=12+5
@@ -853,12 +853,14 @@ jrdprad5 1	# for reading file with full set of stuff with radiation
                 jrdpraddumpnew rad$1
                 #jrdpdissmeasure dissmeasure$1
                 jrdpraddims
-                #jrdpfailfloordu failfloordu$1
-                #jrdpdebug debug$1
-                #jrdpdebugnew2 debug$1
-                #debugenernew2
+                jrdpfailfloordu failfloordu$1
+                jrdpdebugnew2 debug$1
+                debugenernew
                 #
                 jrdpradother
+                #
+                # enerrad3d ener.out
+                # enerrad3dmore
                 #
 jrdpradother 0 #                
  #
@@ -2098,51 +2100,52 @@ jrdpdebugnew2 1 # reads-in debug???? files into numbered names
 		# DEBUGTS 3
                 #
             #
-	# see failfloorcount counter
-	#define COUNTNOTHING -2
-	#define COUNTONESTEP -1 // used as control label, not counted
-	#define COUNTREALSTART 0 // marks when real counters begin
-	#define NUMFAILFLOORFLAGS 37
-	#  mnemonics
-	#define COUNTUTOPRIMFAILCONV 0 // if failed to converge
-	#define COUNTFLOORACT 1 // if floor activated
-	#define COUNTLIMITGAMMAACT 2 // if Gamma limiter activated
-	#define COUNTINFLOWACT 3 // if inflow check activated
-	#define COUNTUTOPRIMFAILRHONEG 4
-	#define COUNTUTOPRIMFAILUNEG 5
-	#define COUNTUTOPRIMFAILRHOUNEG 6
-	#define COUNTGAMMAPERC 7 // see fixup_checksolution()
-	#define COUNTUPERC 8 // see fixup_checksolution()
-	#define COUNTFFDE 9 // if originally MHD or ENTROPY, this is always referring to EOMFFDE2 or whatever set in utoprimgen.c
-	#define COUNTCOLD 10
-	#define COUNTENTROPY 11
-	#define COUNTHOT 12
-	#define COUNTEOSLOOKUPFAIL 13
-	#define COUNTBOUND1 14 // see bounds.tools.c (used when boundary code actually affects active zone values)
-	#define COUNTBOUND2 15
-	#
-	# IMPLICITs count normal and issues separately from utoprim failure because not a normal 1-step inversion
-	#define COUNTIMPLICITITERS 16
-	#define COUNTIMPLICITMHDSTEPS 17
-	#define COUNTIMPLICITERRORS0 18
-	#define COUNTIMPLICITERRORS1 19
-	#define COUNTIMPLICITNORMAL 20
-	#define COUNTEXPLICITNORMAL 21
-	#define COUNTIMPLICITBAD 22
-	#define COUNTEXPLICITBAD 23
-	#define COUNTIMPLICITENERGY 24
-	#define COUNTIMPLICITENTROPY 25
-	#define COUNTIMPLICITCOLDMHD 26
-	#define COUNTIMPLICITFAILED 27
-	#define COUNTIMPLICITPMHD 28
-	#define COUNTIMPLICITUMHD 29
-	#define COUNTIMPLICITPRAD 30
-	#define COUNTIMPLICITURAD 31
-	#define COUNTIMPLICITENTROPYUMHD 32
-	#define COUNTIMPLICITENTROPYPMHD 33
-	#define COUNTIMPLICITMODENORMAL 34
-	#define COUNTIMPLICITMODESTAGES 35
-	#define COUNTIMPLICITMODECOLD 36
+    # see failfloorcount counter
+	# define COUNTNOTHING -2
+	# define COUNTONESTEP -1 // used as control label, not counted
+	# define COUNTREALSTART 0 // marks when real counters begin
+	# define NUMFAILFLOORFLAGS 38
+    #  mnemonics
+	# define COUNTUTOPRIMFAILCONV 0 // if failed to converge
+	# define COUNTFLOORACT 1 // if floor activated
+	# define COUNTLIMITGAMMAACT 2 // if Gamma limiter activated
+	# define COUNTINFLOWACT 3 // if inflow check activated
+	# define COUNTUTOPRIMFAILRHONEG 4
+	# define COUNTUTOPRIMFAILUNEG 5
+	# define COUNTUTOPRIMFAILRHOUNEG 6
+	# define COUNTGAMMAPERC 7 // see fixup_checksolution()
+	# define COUNTUPERC 8 // see fixup_checksolution()
+	# define COUNTFFDE 9 // if originally MHD or ENTROPY, this is always referring to EOMFFDE2 or whatever set in utoprimgen.c
+	# define COUNTCOLD 10
+	# define COUNTENTROPY 11
+	# define COUNTHOT 12
+	# define COUNTEOSLOOKUPFAIL 13
+	# define COUNTBOUND1 14 // see bounds.tools.c (used when boundary code actually affects active zone values)
+	# define COUNTBOUND2 15
+	# define COUNTUCONSFIXUP 16
+    #
+    # IMPLICITs count normal and issues separately from utoprim failure because not a normal 1-step inversion
+	# define COUNTIMPLICITITERS 17
+	# define COUNTIMPLICITMHDSTEPS 18
+	# define COUNTIMPLICITERRORS0 19
+	# define COUNTIMPLICITERRORS1 20
+	# define COUNTIMPLICITNORMAL 21
+	# define COUNTEXPLICITNORMAL 22
+	# define COUNTIMPLICITBAD 23
+	# define COUNTEXPLICITBAD 24
+	# define COUNTIMPLICITENERGY 25
+	# define COUNTIMPLICITENTROPY 26
+	# define COUNTIMPLICITCOLDMHD 27
+	# define COUNTIMPLICITFAILED 28
+	# define COUNTIMPLICITPMHD 29
+	# define COUNTIMPLICITUMHD 30
+	# define COUNTIMPLICITPRAD 31
+	# define COUNTIMPLICITURAD 32
+	# define COUNTIMPLICITENTROPYUMHD 33
+	# define COUNTIMPLICITENTROPYPMHD 34
+	# define COUNTIMPLICITMODENORMAL 35
+	# define COUNTIMPLICITMODESTAGES 36
+	# define COUNTIMPLICITMODECOLD 37
     #
             # e.g. 
             #
@@ -2171,7 +2174,7 @@ jrdpdebugnew2 1 # reads-in debug???? files into numbered names
                      #
                 }
                 #
-                # e.g. (dd16/_realnstep/3) is number of implicit iterations on average for each cell
+                # e.g. (dd17/_realnstep/3) is number of implicit iterations on average for each cell
                 # 
                 #
 subfailfloordd 0 #
